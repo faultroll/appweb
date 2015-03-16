@@ -1,4 +1,4 @@
-exp-esp License
+appweb-php License
 ===
 
 This software is distributed under the GPL open source license.

@@ -10,5 +10,15 @@
     "repository": {
         "type": "git",
         "url": "git://github.com/embedthis/appweb-php.git"
+    },
+    "files": [
+        "*.me",
+        "*.c"
+    ],
+    "pak": {
+        "export": [
+            "*.me",
+            "*.c"
+        ]
     }
 }
