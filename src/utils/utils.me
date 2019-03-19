@@ -1,0 +1,14 @@
+/*
+    utils.me -- MakeMe file for Utilities
+ */
+
+Me.load({
+    targets: {
+        authpass: {
+            type: 'exe',
+            sources: [ 'authpass.c' ],
+            depends: [ 'libappweb' ],
+            platforms: [ 'local' ],
+        },
+	},
+})

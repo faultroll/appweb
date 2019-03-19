@@ -1,0 +1,54 @@
+/*
+    doc.me -- MakeMe file for Appweb documentation
+ */
+
+Me.load({
+    targets: {
+        api: {
+            depends: ['render-doc'], 
+            action: `
+                apidoc('api/appweb.dox', '${TOP}/src/appweb.h', 'APPWEB')
+                /* 
+                    Patch generated doxygen API into the prepared template under dist/ref/api 
+                 */
+                apiLayout('api/appweb.html', 'dist/ref/api/appweb.html')
+                /*
+                    For packages, use the doxygen HTML directly from paks
+                 */
+                let base = me.dir.paks.join('*/doc')
+                let files = Path().files(base.join('api/*.html'))
+                for each (src in files) {
+                    let dest = src.trimComponents(base.components.length)
+                    apiLayout(src, Path('dist/ref').join(dest))
+                }
+            `
+        },
+
+        validate: {
+            depends: [ 'gen-doc' ],
+            action: `
+                for each (f in Path('public').files('**/*.html')) {
+                    let data = f.readString()
+                    data = data.replace('700|Open', '').
+                        replace(/appweb.download.html/g, 'download/appweb.html').
+                        replace(/pak.download.html/g, 'download/pak.html').
+                        replace(/developers.contributors.html/g, 'scripts/contributors.esp').
+                        replace(/nowrap="nowrap"/g, '').
+                        replace(/https:..embedthis.com.appweb.licensing.html/g, 'https://embedthis.com/').
+                        replace(/https:..embedthis.com.makeme.doc.guide.me.source.building.htm/g, 'https://embedthis.com/').
+                        replace(/https:..embedthis.com.makeme.doc.source.building.htm/g, 'https://embedthis.com/').
+                        replace(/https:..embedthis.com.makeme.doc.source/g, 'https://embedthis.com/').
+                        replace(/https:..embedthis.com.developers./g, 'https://embedthis.com/').
+                        replace(/nowrap/g, '')
+                    trace('Patch', f)
+                    f.write(data)
+                }
+                for each (f in Path('public/man').files('*.html')) {
+                    f.write(f.readString().toLowerCase())
+                }
+                trace('Listen', 'expansive --nowatch')
+                run('expansive --nowatch')
+            `
+        },
+    },
+})

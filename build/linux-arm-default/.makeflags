@@ -1,0 +1,1 @@
+ --no-print-directory -B -- ME_COM_OPENSSL_PATH=/opt/openssl-1.1.1b ME_COM_OPENSSL=1 LD=arm-linux-ld CC=arm-linux-gcc ARCH=arm SHOW=1

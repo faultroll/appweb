@@ -1,0 +1,83 @@
+11/26/18 07:15:15 2 appweb, Configuration for Embedthis Appweb
+11/26/18 07:15:15 2 appweb, ----------------------------------
+11/26/18 07:15:15 2 appweb, Version:            7.0.4
+11/26/18 07:15:15 2 appweb, BuildType:          Debug
+11/26/18 07:15:15 2 appweb, CPU:                x64
+11/26/18 07:15:15 2 appweb, OS:                 macosx
+11/26/18 07:15:15 2 appweb, Host:               orion
+11/26/18 07:15:15 2 appweb, Configure:          me configure
+11/26/18 07:15:15 2 appweb, ----------------------------------
+11/26/18 07:15:15 3 info esp, Load ESP app: default/solo from esp/solo/esp.json
+11/26/18 07:15:15 3 info esp, Load ESP app: default/session from esp/session/esp.json
+11/26/18 07:15:15 3 info esp, Load ESP app: default/websockets from esp/websockets/esp.json
+11/26/18 07:15:15 3 info esp, Load ESP app: default/cache from esp/caching/esp.json
+11/26/18 07:15:15 3 info esp, Load ESP app: default/autobahn from esp/autobahn/esp.json
+11/26/18 07:15:15 0 info http, Started HTTP service on 127.0.0.1:4100
+11/26/18 07:15:15 0 info http, Started HTTP service on 127.0.0.1:4101
+11/26/18 07:15:15 0 info http, Started HTTPS service on 127.0.0.1:4443
+11/26/18 07:15:15 0 info http, Started HTTPS service on 127.0.0.1:5443
+11/26/18 07:15:15 0 info http, Started HTTPS service on 127.0.0.1:5444
+11/26/18 07:15:15 0 info http, Started HTTPS service on 127.0.0.1:5445
+11/26/18 07:15:15 0 info http, Started HTTPS service on 127.0.0.1:6443
+11/26/18 07:15:15 0 info http, Started HTTPS service on 127.0.0.1:7443
+11/26/18 07:15:15 0 info http, Started HTTP service on 127.0.0.1:4200
+11/26/18 07:15:15 0 info http, Started HTTP service on 127.0.0.1:4300
+11/26/18 07:15:15 0 info http, Started HTTP service on 127.0.0.1:4400
+11/26/18 07:15:15 2 info esp, Compile /Users/mob/dev/appweb/test/web/auth/form/login.esp
+11/26/18 07:15:15 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_26a49c42b94a04d2e0713be83a2b6fb4.c -o /Users/mob/dev/appweb/test/cache/view_26a49c42b94a04d2e0713be83a2b6fb4.o
+11/26/18 07:15:15 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_26a49c42b94a04d2e0713be83a2b6fb4.dylib /Users/mob/dev/appweb/test/cache/view_26a49c42b94a04d2e0713be83a2b6fb4.o
+11/26/18 07:15:15 4 debug mpr ssl mbedtls, readMbed: error -0x50
+11/26/18 07:15:15 4 debug mpr ssl mbedtls, readMbed: error -0x50
+11/26/18 07:15:15 4 debug mpr ssl mbedtls, readMbed: error -0x50
+11/26/18 07:15:15 2 info esp, Compile /Users/mob/dev/appweb/test/web/form.esp
+11/26/18 07:15:15 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_93e17415fffedbbab8a1ac2e7f704c9e.c -o /Users/mob/dev/appweb/test/cache/view_93e17415fffedbbab8a1ac2e7f704c9e.o
+11/26/18 07:15:15 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_93e17415fffedbbab8a1ac2e7f704c9e.dylib /Users/mob/dev/appweb/test/cache/view_93e17415fffedbbab8a1ac2e7f704c9e.o
+11/26/18 07:15:16 2 info esp, Compile /Users/mob/dev/appweb/test/web/upload/upload.esp
+11/26/18 07:15:16 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_99e05d94b85068537a1121bbec9d0df8.c -o /Users/mob/dev/appweb/test/cache/view_99e05d94b85068537a1121bbec9d0df8.o
+11/26/18 07:15:16 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_99e05d94b85068537a1121bbec9d0df8.dylib /Users/mob/dev/appweb/test/cache/view_99e05d94b85068537a1121bbec9d0df8.o
+11/26/18 07:15:19 2 info esp, Compile /Users/mob/dev/appweb/test/web/notFound.esp
+11/26/18 07:15:19 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_f7926a579e3457e127a490b129abd981.c -o /Users/mob/dev/appweb/test/cache/view_f7926a579e3457e127a490b129abd981.o
+11/26/18 07:15:19 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_f7926a579e3457e127a490b129abd981.dylib /Users/mob/dev/appweb/test/cache/view_f7926a579e3457e127a490b129abd981.o
+11/26/18 07:15:19 2 info esp, Compile /Users/mob/dev/appweb/test/web/big.esp
+11/26/18 07:15:19 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_a635652c3fdd157abd095014d62e8b0b.c -o /Users/mob/dev/appweb/test/cache/view_a635652c3fdd157abd095014d62e8b0b.o
+11/26/18 07:15:19 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_a635652c3fdd157abd095014d62e8b0b.dylib /Users/mob/dev/appweb/test/cache/view_a635652c3fdd157abd095014d62e8b0b.o
+11/26/18 07:15:19 2 info esp, Compile /Users/mob/dev/appweb/test/esp/caching/cache.c
+11/26/18 07:15:19 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/esp/caching/cache.c -o /Users/mob/dev/appweb/test/esp/caching/cache/controller_0977cc7e5c2bfa11c285851b1c87974d.o
+11/26/18 07:15:19 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/esp/caching/cache/controller_0977cc7e5c2bfa11c285851b1c87974d.dylib /Users/mob/dev/appweb/test/esp/caching/cache/controller_0977cc7e5c2bfa11c285851b1c87974d.o
+11/26/18 07:15:20 2 info esp, Compile /Users/mob/dev/appweb/test/web/caching/cache.esp
+11/26/18 07:15:20 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_555129acf6e1cac6b64cd58950a17f64.c -o /Users/mob/dev/appweb/test/cache/view_555129acf6e1cac6b64cd58950a17f64.o
+11/26/18 07:15:20 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_555129acf6e1cac6b64cd58950a17f64.dylib /Users/mob/dev/appweb/test/cache/view_555129acf6e1cac6b64cd58950a17f64.o
+11/26/18 07:15:20 2 info esp, Compile /Users/mob/dev/appweb/test/web/directives.esp
+11/26/18 07:15:20 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_3805b07b4617a36670b0399e4e2d49bc.c -o /Users/mob/dev/appweb/test/cache/view_3805b07b4617a36670b0399e4e2d49bc.o
+11/26/18 07:15:20 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_3805b07b4617a36670b0399e4e2d49bc.dylib /Users/mob/dev/appweb/test/cache/view_3805b07b4617a36670b0399e4e2d49bc.o
+11/26/18 07:15:20 2 info esp, Compile /Users/mob/dev/appweb/test/web/dump.esp
+11/26/18 07:15:20 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_2816855a418e07d01a8c9653f1490cd3.c -o /Users/mob/dev/appweb/test/cache/view_2816855a418e07d01a8c9653f1490cd3.o
+11/26/18 07:15:20 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_2816855a418e07d01a8c9653f1490cd3.dylib /Users/mob/dev/appweb/test/cache/view_2816855a418e07d01a8c9653f1490cd3.o
+11/26/18 07:15:20 2 info esp, Compile /Users/mob/dev/appweb/test/web/test.esp
+11/26/18 07:15:20 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_291742081f3791bcbb83b460b800ff01.c -o /Users/mob/dev/appweb/test/cache/view_291742081f3791bcbb83b460b800ff01.o
+11/26/18 07:15:20 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_291742081f3791bcbb83b460b800ff01.dylib /Users/mob/dev/appweb/test/cache/view_291742081f3791bcbb83b460b800ff01.o
+11/26/18 07:15:20 2 info esp, Compile /Users/mob/dev/appweb/test/web/outer.esp
+11/26/18 07:15:20 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_6872d1b3fb8193584cde86902c6fe154.c -o /Users/mob/dev/appweb/test/cache/view_6872d1b3fb8193584cde86902c6fe154.o
+11/26/18 07:15:21 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_6872d1b3fb8193584cde86902c6fe154.dylib /Users/mob/dev/appweb/test/cache/view_6872d1b3fb8193584cde86902c6fe154.o
+11/26/18 07:15:21 2 info esp, Compile /Users/mob/dev/appweb/test/web/redirect.esp
+11/26/18 07:15:21 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_6b2b63ebf38eae0d3d81c326fc160d48.c -o /Users/mob/dev/appweb/test/cache/view_6b2b63ebf38eae0d3d81c326fc160d48.o
+11/26/18 07:15:21 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_6b2b63ebf38eae0d3d81c326fc160d48.dylib /Users/mob/dev/appweb/test/cache/view_6b2b63ebf38eae0d3d81c326fc160d48.o
+11/26/18 07:15:21 2 info esp, Compile /Users/mob/dev/appweb/test/web/index.esp
+11/26/18 07:15:21 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_6aabc965f39a5511e494ce254a3779b1.c -o /Users/mob/dev/appweb/test/cache/view_6aabc965f39a5511e494ce254a3779b1.o
+11/26/18 07:15:21 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_6aabc965f39a5511e494ce254a3779b1.dylib /Users/mob/dev/appweb/test/cache/view_6aabc965f39a5511e494ce254a3779b1.o
+11/26/18 07:15:21 2 info esp, Compile /Users/mob/dev/appweb/test/web/reload.esp
+11/26/18 07:15:21 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.c -o /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.o
+11/26/18 07:15:21 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.dylib /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.o
+11/26/18 07:15:22 4 info esp, Source /Users/mob/dev/appweb/test/web/reload.esp is newer than module /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.dylib, recompiling ...
+11/26/18 07:15:22 2 info esp, Compile /Users/mob/dev/appweb/test/web/reload.esp
+11/26/18 07:15:22 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.c -o /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.o
+11/26/18 07:15:22 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.dylib /Users/mob/dev/appweb/test/cache/view_7cde361d0569b0c4507c849b03360859.o
+11/26/18 07:15:22 2 info esp, Compile /Users/mob/dev/appweb/test/esp/session/session.c
+11/26/18 07:15:22 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/esp/session/session.c -o /Users/mob/dev/appweb/test/esp/session/cache/controller_4cc6fccc40d0f12c66e19e5d7c300380.o
+11/26/18 07:15:22 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/esp/session/cache/controller_4cc6fccc40d0f12c66e19e5d7c300380.dylib /Users/mob/dev/appweb/test/esp/session/cache/controller_4cc6fccc40d0f12c66e19e5d7c300380.o
+11/26/18 07:15:23 2 info esp, Compile /Users/mob/dev/appweb/test/esp/solo/solo.c
+11/26/18 07:15:23 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/esp/solo/solo.c -o /Users/mob/dev/appweb/test/esp/solo/cache/controller_435b42f630a1c7857df266ddafafa159.o
+11/26/18 07:15:23 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/esp/solo/cache/controller_435b42f630a1c7857df266ddafafa159.dylib /Users/mob/dev/appweb/test/esp/solo/cache/controller_435b42f630a1c7857df266ddafafa159.o
+11/26/18 07:15:23 2 info esp, Compile /Users/mob/dev/appweb/test/esp/websockets/websockets.c
+11/26/18 07:15:23 4 info esp run, clang -c -g -Wall -DPIC -fPIC -arch x86_64 -I. -Isrc -I/Users/mob/dev/appweb/build/macosx-x64-debug/inc /Users/mob/dev/appweb/test/esp/websockets/websockets.c -o /Users/mob/dev/appweb/test/esp/websockets/cache/controller_009a586127c1a66da59779857e8ea130.o
+11/26/18 07:15:23 4 info esp run, clang -dynamiclib -g -arch x86_64 -L/Users/mob/dev/appweb/build/macosx-x64-debug/bin -Wl,-rpath,@executable_path/ -Wl,-rpath,@loader_path/  -lesp -lpcre -lhttp -lmpr -lpthread -lm  -o /Users/mob/dev/appweb/test/esp/websockets/cache/controller_009a586127c1a66da59779857e8ea130.dylib /Users/mob/dev/appweb/test/esp/websockets/cache/controller_009a586127c1a66da59779857e8ea130.o
