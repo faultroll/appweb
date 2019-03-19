@@ -106,4 +106,4 @@ help:
 
 .PHONY: appweb	
 appweb:
-	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm CC=arm-linux-gcc LD=arm-linux-ld ME_COM_OPENSSL=1 ME_COM_OPENSSL_PATH=/opt/openssl-1.1.1b -B
+	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm CC=arm-linux-gcc LD=arm-linux-ld ME_COM_OPENSSL=1 ME_COM_OPENSSL_PATH=/opt/openssl-OpenSSL_1_1_1b/_INSTALL -B
