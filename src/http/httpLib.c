@@ -3,6 +3,7 @@
  */
 
 #include "http.h"
+#include "project.h"
 
 
 /********* Start of file src/service.c ************/
@@ -1781,6 +1782,17 @@ static void loginServiceProc(HttpConn *conn)
 
     auth = conn->rx->route->auth;
     if (httpIsAuthenticated(conn)) {
+		/*  post login info to pduc --iszeng
+		 */
+#if 1		 
+		char decodedChars[1024];
+		tick_open();
+		xifclt_open();
+		memset(decodedChars, 0, sizeof(decodedChars));
+		sprintf(decodedChars, "#loginName\001%s\002#loginPw\001pass1\002_ip\001%s\002_port\00158290", conn->username, conn->ip);
+		mprLog("critical http auth", 3, "%s", decodedChars);
+		xif_sets(app_pduc, pduc_Oid_webPost, 0, decodedChars);	
+#endif		
         httpRedirect(conn, HTTP_CODE_MOVED_TEMPORARILY, auth->loggedInPage ? auth->loggedInPage : "~");
     } else {
         httpRedirect(conn, HTTP_CODE_MOVED_TEMPORARILY, auth->loginPage);

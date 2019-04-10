@@ -1,1 +1,1 @@
- --no-print-directory -B -- ME_COM_OPENSSL_PATH=/opt/openssl-OpenSSL_1_1_1b/_INSTALL ME_COM_OPENSSL=1 LD=arm-linux-ld CC=arm-linux-gcc ARCH=arm SHOW=1
+ --no-print-directory -B -- DEBUG=release ME_COM_OPENSSL_PATH=/opt/openssl-OpenSSL_1_1_1b/ ME_COM_OPENSSL=1 LD=arm-linux-ld CC=arm-linux-gcc ARCH=arm SHOW=1
