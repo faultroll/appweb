@@ -254,6 +254,9 @@ MAIN(appweb, int argc, char **argv, char **envp)
         return MPR_ERR_CANT_INITIALIZE;
     }
     httpSetInfoLevel(0);
+	
+	httpDefineAction("/action/action_get", action_get);
+	
     if (httpStartEndpoints() < 0) {
         mprLog("error appweb", 0, "Cannot listen on HTTP endpoints, exiting.");
         exit(9);

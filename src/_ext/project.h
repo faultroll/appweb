@@ -19,6 +19,7 @@
 #define THIS_APP app_boa
 #define THIS_APP_NUMBER THIS_APP
 
+#define pduc_Oid_webRequest 2
 #define pduc_Oid_webPost 3 // see the xsys program.
 
 #ifndef DEFAULT_STRING_LENGTH

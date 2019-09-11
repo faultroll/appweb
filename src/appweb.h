@@ -12,6 +12,7 @@
 #include    "osdep.h"
 #include    "mpr.h"
 #include    "http.h"
+#include	"action.h"
 
 #ifdef __cplusplus
 extern "C" {

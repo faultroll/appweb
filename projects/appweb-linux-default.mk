@@ -178,6 +178,7 @@ clean:
 	rm -f "$(BUILD)/bin/appman"
 	rm -f "$(BUILD)/bin/tick.o"
 	rm -f "$(BUILD)/bin/xifclt.o"
+	rm -f "$(BUILD)/bin/action.o"
 
 clobber: clean
 	rm -fr ./$(BUILD)
@@ -233,12 +234,24 @@ $(BUILD)/inc/http.h: $(DEPS_4)
 	cp src/http/http.h $(BUILD)/inc/http.h
 
 #
+#	action.h
+#
+DEPS_4_1 += src/_ext/action.h
+DEPS_4_1 += $(BUILD)/inc/osdep.h
+
+$(BUILD)/inc/action.h: $(DEPS_4_1)
+	@echo '      [Copy] $(BUILD)/inc/action.h'
+	mkdir -p "$(BUILD)/inc"
+	cp src/_ext/action.h $(BUILD)/inc/action.h
+	
+#
 #   appweb.h
 #
 DEPS_5 += src/appweb.h
 DEPS_5 += $(BUILD)/inc/osdep.h
 DEPS_5 += $(BUILD)/inc/mpr.h
 DEPS_5 += $(BUILD)/inc/http.h
+DEPS_5 += $(BUILD)/inc/action.h
 
 $(BUILD)/inc/appweb.h: $(DEPS_5)
 	@echo '      [Copy] $(BUILD)/inc/appweb.h'
@@ -527,6 +540,17 @@ $(BUILD)/obj/xifclt.o: \
 	src/_ext/xifclt.c $(DES_30_8)
 	@echo '		[Compile] $(BUILD)/obj/xifclt.o'
 	$(CC) -c -o $(BUILD)/obj/xifclt.o $(CFLAGS) $(DFLAGS) -DME_COM_OPENSSL_PATH="$(ME_COM_OPENSSL_PATH)" $(IFLAGS) "-I$(ME_COM_OPENSSL_PATH)/include" src/_ext/xifclt.c
+
+#
+#	action.o	
+#
+DES_30_9 += $(BUILD)/inc/project.h
+DES_30_9 += $(BUILD)/inc/appweb.h
+
+$(BUILD)/obj/action.o: \
+	src/_ext/action.c $(DES_30_9)
+	@echo '		[Compile] $(BUILD)/obj/action.o'
+	$(CC) -c -o $(BUILD)/obj/action.o $(CFLAGS) $(DFLAGS) -DME_COM_OPENSSL_PATH="$(ME_COM_OPENSSL_PATH)" $(IFLAGS) "-I$(ME_COM_OPENSSL_PATH)/include" src/_ext/action.c	
 	
 #
 #   http.h
@@ -934,6 +958,7 @@ DEPS_50 += $(BUILD)/obj/convenience.o
 DEPS_50 += $(BUILD)/obj/cgiHandler.o
 DEPS_50 += $(BUILD)/obj/espHandler.o
 DEPS_50 += $(BUILD)/obj/rom.o
+DEPS_50 += $(BUILD)/obj/action.o
 
 ifeq ($(ME_COM_MBEDTLS),1)
     LIBS_50 += -lmbedtls
@@ -988,7 +1013,7 @@ endif
 
 $(BUILD)/bin/libappweb.so: $(DEPS_50)
 	@echo '      [Link] $(BUILD)/bin/libappweb.so'
-	$(CC) -shared -o $(BUILD)/bin/libappweb.so $(LDFLAGS) $(LIBPATHS)  "$(BUILD)/obj/config.o" "$(BUILD)/obj/convenience.o" "$(BUILD)/obj/cgiHandler.o" "$(BUILD)/obj/espHandler.o" "$(BUILD)/obj/rom.o" $(LIBPATHS_50) $(LIBS_50) $(LIBS_50) $(LIBS) 
+	$(CC) -shared -o $(BUILD)/bin/libappweb.so $(LDFLAGS) $(LIBPATHS)  "$(BUILD)/obj/config.o" "$(BUILD)/obj/convenience.o" "$(BUILD)/obj/cgiHandler.o" "$(BUILD)/obj/espHandler.o" "$(BUILD)/obj/rom.o" "$(BUILD)/obj/action.o" $(LIBPATHS_50) $(LIBS_50) $(LIBS_50) $(LIBS) 
 
 #
 #   appweb

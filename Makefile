@@ -104,11 +104,18 @@ help:
 	@echo 'Use "SHOW=1 make" to show executed commands.' >&2
 	@echo '' >&2
 
+.PHONY: rebuild
+rebuild: appweb install_appweb
+
 #	DEBUG=debug			for debug
 #	DEBUG=release		for release
 .PHONY: appweb	
 appweb:
 	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm CC=arm-linux-gcc LD=arm-linux-ld ME_COM_OPENSSL=1 ME_COM_OPENSSL_PATH=/opt/openssl-OpenSSL_1_1_1b/ DEBUG=release -B
+
+.PHONY: install_appweb
+install_appweb:
+	cp build/linux-arm-default/bin/* publish/
 
 .PHONY: clear
 clear:
