@@ -116,6 +116,8 @@ appweb:
 .PHONY: install_appweb
 install_appweb:
 	cp build/linux-arm-default/bin/* publish/
+	cd publish/
+	tar zcvf appweb.tar.gz *
 
 .PHONY: clear
 clear:

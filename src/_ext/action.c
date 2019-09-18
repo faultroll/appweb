@@ -31,6 +31,7 @@ bool action_output_file(char *filepath, HttpQueue *q) {
 	}
 	memset(buf, '\0', sizeof(buf));
 	sleep(1);
+	int size;
 	while ((size = fread(buf, 1, sizeof(buf)/2-1, fd)) > 0) {
 		httpWrite(q, escapeNumberSign(buf));
 		memset(buf, '\0', sizeof(buf));
