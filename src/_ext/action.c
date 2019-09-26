@@ -58,7 +58,7 @@ PUBLIC void action_get(HttpConn *conn)
 	mprLog("error appweb", 0, "ret = %d", ret);
 	if (ret == 0) {
 		httpSetStatus(conn, 200);
-		httpWrite(q, mainFrameDoctype);
+		//httpWrite(q, mainFrameDoctype);
 		/*
 			Add desired headers. "Set" will overwrite, add will create if not already defined.
 		 */		

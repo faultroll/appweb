@@ -111,14 +111,14 @@ rebuild: appweb install_appweb
 #	DEBUG=release		for release
 .PHONY: appweb	
 appweb:
-	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm CC=arm-linux-gcc LD=arm-linux-ld ME_COM_OPENSSL=1 ME_COM_OPENSSL_PATH=/opt/openssl-OpenSSL_1_1_1b/ DEBUG=release -B
+	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm CC=arm-linux-gcc LD=arm-linux-ld ME_COM_OPENSSL=1 ME_COM_OPENSSL_PATH=/opt/openssl-OpenSSL_1_1_1b/ DEBUG=debug -B
 
 .PHONY: install_appweb
 install_appweb:
+	cd publish/ && ls | grep -v cc.sh | xargs -r rm
 	cp build/linux-arm-default/bin/* publish/
-	cd publish/
-	tar zcvf appweb.tar.gz *
-
+	sleep 5 && cd publish/ && tar zcvf appweb.tar.gz ./*
+	
 .PHONY: clear
 clear:
 	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm clean

@@ -257,7 +257,7 @@ MAIN(appweb, int argc, char **argv, char **envp)
 	
 	httpDefineAction("/action/action_get", action_get);
 	
-	//httpDefineAction("/action/action_post", action_post);
+	httpDefineAction("/action/action_post", action_post);
 	
     if (httpStartEndpoints() < 0) {
         mprLog("error appweb", 0, "Cannot listen on HTTP endpoints, exiting.");
