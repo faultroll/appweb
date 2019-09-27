@@ -8,10 +8,9 @@ const char   refresh[] =
 			"<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>		<meta http-equiv=\"refresh\" content=\"0\"/><title>Showing Result...</title></head>	<body>	<p>Showing Result...</p>	</body></html>";
 	
 char* escapeNumberSign(char *buf) {
-	char   esc[1024];
+	char   esc[256*3];
 	char   *p0, *p1;
 	
-	if (strlen(buf) > sizeof(esc)/2 - 1)   return NULL;
 	memset(esc, 0, sizeof(esc));
 	for (p0 = buf, p1 = esc; *p0; p0++, p1++) {
 		*p1 = *p0;
@@ -25,20 +24,23 @@ char* escapeNumberSign(char *buf) {
 				
 bool action_output_file(char *filepath, HttpQueue *q) {
 	FILE   *fd;
-	char   buf[1024];
+	char   buf[256/2];
 
 	fd = fopen(filepath, "r");
 	if (!fd) {
 		fd = fopen("/xprod/xweb/xfs/error.html", "r");
 		if (!fd)   return 0;
 	}
-	memset(buf, '\0', sizeof(buf));
+	memset(buf, 0, sizeof(buf));
 	sleep(1);
 	int size;
-	while ((size = fread(buf, 1, sizeof(buf)/2-1, fd)) > 0) {
-		httpWrite(q, escapeNumberSign(buf));
-		memset(buf, '\0', sizeof(buf));
+	while ((size = fread(buf, 1, sizeof(buf)-1, fd)) > 0) {
+		char * test = escapeNumberSign(buf);
+		mprLog("error appweb", 0, "\nsize = %d\n%s", size, test);
+		httpWrite(q, test);
+		memset(buf, 0, sizeof(buf));
 	}
+	fclose(fd);
 	return 1;
 }
 
@@ -48,17 +50,15 @@ PUBLIC void action_get(HttpConn *conn)
 	char   prm[128];
 	char   *page = NULL;
 	
-	mprLog("error appweb", 0, "come here");
 	page = httpGetParam(conn, "p", NULL);
 	if (page !=  NULL) 
 		sprintf(prm, "username=%s,/%s",conn->username, page);
 	else
 		return;
 	int ret = xif_sets(app_pduc, pduc_Oid_webRequest, 0, prm);
-	mprLog("error appweb", 0, "ret = %d", ret);
 	if (ret == 0) {
 		httpSetStatus(conn, 200);
-		//httpWrite(q, mainFrameDoctype);
+		httpWrite(q, mainFrameDoctype);
 		/*
 			Add desired headers. "Set" will overwrite, add will create if not already defined.
 		 */		
