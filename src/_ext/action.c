@@ -8,10 +8,11 @@ const char   refresh[] =
 			"<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>		<meta http-equiv=\"refresh\" content=\"0\"/><title>Showing Result...</title></head>	<body>	<p>Showing Result...</p>	</body></html>";
 	
 char* escapeNumberSign(char *buf) {
-	char   esc[256*3];
+	char   *esc;
 	char   *p0, *p1;
 	
-	memset(esc, 0, sizeof(esc));
+	esc = mprAlloc(256);
+	memset(esc, 0, 256);
 	for (p0 = buf, p1 = esc; *p0; p0++, p1++) {
 		*p1 = *p0;
 		if (*p0 == '%') {
@@ -33,11 +34,8 @@ bool action_output_file(char *filepath, HttpQueue *q) {
 	}
 	memset(buf, 0, sizeof(buf));
 	sleep(1);
-	int size;
-	while ((size = fread(buf, 1, sizeof(buf)-1, fd)) > 0) {
-		char * test = escapeNumberSign(buf);
-		mprLog("error appweb", 0, "\nsize = %d\n%s", size, test);
-		httpWrite(q, test);
+	while (fread(buf, 1, sizeof(buf)-1, fd) > 0) {
+		httpWrite(q, escapeNumberSign(buf));
 		memset(buf, 0, sizeof(buf));
 	}
 	fclose(fd);
