@@ -5,7 +5,7 @@ const char   mainFrameDoctype[] =
 	"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\n\n""<html xmlns=\"http://www.w3.org/1999/xhtml\">";
 
 const char   refresh[] =
-			"<html xmlns=\"http://www.w3.org/1999/xhtml\"><head>		<meta http-equiv=\"refresh\" content=\"0\"/><title>Showing Result...</title></head>	<body>	<p>Showing Result...</p>	</body></html>";
+			"<head><meta http-equiv=\"refresh\" content=\"0\" url=\"/action/action_get\"/><title>Showing Result...</title></head> <body><p>Showing Result...</p></body></html>";
 	
 char* escapeNumberSign(char *buf) {
 	char   *esc;
@@ -76,15 +76,16 @@ PUBLIC void action_get(HttpConn *conn)
 PUBLIC void action_post(HttpConn *conn)
 {
 	HttpQueue   *q = conn->writeq;
-	char   decodedChars[1024];
-	char   *str = NULL;
+	char        *str = NULL;
+	char        decodedChars[1024];
 	
 	str = httpGetParamsString(conn);
-	memset(decodedChars, 0, sizeof(decodedChars));
-	if (strlen(str) < 1024) {
+	if (str == NULL) {
+		return;
+	} else if (strlen(str) < 1024) {
+		memset(decodedChars, 0, sizeof(decodedChars));
 		strcpy(decodedChars, str);
-	}
-	else {
+	} else {
 		mprLog("error appweb", 0, "post data bytes >= 1024");
 		return;
 	}
@@ -137,35 +138,26 @@ PUBLIC void action_post(HttpConn *conn)
 	d += strlen("\002#loginName\001");
 	if (conn->username) {
 		sprintf(d, conn->username);
-	}
-	else {
+	} else {
 		mprLog("error appweb", 0, "conn->username is NULL");
 		return;
 	}
 	d += strlen(conn->username);
 	sprintf(d, "\002");
-	mprLog("error appweb", 0, "\n***\n%s\n---\n", decodedChars);
 
 	int ret = xif_sets(app_pduc, pduc_Oid_webPost, 0, decodedChars);
-	if (ret == 1) {
-
+	if (ret == XIF_RETURN_NO_SUCH_CMD) {
+#if 0		
 		httpSetStatus(conn, 200);
-		// httpWrite(q, mainFrameDoctype);
+		httpWrite(q, mainFrameDoctype);
 		/*
 			Add desired headers. "Set" will overwrite, add will create if not already defined.
 		 */		
 		httpAddHeaderString(conn, "Content-Type", "text/html");
-		 httpSetHeaderString(conn, "Cache-Control", "no-cache");
+		httpSetHeaderString(conn, "Cache-Control", "no-cache");
 		httpWrite(q, refresh);
 
-		// if (!action_output_file("/tmp/boa/result.html", q)) {
-			// httpWrite(q, "file loss");
-		// }
-	   /*
-			Call finalize output and close the request.
-			Delay closing if you want to do asynchronous output and close later.
-		 */			
 		httpFinalize(conn);
-	
+#endif	
 	} 
 }
