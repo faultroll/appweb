@@ -147,17 +147,26 @@ PUBLIC void action_post(HttpConn *conn)
 
 	int ret = xif_sets(app_pduc, pduc_Oid_webPost, 0, decodedChars);
 	if (ret == XIF_RETURN_NO_SUCH_CMD) {
-#if 0		
-		httpSetStatus(conn, 200);
-		httpWrite(q, mainFrameDoctype);
-		/*
-			Add desired headers. "Set" will overwrite, add will create if not already defined.
-		 */		
-		httpAddHeaderString(conn, "Content-Type", "text/html");
-		httpSetHeaderString(conn, "Cache-Control", "no-cache");
-		httpWrite(q, refresh);
-
-		httpFinalize(conn);
-#endif	
+		char prm[128];
+		memset(prm, 0, sizeof(prm));
+		sprintf(prm, "username=%s,/%s",conn->username, "bxpx");
+		int ret = xif_sets(app_pduc, pduc_Oid_webRequest, 0, prm);
+		if (ret == 0) {
+			httpSetStatus(conn, 200);
+			httpWrite(q, mainFrameDoctype);
+			/*
+				Add desired headers. "Set" will overwrite, add will create if not already defined.
+			 */		
+			httpAddHeaderString(conn, "Content-Type", "text/html");
+			httpSetHeaderString(conn, "Cache-Control", "no-cache");
+			if (!action_output_file("/tmp/boa/result.html", q)) {
+				httpWrite(q, "file loss");
+			}
+		   /*
+				Call finalize output and close the request.
+				Delay closing if you want to do asynchronous output and close later.
+			 */			
+			httpFinalize(conn);
+		} 
 	} 
 }
