@@ -4,12 +4,21 @@
     crumbs: []
 }
 
+<<<<<<< HEAD
+=======
+<@ let pak = Path('../pak.json').readJSON() @>
+
+>>>>>>> local
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <title><@= meta.title @></title>
     <@ partial('head') @>
 </head>
+<<<<<<< HEAD
 <body class="version">v<@= Path('../package.json').readJSON().version @></body>
+=======
+<body class="version" style="position: fixed; right: 14px; text-align: right;"><@= pak.title @> v<@= pak.version @></body>
+>>>>>>> local
 </html>
 

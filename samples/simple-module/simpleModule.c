@@ -1,15 +1,26 @@
 /*
     simple.c - Create a simple AppWeb dynamically loadable module
+<<<<<<< HEAD
   
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
  */
  
+=======
+
+    Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
+ */
+
+>>>>>>> local
 /******************************* Includes *****************************/
 
 #include    "appweb.h"
 
 /********************************* Code *******************************/
+<<<<<<< HEAD
 /* 
+=======
+/*
+>>>>>>> local
     Parse any module specific configuration directives from the appweb.conf config file.
  */
 static int customConfig(MaState *state, cchar *key, cchar *value)
@@ -45,6 +56,7 @@ int httpSimpleModuleInit(Http *http, MprModule *mp)
 
 
 /*
+<<<<<<< HEAD
     @copy   default
 
     Copyright (c) Embedthis Software. All Rights Reserved.
@@ -62,4 +74,12 @@ int httpSimpleModuleInit(Http *http, MprModule *mp)
     vim: sw=4 ts=4 expandtab
 
     @end
+=======
+    Copyright (c) Embedthis Software. All Rights Reserved.
+    This software is distributed under commercial and open source licenses.
+    You may use the Embedthis Open Source license or you may acquire a
+    commercial license from Embedthis Software. You agree to be fully bound
+    by the terms of either license. Consult the LICENSE.md distributed with
+    this software for full details and other copyrights.
+>>>>>>> local
  */

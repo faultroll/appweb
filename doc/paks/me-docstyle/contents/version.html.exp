@@ -10,6 +10,10 @@
     <title><@= meta.title @></title>
     <@ partial('head') @>
 </head>
+<<<<<<< HEAD
 <body class="version">v<@= Path('../package.json').readJSON().version @></body>
+=======
+<body class="version">v<@= Path('../pak.json').readJSON().version @></body>
+>>>>>>> local
 </html>
 

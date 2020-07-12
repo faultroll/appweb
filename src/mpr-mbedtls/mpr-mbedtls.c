@@ -193,7 +193,14 @@ static int configMbed(MprSsl *ssl, int flags, char **errorMsg)
 {
     MbedConfig          *cfg;
     mbedtls_ssl_config  *mconf;
+<<<<<<< HEAD
     int                 rc;
+=======
+    cuchar              dhm_p[] = MBEDTLS_DHM_RFC3526_MODP_2048_P_BIN;
+    cuchar              dhm_g[] = MBEDTLS_DHM_RFC3526_MODP_2048_G_BIN;
+    char                *anext, *aprotocol;
+    int                 i, rc;
+>>>>>>> local
 
     if (ssl->config && !ssl->changed) {
         return 0;
@@ -257,7 +264,11 @@ static int configMbed(MprSsl *ssl, int flags, char **errorMsg)
     /*
         Configure larger DH parameters
      */
+<<<<<<< HEAD
     if ((rc = mbedtls_ssl_conf_dh_param(mconf, MBEDTLS_DHM_RFC5114_MODP_2048_P, MBEDTLS_DHM_RFC5114_MODP_2048_G)) < 0) {
+=======
+    if ((rc = mbedtls_ssl_conf_dh_param_bin(mconf, dhm_p, sizeof(dhm_g), dhm_g, sizeof(dhm_g))) < 0) {
+>>>>>>> local
         merror(rc, "Cannot set DH params");
         return MPR_ERR_CANT_INITIALIZE;
     }
@@ -300,6 +311,14 @@ static int configMbed(MprSsl *ssl, int flags, char **errorMsg)
     if ((cfg->ciphers = getCipherSuite(ssl)) != 0) {
         mbedtls_ssl_conf_ciphersuites(mconf, cfg->ciphers);
     }
+<<<<<<< HEAD
+=======
+#if ME_MPR_HAS_ALPN
+    if (ssl->alpn) {
+        mbedtls_ssl_conf_alpn_protocols(mconf, (cchar**) ssl->alpn->items);
+    }
+#endif
+>>>>>>> local
     if (flags & MPR_SOCKET_SERVER && ssl->matchSsl) {
         mbedtls_ssl_conf_sni(mconf, sniCallback, 0);
     }
@@ -494,10 +513,17 @@ static int getPeerCertInfo(MprSocket *sp)
         mbedtls_x509_dn_gets(cbuf, sizeof(cbuf), &peer->issuer);
         sp->peerCertIssuer = sclone(cbuf);
 
+<<<<<<< HEAD
         if (mprGetLogLevel() >= 5) {
             char buf[4096];
             mbedtls_x509_crt_info(buf, sizeof(buf) - 1, "", peer);
             mprLog("info mbedtls", 5, "Peer certificate\n%s", buf);
+=======
+        if (mprGetLogLevel() >= 6) {
+            char buf[4096];
+            mbedtls_x509_crt_info(buf, sizeof(buf) - 1, "", peer);
+            mprLog("info mbedtls", 6, "Peer certificate\n%s", buf);
+>>>>>>> local
         }
     }
     sp->cipher = replaceHyphen(sclone(mbedtls_ssl_get_ciphersuite(ctx)), '-', '_');
@@ -818,11 +844,19 @@ static int *getCipherSuite(MprSsl *ssl)
         static int once = 0;
         if (!once++) {
             cp = (ciphers && *ciphers) ? result : mbedtls_ssl_list_ciphersuites();
+<<<<<<< HEAD
             mprLog("info mbedtls", 5, "\nCiphers:");
             for (; *cp; cp++) {
                 scopy(buf, sizeof(buf), mbedtls_ssl_get_ciphersuite_name(*cp));
                 replaceHyphen(buf, '-', '_');
                 mprLog("info mbedtls", 5, "0x%04X %s", *cp, buf);
+=======
+            mprLog("info mbedtls", 6, "\nCiphers:");
+            for (; *cp; cp++) {
+                scopy(buf, sizeof(buf), mbedtls_ssl_get_ciphersuite_name(*cp));
+                replaceHyphen(buf, '-', '_');
+                mprLog("info mbedtls", 6, "0x%04X %s", *cp, buf);
+>>>>>>> local
             }
         }
     }

@@ -58,6 +58,7 @@ Me.load({
             fortify: true,
         },
 
+<<<<<<< HEAD
         ejscript: {
             db: true,                                                                                     
             mail: true,                                                                                   
@@ -69,6 +70,8 @@ Me.load({
             zlib: true,
         },
 
+=======
+>>>>>>> local
         esp: {
             cmd:    true,
             legacy: false,
@@ -86,6 +89,13 @@ Me.load({
             compact: true,      /* Compact edition - Disable non-essential ciphers and features */
         },
 
+<<<<<<< HEAD
+=======
+        openssl: {
+            version: '1.0',
+        },
+
+>>>>>>> local
         mpr: {
             /*
                 Enable logging via mprLog to the log file
@@ -104,7 +114,11 @@ Me.load({
             ssl: {
                 cache: 512,             /* Set the session cache size (items) */
                 logLevel: 5,            /* Starting logging level for SSL messages */
+<<<<<<< HEAD
                 handshakes: 1,          /* Set maximum number of renegotiations (zero means infinite) */
+=======
+                handshakes: 3,          /* Set maximum number of renegotiations (zero means infinite) */
+>>>>>>> local
                 ticket: true,           /* Enable session resumption via ticketing - client side session caching */
                 timeout: 86400,         /* Session and ticketing duration in seconds */
             },
@@ -157,7 +171,16 @@ Me.load({
             See installs/installs.me for the install targets
          */
         projects: {
+<<<<<<< HEAD
             action: `genProjects('')`,
+=======
+            action: `
+                genProjects('--set openssl.version=1.0 --with openssl', 'openssl_10', 'windows-x64')
+                genProjects('--set openssl.version=1.1 --with openssl', 'openssl_11', 'windows-x64')
+                genProjects('--with openssl', 'openssl', 'macosx-x64')
+                genProjects('')
+            `,
+>>>>>>> local
         },
 
         publish: {

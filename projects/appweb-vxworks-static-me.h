@@ -22,7 +22,11 @@
     #define ME_COMPANY "embedthis"
 #endif
 #ifndef ME_COMPATIBLE
+<<<<<<< HEAD
     #define ME_COMPATIBLE "7.0"
+=======
+    #define ME_COMPATIBLE "7.1"
+>>>>>>> local
 #endif
 #ifndef ME_COMPILER_FORTIFY
     #define ME_COMPILER_FORTIFY 1
@@ -87,6 +91,7 @@
 #ifndef ME_DESCRIPTION
     #define ME_DESCRIPTION "Embedthis Appweb Embedded Web Server"
 #endif
+<<<<<<< HEAD
 #ifndef ME_EJSCRIPT_DB
     #define ME_EJSCRIPT_DB 1
 #endif
@@ -111,6 +116,8 @@
 #ifndef ME_EJSCRIPT_ZLIB
     #define ME_EJSCRIPT_ZLIB 1
 #endif
+=======
+>>>>>>> local
 #ifndef ME_ESP_CMD
     #define ME_ESP_CMD 1
 #endif
@@ -151,7 +158,11 @@
     #define ME_MPR_SSL_CACHE 512
 #endif
 #ifndef ME_MPR_SSL_HANDSHAKES
+<<<<<<< HEAD
     #define ME_MPR_SSL_HANDSHAKES 1
+=======
+    #define ME_MPR_SSL_HANDSHAKES 3
+>>>>>>> local
 #endif
 #ifndef ME_MPR_SSL_LOG_LEVEL
     #define ME_MPR_SSL_LOG_LEVEL 5
@@ -168,6 +179,12 @@
 #ifndef ME_NAME
     #define ME_NAME "appweb"
 #endif
+<<<<<<< HEAD
+=======
+#ifndef ME_OPENSSL_VERSION
+    #define ME_OPENSSL_VERSION "1.0"
+#endif
+>>>>>>> local
 #ifndef ME_PLATFORMS
     #define ME_PLATFORMS "local"
 #endif
@@ -184,13 +201,21 @@
     #define ME_STATIC 1
 #endif
 #ifndef ME_TITLE
+<<<<<<< HEAD
     #define ME_TITLE "Embedthis Appweb"
+=======
+    #define ME_TITLE "Embedthis Appweb Community Edition"
+>>>>>>> local
 #endif
 #ifndef ME_TUNE
     #define ME_TUNE "size"
 #endif
 #ifndef ME_VERSION
+<<<<<<< HEAD
     #define ME_VERSION "7.0.1"
+=======
+    #define ME_VERSION "7.1.1"
+>>>>>>> local
 #endif
 #ifndef ME_WATCHDOG_NAME
     #define ME_WATCHDOG_NAME "appman"
@@ -252,7 +277,11 @@
     #define ME_VAPP_PREFIX "deploy"
 #endif
 #ifndef ME_SRC_PREFIX
+<<<<<<< HEAD
     #define ME_SRC_PREFIX "/usr/src/appweb-7.0.1"
+=======
+    #define ME_SRC_PREFIX "/usr/src/appweb-7.1.1"
+>>>>>>> local
 #endif
 
 /* Suffixes */
@@ -291,13 +320,21 @@
     #define ME_MAJOR_VERSION 7
 #endif
 #ifndef ME_MINOR_VERSION
+<<<<<<< HEAD
     #define ME_MINOR_VERSION 0
+=======
+    #define ME_MINOR_VERSION 1
+>>>>>>> local
 #endif
 #ifndef ME_PATCH_VERSION
     #define ME_PATCH_VERSION 1
 #endif
 #ifndef ME_VNUM
+<<<<<<< HEAD
     #define ME_VNUM 700000001
+=======
+    #define ME_VNUM 700010001
+>>>>>>> local
 #endif
 
 /* Components */

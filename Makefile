@@ -18,7 +18,11 @@ PROFILE := default
 
 ifeq ($(ARCH),)
 	ifeq ($(OS),windows)
+<<<<<<< HEAD
 		ifeq ($(PROCESSOR_ARCHITEW6432),AMD64)
+=======
+		ifeq ($(PROCESSOR_ARCHITECTURE),AMD64)
+>>>>>>> local
 			ARCH?=x64
 		else
 			ARCH?=x86
@@ -77,7 +81,11 @@ help:
 	@echo '  ME_COM_DIR        # Enable the directory listing handler' >&2
 	@echo '  ME_COM_ESP        # Enable the ESP web framework' >&2
 	@echo '  ME_COM_MBEDTLS    # Enable the mbed TLS stack' >&2
+<<<<<<< HEAD
 	@echo '  ME_COM_OPENSSL    # Enable the OpenSSL SSL stack' >&2
+=======
+	@echo '  ME_COM_OPENSSL    # Enable the OpenSSL SSL stack, must set ME_COM_OPENSS_PATH' >&2
+>>>>>>> local
 	@echo '  ME_COM_SQLITE     # Enable the SQLite database' >&2
 	@echo '  ME_ROM            # Build for ROM without a file system' >&2
 	@echo '  ME_STACK_SIZE     # Define the VxWorks stack size' >&2
@@ -103,4 +111,25 @@ help:
 	@echo '' >&2
 	@echo 'Use "SHOW=1 make" to show executed commands.' >&2
 	@echo '' >&2
+<<<<<<< HEAD
+=======
 
+.PHONY: rebuild
+rebuild: appweb install_appweb
+
+#	DEBUG=debug			for debug
+#	DEBUG=release		for release
+.PHONY: appweb	
+appweb:
+	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm CC=arm-linux-gcc LD=arm-linux-ld ME_COM_OPENSSL=1 ME_COM_OPENSSL_PATH=/opt/openssl-OpenSSL_1_1_1b/ DEBUG=debug -B
+
+.PHONY: install_appweb
+install_appweb:
+	cd publish/ && ls | grep -v cc.sh | xargs -r rm
+	cp build/linux-arm-default/bin/* publish/
+	sleep 5 && cd publish/ && tar zcvf appweb.tar.gz ./*
+	
+.PHONY: clear
+clear:
+	@$(MAKE) SHOW=1 -f projects/appweb-linux-default.mk ARCH=arm clean
+>>>>>>> local

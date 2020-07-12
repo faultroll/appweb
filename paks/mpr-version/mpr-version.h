@@ -57,15 +57,20 @@ PUBLIC bool mprIsVersionObjAcceptable(MprVersion *vp, cchar *criteria);
 #endif /* _h_VERSION */
 
 /*
+<<<<<<< HEAD
     @copy   default
 
     Copyright (c) Embedthis Software. All Rights Reserved.
 
+=======
+    Copyright (c) Embedthis Software. All Rights Reserved.
+>>>>>>> local
     This software is distributed under commercial and open source licenses.
     You may use the Embedthis Open Source license or you may acquire a
     commercial license from Embedthis Software. You agree to be fully bound
     by the terms of either license. Consult the LICENSE.md distributed with
     this software for full details and other copyrights.
+<<<<<<< HEAD
 
     Local variables:
     tab-width: 4
@@ -74,4 +79,6 @@ PUBLIC bool mprIsVersionObjAcceptable(MprVersion *vp, cchar *criteria);
     vim: sw=4 ts=4 expandtab
 
     @end
+=======
+>>>>>>> local
  */

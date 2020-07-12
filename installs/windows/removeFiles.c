@@ -1,6 +1,12 @@
+<<<<<<< HEAD
 /** 
     remove.c - Remove files safely on Windows
   
+=======
+/**
+    remove.c - Remove files safely on Windows
+
+>>>>>>> local
     Copyright (c) All Rights Reserved. See details at the end of the file.
  */
 
@@ -103,7 +109,11 @@ int APIENTRY WinMain(HINSTANCE inst, HINSTANCE junk, char *args, int junk2)
     if (errflg || !removeOk) {
         fprintf(stderr, "Bad Usage");
         return FALSE;
+<<<<<<< HEAD
     }   
+=======
+    }
+>>>>>>> local
 
     cleanup();
 
@@ -153,7 +163,11 @@ static void recursiveRemove(char *dir, char *pattern)
     handle = FindFirstFile("*.*", &data);
 
     while (FindNextFile(handle, &data)) {
+<<<<<<< HEAD
         if (strcmp(data.cFileName, "..") == 0 || 
+=======
+        if (strcmp(data.cFileName, "..") == 0 ||
+>>>>>>> local
             strcmp(data.cFileName, ".") == 0) {
             continue;
         }
@@ -264,11 +278,16 @@ static int mprStrcpy(char *dest, int destMax, const char *src)
     } else {
         *dest = '\0';
         len = 0;
+<<<<<<< HEAD
     } 
+=======
+    }
+>>>>>>> local
     return len;
 }
 
 /*
+<<<<<<< HEAD
     @copy   default
 
     Copyright (c) Embedthis Software. All Rights Reserved.
@@ -286,4 +305,12 @@ static int mprStrcpy(char *dest, int destMax, const char *src)
     vim: sw=4 ts=4 expandtab
 
     @end
+=======
+    Copyright (c) Embedthis Software. All Rights Reserved.
+    This software is distributed under commercial and open source licenses.
+    You may use the Embedthis Open Source license or you may acquire a
+    commercial license from Embedthis Software. You agree to be fully bound
+    by the terms of either license. Consult the LICENSE.md distributed with
+    this software for full details and other copyrights.
+>>>>>>> local
  */
