@@ -1,0 +1,24 @@
+{
+    "name": "appweb-php",
+    "description": "PHP package for Appweb",
+    "version": "0.1.0",
+    "keywords": [
+        "php",
+        "appweb"
+    ],
+    "licenses": "GPL",
+    "repository": {
+        "type": "git",
+        "url": "git://github.com/embedthis/appweb-php.git"
+    },
+    "files": [
+        "*.me",
+        "*.c"
+    ],
+    "pak": {
+        "export": [
+            "*.me",
+            "*.c"
+        ]
+    }
+}
