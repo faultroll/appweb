@@ -2608,7 +2608,11 @@ static void loadApp(HttpRoute *parent, MprJson *prop)
     int         next;
 
     if (prop->type & MPR_JSON_OBJ) {
+<<<<<<< HEAD
         prefix = mprGetJson(prop, "prefix"); 
+=======
+        prefix = mprGetJson(prop, "prefix");
+>>>>>>> local
         config = mprGetJson(prop, "config");
         route = httpCreateInheritedRoute(parent);
         if (espInit(route, prefix, config) < 0) {
@@ -2629,7 +2633,11 @@ static void loadApp(HttpRoute *parent, MprJson *prop)
             httpFinalizeRoute(route);
         }
     }
+<<<<<<< HEAD
 }       
+=======
+}
+>>>>>>> local
 
 
 static void parseEsp(HttpRoute *route, cchar *key, MprJson *prop)
@@ -2640,11 +2648,14 @@ static void parseEsp(HttpRoute *route, cchar *key, MprJson *prop)
 
     if (smatch(mprGetJson(prop, "app"), "true")) {
         eroute->app = 1;
+<<<<<<< HEAD
 #if DEPRECATE || 1
     } else if (mprGetJson(prop, "server.listen") || mprGetJson(prop, "generate")) {
         eroute->app = 1;
         /* Here for legacy apps without esp.app */
 #endif
+=======
+>>>>>>> local
     }
     if (eroute->app) {
         /*
@@ -2696,7 +2707,11 @@ static void parseApps(HttpRoute *route, cchar *key, MprJson *prop)
 
     } else if (prop->type & MPR_JSON_OBJ) {
         loadApp(route, prop);
+<<<<<<< HEAD
         
+=======
+
+>>>>>>> local
     } else if (prop->type & MPR_JSON_ARRAY) {
         for (ITERATE_CONFIG(route, prop, child, ji)) {
             loadApp(route, child);
@@ -2761,7 +2776,11 @@ PUBLIC int getVisualStudioEnv(Esp *esp)
 
     /*
         Get the real system architecture, not whether this app is 32 or 64 bit.
+<<<<<<< HEAD
         On native 64 bit systems, PA is amd64 for 64 bit apps and is PAW6432 is amd64 for 32 bit apps 
+=======
+        On native 64 bit systems, PA is amd64 for 64 bit apps and is PAW6432 is amd64 for 32 bit apps
+>>>>>>> local
      */
     if (smatch(getenv("PROCESSOR_ARCHITECTURE"), "AMD64") || getenv("PROCESSOR_ARCHITEW6432")) {
         cpu = "x64";
@@ -2962,7 +2981,11 @@ static void legacyRouteSet(HttpRoute *route, cchar *set)
 #endif
 
 
+<<<<<<< HEAD
 PUBLIC int espInitParser() 
+=======
+PUBLIC int espInitParser()
+>>>>>>> local
 {
     httpDefineRouteSet("esp-server", serverRouteSet);
     httpDefineRouteSet("esp-restful", restfulRouteSet);
@@ -2979,7 +3002,11 @@ PUBLIC int espInitParser()
     httpAddConfig("esp.optimize", parseOptimize);
     httpAddConfig("esp.update", parseUpdate);
     return 0;
+<<<<<<< HEAD
 } 
+=======
+}
+>>>>>>> local
 
 /*
     Copyright (c) Embedthis Software. All Rights Reserved.
@@ -4431,7 +4458,11 @@ static void startEsp(HttpQueue *q);
 static int unloadEsp(MprModule *mp);
 
 #if !ME_STATIC
+<<<<<<< HEAD
 static int espLoadModule(HttpRoute *route, MprDispatcher *dispatcher, cchar *kind, cchar *source, cchar **errMsg, 
+=======
+static int espLoadModule(HttpRoute *route, MprDispatcher *dispatcher, cchar *kind, cchar *source, cchar **errMsg,
+>>>>>>> local
     bool *loaded);
 static cchar *getModuleName(HttpRoute *route, cchar *kind, cchar *target);
 static char *getModuleEntry(EspRoute *eroute, cchar *kind, cchar *source, cchar *cacheName);
@@ -4454,8 +4485,13 @@ PUBLIC int espOpen(MprModule *module)
     handler->close = closeEsp;
     handler->start = startEsp;
 
+<<<<<<< HEAD
     /* 
         Using the standard 'incoming' callback that simply transfers input to the queue head 
+=======
+    /*
+        Using the standard 'incoming' callback that simply transfers input to the queue head
+>>>>>>> local
         Applications should read by defining a notifier for READABLE events and then calling httpGetPacket
         on the read queue.
      */
@@ -4512,6 +4548,11 @@ static int openEsp(HttpQueue *q)
     HttpRoute   *rp, *route;
     EspRoute    *eroute;
     EspReq      *req;
+<<<<<<< HEAD
+=======
+    char        *cookie;
+    int         next;
+>>>>>>> local
 
     conn = q->conn;
     rx = conn->rx;
@@ -4556,8 +4597,16 @@ static int openEsp(HttpQueue *q)
         If a cookie is not explicitly set, use the application name for the session cookie so that
         cookies are unique per esp application.
      */
+<<<<<<< HEAD
     if (!route->cookie) {
         httpSetRouteCookie(route, sfmt("esp-%s", eroute->appName));
+=======
+    cookie = sfmt("esp-%s", eroute->appName);
+    for (ITERATE_ITEMS(route->host->routes, rp, next)) {
+        if (!rp->cookie) {
+            httpSetRouteCookie(rp, cookie);
+        }
+>>>>>>> local
     }
     return 0;
 }
@@ -5047,7 +5096,11 @@ PUBLIC void espRenderDocument(HttpConn *conn, cchar *target)
 
 /************************************ Support *********************************/
 /*
+<<<<<<< HEAD
     Create a per user session database clone. 
+=======
+    Create a per user session database clone.
+>>>>>>> local
     Used for demos so one users updates to not change anothers view of the database.
  */
 static void pruneDatabases(Esp *esp)
@@ -5172,7 +5225,11 @@ static cchar *getModuleName(HttpRoute *route, cchar *kind, cchar *target)
 /*
     WARNING: GC yield
  */
+<<<<<<< HEAD
 static int espLoadModule(HttpRoute *route, MprDispatcher *dispatcher, cchar *kind, cchar *source, cchar **errMsg, 
+=======
+static int espLoadModule(HttpRoute *route, MprDispatcher *dispatcher, cchar *kind, cchar *source, cchar **errMsg,
+>>>>>>> local
     bool *loaded)
 {
     EspRoute    *eroute;
@@ -5212,7 +5269,11 @@ static int espLoadModule(HttpRoute *route, MprDispatcher *dispatcher, cchar *kin
     }
     if (mprLookupModule(source) == 0) {
         if (!mprPathExists(module, R_OK)) {
+<<<<<<< HEAD
             *errMsg = "Module does not exist";
+=======
+            *errMsg = sfmt("Module does not exist: %s", module);
+>>>>>>> local
             unlock(esp);
             return MPR_ERR_CANT_FIND;
         }
@@ -5223,7 +5284,11 @@ static int espLoadModule(HttpRoute *route, MprDispatcher *dispatcher, cchar *kin
             return MPR_ERR_MEMORY;
         }
         if (mprLoadModule(mp) < 0) {
+<<<<<<< HEAD
             *errMsg = "Cannot load compiled esp module";
+=======
+            *errMsg = sfmt("Cannot load compiled esp module: %s", module);
+>>>>>>> local
             unlock(esp);
             return MPR_ERR_CANT_READ;
         }
@@ -5496,16 +5561,28 @@ static void manageEsp(Esp *esp, int flags)
     }
 }
 
+<<<<<<< HEAD
 
 /*********************************** Directives *******************************/
 /*
     Load the ESP configuration file esp.json (eroute->configFile) and an optional package.json file
+=======
+/*********************************** Directives *******************************/
+/*
+    Load the ESP configuration file esp.json (eroute->configFile) and an optional pak.json file
+>>>>>>> local
     WARNING: may yield
  */
 PUBLIC int espLoadConfig(HttpRoute *route)
 {
     EspRoute    *eroute;
+<<<<<<< HEAD
     cchar       *home, *name, *package;
+=======
+    HttpRoute   *rp;
+    cchar       *cookie, *home, *name, *package;
+    int         next;
+>>>>>>> local
     bool        modified;
 
     eroute = route->eroute;
@@ -5517,7 +5594,11 @@ PUBLIC int espLoadConfig(HttpRoute *route)
         return 0;
     }
     home = eroute->configFile ? mprGetPathDir(eroute->configFile) : route->home;
+<<<<<<< HEAD
     package = mprJoinPath(home, "package.json");
+=======
+    package = mprJoinPath(home, "pak.json");
+>>>>>>> local
     modified = 0;
     ifConfigModified(route, eroute->configFile, &modified);
     ifConfigModified(route, package, &modified);
@@ -5538,6 +5619,15 @@ PUBLIC int espLoadConfig(HttpRoute *route)
         if ((name = espGetConfig(route, "name", 0)) != 0) {
             eroute->appName = name;
         }
+<<<<<<< HEAD
+=======
+        cookie = sfmt("esp-%s", eroute->appName);
+        for (ITERATE_ITEMS(route->host->routes, rp, next)) {
+            if (!rp->cookie) {
+                httpSetRouteCookie(rp, cookie);
+            }
+        }
+>>>>>>> local
         unlock(esp);
     }
     if (!httpGetDir(route, "CACHE")) {
@@ -5710,9 +5800,14 @@ PUBLIC void espSetDefaultDirs(HttpRoute *route, bool app)
     cchar   *controllers, *documents, *path, *migrations;
 
     documents = mprJoinPath(route->home, "dist");
+<<<<<<< HEAD
 #if DEPRECATED || 1
     /*
         Consider keeping documents, web and public 
+=======
+    /*
+        Consider keeping documents, web and public
+>>>>>>> local
      */
     if (!mprPathExists(documents, X_OK)) {
         documents = mprJoinPath(route->home, "documents");
@@ -5725,9 +5820,15 @@ PUBLIC void espSetDefaultDirs(HttpRoute *route, bool app)
                     if (!mprPathExists(documents, X_OK)) {
 #if ME_APPWEB_PRODUCT
                         if (!esp->hostedDocuments && mprPathExists("install.conf", R_OK)) {
+<<<<<<< HEAD
                             /* 
                                 This returns the documents directory of the default route of the default host 
                                 When Appweb switches to appweb.json, then just it should be loaded with package.json
+=======
+                            /*
+                                This returns the documents directory of the default route of the default host
+                                When Appweb switches to appweb.json, then just it should be loaded with pak.json
+>>>>>>> local
                              */
                             char *output;
                             bool yielding = mprSetThreadYield(NULL, 0);
@@ -5737,7 +5838,11 @@ PUBLIC void espSetDefaultDirs(HttpRoute *route, bool app)
                                 documents = route->home;
                             }
                             mprSetThreadYield(NULL, yielding);
+<<<<<<< HEAD
                         } else 
+=======
+                        } else
+>>>>>>> local
 #endif
                         {
                             documents = route->home;
@@ -5747,8 +5852,12 @@ PUBLIC void espSetDefaultDirs(HttpRoute *route, bool app)
             }
         }
     }
+<<<<<<< HEAD
 #endif
     
+=======
+
+>>>>>>> local
     /*
         Detect if a controllers directory exists. Set controllers to "." if absent.
      */
@@ -5758,16 +5867,22 @@ PUBLIC void espSetDefaultDirs(HttpRoute *route, bool app)
         controllers = ".";
     }
 
+<<<<<<< HEAD
 #if DEPRECATED || 1
+=======
+>>>>>>> local
     migrations = "db/migrations";
     path = mprJoinPath(route->home, migrations);
     if (!mprPathExists(path, X_OK)) {
         migrations = "migrations";
     }
+<<<<<<< HEAD
 #else
     migrations = "migrations";
 #endif
 
+=======
+>>>>>>> local
     setDir(route, "CACHE", 0, app);
     setDir(route, "CONTROLLERS", controllers, app);
     setDir(route, "CONTENTS", 0, app);
@@ -5903,7 +6018,11 @@ static cchar *getWinVer(HttpRoute *route);
 /************************************* Code ***********************************/
 /*
     Tokens:
+<<<<<<< HEAD
     AR          Library archiver (ar)   
+=======
+    AR          Library archiver (ar)
+>>>>>>> local
     ARLIB       Archive library extension (.a, .lib)
     ARCH        Build architecture (64)
     CC          Compiler (cc)
@@ -5928,7 +6047,11 @@ PUBLIC char *espExpandCommand(HttpRoute *route, cchar *command, cchar *source, c
     EspRoute    *eroute;
     cchar       *cp, *outputModule, *os, *arch, *profile, *srcDir;
     char        *tmp;
+<<<<<<< HEAD
     
+=======
+
+>>>>>>> local
     if (command == 0) {
         return 0;
     }
@@ -5961,11 +6084,19 @@ PUBLIC char *espExpandCommand(HttpRoute *route, cchar *command, cchar *source, c
 
             } else if (matchToken(&cp, "${INC}")) {
                 /* Include directory for the configuration */
+<<<<<<< HEAD
                 mprPutStringToBuf(buf, mprJoinPath(http->platformDir, "inc")); 
 
             } else if (matchToken(&cp, "${LIBPATH}")) {
                 /* Library directory for Appweb libraries for the target */
                 mprPutStringToBuf(buf, mprJoinPath(http->platformDir, "bin")); 
+=======
+                mprPutStringToBuf(buf, mprJoinPath(http->platformDir, "inc"));
+
+            } else if (matchToken(&cp, "${LIBPATH}")) {
+                /* Library directory for Appweb libraries for the target */
+                mprPutStringToBuf(buf, mprJoinPath(http->platformDir, "bin"));
+>>>>>>> local
 
             } else if (matchToken(&cp, "${LIBS}")) {
                 /* Required libraries to link. These may have nested ${TOKENS} */
@@ -6017,7 +6148,11 @@ PUBLIC char *espExpandCommand(HttpRoute *route, cchar *command, cchar *source, c
 
             /*
                 These vars can be also be configured from environment variables.
+<<<<<<< HEAD
                 NOTE: the default esp.conf includes "esp->vxworks.conf" which has EspEnv definitions for the 
+=======
+                NOTE: the default esp.conf includes "esp->vxworks.conf" which has EspEnv definitions for the
+>>>>>>> local
                 configured VxWorks toolchain.
              */
             } else if (matchToken(&cp, "${AR}")) {
@@ -6071,7 +6206,11 @@ PUBLIC char *espExpandCommand(HttpRoute *route, cchar *command, cchar *source, c
 }
 
 
+<<<<<<< HEAD
 static int runCommand(HttpRoute *route, MprDispatcher *dispatcher, cchar *command, cchar *csource, cchar *module, 
+=======
+static int runCommand(HttpRoute *route, MprDispatcher *dispatcher, cchar *command, cchar *csource, cchar *module,
+>>>>>>> local
     char **errMsg)
 {
     MprCmd      *cmd;
@@ -6159,7 +6298,11 @@ PUBLIC int espLoadCompilerRules(HttpRoute *route)
 
     WARNING: this routine blocks and runs GC. All parameters must be retained.
  */
+<<<<<<< HEAD
 PUBLIC bool espCompile(HttpRoute *route, MprDispatcher *dispatcher, cchar *source, cchar *module, cchar *cacheName, 
+=======
+PUBLIC bool espCompile(HttpRoute *route, MprDispatcher *dispatcher, cchar *source, cchar *module, cchar *cacheName,
+>>>>>>> local
     int isView, char **errMsg)
 {
     MprFile     *fp;
@@ -6232,8 +6375,13 @@ PUBLIC bool espCompile(HttpRoute *route, MprDispatcher *dispatcher, cchar *sourc
         return 0;
     }
 
+<<<<<<< HEAD
     /* 
         Run compiler: WARNING: GC yield here 
+=======
+    /*
+        Run compiler: WARNING: GC yield here
+>>>>>>> local
      */
     if (runCommand(route, dispatcher, eroute->compileCmd, csource, module, errMsg) != 0) {
         return 0;
@@ -6366,7 +6514,11 @@ static char *joinLine(cchar *str, ssize *lenp)
         <%^ start           Put esp code at the start of the function
         <%^ end             Put esp code at the end of the function
 
+<<<<<<< HEAD
         %!var               Substitue the value of a parameter. 
+=======
+        %!var               Substitue the value of a parameter.
+>>>>>>> local
         %$param             Substitue the value of a request parameter.
         %#field             Lookup the current record for the value of the field.
         %~                  Home URL for the application
@@ -6377,7 +6529,11 @@ static char *joinLine(cchar *str, ssize *lenp)
  */
 
 //  DEPRECATED layout
+<<<<<<< HEAD
 PUBLIC char *espBuildScript(HttpRoute *route, cchar *page, cchar *path, cchar *cacheName, cchar *layout, 
+=======
+PUBLIC char *espBuildScript(HttpRoute *route, cchar *page, cchar *path, cchar *cacheName, cchar *layout,
+>>>>>>> local
         EspState *state, char **err)
 {
     EspState    top;
@@ -6606,7 +6762,11 @@ PUBLIC char *espBuildScript(HttpRoute *route, cchar *page, cchar *path, cchar *c
             "   espDefineView(route, \"%s\", %s);\n"\
             "   return 0;\n"\
             "}\n",
+<<<<<<< HEAD
             mprGetRelPath(path, route->home), mprGetBufStart(state->global), cacheName, 
+=======
+            mprGetRelPath(path, route->home), mprGetBufStart(state->global), cacheName,
+>>>>>>> local
                 mprGetBufStart(state->start), bodyCode, mprGetBufStart(state->end),
             ESP_EXPORT_STRING, cacheName, mprGetPortablePath(mprGetRelPath(path, route->documents)), cacheName);
         mprDebug("esp", 5, "Create ESP script: \n%s\n", bodyCode);
@@ -6692,7 +6852,11 @@ static int getEspToken(EspParse *parse)
                             <%^ control
                          */
                         if (*next == '@') {
+<<<<<<< HEAD
                             mprLog("esp warn", 0, "Using deprecated \"%%%c\" control directive in esp page: %s", 
+=======
+                            mprLog("esp warn", 0, "Using deprecated \"%%%c\" control directive in esp page: %s",
+>>>>>>> local
                                 *next, parse->path);
                         }
                         tid = ESP_TOK_CONTROL;
@@ -6703,7 +6867,11 @@ static int getEspToken(EspParse *parse)
                                 return ESP_TOK_ERR;
                             }
                         }
+<<<<<<< HEAD
                         
+=======
+
+>>>>>>> local
                     } else {
                         tid = ESP_TOK_CODE;
                         while (next < end && !(*next == '%' && next[1] == '>' && (next[-1] != '\\' && next[-1] != '%'))) {
@@ -6726,7 +6894,11 @@ static int getEspToken(EspParse *parse)
             } else {
                 if (!addChar(parse, c)) {
                     return ESP_TOK_ERR;
+<<<<<<< HEAD
                 }                
+=======
+                }
+>>>>>>> local
             }
             break;
 
@@ -6963,7 +7135,11 @@ static cchar *getDebug(EspRoute *eroute)
     } else if (eroute->compileMode == ESP_COMPILE_OPTIMIZED) {
         symbols = 0;
     } else {
+<<<<<<< HEAD
         symbols = sends(http->platform, "-debug") || sends(http->platform, "-xcode") || 
+=======
+        symbols = sends(http->platform, "-debug") || sends(http->platform, "-xcode") ||
+>>>>>>> local
             sends(http->platform, "-mine") || sends(http->platform, "-vsdebug");
     }
     if (scontains(http->platform, "windows-")) {
@@ -6981,9 +7157,15 @@ static cchar *getLibs(cchar *os)
         libs = "\"${LIBPATH}\\libesp${SHLIB}\" \"${LIBPATH}\\libhttp.lib\" \"${LIBPATH}\\libmpr.lib\"";
     } else {
 #if LINUX
+<<<<<<< HEAD
         /* 
             Fedora interprets $ORIGN relative to the shared library and not the application executable
             So loading compiled apps fails to locate libesp.so. 
+=======
+        /*
+            Fedora interprets $ORIGN relative to the shared library and not the application executable
+            So loading compiled apps fails to locate libesp.so.
+>>>>>>> local
             Since building a shared library, can omit libs and resolve at load time.
          */
         libs = "";
@@ -7033,11 +7215,19 @@ static cchar *getWinSDK(HttpRoute *route)
     EspRoute *eroute;
 
     /*
+<<<<<<< HEAD
         MS has made a huge mess of where and how the windows SDKs are installed. The registry key at 
         HKLM/Software/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder cannot be trusted and often
         points to the old 7.X SDKs even when 8.X is installed and active. MS have also moved the 8.X
         SDK to Windows Kits, while still using the old folder for some bits. So the old-reliable
         CurrentInstallFolder registry key is now unusable. So we must scan for explicit SDK versions 
+=======
+        MS has made a huge mess of where and how the windows SDKs are installed. The registry key at
+        HKLM/Software/Microsoft/Microsoft SDKs/Windows/CurrentInstallFolder cannot be trusted and often
+        points to the old 7.X SDKs even when 8.X is installed and active. MS have also moved the 8.X
+        SDK to Windows Kits, while still using the old folder for some bits. So the old-reliable
+        CurrentInstallFolder registry key is now unusable. So we must scan for explicit SDK versions
+>>>>>>> local
         listed above. Ugh!
      */
     cchar   *path, *key, *version;
@@ -7048,7 +7238,11 @@ static cchar *getWinSDK(HttpRoute *route)
     if (eroute->winsdk) {
         return eroute->winsdk;
     }
+<<<<<<< HEAD
     /* 
+=======
+    /*
+>>>>>>> local
         General strategy is to find an "include" directory in the highest version Windows SDK.
         First search the registry key: Windows Kits/InstalledRoots/KitsRoot*
      */
@@ -7066,7 +7260,11 @@ static cchar *getWinSDK(HttpRoute *route)
         }
     }
     if (!path) {
+<<<<<<< HEAD
         /* 
+=======
+        /*
+>>>>>>> local
             Next search the registry keys at Windows SDKs/Windows/ * /InstallationFolder
          */
         key = sfmt("HKLM\\SOFTWARE%s\\Microsoft\\Microsoft SDKs\\Windows", (ME_64) ? "\\Wow6432Node" : "");
@@ -7113,12 +7311,22 @@ static cchar *getWinVer(HttpRoute *route)
 static cchar *getArPath(cchar *os, cchar *arch)
 {
 #if WINDOWS
+<<<<<<< HEAD
     /* 
+=======
+    /*
+>>>>>>> local
         Get the real system architecture (32 or 64 bit)
      */
     Http *http = MPR->httpService;
     cchar *path = espGetVisualStudio();
+<<<<<<< HEAD
     if (scontains(http->platform, "-x64-")) {
+=======
+    if (getenv("VSINSTALLDIR")) {
+        path = sclone("lib.exe");
+    } else if (scontains(http->platform, "-x64-")) {
+>>>>>>> local
         int is64BitSystem = smatch(getenv("PROCESSOR_ARCHITECTURE"), "AMD64") || getenv("PROCESSOR_ARCHITEW6432");
         if (is64BitSystem) {
             path = mprJoinPath(path, "VC/bin/amd64/lib.exe");
@@ -7139,12 +7347,22 @@ static cchar *getArPath(cchar *os, cchar *arch)
 static cchar *getCompilerPath(cchar *os, cchar *arch)
 {
 #if WINDOWS
+<<<<<<< HEAD
     /* 
+=======
+    /*
+>>>>>>> local
         Get the real system architecture (32 or 64 bit)
      */
     Http *http = MPR->httpService;
     cchar *path = espGetVisualStudio();
+<<<<<<< HEAD
     if (scontains(http->platform, "-x64-")) {
+=======
+    if (getenv("VSINSTALLDIR")) {
+        path = sclone("cl.exe");
+    } else if (scontains(http->platform, "-x64-")) {
+>>>>>>> local
         int is64BitSystem = smatch(getenv("PROCESSOR_ARCHITECTURE"), "AMD64") || getenv("PROCESSOR_ARCHITEW6432");
         if (is64BitSystem) {
             path = mprJoinPath(path, "VC/bin/amd64/cl.exe");

@@ -31,6 +31,10 @@ static void chat(Msg *msg)
 
     conn = msg->conn;
     packet = msg->packet;
+<<<<<<< HEAD
+=======
+    print("Sending %s", httpGetPacketStart(packet));
+>>>>>>> local
     httpSendBlock(conn, packet->type, httpGetPacketStart(packet), httpGetPacketLength(packet), 0);
 }
 

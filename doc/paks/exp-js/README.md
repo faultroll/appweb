@@ -62,7 +62,11 @@ To support using Content Security Policy headers, the js-extract transform extra
 
 ## Example
 
+<<<<<<< HEAD
 The `debug` collection will be selected if the package.json `pak.mode` is set to debug. Similarly for the `release` collection.
+=======
+The `debug` collection will be selected if the pak.json `profile` is set to debug. Similarly for the `release` collection.
+>>>>>>> local
 
 ```
 debug: {

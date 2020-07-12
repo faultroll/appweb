@@ -2,6 +2,7 @@
 <html lang="en">
 <head>
     <title>Routing</title>
+<<<<<<< HEAD
     <!-- Copyright Embedthis Software. All Rights Reserved. -->
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8" />
@@ -16,6 +17,21 @@
     <link href="../../lib/semantic-ui/semantic.min.css" rel="stylesheet" type="text/css" />
     <link href="../../css/all.min.css" rel="stylesheet" type="text/css" />
     <link href="../../css/api.min.css" rel="stylesheet" type="text/css" />
+=======
+    
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+    <meta name="description" content="Routing">
+    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700' rel='stylesheet' type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Julius+Sans+One' rel='stylesheet' type='text/css'>
+    
+    <link href="../../images/favicon.ico" rel="shortcut icon">
+    <link href="../../lib/semantic-ui/semantic.min.css" rel="stylesheet" type="text/css">
+    <link href="../../css/all.min.css" rel="stylesheet" type="text/css">
+    <link href="../../css/api.min.css" rel="stylesheet" type="text/css">
+>>>>>>> local
     
 
 </head>
@@ -42,6 +58,12 @@
                     <a class="item" href="../../start/service.html">Running as a Service</a>
                     <a class="item" href="../../start/releaseNotes.html">Release Notes</a>
                     <a class="item" href="../../start/source.html">Building from Source</a>
+<<<<<<< HEAD
+=======
+                    <a class="item" href="../../start/cgi.html">Building with CGI</a>
+                    <a class="item" href="../../start/openssl.html">Building with OpenSSL</a>
+                    <a class="item" href="../../start/php.html">Building with PHP</a>
+>>>>>>> local
                 </div>
             </div>
             <div class="item">
@@ -244,8 +266,13 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>&lt;Route /secret/&gt;<br />
                         &nbsp; &nbsp; AddInputFilter decryptFilter<br />
+=======
+                        <td>&lt;Route /secret/&gt;<br>
+                        &nbsp; &nbsp; AddInputFilter decryptFilter<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -280,8 +307,13 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>&lt;Route /capture/&gt;<br />
                         &nbsp; &nbsp; AddOutputFilter compressFilter<br />
+=======
+                        <td>&lt;Route /capture/&gt;<br>
+                        &nbsp; &nbsp; AddOutputFilter compressFilter<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -314,8 +346,13 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>&lt;Route /public/&gt;<br />
                         &nbsp; &nbsp; AddLanguageDir en english-docs<br />
+=======
+                        <td>&lt;Route /public/&gt;<br>
+                        &nbsp; &nbsp; AddLanguageDir en english-docs<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -350,8 +387,13 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>&lt;Route /public/&gt;<br />
                         &nbsp; &nbsp; AddLanguageSuffix en en before<br />
+=======
+                        <td>&lt;Route /public/&gt;<br>
+                        &nbsp; &nbsp; AddLanguageSuffix en en before<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -421,11 +463,19 @@
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>Cache lifespan<br/>
                             Cache [client=secs] [methods="set"] [extensions="set"] <br/>
                                 &nbsp; &nbsp; &rarr; &nbsp; &nbsp; [types="set"] [URI ..]<br/>
                             Cache [server=secs] [manual] [methods="set"] [ext="set"] <br/>
                                 &nbsp; &nbsp; &rarr; &nbsp; &nbsp; [types="set"] [URI ..]<br/>
+=======
+                        <td>Cache lifespan<br>
+                            Cache [client=secs] [methods="set"] [extensions="set"] <br>
+                                &nbsp; &nbsp; &rarr; &nbsp; &nbsp; [types="set"] [URI ..]<br>
+                            Cache [server=secs] [manual] [methods="set"] [ext="set"] <br>
+                                &nbsp; &nbsp; &rarr; &nbsp; &nbsp; [types="set"] [URI ..]<br>
+>>>>>>> local
                     </tr>
                     <tr>
                         <td class="pivot">Context</td>
@@ -433,10 +483,17 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>Cache client=86400 ext="gif,jpeg,jpg,png,pdf,ico,js"<br/>
                             Cache server=86400 methods="GET,POST" /status.esp<br/>
                             Cache client=1800 server=86400 methods="GET,POST" /status.esp<br/>
                             Cache server manual /inventory.esp<br/>
+=======
+                        <td>Cache client=86400 ext="gif,jpeg,jpg,png,pdf,ico,js"<br>
+                            Cache server=86400 methods="GET,POST" /status.esp<br>
+                            Cache client=1800 server=86400 methods="GET,POST" /status.esp<br>
+                            Cache server manual /inventory.esp<br>
+>>>>>>> local
                             Cache 86400</td>
                     </tr>
                     <tr>
@@ -472,7 +529,11 @@
                                 separately cached. Any URIs specified in the directive should not contain any request
                                 parameters.</li>
                                 <li>Only &mdash; Only the exact URIs specified in the directive will be cached. The URIs
+<<<<<<< HEAD
                                 specified must contain request parameters in a sorted www-urlencoded format. <br/> 
+=======
+                                specified must contain request parameters in a sorted www-urlencoded format. <br> 
+>>>>>>> local
                                 E.g.: /example.esp?hobby=sailing&amp;name=john.</li>
                                 <li>Manual &mdash; In manual-mode the response will still be automatically cached.  However,
                                 it will not be automatically written to the client.  The request handler must call the
@@ -503,6 +564,7 @@
                 </tbody>
             </table>
             
+<<<<<<< HEAD
             <!--
             <a id="clientCacheByType"></a>
             <h2>ClientCacheByType</h2>
@@ -540,6 +602,9 @@
                 </tbody>
             </table>
             -->
+=======
+            
+>>>>>>> local
             <a id="condition"></a>
             <h2>Condition</h2>
             <table class="directive" title="details">
@@ -550,11 +615,19 @@
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>Condition [!] rule details ...<br/>
                             Condition [!] missing<br/>
                             Condition [!] directory string<br/>
                             Condition [!] exists string<br/>
                             Condition [!] match string regular-expression-pattern<br/>
+=======
+                        <td>Condition [!] rule details ...<br>
+                            Condition [!] missing<br>
+                            Condition [!] directory string<br>
+                            Condition [!] exists string<br>
+                            Condition [!] match string regular-expression-pattern<br>
+>>>>>>> local
                         </td>
                     </tr>
                     <tr>
@@ -563,9 +636,15 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>Condition missing<br />
                             Condition directory ${request:filename}<br />
                             Condition ! exists ${request:filename}<br />
+=======
+                        <td>Condition missing<br>
+                            Condition directory ${request:filename}<br>
+                            Condition ! exists ${request:filename}<br>
+>>>>>>> local
                             Condition match ${header:User-Agent} (Chrome|Safari) 
                         </td>
                     </tr>
@@ -597,7 +676,11 @@
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>CrossOrigin origin=[client|all|*|NAME] <br/>
+=======
+                        <td>CrossOrigin origin=[client|all|*|NAME] <br>
+>>>>>>> local
                             &nbsp; &nbsp; &nbsp;[credentials=[yes|no]] [headers=HDR,...] [age=NN]</td>
                     </tr>
                     <tr>
@@ -606,7 +689,11 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>CrossOrigin origin=*<br />
+=======
+                        <td>CrossOrigin origin=*<br>
+>>>>>>> local
                             CrossOrigin origin=http://www.google.com credentials=yes age=3000
                         </td>
                     </tr>
@@ -644,6 +731,7 @@
                     </tr>
                     <tr>
                         <td class="pivot">Examples</td>
+<<<<<<< HEAD
                         <td>Defense deny REMEDY=ban STATUS=406 PERIOD=10mins<br/>
 Defense block REMEDY=ban PERIOD=30mins<br/>
 Defense report REMEDY=http URI=http://example.com/report<br/>
@@ -652,6 +740,16 @@ Defense slow REMEDY=delay PERIOD=10mins DELAY=1sec<br/>
 Defense fix REMEDY=cmd CMD="${MESSAGE} | sendmail admin@example.com"<br/>
 Defense notify REMEDY=email TO=info@example.com<br/>
 Defense firewall REMEDY=cmd CMD="iptables -A INPUT -s ${IP} -j DROP"<br/>
+=======
+                        <td>Defense deny REMEDY=ban STATUS=406 PERIOD=10mins<br>
+Defense block REMEDY=ban PERIOD=30mins<br>
+Defense report REMEDY=http URI=http://example.com/report<br>
+Defense alarm REMEDY=cmd CMD="afplay klaxon.mp3"<br>
+Defense slow REMEDY=delay PERIOD=10mins DELAY=1sec<br>
+Defense fix REMEDY=cmd CMD="${MESSAGE} | sendmail admin@example.com"<br>
+Defense notify REMEDY=email TO=info@example.com<br>
+Defense firewall REMEDY=cmd CMD="iptables -A INPUT -s ${IP} -j DROP"<br>
+>>>>>>> local
 Defense reboot REMEDY=restart 
                         </td>
                     </tr>
@@ -886,7 +984,11 @@ Defense reboot REMEDY=restart
                     </tr>
                     <tr>
                         <td class="pivot">Examples</td>
+<<<<<<< HEAD
                         <td>InactivityTimeout 2mins<br/>
+=======
+                        <td>InactivityTimeout 2mins<br>
+>>>>>>> local
                         InactivityTimeout never</td>
                     </tr>
                     <tr>
@@ -916,7 +1018,11 @@ Defense reboot REMEDY=restart
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>Map compressed<br/>
+=======
+                        <td>Map compressed<br>
+>>>>>>> local
                         Map "ext,ext,..." "newext, newext, newext"
                         </td>
                     </tr>
@@ -926,7 +1032,11 @@ Defense reboot REMEDY=restart
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>Map compressed<br/>
+=======
+                        <td>Map compressed<br>
+>>>>>>> local
                         Map "js,css,less" min.${1}.gz, min.${1}, ${1}.gz</td>
                     </tr>
                     <tr>
@@ -939,9 +1049,15 @@ Defense reboot REMEDY=restart
                             documents with the new extensions and optionally remove the originals.</p>
                             <p>The new extension pattern may reference the original filename as <i>${1}</i>.</p>
                             <p>The short form <i>"Map compressed"</i> directive configures Appweb to serve compressed content 
+<<<<<<< HEAD
                             for Html, Text, XML, Javascript, CSS or Less documents. It is equivalent to:<br />
                             <br />
                             Map "js,css,less" "min.${1}.gz, min.${1}, ${1}.gz"<br/>
+=======
+                            for Html, Text, XML, Javascript, CSS or Less documents. It is equivalent to:<br>
+                            <br>
+                            Map "js,css,less" "min.${1}.gz, min.${1}, ${1}.gz"<br>
+>>>>>>> local
                             Map "html,txt,xml", "${1}.gz"</p>
                         </td>
                     </tr>
@@ -998,7 +1114,11 @@ Defense reboot REMEDY=restart
                     </tr>
                     <tr>
                         <td class="pivot">Examples</td>
+<<<<<<< HEAD
                         <td>Monitor "NotFoundErrors &gt; 190" 5sec deny log email<br/>
+=======
+                        <td>Monitor "NotFoundErrors &gt; 190" 5sec deny log email<br>
+>>>>>>> local
 Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
@@ -1097,7 +1217,11 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                             <p>The Param directive tests if the specified request param value matches the
                             required value. Request <a href="../routing.html#params">params</a> are sourced from 
                             the request URI query and posted form data.</p>
+<<<<<<< HEAD
                             <P>The rule result can be negated by prefixing with "<em>!</em>".</p>
+=======
+                            <p>The rule result can be negated by prefixing with "<em>!</em>".</p>
+>>>>>>> local
                             <p>For information about embedded {tokens}, see <a href="../routing.html#tokens">Tokens</a>
                             in the <a href="../routing.html">Routing Guide</a>.</p>
                         </td>
@@ -1171,6 +1295,7 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                 </tbody>
             </table>
             
+<<<<<<< HEAD
             <!-- DEPRECATED 4.4. Use SetMethods instead
             <a id="putMethod"></a>
             <h2>PutMethod</h2>
@@ -1204,6 +1329,9 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                 </tbody>
             </table>
             -->
+=======
+            
+>>>>>>> local
             
             <a id="redirect"></a>
             <h2>Redirect</h2>
@@ -1223,9 +1351,15 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>Redirect temp /pressRelease.html /fixedPressRelease.html<br />
                         Redirect permanent /acme.html http://www.coyote.com/acme.html<br />
                         Redirect 410 /membersOnly<br/>
+=======
+                        <td>Redirect temp /pressRelease.html /fixedPressRelease.html<br>
+                        Redirect permanent /acme.html http://www.coyote.com/acme.html<br>
+                        Redirect 410 /membersOnly<br>
+>>>>>>> local
                         Redirect secure</td>
                     </tr>
                     <tr>
@@ -1336,7 +1470,11 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Examples</td>
+<<<<<<< HEAD
                         <td>RequestTimeout 10mins<br/>
+=======
+                        <td>RequestTimeout 10mins<br>
+>>>>>>> local
                         RequestTimeout never</td>
                     </tr>
                     <tr>
@@ -1361,8 +1499,13 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>&lt;Reroute URI-Pattern&gt;<br />
                         ...<br />
+=======
+                        <td>&lt;Reroute URI-Pattern&gt;<br>
+                        ...<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -1371,8 +1514,13 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>&lt;Route /admin/debug&gt;<br />
                         &nbsp; &nbsp; AddHandler myDebugHandler<br />
+=======
+                        <td>&lt;Route /admin/debug&gt;<br>
+                        &nbsp; &nbsp; AddHandler myDebugHandler<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -1394,7 +1542,11 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>Reset pipeline<br/>
+=======
+                        <td>Reset pipeline<br>
+>>>>>>> local
                         Reset routes</td>
                     </tr>
                     <tr>
@@ -1431,8 +1583,13 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>&lt;Route URI-Pattern&gt;<br />
                         ...<br />
+=======
+                        <td>&lt;Route URI-Pattern&gt;<br>
+                        ...<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -1441,8 +1598,13 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>&lt;Route /admin/debug&gt;<br />
                         &nbsp; &nbsp; AddHandler myDebugHandler<br />
+=======
+                        <td>&lt;Route /admin/debug&gt;<br>
+                        &nbsp; &nbsp; AddHandler myDebugHandler<br>
+>>>>>>> local
                         &lt;/Route&gt;</td>
                     </tr>
                     <tr>
@@ -1509,7 +1671,11 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>SessionCookie name=NAME visible=[true|false] persist=[true|false]<br/>
+=======
+                        <td>SessionCookie name=NAME visible=[true|false] persist=[true|false]<br>
+>>>>>>> local
                         SessionCookie enable
                         SessionCookie disable</td>
                     </tr>
@@ -1731,11 +1897,19 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>Target rule details ...<br/>
                             Target close<br/>
                             Target redirect status URI<br/>
                             Target run document<br/>
                             Target write [-r] status message<br/>
+=======
+                        <td>Target rule details ...<br>
+                            Target close<br>
+                            Target redirect status URI<br>
+                            Target run document<br>
+                            Target write [-r] status message<br>
+>>>>>>> local
                         </td>
                     </tr>
                     <tr>
@@ -1744,11 +1918,19 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td>Target close<br />
                             Target redirect 302 /updated/$&<br />
                             Target run<br />
                             Target run ${request:filename}.gz<br />
                             Target write 200 "Hello World\r\n"<br/>
+=======
+                        <td>Target close<br>
+                            Target redirect 302 /updated/$&<br>
+                            Target run<br>
+                            Target run ${request:filename}.gz<br>
+                            Target write 200 "Hello World\r\n"<br>
+>>>>>>> local
                         </td>
                     </tr>
                     <tr>
@@ -1776,6 +1958,7 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                 </tbody>
             </table>
             
+<<<<<<< HEAD
             <!-- DEPRECATED 4.4. Use SetMethods instead
             <a id="traceMethod"></a>
             <h2>TraceMethod</h2>
@@ -1812,6 +1995,9 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                 </tbody>
             </table>
             -->
+=======
+            
+>>>>>>> local
             
             <a id="update"></a>
             <h2>Update</h2>
@@ -1823,7 +2009,11 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
+<<<<<<< HEAD
                         <td>Update param var value ...<br/>
+=======
+                        <td>Update param var value ...<br>
+>>>>>>> local
                             Update cmd commandLine...
                         </td>
                     </tr>
@@ -1833,7 +2023,11 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
+<<<<<<< HEAD
                         <td> Update param client ${request:clientAddress}<br/>
+=======
+                        <td> Update param client ${request:clientAddress}<br>
+>>>>>>> local
                             Update cmd sh -c 'echo Demo Downloaded | mail -s"Download from ${request:clientAddress}"'
                         </td>
                     </tr>
@@ -1961,5 +2155,11 @@ Monitor "RequestsPerClient &gt; 200" 5sec deny</td>
 
     
 
+<<<<<<< HEAD
 </body>
 </html>
+=======
+
+
+
+>>>>>>> local

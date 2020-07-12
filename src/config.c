@@ -497,6 +497,7 @@ static int allowDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
+<<<<<<< HEAD
 #if DEPRECATED
 /*
     AuthGroupFile path
@@ -509,6 +510,8 @@ static int authGroupFileDirective(MaState *state, cchar *key, cchar *value)
 #endif
 
 
+=======
+>>>>>>> local
 /*
     AuthStore NAME
  */
@@ -581,6 +584,7 @@ static int authTypeDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
+<<<<<<< HEAD
 #if DEPRECATED
 /*
     AuthUserFile path
@@ -593,6 +597,8 @@ static int authUserFileDirective(MaState *state, cchar *key, cchar *value)
 #endif
 
 
+=======
+>>>>>>> local
 /*
     AuthAutoLogin username
  */
@@ -774,6 +780,7 @@ static int closeDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
+<<<<<<< HEAD
 #if DEPRECATED
 /*
     Compress [gzip|none]
@@ -796,6 +803,8 @@ static int compressDirective(MaState *state, cchar *key, cchar *value)
 #endif
 
 
+=======
+>>>>>>> local
 /*
     Condition [!] auth
     Condition [!] condition
@@ -1375,6 +1384,7 @@ static int limitProcessesDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
+<<<<<<< HEAD
 #if DEPRECATED
 /*
     LimitRequests count
@@ -1388,6 +1398,8 @@ static int limitRequestsDirective(MaState *state, cchar *key, cchar *value)
 #endif
 
 
+=======
+>>>>>>> local
 /*
     LimitRequestsPerClient count
  */
@@ -1499,7 +1511,11 @@ static int listenDirective(MaState *state, cchar *key, cchar *value)
 {
     HttpEndpoint    *endpoint, *dual;
     HttpHost        *host;
+<<<<<<< HEAD
     char            *ip, *address;
+=======
+    cchar           *ip, *address;
+>>>>>>> local
     int             port;
 
     if (!maTokenize(state, value, "%S", &address)) {
@@ -1544,7 +1560,11 @@ static int listenSecureDirective(MaState *state, cchar *key, cchar *value)
 #if ME_COM_SSL
     HttpEndpoint    *endpoint, *dual;
     HttpHost        *host;
+<<<<<<< HEAD
     char            *address, *ip;
+=======
+    cchar           *address, *ip;
+>>>>>>> local
     int             port;
 
     if (!maTokenize(state, value, "%S", &address)) {
@@ -1833,6 +1853,7 @@ static int memoryPolicyDirective(MaState *state, cchar *key, cchar *value)
     } else if (scmp(policy, "continue") == 0) {
         flags = MPR_ALLOC_POLICY_PRUNE;
 
+<<<<<<< HEAD
 #if DEPRECATED
     } else if (scmp(policy, "exit") == 0) {
         flags = MPR_ALLOC_POLICY_EXIT;
@@ -1841,6 +1862,8 @@ static int memoryPolicyDirective(MaState *state, cchar *key, cchar *value)
         flags = MPR_ALLOC_POLICY_PRUNE;
 #endif
 
+=======
+>>>>>>> local
     } else {
         mprLog("error appweb config", 0, "Unknown memory depletion policy '%s'", policy);
         return MPR_ERR_BAD_SYNTAX;
@@ -1987,6 +2010,7 @@ static int prefixDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
+<<<<<<< HEAD
 #if DEPRECATED
 /*
     Protocol HTTP/1.0
@@ -2025,6 +2049,8 @@ static int putMethodDirective(MaState *state, cchar *key, cchar *value)
 #endif
 
 
+=======
+>>>>>>> local
 /*
     Redirect [status|permanent|temp|seeother|gone] from to
     Redirect secure
@@ -2219,6 +2245,7 @@ static int resetDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
+<<<<<<< HEAD
 #if DEPRECATED
 /*
     ResetPipeline (alias for Reset routes)
@@ -2231,6 +2258,8 @@ static int resetPipelineDirective(MaState *state, cchar *key, cchar *value)
 #endif
 
 
+=======
+>>>>>>> local
 /*
     Role name abilities...
  */
@@ -2764,6 +2793,7 @@ static int traceDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
+<<<<<<< HEAD
 #if DEPRECATED
 /*
     TraceMethod on|off
@@ -2785,6 +2815,8 @@ static int traceMethodDirective(MaState *state, cchar *key, cchar *value)
 #endif
 
 
+=======
+>>>>>>> local
 /*
     TypesConfig path
  */
@@ -2938,7 +2970,12 @@ static int virtualHostDirective(MaState *state, cchar *key, cchar *value)
 static int closeVirtualHostDirective(MaState *state, cchar *key, cchar *value)
 {
     HttpEndpoint    *endpoint;
+<<<<<<< HEAD
     char            *address, *ip, *addresses, *tok;
+=======
+    cchar           *ip;
+    char            *address, *addresses, *tok;
+>>>>>>> local
     int             port;
 
     if (state->enabled) {

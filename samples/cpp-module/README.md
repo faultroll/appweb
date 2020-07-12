@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 CppModule Sample
 ===
 
@@ -5,12 +6,26 @@ This sample shows how to create an Appweb loadable module in C++. A module may p
 filter, custom configuration directives or any functionality you wish to integrate into Appweb. Appweb modules 
 are compiled into shared libraries and are dynamically loaded in response to appweb.conf LoadModule directives. 
 If your main program is statically linked, the same module, without change may be included in the main program 
+=======
+cpp-module Sample
+===
+
+This sample shows how to create an Appweb loadable module in C++. A module may provide an Appweb handler,
+filter, custom configuration directives or any functionality you wish to integrate into Appweb. Appweb modules
+are compiled into shared libraries and are dynamically loaded in response to appweb.conf LoadModule directives.
+If your main program is statically linked, the same module, without change may be included in the main program
+>>>>>>> local
 executable link, provided the module entry point is manually invoked from the main program.
 
 Requirements
 ---
+<<<<<<< HEAD
 * [Appweb](https://embedthis.com/appweb/download.html)
 * [MakeMe Build Tool](https://embedthis.com/makeme/download.html)
+=======
+* [Appweb](https://www.embedthis.com/appweb/download.html)
+* [MakeMe Build Tool](https://www.embedthis.com/makeme/download.html)
+>>>>>>> local
 
 To build:
 ---
@@ -32,10 +47,17 @@ Code:
 
 Documentation:
 ---
+<<<<<<< HEAD
 * [Appweb Documentation](https://embedthis.com/appweb/doc/index.html)
 * [Creating Handlers](https://embedthis.com/appweb/doc/developers/handlers.html)
 * [Creating Modules](https://embedthis.com/appweb/doc/developers/modules.html)
 * [API Library](https://embedthis.com/appweb/doc/ref/native.html)
+=======
+* [Appweb Documentation](https://www.embedthis.com/appweb/doc/index.html)
+* [Creating Handlers](https://www.embedthis.com/appweb/doc/developers/handlers.html)
+* [Creating Modules](https://www.embedthis.com/appweb/doc/developers/modules.html)
+* [API Library](https://www.embedthis.com/appweb/doc/ref/native.html)
+>>>>>>> local
 
 See Also:
 ---

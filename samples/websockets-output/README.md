@@ -14,8 +14,13 @@ browse to:
 Requirements
 ---
 
+<<<<<<< HEAD
 * [Appweb](https://embedthis.com/appweb/download.html)
 * [MakeMe Build Tool](https://embedthis.com/makeme/download.html)
+=======
+* [Appweb](https://www.embedthis.com/appweb/download.html)
+* [MakeMe Build Tool](https://www.embedthis.com/makeme/download.html)
+>>>>>>> local
 
 To build:
 ---
@@ -42,6 +47,7 @@ Code:
 
 Documentation:
 ---
+<<<<<<< HEAD
 * [Appweb Documentation](https://embedthis.com/appweb/doc/index.html)
 * [ESP Directives](https://embedthis.com/appweb/doc/users/dir/esp.html)
 * [ESP Tour](https://embedthis.com/esp/doc/start/tour.html)
@@ -49,6 +55,15 @@ Documentation:
 * [ESP APIs](https://embedthis.com/esp/doc/ref/native.html)
 * [ESP Guide](https://embedthis.com/esp/doc/users/index.html)
 * [ESP Overview](https://embedthis.com/esp/doc/index.html)
+=======
+* [Appweb Documentation](https://www.embedthis.com/appweb/doc/index.html)
+* [ESP Directives](https://www.embedthis.com/appweb/doc/users/dir/esp.html)
+* [ESP Tour](https://www.embedthis.com/esp/doc/start/tour.html)
+* [ESP Controllers](https://www.embedthis.com/esp/doc/users/controllers.html)
+* [ESP APIs](https://www.embedthis.com/esp/doc/ref/native.html)
+* [ESP Guide](https://www.embedthis.com/esp/doc/users/index.html)
+* [ESP Overview](https://www.embedthis.com/esp/doc/index.html)
+>>>>>>> local
 
 See Also:
 ---

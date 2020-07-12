@@ -1,11 +1,20 @@
 /*
     simple.c - Create a simple AppWeb request handler
+<<<<<<< HEAD
   
     This sample demonstrates creating a request handler to process requests.
   
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
  */
  
+=======
+
+    This sample demonstrates creating a request handler to process requests.
+
+    Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
+ */
+
+>>>>>>> local
 /******************************* Includes *****************************/
 
 #include    "appweb.h"
@@ -23,12 +32,20 @@ static void readySimple(HttpQueue *q)
     httpSetStatus(conn, 200);
 
     /*
+<<<<<<< HEAD
         Generate some dynamic data. If you generate a lot, this will buffer up to a configured maximum. 
+=======
+        Generate some dynamic data. If you generate a lot, this will buffer up to a configured maximum.
+>>>>>>> local
         If that limit is exceeded, the packet will be sent downstream and the response headers will be created.
      */
     httpWrite(q, "Hello World\n");
     /*
+<<<<<<< HEAD
         Call finalize when the response to the client is complete. Call httpFlushOutput if the response is 
+=======
+        Call finalize when the response to the client is complete. Call httpFlushOutput if the response is
+>>>>>>> local
         incomplete and you wish to immediately send any buffered output.
     */
     httpFinalize(conn);
@@ -63,6 +80,7 @@ int httpSimpleHandlerInit(Http *http, MprModule *module)
 }
 
 /*
+<<<<<<< HEAD
     @copy   default
 
     Copyright (c) Embedthis Software. All Rights Reserved.
@@ -80,4 +98,12 @@ int httpSimpleHandlerInit(Http *http, MprModule *module)
     vim: sw=4 ts=4 expandtab
 
     @end
+=======
+    Copyright (c) Embedthis Software. All Rights Reserved.
+    This software is distributed under commercial and open source licenses.
+    You may use the Embedthis Open Source license or you may acquire a
+    commercial license from Embedthis Software. You agree to be fully bound
+    by the terms of either license. Consult the LICENSE.md distributed with
+    this software for full details and other copyrights.
+>>>>>>> local
  */

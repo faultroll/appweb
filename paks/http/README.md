@@ -10,7 +10,11 @@ See LICENSE.md for details.
   See doc/index.html
 
 ### Prerequisites:
+<<<<<<< HEAD
     MakeMe (https://embedthis.com/makeme/) for MakeMe to configure and build.
+=======
+    MakeMe (https://www.embedthis.com/makeme/) for MakeMe to configure and build.
+>>>>>>> local
 
 ### To Build:
 
@@ -43,6 +47,10 @@ This will run appweb in the src/server directory using the src/server/appweb.con
 
 Resources
 ---
+<<<<<<< HEAD
   - [Embedthis web site](https://embedthis.com/)
+=======
+  - [Embedthis web site](https://www.embedthis.com/)
+>>>>>>> local
   - [Http GitHub repository](http://github.com/embedthis/http)
   - [MakeMe GitHub repository](http://github.com/embedthis/makeme)

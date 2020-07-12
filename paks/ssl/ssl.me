@@ -22,6 +22,12 @@ Me.load({
                         }
                     }
                 }
+<<<<<<< HEAD
+=======
+                /*
+                    Select an ssl provider
+                 */
+>>>>>>> local
                 for each (p in target.discovers) {
                     if (p == provider) {
                         continue
@@ -46,6 +52,7 @@ Me.load({
                 } else {
                     throw 'No enabled SSL providers.\n'
                 }
+<<<<<<< HEAD
                 if (me.options.gen) {
                     if (me.platform.os == 'windows' || me.platform.os == 'vxworks') {
                         for each (p in target.discovers) {
@@ -57,6 +64,8 @@ Me.load({
                         }
                     }
                 }
+=======
+>>>>>>> local
             },
             without: function(target) {
                 for each (p in target.discovers) {
