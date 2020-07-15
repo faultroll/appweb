@@ -12,10 +12,7 @@
 #include    "osdep.h"
 #include    "mpr.h"
 #include    "http.h"
-<<<<<<< HEAD
-=======
 #include	"action.h"
->>>>>>> local
 
 #ifdef __cplusplus
 extern "C" {

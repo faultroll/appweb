@@ -1,18 +1,3 @@
-<<<<<<< HEAD
-Embedthis Appweb
-===
-
-[![Build Status](https://travis-ci.org/embedthis/appweb.png)](https://travis-ci.org/embedthis/appweb)
-
-The fast, little web server for embedded applications.
-
-Branches
----
-The repository has three branches:
-
-* master - Most recent release of the software.
-* dev - Current ongoing development.
-=======
 Embedthis Appweb Community Edition
 ===
 
@@ -26,27 +11,11 @@ The repository has several branches:
 * master - Most recent release of the software.
 * dev - Current ongoing development.
 * X.X - Archived prior release branches for maintenance.
->>>>>>> local
 
 Licensing
 ---
 See [LICENSE.md](LICENSE.md) for details.
 
-<<<<<<< HEAD
-### To read documentation:
-
-  See https://embedthis.com/appweb/doc/index.html
-
-### Building
-
-    You can build with make or with MakeMe. MakeMe is quicker and more flexible.
-    To install MakeMe, download it from https://embedthis.com/makeme/.
-
-### To build with make:
-
-    make
-
-=======
 ### Documentation
 
   See https://www.embedthis.com/appweb/doc/index.html.
@@ -72,15 +41,10 @@ or to see the commands as they are invoked:
 
     make SHOW=1
 
->>>>>>> local
 You can pass make variables to tailor the build. For a list of variables:
 
 	make help
 
-<<<<<<< HEAD
-### To build with MakeMe:
-
-=======
 To run
 
 	make run
@@ -136,7 +100,6 @@ Click Project -> Run to run.
 
 To install MakeMe, download it from https://www.embedthis.com/makeme/.
 
->>>>>>> local
     ./configure
     me
 
@@ -144,24 +107,11 @@ For a list of configure options:
 
 	./configure --help
 
-<<<<<<< HEAD
-### To run
-
-	make run
-
-or
-
-    me run
-
-### To install:
-
-=======
 ### To install:
 
 If you have built from source using Make or MakeMe, you can install the
 software using:
 
->>>>>>> local
     sudo make install
 
 or
@@ -176,10 +126,6 @@ or
 
     sudo me uninstall
 
-<<<<<<< HEAD
-### To test:
-
-=======
 ### To Run:
 
 The src/server directory contains a minimal appweb.conf suitable for production
@@ -194,17 +140,10 @@ Build with MakeMe and then:
 
     ./configure
     me
->>>>>>> local
     me test
 
 Resources
 ---
-<<<<<<< HEAD
-  - [Appweb web site](https://embedthis.com/)
-  - [Appweb GitHub repository](http://github.com/embedthis/appweb)
-  - [Embedthis web site](https://embedthis.com/)
-=======
   - [Appweb web site](https://www.embedthis.com/)
   - [Appweb GitHub repository](http://github.com/embedthis/appweb)
   - [Embedthis web site](https://www.embedthis.com/)
->>>>>>> local

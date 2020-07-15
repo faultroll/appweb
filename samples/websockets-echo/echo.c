@@ -27,12 +27,9 @@ static void echo_callback(HttpConn *conn, int event, int arg)
 
     } else if (event == HTTP_EVENT_ERROR) {
         mprLog("info echo", 0, "error event");
-<<<<<<< HEAD
-=======
 
     } else if (event == HTTP_EVENT_DESTROY) {
         mprLog("info echo", 0, "client disconnected");
->>>>>>> local
     }
 }
 
@@ -40,11 +37,7 @@ static void echo_callback(HttpConn *conn, int event, int arg)
 /*
     Action to run in response to the "test/echo" URI
  */
-<<<<<<< HEAD
-static void echo_action() { 
-=======
 static void echo_action() {
->>>>>>> local
     /*
         Don't automatically finalize (complete) the request when this routine returns. This keeps the connection open.
      */
@@ -59,10 +52,7 @@ static void echo_action() {
 
 /*
     Initialize the "echo" loadable module
-<<<<<<< HEAD
-=======
     The default ESP name for a controller is "app" if there is no esp.json to define the app name.
->>>>>>> local
  */
 ESP_EXPORT int esp_controller_app_echo(HttpRoute *route, MprModule *module) {
     /*

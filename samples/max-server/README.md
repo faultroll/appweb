@@ -10,13 +10,8 @@ You are encouraged to see the other typical appweb.conf samples:
 
 Requirements
 ---
-<<<<<<< HEAD
-* [Appweb](https://embedthis.com/appweb/download.html)
-* [MakeMe Build Tool](https://embedthis.com/makeme/download.html)
-=======
 * [Appweb](https://www.embedthis.com/appweb/download.html)
 * [MakeMe Build Tool](https://www.embedthis.com/makeme/download.html)
->>>>>>> local
 
 To run:
 ---
@@ -36,15 +31,9 @@ Code:
 
 Documentation:
 ---
-<<<<<<< HEAD
-* [Appweb Documentation](https://embedthis.com/appweb/doc/index.html)
-* [Configuration Directives](https://embedthis.com/appweb/doc/users/configuration.html#directives)
-* [Sandbox Limits](https://embedthis.com/appweb/doc/users/dir/sandbox.html)
-=======
 * [Appweb Documentation](https://www.embedthis.com/appweb/doc/index.html)
 * [Configuration Directives](https://www.embedthis.com/appweb/doc/users/configuration.html#directives)
 * [Sandbox Limits](https://www.embedthis.com/appweb/doc/users/dir/sandbox.html)
->>>>>>> local
 
 See Also:
 ---

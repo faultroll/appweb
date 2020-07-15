@@ -35,11 +35,7 @@ static void output_callback(HttpConn *conn, int event, int arg)
 
                 /*
                     Set the HTTP_MORE flag on every write except the last. This means each write is sent as
-<<<<<<< HEAD
-                    a separate frame. The first frame has the type of WS_MSG_TEXT, all others must be 
-=======
                     a separate frame. The first frame has the type of WS_MSG_TEXT, all others must be
->>>>>>> local
                     continuation frames.
                  */
                 flags = HTTP_NON_BLOCK;
@@ -48,11 +44,7 @@ static void output_callback(HttpConn *conn, int event, int arg)
                 }
                 type = output->written == 0 ? WS_MSG_TEXT : WS_MSG_CONT;
                 /*
-<<<<<<< HEAD
-                    Send the next chunk as a WebSockets frame using a non-blocking write. 
-=======
                     Send the next chunk as a WebSockets frame using a non-blocking write.
->>>>>>> local
                     This may return having written only a portion of the requested data.
                  */
                 if ((wrote = httpSendBlock(conn, type, buf, len, flags)) < 0) {
@@ -77,12 +69,9 @@ static void output_callback(HttpConn *conn, int event, int arg)
 
     } else if (event == HTTP_EVENT_ERROR) {
         mprLog("info output", 0, "error event");
-<<<<<<< HEAD
-=======
 
     } else if (event == HTTP_EVENT_DESTROY) {
         mprLog("info output", 0, "client closed the connection");
->>>>>>> local
     }
 }
 
@@ -100,13 +89,8 @@ static void manageOutput(Output *output, int flags)
 /*
     Action to run in response to the "test/output" URI
  */
-<<<<<<< HEAD
-static void output_action() 
-{ 
-=======
 static void output_action()
 {
->>>>>>> local
     Output  *output;
 
     /*
@@ -130,11 +114,7 @@ static void output_action()
     mprGetPathInfo(OUTPUT_FILE, &output->info);
     /*
         Save a reference to our output state
-<<<<<<< HEAD
-     */ 
-=======
      */
->>>>>>> local
     setData(output);
 }
 

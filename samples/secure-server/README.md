@@ -19,13 +19,8 @@ The password database is kept in a flat file called auth.conf. The password was 
 
 Requirements
 ---
-<<<<<<< HEAD
-* [Appweb](https://embedthis.com/appweb/download.html)
-* [MakeMe Build Tool](https://embedthis.com/makeme/download.html)
-=======
 * [Appweb](https://www.embedthis.com/appweb/download.html)
 * [MakeMe Build Tool](https://www.embedthis.com/makeme/download.html)
->>>>>>> local
 
 To build:
 ---
@@ -57,15 +52,6 @@ Code:
 
 Documentation:
 ---
-<<<<<<< HEAD
-* [Appweb Documentation](https://embedthis.com/appweb/doc/index.html)
-* [Chroot Directive](https://embedthis.com/appweb/doc/users/dir/server.html#chroot)
-* [Configuration Directives](https://embedthis.com/appweb/doc/users/configuration.html#directives)
-* [Sandbox Limits](https://embedthis.com/appweb/doc/users/dir/sandbox.html)
-* [Security Considerations](https://embedthis.com/appweb/doc/users/security.html)
-* [SSL in Appweb](https://embedthis.com/appweb/doc/users/ssl.html)
-* [User Authentication](https://embedthis.com/appweb/doc/users/authentication.html)
-=======
 * [Appweb Documentation](https://www.embedthis.com/appweb/doc/index.html)
 * [Chroot Directive](https://www.embedthis.com/appweb/doc/users/dir/server.html#chroot)
 * [Configuration Directives](https://www.embedthis.com/appweb/doc/users/configuration.html#directives)
@@ -73,7 +59,6 @@ Documentation:
 * [Security Considerations](https://www.embedthis.com/appweb/doc/users/security.html)
 * [SSL in Appweb](https://www.embedthis.com/appweb/doc/users/ssl.html)
 * [User Authentication](https://www.embedthis.com/appweb/doc/users/authentication.html)
->>>>>>> local
 
 See Also:
 ---

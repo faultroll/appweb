@@ -497,21 +497,6 @@ static int allowDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
-<<<<<<< HEAD
-#if DEPRECATED
-/*
-    AuthGroupFile path
- */
-static int authGroupFileDirective(MaState *state, cchar *key, cchar *value)
-{
-    mprLog("warn appweb config", 0, "The AuthGroupFile directive is deprecated. Use new User/Group directives instead.");
-    return 0;
-}
-#endif
-
-
-=======
->>>>>>> local
 /*
     AuthStore NAME
  */
@@ -584,21 +569,6 @@ static int authTypeDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
-<<<<<<< HEAD
-#if DEPRECATED
-/*
-    AuthUserFile path
- */
-static int authUserFileDirective(MaState *state, cchar *key, cchar *value)
-{
-    mprLog("warn appweb config", 0, "The AuthGroupFile directive is deprecated. Use new User/Group directives instead.");
-    return 0;
-}
-#endif
-
-
-=======
->>>>>>> local
 /*
     AuthAutoLogin username
  */
@@ -780,31 +750,6 @@ static int closeDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
-<<<<<<< HEAD
-#if DEPRECATED
-/*
-    Compress [gzip|none]
- */
-static int compressDirective(MaState *state, cchar *key, cchar *value)
-{
-    char    *format;
-
-    if (!maTokenize(state, value, "%S", &format)) {
-        return MPR_ERR_BAD_SYNTAX;
-    }
-    if (scaselessmatch(format, "gzip") || scaselessmatch(format, "on")) {
-        httpSetRouteCompression(state->route, HTTP_ROUTE_GZIP);
-
-    } else if (scaselessmatch(format, "none") || scaselessmatch(format, "off")) {
-        httpSetRouteCompression(state->route, 0);
-    }
-    return 0;
-}
-#endif
-
-
-=======
->>>>>>> local
 /*
     Condition [!] auth
     Condition [!] condition
@@ -1384,22 +1329,6 @@ static int limitProcessesDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
-<<<<<<< HEAD
-#if DEPRECATED
-/*
-    LimitRequests count
- */
-static int limitRequestsDirective(MaState *state, cchar *key, cchar *value)
-{
-    mprLog("error appweb config", 0,
-        "The LimitRequests directive is deprecated. Use LimitConnections or LimitRequestsPerClient instead.");
-    return 0;
-}
-#endif
-
-
-=======
->>>>>>> local
 /*
     LimitRequestsPerClient count
  */
@@ -1511,11 +1440,7 @@ static int listenDirective(MaState *state, cchar *key, cchar *value)
 {
     HttpEndpoint    *endpoint, *dual;
     HttpHost        *host;
-<<<<<<< HEAD
-    char            *ip, *address;
-=======
     cchar           *ip, *address;
->>>>>>> local
     int             port;
 
     if (!maTokenize(state, value, "%S", &address)) {
@@ -1560,11 +1485,7 @@ static int listenSecureDirective(MaState *state, cchar *key, cchar *value)
 #if ME_COM_SSL
     HttpEndpoint    *endpoint, *dual;
     HttpHost        *host;
-<<<<<<< HEAD
-    char            *address, *ip;
-=======
     cchar           *address, *ip;
->>>>>>> local
     int             port;
 
     if (!maTokenize(state, value, "%S", &address)) {
@@ -1853,17 +1774,6 @@ static int memoryPolicyDirective(MaState *state, cchar *key, cchar *value)
     } else if (scmp(policy, "continue") == 0) {
         flags = MPR_ALLOC_POLICY_PRUNE;
 
-<<<<<<< HEAD
-#if DEPRECATED
-    } else if (scmp(policy, "exit") == 0) {
-        flags = MPR_ALLOC_POLICY_EXIT;
-
-    } else if (scmp(policy, "prune") == 0) {
-        flags = MPR_ALLOC_POLICY_PRUNE;
-#endif
-
-=======
->>>>>>> local
     } else {
         mprLog("error appweb config", 0, "Unknown memory depletion policy '%s'", policy);
         return MPR_ERR_BAD_SYNTAX;
@@ -2010,47 +1920,6 @@ static int prefixDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
-<<<<<<< HEAD
-#if DEPRECATED
-/*
-    Protocol HTTP/1.0
-    Protocol HTTP/1.1
- */
-static int protocolDirective(MaState *state, cchar *key, cchar *value)
-{
-    httpSetRouteProtocol(state->host, value);
-    if (!scaselessmatch(value, "HTTP/1.0") && !scaselessmatch(value, "HTTP/1.1")) {
-        mprLog("error appweb config", 0, "Unknown http protocol %s. Should be HTTP/1.0 or HTTP/1.1", value);
-        return MPR_ERR_BAD_SYNTAX;
-    }
-    return 0;
-}
-#endif
-
-
-#if DEPRECATED
-/*
-    PutMethod on|off
- */
-static int putMethodDirective(MaState *state, cchar *key, cchar *value)
-{
-    bool    on;
-
-    if (!maTokenize(state, value, "%B", &on)) {
-        return MPR_ERR_BAD_SYNTAX;
-    }
-    if (on) {
-        httpAddRouteMethods(state->route, "DELETE, PUT");
-    } else {
-        httpRemoveRouteMethods(state->route, "DELETE, PUT");
-    }
-    return 0;
-}
-#endif
-
-
-=======
->>>>>>> local
 /*
     Redirect [status|permanent|temp|seeother|gone] from to
     Redirect secure
@@ -2245,21 +2114,6 @@ static int resetDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
-<<<<<<< HEAD
-#if DEPRECATED
-/*
-    ResetPipeline (alias for Reset routes)
- */
-static int resetPipelineDirective(MaState *state, cchar *key, cchar *value)
-{
-    httpResetRoutePipeline(state->route);
-    return 0;
-}
-#endif
-
-
-=======
->>>>>>> local
 /*
     Role name abilities...
  */
@@ -2793,30 +2647,6 @@ static int traceDirective(MaState *state, cchar *key, cchar *value)
 }
 
 
-<<<<<<< HEAD
-#if DEPRECATED
-/*
-    TraceMethod on|off
- */
-static int traceMethodDirective(MaState *state, cchar *key, cchar *value)
-{
-    bool    on;
-
-    if (!maTokenize(state, value, "%B", &on)) {
-        return MPR_ERR_BAD_SYNTAX;
-    }
-    if (on) {
-        httpAddRouteMethods(state->route, "TRACE");
-    } else {
-        httpRemoveRouteMethods(state->route, "TRACE");
-    }
-    return 0;
-}
-#endif
-
-
-=======
->>>>>>> local
 /*
     TypesConfig path
  */
@@ -2970,12 +2800,8 @@ static int virtualHostDirective(MaState *state, cchar *key, cchar *value)
 static int closeVirtualHostDirective(MaState *state, cchar *key, cchar *value)
 {
     HttpEndpoint    *endpoint;
-<<<<<<< HEAD
-    char            *address, *ip, *addresses, *tok;
-=======
     cchar           *ip;
     char            *address, *addresses, *tok;
->>>>>>> local
     int             port;
 
     if (state->enabled) {

@@ -1,6 +1,3 @@
-<<<<<<< HEAD
-[jQuery](http://jquery.com/) - New Wave JavaScript
-==================================================
 
 Contribution Guides
 --------------------------------------
@@ -439,4 +436,3 @@ require("jsdom").env("", function(err, window) {
 	var $ = require("jquery")(window);
 });
 ```
->>>>>>> local

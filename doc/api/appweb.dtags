@@ -98,11 +98,7 @@
   </compound>
   <compound kind="dir">
     <name>src</name>
-<<<<<<< HEAD
-    <path>/Users/mob/dev/appweb/src/</path>
-=======
     <path>/Users/mob/dev/appweb-7/src/</path>
->>>>>>> local
     <filename>dir_68267d1309a1af8e8297ef4c3efbcdba.html</filename>
     <file>appweb.h</file>
   </compound>

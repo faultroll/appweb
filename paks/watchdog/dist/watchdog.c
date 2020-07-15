@@ -67,15 +67,6 @@ static App *app;
 
 /***************************** Forward Declarations ***************************/
 
-<<<<<<< HEAD
-static void killService();
-static bool killPid();
-static void manageApp(void *unused, int flags);
-static int  readPid();
-static bool process(cchar *operation, bool quiet);
-static void runService();
-static void setAppDefaults();
-=======
 static void killService(void);
 static bool killPid(void);
 static void manageApp(void *unused, int flags);
@@ -83,7 +74,6 @@ static int  readPid(void);
 static bool process(cchar *operation, bool quiet);
 static void runService(void);
 static void setAppDefaults(void);
->>>>>>> local
 static void terminating(int state, int how, int status);
 static int  writePid(int pid);
 

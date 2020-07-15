@@ -1,17 +1,10 @@
 ESP WebSockets Chat Sample
 ===
 
-<<<<<<< HEAD
-This sample shows how to create a chat server using WebSockets and ESP. This 
-application echos incoming packets back to all clients. The application source 
-is in chat.c. This is a simple ESP controler with one action that is run in 
-response to the URI: 
-=======
 This sample shows how to create a chat server using WebSockets and ESP. This
 application echos incoming packets back to all clients. The application source
 is in chat.c. This is a simple ESP controler with one action that is run in
 response to the URI:
->>>>>>> local
 
     /ws/test/chat
 
@@ -24,33 +17,19 @@ then close the connection.
 Requirements
 ---
 
-<<<<<<< HEAD
-* [Appweb](https://embedthis.com/appweb/download.html)
-* [MakeMe Build Tool](https://embedthis.com/makeme/download.html)
-
-To build:
----
-    me 
-=======
 * [Appweb](https://www.embedthis.com/appweb/download.html)
 * [MakeMe Build Tool](https://www.embedthis.com/makeme/download.html)
 
 To build:
 ---
     me
->>>>>>> local
 
 To run:
 ---
     me run
 
-<<<<<<< HEAD
-The server listens on port 8080. Browse to: 
- 
-=======
 The server listens on port 8080. Browse to:
 
->>>>>>> local
      http://localhost:8080/
 
 This opens a web socket and sends any messages entered into the text field to all clients.
@@ -60,24 +39,12 @@ Code:
 * [cache](cache) - Directory for compiled ESP modules
 * [appweb.conf](appweb.conf) - Appweb server configuration file
 * [chat.c](chat.c) - WebSockets chat server code
-<<<<<<< HEAD
-=======
 * [load.es](load.es) - Ejscript test load program
->>>>>>> local
 * [start.me](start.me) - MakeMe build instructions
 * [web](web) - Directory containing the index.html web page
 
 Documentation:
 ---
-<<<<<<< HEAD
-* [Appweb Documentation](https://embedthis.com/appweb/doc/index.html)
-* [ESP Directives](https://embedthis.com/appweb/doc/users/dir/esp.html)
-* [ESP Tour](https://embedthis.com/esp/doc/start/tour.html)
-* [ESP Controllers](https://embedthis.com/esp/doc/users/controllers.html)
-* [ESP APIs](https://embedthis.com/esp/doc/ref/native.html)
-* [ESP Guide](https://embedthis.com/esp/doc/users/index.html)
-* [ESP Overview](https://embedthis.com/esp/doc/index.html)
-=======
 * [Appweb Documentation](https://www.embedthis.com/appweb/doc/index.html)
 * [ESP Directives](https://www.embedthis.com/appweb/doc/users/dir/esp.html)
 * [ESP Tour](https://www.embedthis.com/esp/doc/start/tour.html)
@@ -85,7 +52,6 @@ Documentation:
 * [ESP APIs](https://www.embedthis.com/esp/doc/ref/native.html)
 * [ESP Guide](https://www.embedthis.com/esp/doc/users/index.html)
 * [ESP Overview](https://www.embedthis.com/esp/doc/index.html)
->>>>>>> local
 
 See Also:
 ---

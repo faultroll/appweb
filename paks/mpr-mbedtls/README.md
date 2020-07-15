@@ -45,8 +45,4 @@ Compile time SSL controls:
 
 ## Get Pak
 
-<<<<<<< HEAD
-[https://embedthis.com/pak/](https://embedthis.com/pak/)
-=======
 [https://www.embedthis.com/pak/](https://www.embedthis.com/pak/)
->>>>>>> local

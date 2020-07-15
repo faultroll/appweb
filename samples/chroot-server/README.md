@@ -1,8 +1,4 @@
-<<<<<<< HEAD
-Chroot Sample
-=======
 chroot-server Sample
->>>>>>> local
 ===
 
 This sample shows how to run Appweb in a Chroot-jail. This is where Appweb runs with enhanced
@@ -10,21 +6,12 @@ security by changing its root directory so that the rest of the operating system
 
 Requirements
 ---
-<<<<<<< HEAD
-* [Appweb](https://embedthis.com/appweb/download.html)
-* [MakeMe Build Tool](https://embedthis.com/e/download.html)
-
-To build:
----
-    me 
-=======
 * [Appweb](https://www.embedthis.com/appweb/download.html)
 * [MakeMe Build Tool](https://www.embedthis.com/e/download.html)
 
 To build:
 ---
     me
->>>>>>> local
 
 To run:
 ---
@@ -53,15 +40,9 @@ Code:
 
 Documentation:
 ---
-<<<<<<< HEAD
-* [Appweb Documentation](https://embedthis.com/appweb/doc/index.html)
-* [Chroot Directive](https://embedthis.com/appweb/doc/users/dir/server.html#chroot)
-* [Security Considerations](https://embedthis.com/appweb/doc/users/security.html)
-=======
 * [Appweb Documentation](https://www.embedthis.com/appweb/doc/index.html)
 * [Chroot Directive](https://www.embedthis.com/appweb/doc/users/dir/server.html#chroot)
 * [Security Considerations](https://www.embedthis.com/appweb/doc/users/security.html)
->>>>>>> local
 
 See Also:
 ---

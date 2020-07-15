@@ -1,11 +1,7 @@
 /*
     expansive.es - Configuration for exp-css
 
-<<<<<<< HEAD
-    Transform by prefixing and minifying. Uses autoprefixer and less.
-=======
     Transform by prefixing and minifying. Uses postcss and less.
->>>>>>> local
  */
 Expansive.load({
 
@@ -38,14 +34,9 @@ Expansive.load({
                     if (!(service.files is Array)) {
                         service.files = [ service.files ]
                     }
-<<<<<<< HEAD
-                    expansive.control.collections.styles =
-                        (expansive.control.collections.styles + service.files).unique()
-=======
                     if (expansive.control.collections.styles.length == 0) {
                         expansive.control.collections.styles = service.files
                     }
->>>>>>> local
                 }
                 if (!service.minify) {
                     expansive.transforms['css-minify'].enable = false
@@ -82,11 +73,7 @@ Expansive.load({
                     let minified = vfile.replaceExt('min.css')
                     /*
                         Use this source file if forced+miify, or a suitable minfied version does not exist or !usemin
-<<<<<<< HEAD
-                     */                           
-=======
                      */
->>>>>>> local
                     if ((service.minify && service.force) ||
                         !(minified.exists && service.usemin && (!service.usemap || vfile.replaceExt('css.map').exists))) {
                         if (service.minify && service.dotmin) {
@@ -102,19 +89,11 @@ Expansive.load({
             name:       'prefix',
             mappings:   'css',
             render:     function(contents) {
-<<<<<<< HEAD
-                let autoprefixer = Cmd.locate('autoprefixer')
-                if (autoprefixer) {
-                    contents = expansive.run(autoprefixer, contents)
-                } else {
-                    trace('Warn', 'Cannot find autoprefixer')
-=======
                 let postcss = Cmd.locate('postcss')
                 if (postcss) {
                     contents = expansive.run(postcss + ' --use autoprefixer', contents)
                 } else {
                     trace('Warn', 'Cannot find postcss')
->>>>>>> local
                 }
                 return contents
             }
@@ -132,11 +111,7 @@ Expansive.load({
                 }
                 return contents
             }
-<<<<<<< HEAD
-       
-=======
 
->>>>>>> local
         }, {
             name:     'render',
             mappings: {
@@ -148,12 +123,7 @@ Expansive.load({
                 service.hash = {}
 
                 /*
-<<<<<<< HEAD
-                    Render styles is based on 'collections.styles' which defaults to '**.css' and is modified
-                    via expansive.json and addItems.
-=======
                     Render styles is based on 'collections.styles' which defaults to '**.css' and is modified via expansive.json and addItems.
->>>>>>> local
                  */
                 global.renderStyles = function(filter = null, extras = []) {
                     let collections = expansive.collections
@@ -171,11 +141,7 @@ Expansive.load({
                             let vfile = directories.contents.join(style)
                             let base = vfile.trimEnd('.min.css').trimEnd('.css')
 
-<<<<<<< HEAD
-                            let map = base.joinExt('min.map', true).exists || base.joinExt('css.map', true).exists || 
-=======
                             let map = base.joinExt('min.map', true).exists || base.joinExt('css.map', true).exists ||
->>>>>>> local
                                 base.joinExt('.min.css.map', true).exists
                             if (vfile.endsWith('min.css')) {
                                 if (service.usemin && (!service.usemap || map)) {
@@ -183,11 +149,7 @@ Expansive.load({
                                 }
                             } else {
                                 let minified = vfile.replaceExt('min.css').exists
-<<<<<<< HEAD
-                                let map = vfile.replaceExt('min.map').exists || vfile.replaceExt('css.map').exists || 
-=======
                                 let map = vfile.replaceExt('min.map').exists || vfile.replaceExt('css.map').exists ||
->>>>>>> local
                                     vfile.replaceExt('.min.css.map').exists
                                 if ((service.minify && service.force) || !minified || !(service.usemap && map)) {
                                     if (service.minify && service.dotmin) {
@@ -207,27 +169,15 @@ Expansive.load({
                         This is hased and saved.
                      */
                     if (!service.hash[collections.styles]) {
-<<<<<<< HEAD
-                        let files = directories.contents.files(collections.styles, 
-                            { contents: true, directories: false, relative: true})
-=======
                         let files = directories.contents.files(collections.styles,
                             { contents: true, directories: false, relative: true})
                         if (expansive.control.filters) {
                             files = files.filter(function(e) { return e.glob(expansive.control.filters) })
                         }
->>>>>>> local
                         files = expansive.orderFiles(files, "css")
                         service.hash[collections.styles] = buildStyleList(files).unique()
                     }
                     for each (style in service.hash[collections.styles]) {
-<<<<<<< HEAD
-                        if (filter && !Path(script).glob(filter)) {
-                            continue
-                        }
-                        let uri = meta.top.join(style).trimStart('./')
-                        write('<link href="' + uri + '" rel="stylesheet" type="text/css" />\n    ')
-=======
                         if (filter && !Path(style).glob(filter)) {
                             continue
                         }
@@ -239,7 +189,6 @@ Expansive.load({
                             style = meta.top.join(style).trimStart('./')
                         }
                         write('<link href="' + style + '" rel="stylesheet" type="text/css" />\n    ')
->>>>>>> local
                     }
                     if (extras && extras is String) {
                         extras = [extras]
@@ -252,10 +201,6 @@ Expansive.load({
                         }
                     }
                     for each (style in extras) {
-<<<<<<< HEAD
-                        let uri = meta.top.join(style).trimStart('./')
-                        write('<link href="' + uri + '" rel="stylesheet" type="text/css" />\n    ')
-=======
                         if (service.absolute) {
                             if (!style.startsWith('http') && !style.startsWith('..')) {
                                 style = '/' + style
@@ -264,7 +209,6 @@ Expansive.load({
                             style = meta.top.join(style).trimStart('./')
                         }
                         write('<link href="' + style + '" rel="stylesheet" type="text/css" />\n    ')
->>>>>>> local
                     }
                     if (expansive.collections['inline-styles']) {
                         write('<style>')
@@ -318,11 +262,7 @@ Expansive.load({
                 }
 
                 /*
-<<<<<<< HEAD
-                    Local function to handle style attributes 
-=======
                     Local function to handle style attributes
->>>>>>> local
                 */
                 function handleStyleAttributes(contents, meta, state, transform): String {
                     let result = ''
@@ -403,13 +343,8 @@ Expansive.load({
                     if (state.elements) {
                         for (let [key,value] in state.elements) {
                             value = value.trim().split('\n').transform(function (e) e.trim()).join('\n    ')
-<<<<<<< HEAD
-                            //  Match {
-                            value = value.replace('    }', '}') 
-=======
                             //  Match {{
                             value = value.replace('    }', '}')
->>>>>>> local
                             state.elements[key] = value
                         }
                         styles += state.elements.join('\n\n') + '\n\n'

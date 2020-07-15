@@ -3,12 +3,9 @@
 
     This sample demonstrates retrieving content using the HTTP GET method.
 
-<<<<<<< HEAD
-=======
     MOB - should be renamed simple-client
         typical-client should be event based with notifier and http2
 
->>>>>>> local
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
  */
 /***************************** Includes *******************************/
@@ -39,11 +36,7 @@ MAIN(simpleClient, int argc, char **argv, char **envp)
     /*
         Open a connection to issue the GET. Then finalize the request output - this forces the request out.
      */
-<<<<<<< HEAD
-    if ((conn = httpRequest("GET", "http://embedthis.com/index.html", NULL, &err)) == 0) {
-=======
     if ((conn = httpRequest("GET", "http://example.com/index.html", NULL, 1, &err)) == 0) {
->>>>>>> local
         mprError("Can't get URL: %s", err);
         exit(2);
     }
@@ -62,28 +55,10 @@ MAIN(simpleClient, int argc, char **argv, char **envp)
 
 
 /*
-<<<<<<< HEAD
-    @copy   default
-
     Copyright (c) Embedthis Software. All Rights Reserved.
-
-=======
-    Copyright (c) Embedthis Software. All Rights Reserved.
->>>>>>> local
     This software is distributed under commercial and open source licenses.
     You may use the Embedthis Open Source license or you may acquire a
     commercial license from Embedthis Software. You agree to be fully bound
     by the terms of either license. Consult the LICENSE.md distributed with
     this software for full details and other copyrights.
-<<<<<<< HEAD
-
-    Local variables:
-    tab-width: 4
-    c-basic-offset: 4
-    End:
-    vim: sw=4 ts=4 expandtab
-
-    @end
-=======
->>>>>>> local
  */

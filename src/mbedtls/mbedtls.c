@@ -7,15 +7,8 @@
 #if ME_COM_MBEDTLS
 
 
-<<<<<<< HEAD
-
 /********* Start of file library/aes.c ************/
 
-
-=======
-/********* Start of file library/aes.c ************/
-
->>>>>>> local
 /*
  *  FIPS-197 compliant AES implementation
  *
@@ -72,18 +65,9 @@
 
 #if !defined(MBEDTLS_AES_ALT)
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#define FSb AESFSb
-
-/* Implementation that should never be optimized out by the compiler */
-static void aes_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-=======
 /* Implementation that should never be optimized out by the compiler */
 static void mbedtls_zeroize( void *v, size_t n ) {
     volatile unsigned char *p = (unsigned char*)v; while( n-- ) *p++ = 0;
->>>>>>> local
 }
 
 /*
@@ -501,11 +485,7 @@ void mbedtls_aes_free( mbedtls_aes_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    aes_zeroize( ctx, sizeof( mbedtls_aes_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_aes_context ) );
->>>>>>> local
 }
 
 /*
@@ -741,15 +721,9 @@ exit:
  * AES-ECB block encryption
  */
 #if !defined(MBEDTLS_AES_ENCRYPT_ALT)
-<<<<<<< HEAD
-void mbedtls_aes_encrypt( mbedtls_aes_context *ctx,
-                          const unsigned char input[16],
-                          unsigned char output[16] )
-=======
 int mbedtls_internal_aes_encrypt( mbedtls_aes_context *ctx,
                                   const unsigned char input[16],
                                   unsigned char output[16] )
->>>>>>> local
 {
     int i;
     uint32_t *RK, X0, X1, X2, X3, Y0, Y1, Y2, Y3;
@@ -797,11 +771,6 @@ int mbedtls_internal_aes_encrypt( mbedtls_aes_context *ctx,
     PUT_UINT32_LE( X1, output,  4 );
     PUT_UINT32_LE( X2, output,  8 );
     PUT_UINT32_LE( X3, output, 12 );
-<<<<<<< HEAD
-}
-#endif /* !MBEDTLS_AES_ENCRYPT_ALT */
-
-=======
 
     return( 0 );
 }
@@ -816,20 +785,13 @@ void mbedtls_aes_encrypt( mbedtls_aes_context *ctx,
 }
 #endif /* !MBEDTLS_DEPRECATED_REMOVED */
 
->>>>>>> local
 /*
  * AES-ECB block decryption
  */
 #if !defined(MBEDTLS_AES_DECRYPT_ALT)
-<<<<<<< HEAD
-void mbedtls_aes_decrypt( mbedtls_aes_context *ctx,
-                          const unsigned char input[16],
-                          unsigned char output[16] )
-=======
 int mbedtls_internal_aes_decrypt( mbedtls_aes_context *ctx,
                                   const unsigned char input[16],
                                   unsigned char output[16] )
->>>>>>> local
 {
     int i;
     uint32_t *RK, X0, X1, X2, X3, Y0, Y1, Y2, Y3;
@@ -877,11 +839,6 @@ int mbedtls_internal_aes_decrypt( mbedtls_aes_context *ctx,
     PUT_UINT32_LE( X1, output,  4 );
     PUT_UINT32_LE( X2, output,  8 );
     PUT_UINT32_LE( X3, output, 12 );
-<<<<<<< HEAD
-}
-#endif /* !MBEDTLS_AES_DECRYPT_ALT */
-
-=======
 
     return( 0 );
 }
@@ -896,7 +853,6 @@ void mbedtls_aes_decrypt( mbedtls_aes_context *ctx,
 }
 #endif /* !MBEDTLS_DEPRECATED_REMOVED */
 
->>>>>>> local
 /*
  * AES-ECB block encryption/decryption
  */
@@ -923,17 +879,9 @@ int mbedtls_aes_crypt_ecb( mbedtls_aes_context *ctx,
 #endif
 
     if( mode == MBEDTLS_AES_ENCRYPT )
-<<<<<<< HEAD
-        mbedtls_aes_encrypt( ctx, input, output );
-    else
-        mbedtls_aes_decrypt( ctx, input, output );
-
-    return( 0 );
-=======
         return( mbedtls_internal_aes_encrypt( ctx, input, output ) );
     else
         return( mbedtls_internal_aes_decrypt( ctx, input, output ) );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_CIPHER_MODE_CBC)
@@ -1302,12 +1250,6 @@ static const int aes_test_ctr_len[3] =
  */
 int mbedtls_aes_self_test( int verbose )
 {
-<<<<<<< HEAD
-    int ret = 0, i, j, u, v;
-    unsigned char key[32];
-    unsigned char buf[64];
-    unsigned char iv[16];
-=======
     int ret = 0, i, j, u, mode;
     unsigned int keybits;
     unsigned char key[32];
@@ -1316,7 +1258,6 @@ int mbedtls_aes_self_test( int verbose )
 #if defined(MBEDTLS_CIPHER_MODE_CBC) || defined(MBEDTLS_CIPHER_MODE_CFB)
     unsigned char iv[16];
 #endif
->>>>>>> local
 #if defined(MBEDTLS_CIPHER_MODE_CBC)
     unsigned char prv[16];
 #endif
@@ -1339,47 +1280,6 @@ int mbedtls_aes_self_test( int verbose )
     for( i = 0; i < 6; i++ )
     {
         u = i >> 1;
-<<<<<<< HEAD
-        v = i  & 1;
-
-        if( verbose != 0 )
-            mbedtls_printf( "  AES-ECB-%3d (%s): ", 128 + u * 64,
-                             ( v == MBEDTLS_AES_DECRYPT ) ? "dec" : "enc" );
-
-        memset( buf, 0, 16 );
-
-        if( v == MBEDTLS_AES_DECRYPT )
-        {
-            mbedtls_aes_setkey_dec( &ctx, key, 128 + u * 64 );
-
-            for( j = 0; j < 10000; j++ )
-                mbedtls_aes_crypt_ecb( &ctx, v, buf, buf );
-
-            if( memcmp( buf, aes_test_ecb_dec[u], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-        }
-        else
-        {
-            mbedtls_aes_setkey_enc( &ctx, key, 128 + u * 64 );
-
-            for( j = 0; j < 10000; j++ )
-                mbedtls_aes_crypt_ecb( &ctx, v, buf, buf );
-
-            if( memcmp( buf, aes_test_ecb_enc[u], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-=======
         keybits = 128 + u * 64;
         mode = i & 1;
 
@@ -1426,7 +1326,6 @@ int mbedtls_aes_self_test( int verbose )
         {
             ret = 1;
             goto exit;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -1443,53 +1342,17 @@ int mbedtls_aes_self_test( int verbose )
     for( i = 0; i < 6; i++ )
     {
         u = i >> 1;
-<<<<<<< HEAD
-        v = i  & 1;
-
-        if( verbose != 0 )
-            mbedtls_printf( "  AES-CBC-%3d (%s): ", 128 + u * 64,
-                             ( v == MBEDTLS_AES_DECRYPT ) ? "dec" : "enc" );
-=======
         keybits = 128 + u * 64;
         mode = i & 1;
 
         if( verbose != 0 )
             mbedtls_printf( "  AES-CBC-%3d (%s): ", keybits,
                             ( mode == MBEDTLS_AES_DECRYPT ) ? "dec" : "enc" );
->>>>>>> local
 
         memset( iv , 0, 16 );
         memset( prv, 0, 16 );
         memset( buf, 0, 16 );
 
-<<<<<<< HEAD
-        if( v == MBEDTLS_AES_DECRYPT )
-        {
-            mbedtls_aes_setkey_dec( &ctx, key, 128 + u * 64 );
-
-            for( j = 0; j < 10000; j++ )
-                mbedtls_aes_crypt_cbc( &ctx, v, 16, iv, buf, buf );
-
-            if( memcmp( buf, aes_test_cbc_dec[u], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-        }
-        else
-        {
-            mbedtls_aes_setkey_enc( &ctx, key, 128 + u * 64 );
-
-            for( j = 0; j < 10000; j++ )
-            {
-                unsigned char tmp[16];
-
-                mbedtls_aes_crypt_cbc( &ctx, v, 16, iv, buf, buf );
-
-=======
         if( mode == MBEDTLS_AES_DECRYPT )
         {
             ret = mbedtls_aes_setkey_dec( &ctx, key, keybits );
@@ -1522,22 +1385,11 @@ int mbedtls_aes_self_test( int verbose )
             {
                 unsigned char tmp[16];
 
->>>>>>> local
                 memcpy( tmp, prv, 16 );
                 memcpy( prv, buf, 16 );
                 memcpy( buf, tmp, 16 );
             }
 
-<<<<<<< HEAD
-            if( memcmp( prv, aes_test_cbc_enc[u], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-=======
             ret = mbedtls_aes_crypt_cbc( &ctx, mode, 16, iv, buf, buf );
             if( ret != 0 )
                 goto exit;
@@ -1548,7 +1400,6 @@ int mbedtls_aes_self_test( int verbose )
         {
             ret = 1;
             goto exit;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -1566,33 +1417,6 @@ int mbedtls_aes_self_test( int verbose )
     for( i = 0; i < 6; i++ )
     {
         u = i >> 1;
-<<<<<<< HEAD
-        v = i  & 1;
-
-        if( verbose != 0 )
-            mbedtls_printf( "  AES-CFB128-%3d (%s): ", 128 + u * 64,
-                             ( v == MBEDTLS_AES_DECRYPT ) ? "dec" : "enc" );
-
-        memcpy( iv,  aes_test_cfb128_iv, 16 );
-        memcpy( key, aes_test_cfb128_key[u], 16 + u * 8 );
-
-        offset = 0;
-        mbedtls_aes_setkey_enc( &ctx, key, 128 + u * 64 );
-
-        if( v == MBEDTLS_AES_DECRYPT )
-        {
-            memcpy( buf, aes_test_cfb128_ct[u], 64 );
-            mbedtls_aes_crypt_cfb128( &ctx, v, 64, &offset, iv, buf, buf );
-
-            if( memcmp( buf, aes_test_cfb128_pt, 64 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-=======
         keybits = 128 + u * 64;
         mode = i & 1;
 
@@ -1624,23 +1448,10 @@ int mbedtls_aes_self_test( int verbose )
         {
             memcpy( buf, aes_test_cfb128_ct[u], 64 );
             aes_tests = aes_test_cfb128_pt;
->>>>>>> local
         }
         else
         {
             memcpy( buf, aes_test_cfb128_pt, 64 );
-<<<<<<< HEAD
-            mbedtls_aes_crypt_cfb128( &ctx, v, 64, &offset, iv, buf, buf );
-
-            if( memcmp( buf, aes_test_cfb128_ct[u], 64 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-=======
             aes_tests = aes_test_cfb128_ct[u];
         }
 
@@ -1652,7 +1463,6 @@ int mbedtls_aes_self_test( int verbose )
         {
             ret = 1;
             goto exit;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -1670,61 +1480,16 @@ int mbedtls_aes_self_test( int verbose )
     for( i = 0; i < 6; i++ )
     {
         u = i >> 1;
-<<<<<<< HEAD
-        v = i  & 1;
-
-        if( verbose != 0 )
-            mbedtls_printf( "  AES-CTR-128 (%s): ",
-                             ( v == MBEDTLS_AES_DECRYPT ) ? "dec" : "enc" );
-=======
         mode = i & 1;
 
         if( verbose != 0 )
             mbedtls_printf( "  AES-CTR-128 (%s): ",
                             ( mode == MBEDTLS_AES_DECRYPT ) ? "dec" : "enc" );
->>>>>>> local
 
         memcpy( nonce_counter, aes_test_ctr_nonce_counter[u], 16 );
         memcpy( key, aes_test_ctr_key[u], 16 );
 
         offset = 0;
-<<<<<<< HEAD
-        mbedtls_aes_setkey_enc( &ctx, key, 128 );
-
-        if( v == MBEDTLS_AES_DECRYPT )
-        {
-            len = aes_test_ctr_len[u];
-            memcpy( buf, aes_test_ctr_ct[u], len );
-
-            mbedtls_aes_crypt_ctr( &ctx, len, &offset, nonce_counter, stream_block,
-                           buf, buf );
-
-            if( memcmp( buf, aes_test_ctr_pt[u], len ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-        }
-        else
-        {
-            len = aes_test_ctr_len[u];
-            memcpy( buf, aes_test_ctr_pt[u], len );
-
-            mbedtls_aes_crypt_ctr( &ctx, len, &offset, nonce_counter, stream_block,
-                           buf, buf );
-
-            if( memcmp( buf, aes_test_ctr_ct[u], len ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                ret = 1;
-                goto exit;
-            }
-=======
         if( ( ret = mbedtls_aes_setkey_enc( &ctx, key, 128 ) ) != 0 )
             goto exit;
 
@@ -1750,7 +1515,6 @@ int mbedtls_aes_self_test( int verbose )
         {
             ret = 1;
             goto exit;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -1764,12 +1528,9 @@ int mbedtls_aes_self_test( int verbose )
     ret = 0;
 
 exit:
-<<<<<<< HEAD
-=======
     if( ret != 0 && verbose != 0 )
         mbedtls_printf( "failed\n" );
 
->>>>>>> local
     mbedtls_aes_free( &ctx );
 
     return( ret );
@@ -1777,18 +1538,6 @@ exit:
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef FSb
-
-#endif /* MBEDTLS_AES_C */
-
-
-
-/********* Start of file library/aesni.c ************/
-
-
-=======
 #endif /* MBEDTLS_AES_C */
 
 /*
@@ -1827,7 +1576,6 @@ exit:
 
 /********* Start of file library/aesni.c ************/
 
->>>>>>> local
 /*
  *  AES-NI support functions
  *
@@ -1930,11 +1678,7 @@ int mbedtls_aesni_crypt_ecb( mbedtls_aes_context *ctx,
     asm( "movdqu    (%3), %%xmm0    \n\t" // load input
          "movdqu    (%1), %%xmm1    \n\t" // load round key 0
          "pxor      %%xmm1, %%xmm0  \n\t" // round 0
-<<<<<<< HEAD
-         "addq      $16, %1         \n\t" // point to next round key
-=======
          "add       $16, %1         \n\t" // point to next round key
->>>>>>> local
          "subl      $1, %0          \n\t" // normal rounds = nr - 1
          "test      %2, %2          \n\t" // mode?
          "jz        2f              \n\t" // 0 = decrypt
@@ -1942,11 +1686,7 @@ int mbedtls_aesni_crypt_ecb( mbedtls_aes_context *ctx,
          "1:                        \n\t" // encryption loop
          "movdqu    (%1), %%xmm1    \n\t" // load round key
          AESENC     xmm1_xmm0      "\n\t" // do round
-<<<<<<< HEAD
-         "addq      $16, %1         \n\t" // point to next round key
-=======
          "add       $16, %1         \n\t" // point to next round key
->>>>>>> local
          "subl      $1, %0          \n\t" // loop
          "jnz       1b              \n\t"
          "movdqu    (%1), %%xmm1    \n\t" // load round key
@@ -1956,11 +1696,7 @@ int mbedtls_aesni_crypt_ecb( mbedtls_aes_context *ctx,
          "2:                        \n\t" // decryption loop
          "movdqu    (%1), %%xmm1    \n\t"
          AESDEC     xmm1_xmm0      "\n\t" // do round
-<<<<<<< HEAD
-         "addq      $16, %1         \n\t"
-=======
          "add       $16, %1         \n\t"
->>>>>>> local
          "subl      $1, %0          \n\t"
          "jnz       2b              \n\t"
          "movdqu    (%1), %%xmm1    \n\t" // load round key
@@ -2305,13 +2041,6 @@ int mbedtls_aesni_setkey_enc( unsigned char *rk,
 
 #endif /* MBEDTLS_AESNI_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/arc4.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -2348,7 +2077,6 @@ int mbedtls_aesni_setkey_enc( unsigned char *rk,
 
 /********* Start of file library/arc4.c ************/
 
->>>>>>> local
 /*
  *  An implementation of the ARCFOUR algorithm
  *
@@ -2399,13 +2127,7 @@ int mbedtls_aesni_setkey_enc( unsigned char *rk,
 #if !defined(MBEDTLS_ARC4_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void arc4_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 void mbedtls_arc4_init( mbedtls_arc4_context *ctx )
 {
@@ -2417,11 +2139,7 @@ void mbedtls_arc4_free( mbedtls_arc4_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    arc4_zeroize( ctx, sizeof( mbedtls_arc4_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_arc4_context ) );
->>>>>>> local
 }
 
 /*
@@ -2563,8 +2281,6 @@ exit:
 
 #endif /* MBEDTLS_ARC4_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -2597,15 +2313,10 @@ exit:
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/asn1parse.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  Generic ASN.1 parsing
  *
@@ -2652,13 +2363,7 @@ exit:
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void asn1_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * ASN.1 DER decoding routines
@@ -2765,11 +2470,7 @@ int mbedtls_asn1_get_int( unsigned char **p,
     if( ( ret = mbedtls_asn1_get_tag( p, end, &len, MBEDTLS_ASN1_INTEGER ) ) != 0 )
         return( ret );
 
-<<<<<<< HEAD
-    if( len > sizeof( int ) || ( **p & 0x80 ) != 0 )
-=======
     if( len == 0 || len > sizeof( int ) || ( **p & 0x80 ) != 0 )
->>>>>>> local
         return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
 
     *val = 0;
@@ -2885,12 +2586,8 @@ int mbedtls_asn1_get_sequence_of( unsigned char **p,
         /* Allocate and assign next pointer */
         if( *p < end )
         {
-<<<<<<< HEAD
-            cur->next = mbedtls_calloc( 1, sizeof( mbedtls_asn1_sequence ) );
-=======
             cur->next = (mbedtls_asn1_sequence*)mbedtls_calloc( 1,
                                             sizeof( mbedtls_asn1_sequence ) );
->>>>>>> local
 
             if( cur->next == NULL )
                 return( MBEDTLS_ERR_ASN1_ALLOC_FAILED );
@@ -2933,11 +2630,7 @@ int mbedtls_asn1_get_alg( unsigned char **p,
 
     if( *p == end )
     {
-<<<<<<< HEAD
-        asn1_zeroize( params, sizeof(mbedtls_asn1_buf) );
-=======
         mbedtls_zeroize( params, sizeof(mbedtls_asn1_buf) );
->>>>>>> local
         return( 0 );
     }
 
@@ -2982,11 +2675,7 @@ void mbedtls_asn1_free_named_data( mbedtls_asn1_named_data *cur )
     mbedtls_free( cur->oid.p );
     mbedtls_free( cur->val.p );
 
-<<<<<<< HEAD
-    asn1_zeroize( cur, sizeof( mbedtls_asn1_named_data ) );
-=======
     mbedtls_zeroize( cur, sizeof( mbedtls_asn1_named_data ) );
->>>>>>> local
 }
 
 void mbedtls_asn1_free_named_data_list( mbedtls_asn1_named_data **head )
@@ -3020,8 +2709,6 @@ mbedtls_asn1_named_data *mbedtls_asn1_find_named_data( mbedtls_asn1_named_data *
 
 #endif /* MBEDTLS_ASN1_PARSE_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -3054,15 +2741,10 @@ mbedtls_asn1_named_data *mbedtls_asn1_find_named_data( mbedtls_asn1_named_data *
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/asn1write.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  * ASN.1 buffer writing functionality
  *
@@ -3125,18 +2807,6 @@ int mbedtls_asn1_write_len( unsigned char **p, unsigned char *start, size_t len 
         return( 2 );
     }
 
-<<<<<<< HEAD
-    if( *p - start < 3 )
-        return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
-
-    // We assume we never have lengths larger than 65535 bytes
-    //
-    *--(*p) = len % 256;
-    *--(*p) = ( len / 256 ) % 256;
-    *--(*p) = 0x82;
-
-    return( 3 );
-=======
     if( len <= 0xFFFF )
     {
         if( *p - start < 3 )
@@ -3174,7 +2844,6 @@ int mbedtls_asn1_write_len( unsigned char **p, unsigned char *start, size_t len 
     }
 
     return( MBEDTLS_ERR_ASN1_INVALID_LENGTH );
->>>>>>> local
 }
 
 int mbedtls_asn1_write_tag( unsigned char **p, unsigned char *start, unsigned char tag )
@@ -3417,13 +3086,9 @@ mbedtls_asn1_named_data *mbedtls_asn1_store_named_data( mbedtls_asn1_named_data 
     {
         // Add new entry if not present yet based on OID
         //
-<<<<<<< HEAD
-        if( ( cur = mbedtls_calloc( 1, sizeof(mbedtls_asn1_named_data) ) ) == NULL )
-=======
         cur = (mbedtls_asn1_named_data*)mbedtls_calloc( 1,
                                             sizeof(mbedtls_asn1_named_data) );
         if( cur == NULL )
->>>>>>> local
             return( NULL );
 
         cur->oid.len = oid_len;
@@ -3471,12 +3136,6 @@ mbedtls_asn1_named_data *mbedtls_asn1_store_named_data( mbedtls_asn1_named_data 
 }
 #endif /* MBEDTLS_ASN1_WRITE_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/base64.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -3512,7 +3171,6 @@ mbedtls_asn1_named_data *mbedtls_asn1_store_named_data( mbedtls_asn1_named_data 
 
 
 /********* Start of file library/base64.c ************/
->>>>>>> local
 
 /*
  *  RFC 1521 base64 encoding/decoding
@@ -3545,13 +3203,7 @@ mbedtls_asn1_named_data *mbedtls_asn1_store_named_data( mbedtls_asn1_named_data 
 
 
 
-<<<<<<< HEAD
-#if !VXWORKS
 #include <stdint.h>
-#endif
-=======
-#include <stdint.h>
->>>>>>> local
 
 #if defined(MBEDTLS_SELF_TEST)
 #include <string.h>
@@ -3619,11 +3271,7 @@ int mbedtls_base64_encode( unsigned char *dst, size_t dlen, size_t *olen,
 
     n *= 4;
 
-<<<<<<< HEAD
-    if( dlen < n + 1 )
-=======
     if( ( dlen < n + 1 ) || ( NULL == dst ) )
->>>>>>> local
     {
         *olen = n + 1;
         return( MBEDTLS_ERR_BASE64_BUFFER_TOO_SMALL );
@@ -3718,15 +3366,11 @@ int mbedtls_base64_decode( unsigned char *dst, size_t dlen, size_t *olen,
         return( 0 );
     }
 
-<<<<<<< HEAD
-    n = ( ( n * 6 ) + 7 ) >> 3;
-=======
     /* The following expression is to calculate the following formula without
      * risk of integer overflow in n:
      *     n = ( ( n * 6 ) + 7 ) >> 3;
      */
     n = ( 6 * ( n >> 3 ) ) + ( ( 6 * ( n & 0x7 ) + 7 ) >> 3 );
->>>>>>> local
     n -= j;
 
     if( dst == NULL || dlen < n )
@@ -3822,8 +3466,6 @@ int mbedtls_base64_self_test( int verbose )
 
 #endif /* MBEDTLS_BASE64_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -3856,15 +3498,10 @@ int mbedtls_base64_self_test( int verbose )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/bignum.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  Multi-precision integer library
  *
@@ -3926,12 +3563,6 @@ int mbedtls_base64_self_test( int verbose )
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void mbedtls_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-
-=======
 static void mbedtls_mpi_zeroize( mbedtls_mpi_uint *v, size_t n ) {
     volatile mbedtls_mpi_uint *p = v; while( n-- ) *p++ = 0;
 }
@@ -3939,7 +3570,6 @@ static void mbedtls_mpi_zeroize( mbedtls_mpi_uint *v, size_t n ) {
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
 
->>>>>>> local
 #define ciL    (sizeof(mbedtls_mpi_uint))         /* chars in limb  */
 #define biL    (ciL << 3)               /* bits  in limb  */
 #define biH    (ciL << 2)               /* half limb size */
@@ -3976,11 +3606,7 @@ void mbedtls_mpi_free( mbedtls_mpi *X )
 
     if( X->p != NULL )
     {
-<<<<<<< HEAD
-        mbedtls_zeroize( X->p, X->n * ciL );
-=======
         mbedtls_mpi_zeroize( X->p, X->n );
->>>>>>> local
         mbedtls_free( X->p );
     }
 
@@ -4001,21 +3627,13 @@ int mbedtls_mpi_grow( mbedtls_mpi *X, size_t nblimbs )
 
     if( X->n < nblimbs )
     {
-<<<<<<< HEAD
-        if( ( p = mbedtls_calloc( nblimbs, ciL ) ) == NULL )
-=======
         if( ( p = (mbedtls_mpi_uint*)mbedtls_calloc( nblimbs, ciL ) ) == NULL )
->>>>>>> local
             return( MBEDTLS_ERR_MPI_ALLOC_FAILED );
 
         if( X->p != NULL )
         {
             memcpy( p, X->p, X->n * ciL );
-<<<<<<< HEAD
-            mbedtls_zeroize( X->p, X->n * ciL );
-=======
             mbedtls_mpi_zeroize( X->p, X->n );
->>>>>>> local
             mbedtls_free( X->p );
         }
 
@@ -4047,21 +3665,13 @@ int mbedtls_mpi_shrink( mbedtls_mpi *X, size_t nblimbs )
     if( i < nblimbs )
         i = nblimbs;
 
-<<<<<<< HEAD
-    if( ( p = mbedtls_calloc( i, ciL ) ) == NULL )
-=======
     if( ( p = (mbedtls_mpi_uint*)mbedtls_calloc( i, ciL ) ) == NULL )
->>>>>>> local
         return( MBEDTLS_ERR_MPI_ALLOC_FAILED );
 
     if( X->p != NULL )
     {
         memcpy( p, X->p, i * ciL );
-<<<<<<< HEAD
-        mbedtls_zeroize( X->p, X->n * ciL );
-=======
         mbedtls_mpi_zeroize( X->p, X->n );
->>>>>>> local
         mbedtls_free( X->p );
     }
 
@@ -4431,16 +4041,12 @@ int mbedtls_mpi_write_string( const mbedtls_mpi *X, int radix,
     n = mbedtls_mpi_bitlen( X );
     if( radix >=  4 ) n >>= 1;
     if( radix >= 16 ) n >>= 1;
-<<<<<<< HEAD
-    n += 3;
-=======
     /*
      * Round up the buffer length to an even value to ensure that there is
      * enough room for hexadecimal values that can be represented in an odd
      * number of digits.
      */
     n += 3 + ( ( n + 1 ) & 1 );
->>>>>>> local
 
     if( buflen < n )
     {
@@ -4517,19 +4123,11 @@ int mbedtls_mpi_read_file( mbedtls_mpi *X, int radix, FILE *fin )
     if( slen == sizeof( s ) - 2 )
         return( MBEDTLS_ERR_MPI_BUFFER_TOO_SMALL );
 
-<<<<<<< HEAD
-    if( s[slen - 1] == '\n' ) { slen--; s[slen] = '\0'; }
-    if( s[slen - 1] == '\r' ) { slen--; s[slen] = '\0'; }
-
-    p = s + slen;
-    while( --p >= s )
-=======
     if( slen > 0 && s[slen - 1] == '\n' ) { slen--; s[slen] = '\0'; }
     if( slen > 0 && s[slen - 1] == '\r' ) { slen--; s[slen] = '\0'; }
 
     p = s + slen;
     while( p-- > s )
->>>>>>> local
         if( mpi_get_digit( &d, radix, *p ) != 0 )
             break;
 
@@ -4581,18 +4179,6 @@ cleanup:
 int mbedtls_mpi_read_binary( mbedtls_mpi *X, const unsigned char *buf, size_t buflen )
 {
     int ret;
-<<<<<<< HEAD
-    size_t i, j, n;
-
-    for( n = 0; n < buflen; n++ )
-        if( buf[n] != 0 )
-            break;
-
-    MBEDTLS_MPI_CHK( mbedtls_mpi_grow( X, CHARS_TO_LIMBS( buflen - n ) ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_lset( X, 0 ) );
-
-    for( i = buflen, j = 0; i > n; i--, j++ )
-=======
     size_t i, j;
     size_t const limbs = CHARS_TO_LIMBS( buflen );
 
@@ -4607,7 +4193,6 @@ int mbedtls_mpi_read_binary( mbedtls_mpi *X, const unsigned char *buf, size_t bu
     MBEDTLS_MPI_CHK( mbedtls_mpi_lset( X, 0 ) );
 
     for( i = buflen, j = 0; i > 0; i--, j++ )
->>>>>>> local
         X->p[j / ciL] |= ((mbedtls_mpi_uint) buf[i - 1]) << ((j % ciL) << 3);
 
 cleanup:
@@ -4814,11 +4399,7 @@ int mbedtls_mpi_add_abs( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
 {
     int ret;
     size_t i, j;
-<<<<<<< HEAD
-    mbedtls_mpi_uint *o, *p, c;
-=======
     mbedtls_mpi_uint *o, *p, c, tmp;
->>>>>>> local
 
     if( X == B )
     {
@@ -4841,12 +4422,6 @@ int mbedtls_mpi_add_abs( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
 
     o = B->p; p = X->p; c = 0;
 
-<<<<<<< HEAD
-    for( i = 0; i < j; i++, o++, p++ )
-    {
-        *p +=  c; c  = ( *p <  c );
-        *p += *o; c += ( *p < *o );
-=======
     /*
      * tmp is used because it might happen that p == o
      */
@@ -4855,7 +4430,6 @@ int mbedtls_mpi_add_abs( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
         tmp= *o;
         *p +=  c; c  = ( *p <  c );
         *p += tmp; c += ( *p < tmp );
->>>>>>> local
     }
 
     while( c != 0 )
@@ -5484,22 +5058,15 @@ static void mpi_montg_init( mbedtls_mpi_uint *mm, const mbedtls_mpi *N )
 /*
  * Montgomery multiplication: A = A * B * R^-1 mod N  (HAC 14.36)
  */
-<<<<<<< HEAD
-static void mpi_montmul( mbedtls_mpi *A, const mbedtls_mpi *B, const mbedtls_mpi *N, mbedtls_mpi_uint mm,
-=======
 static int mpi_montmul( mbedtls_mpi *A, const mbedtls_mpi *B, const mbedtls_mpi *N, mbedtls_mpi_uint mm,
->>>>>>> local
                          const mbedtls_mpi *T )
 {
     size_t i, n, m;
     mbedtls_mpi_uint u0, u1, *d;
 
-<<<<<<< HEAD
-=======
     if( T->n < N->n + 1 || T->p == NULL )
         return( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
 
->>>>>>> local
     memset( T->p, 0, T->n * ciL );
 
     d = T->p;
@@ -5527,21 +5094,14 @@ static int mpi_montmul( mbedtls_mpi *A, const mbedtls_mpi *B, const mbedtls_mpi 
     else
         /* prevent timing attacks */
         mpi_sub_hlp( n, A->p, T->p );
-<<<<<<< HEAD
-=======
 
     return( 0 );
->>>>>>> local
 }
 
 /*
  * Montgomery reduction: A = A * R^-1 mod N
  */
-<<<<<<< HEAD
-static void mpi_montred( mbedtls_mpi *A, const mbedtls_mpi *N, mbedtls_mpi_uint mm, const mbedtls_mpi *T )
-=======
 static int mpi_montred( mbedtls_mpi *A, const mbedtls_mpi *N, mbedtls_mpi_uint mm, const mbedtls_mpi *T )
->>>>>>> local
 {
     mbedtls_mpi_uint z = 1;
     mbedtls_mpi U;
@@ -5549,11 +5109,7 @@ static int mpi_montred( mbedtls_mpi *A, const mbedtls_mpi *N, mbedtls_mpi_uint m
     U.n = U.s = (int) z;
     U.p = &z;
 
-<<<<<<< HEAD
-    mpi_montmul( A, &U, N, mm, T );
-=======
     return( mpi_montmul( A, &U, N, mm, T ) );
->>>>>>> local
 }
 
 /*
@@ -5569,11 +5125,7 @@ int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
     mbedtls_mpi RR, T, W[ 2 << MBEDTLS_MPI_WINDOW_SIZE ], Apos;
     int neg;
 
-<<<<<<< HEAD
-    if( mbedtls_mpi_cmp_int( N, 0 ) < 0 || ( N->p[0] & 1 ) == 0 )
-=======
     if( mbedtls_mpi_cmp_int( N, 0 ) <= 0 || ( N->p[0] & 1 ) == 0 )
->>>>>>> local
         return( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
 
     if( mbedtls_mpi_cmp_int( E, 0 ) < 0 )
@@ -5634,21 +5186,13 @@ int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
     else
         MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &W[1], A ) );
 
-<<<<<<< HEAD
-    mpi_montmul( &W[1], &RR, N, mm, &T );
-=======
     MBEDTLS_MPI_CHK( mpi_montmul( &W[1], &RR, N, mm, &T ) );
->>>>>>> local
 
     /*
      * X = R^2 * R^-1 mod N = R mod N
      */
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( X, &RR ) );
-<<<<<<< HEAD
-    mpi_montred( X, N, mm, &T );
-=======
     MBEDTLS_MPI_CHK( mpi_montred( X, N, mm, &T ) );
->>>>>>> local
 
     if( wsize > 1 )
     {
@@ -5661,11 +5205,7 @@ int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
         MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &W[j], &W[1]    ) );
 
         for( i = 0; i < wsize - 1; i++ )
-<<<<<<< HEAD
-            mpi_montmul( &W[j], &W[j], N, mm, &T );
-=======
             MBEDTLS_MPI_CHK( mpi_montmul( &W[j], &W[j], N, mm, &T ) );
->>>>>>> local
 
         /*
          * W[i] = W[i - 1] * W[1]
@@ -5675,11 +5215,7 @@ int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
             MBEDTLS_MPI_CHK( mbedtls_mpi_grow( &W[i], N->n + 1 ) );
             MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &W[i], &W[i - 1] ) );
 
-<<<<<<< HEAD
-            mpi_montmul( &W[i], &W[1], N, mm, &T );
-=======
             MBEDTLS_MPI_CHK( mpi_montmul( &W[i], &W[1], N, mm, &T ) );
->>>>>>> local
         }
     }
 
@@ -5716,11 +5252,7 @@ int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
             /*
              * out of window, square X
              */
-<<<<<<< HEAD
-            mpi_montmul( X, X, N, mm, &T );
-=======
             MBEDTLS_MPI_CHK( mpi_montmul( X, X, N, mm, &T ) );
->>>>>>> local
             continue;
         }
 
@@ -5738,20 +5270,12 @@ int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
              * X = X^wsize R^-1 mod N
              */
             for( i = 0; i < wsize; i++ )
-<<<<<<< HEAD
-                mpi_montmul( X, X, N, mm, &T );
-=======
                 MBEDTLS_MPI_CHK( mpi_montmul( X, X, N, mm, &T ) );
->>>>>>> local
 
             /*
              * X = X * W[wbits] R^-1 mod N
              */
-<<<<<<< HEAD
-            mpi_montmul( X, &W[wbits], N, mm, &T );
-=======
             MBEDTLS_MPI_CHK( mpi_montmul( X, &W[wbits], N, mm, &T ) );
->>>>>>> local
 
             state--;
             nbits = 0;
@@ -5764,34 +5288,20 @@ int mbedtls_mpi_exp_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
      */
     for( i = 0; i < nbits; i++ )
     {
-<<<<<<< HEAD
-        mpi_montmul( X, X, N, mm, &T );
-=======
         MBEDTLS_MPI_CHK( mpi_montmul( X, X, N, mm, &T ) );
->>>>>>> local
 
         wbits <<= 1;
 
         if( ( wbits & ( one << wsize ) ) != 0 )
-<<<<<<< HEAD
-            mpi_montmul( X, &W[1], N, mm, &T );
-=======
             MBEDTLS_MPI_CHK( mpi_montmul( X, &W[1], N, mm, &T ) );
->>>>>>> local
     }
 
     /*
      * X = A^E * R * R^-1 mod N = A^E mod N
      */
-<<<<<<< HEAD
-    mpi_montred( X, N, mm, &T );
-
-    if( neg )
-=======
     MBEDTLS_MPI_CHK( mpi_montred( X, N, mm, &T ) );
 
     if( neg && E->n != 0 && ( E->p[0] & 1 ) != 0 )
->>>>>>> local
     {
         X->s = -1;
         MBEDTLS_MPI_CHK( mbedtls_mpi_add_mpi( X, N, X ) );
@@ -5883,10 +5393,7 @@ int mbedtls_mpi_fill_random( mbedtls_mpi *X, size_t size,
     MBEDTLS_MPI_CHK( mbedtls_mpi_read_binary( X, buf, size ) );
 
 cleanup:
-<<<<<<< HEAD
-=======
     mbedtls_zeroize( buf, sizeof( buf ) );
->>>>>>> local
     return( ret );
 }
 
@@ -5898,11 +5405,7 @@ int mbedtls_mpi_inv_mod( mbedtls_mpi *X, const mbedtls_mpi *A, const mbedtls_mpi
     int ret;
     mbedtls_mpi G, TA, TU, U1, U2, TB, TV, V1, V2;
 
-<<<<<<< HEAD
-    if( mbedtls_mpi_cmp_int( N, 0 ) <= 0 )
-=======
     if( mbedtls_mpi_cmp_int( N, 1 ) <= 0 )
->>>>>>> local
         return( MBEDTLS_ERR_MPI_BAD_INPUT_DATA );
 
     mbedtls_mpi_init( &TA ); mbedtls_mpi_init( &TU ); mbedtls_mpi_init( &U1 ); mbedtls_mpi_init( &U2 );
@@ -6455,13 +5958,6 @@ cleanup:
 
 #endif /* MBEDTLS_BIGNUM_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/blowfish.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -6498,7 +5994,6 @@ cleanup:
 
 /********* Start of file library/blowfish.c ************/
 
->>>>>>> local
 /*
  *  Blowfish implementation
  *
@@ -6541,13 +6036,7 @@ cleanup:
 #if !defined(MBEDTLS_BLOWFISH_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void blowfish_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (big endian)
@@ -6670,11 +6159,7 @@ void mbedtls_blowfish_free( mbedtls_blowfish_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    blowfish_zeroize( ctx, sizeof( mbedtls_blowfish_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_blowfish_context ) );
->>>>>>> local
 }
 
 /*
@@ -7164,8 +6649,6 @@ static const uint32_t S[4][256] = {
 #endif /* !MBEDTLS_BLOWFISH_ALT */
 #endif /* MBEDTLS_BLOWFISH_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -7198,15 +6681,10 @@ static const uint32_t S[4][256] = {
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/camellia.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  Camellia implementation
  *
@@ -7255,22 +6733,10 @@ static const uint32_t S[4][256] = {
 #endif /* MBEDTLS_PLATFORM_C */
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#define FSb CAMELLIAFSb
-
-#if !defined(MBEDTLS_CAMELLIA_ALT)
-
-/* Implementation that should never be optimized out by the compiler */
-static void camellia_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #if !defined(MBEDTLS_CAMELLIA_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (big endian)
@@ -7552,11 +7018,7 @@ void mbedtls_camellia_free( mbedtls_camellia_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    camellia_zeroize( ctx, sizeof( mbedtls_camellia_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_camellia_context ) );
->>>>>>> local
 }
 
 /*
@@ -8186,40 +7648,6 @@ int mbedtls_camellia_self_test( int verbose )
             mbedtls_printf( "  CAMELLIA-CBC-%3d (%s): ", 128 + u * 64,
                              ( v == MBEDTLS_CAMELLIA_DECRYPT ) ? "dec" : "enc" );
 
-<<<<<<< HEAD
-    memcpy( src, camellia_test_cbc_iv, 16 );
-    memcpy( dst, camellia_test_cbc_iv, 16 );
-    memcpy( key, camellia_test_cbc_key[u], 16 + 8 * u );
-
-    if( v == MBEDTLS_CAMELLIA_DECRYPT ) {
-        mbedtls_camellia_setkey_dec( &ctx, key, 128 + u * 64 );
-    } else {
-        mbedtls_camellia_setkey_enc( &ctx, key, 128 + u * 64 );
-    }
-
-    for( i = 0; i < CAMELLIA_TESTS_CBC; i++ ) {
-
-        if( v == MBEDTLS_CAMELLIA_DECRYPT ) {
-            memcpy( iv , src, 16 );
-            memcpy( src, camellia_test_cbc_cipher[u][i], 16 );
-            memcpy( dst, camellia_test_cbc_plain[i], 16 );
-        } else { /* MBEDTLS_CAMELLIA_ENCRYPT */
-            memcpy( iv , dst, 16 );
-            memcpy( src, camellia_test_cbc_plain[i], 16 );
-            memcpy( dst, camellia_test_cbc_cipher[u][i], 16 );
-        }
-
-        mbedtls_camellia_crypt_cbc( &ctx, v, 16, iv, src, buf );
-
-        if( memcmp( buf, dst, 16 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            return( 1 );
-        }
-    }
-=======
         memcpy( src, camellia_test_cbc_iv, 16 );
         memcpy( dst, camellia_test_cbc_iv, 16 );
         memcpy( key, camellia_test_cbc_key[u], 16 + 8 * u );
@@ -8252,7 +7680,6 @@ int mbedtls_camellia_self_test( int verbose )
                 return( 1 );
             }
         }
->>>>>>> local
 
         if( verbose != 0 )
             mbedtls_printf( "passed\n" );
@@ -8327,18 +7754,6 @@ int mbedtls_camellia_self_test( int verbose )
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef FSb
-
-#endif /* MBEDTLS_CAMELLIA_C */
-
-
-
-/********* Start of file library/ccm.c ************/
-
-
-=======
 #endif /* MBEDTLS_CAMELLIA_C */
 
 /*
@@ -8377,7 +7792,6 @@ int mbedtls_camellia_self_test( int verbose )
 
 /********* Start of file library/ccm.c ************/
 
->>>>>>> local
 /*
  *  NIST SP800-38C compliant CCM implementation
  *
@@ -8429,17 +7843,10 @@ int mbedtls_camellia_self_test( int verbose )
 #endif /* MBEDTLS_PLATFORM_C */
 #endif /* MBEDTLS_SELF_TEST && MBEDTLS_AES_C */
 
-<<<<<<< HEAD
-/* Implementation that should never be optimized out by the compiler */
-static void ccm_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #if !defined(MBEDTLS_CCM_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 
 #define CCM_ENCRYPT 0
 #define CCM_DECRYPT 1
@@ -8487,11 +7894,7 @@ int mbedtls_ccm_setkey( mbedtls_ccm_context *ctx,
 void mbedtls_ccm_free( mbedtls_ccm_context *ctx )
 {
     mbedtls_cipher_free( &ctx->cipher_ctx );
-<<<<<<< HEAD
-    ccm_zeroize( ctx, sizeof( mbedtls_ccm_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_ccm_context ) );
->>>>>>> local
 }
 
 /*
@@ -8732,21 +8135,14 @@ int mbedtls_ccm_auth_decrypt( mbedtls_ccm_context *ctx, size_t length,
 
     if( diff != 0 )
     {
-<<<<<<< HEAD
-        ccm_zeroize( output, length );
-=======
         mbedtls_zeroize( output, length );
->>>>>>> local
         return( MBEDTLS_ERR_CCM_AUTH_FAILED );
     }
 
     return( 0 );
 }
 
-<<<<<<< HEAD
-=======
 #endif /* !MBEDTLS_CCM_ALT */
->>>>>>> local
 
 #if defined(MBEDTLS_SELF_TEST) && defined(MBEDTLS_AES_C)
 /*
@@ -8862,13 +8258,6 @@ int mbedtls_ccm_self_test( int verbose )
 
 #endif /* MBEDTLS_CCM_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/certs.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -8905,7 +8294,6 @@ int mbedtls_ccm_self_test( int verbose )
 
 /********* Start of file library/certs.c ************/
 
->>>>>>> local
 /*
  *  X.509 test certificates
  *
@@ -8955,10 +8343,7 @@ int mbedtls_ccm_self_test( int verbose )
 "uCjn8pwUOkABXK8Mss90fzCfCEOtIA==\r\n"                                  \
 "-----END CERTIFICATE-----\r\n"
 const char mbedtls_test_ca_crt_ec[] = TEST_CA_CRT_EC;
-<<<<<<< HEAD
-=======
 const size_t mbedtls_test_ca_crt_ec_len = sizeof( mbedtls_test_ca_crt_ec );
->>>>>>> local
 
 const char mbedtls_test_ca_key_ec[] =
 "-----BEGIN EC PRIVATE KEY-----\r\n"
@@ -8970,15 +8355,10 @@ const char mbedtls_test_ca_key_ec[] =
 "UsuWTITwJImcnlAs1gaRZ3sAWm7cOUidL0fo2G0fYUFNcYoCSLffCFTEHBuPnagb\r\n"
 "a77x/sY1Bvii8S9/XhDTb6pTMx06wzrm\r\n"
 "-----END EC PRIVATE KEY-----\r\n";
-<<<<<<< HEAD
-
-const char mbedtls_test_ca_pwd_ec[] = "PolarSSLTest";
-=======
 const size_t mbedtls_test_ca_key_ec_len = sizeof( mbedtls_test_ca_key_ec );
 
 const char mbedtls_test_ca_pwd_ec[] = "PolarSSLTest";
 const size_t mbedtls_test_ca_pwd_ec_len = sizeof( mbedtls_test_ca_pwd_ec ) - 1;
->>>>>>> local
 
 const char mbedtls_test_srv_crt_ec[] =
 "-----BEGIN CERTIFICATE-----\r\n"
@@ -8995,10 +8375,7 @@ const char mbedtls_test_srv_crt_ec[] =
 "C12r0Lz3ri/moSEpNZWqPjkCMCE2f53GXcYLqyfyJR078c/xNSUU5+Xxl7VZ414V\r\n"
 "fGa5kHvHARBPc8YAIVIqDvHH1Q==\r\n"
 "-----END CERTIFICATE-----\r\n";
-<<<<<<< HEAD
-=======
 const size_t mbedtls_test_srv_crt_ec_len = sizeof( mbedtls_test_srv_crt_ec );
->>>>>>> local
 
 const char mbedtls_test_srv_key_ec[] =
 "-----BEGIN EC PRIVATE KEY-----\r\n"
@@ -9006,10 +8383,7 @@ const char mbedtls_test_srv_key_ec[] =
 "AwEHoUQDQgAEN8xW2XYJHlpyPsdZLf8gbu58+QaRdNCtFLX3aCJZYpJO5QDYIxH/\r\n"
 "6i/SNF1dFr2KiMJrdw1VzYoqDvoByLTt/w==\r\n"
 "-----END EC PRIVATE KEY-----\r\n";
-<<<<<<< HEAD
-=======
 const size_t mbedtls_test_srv_key_ec_len = sizeof( mbedtls_test_srv_key_ec );
->>>>>>> local
 
 const char mbedtls_test_cli_crt_ec[] =
 "-----BEGIN CERTIFICATE-----\r\n"
@@ -9026,10 +8400,7 @@ const char mbedtls_test_cli_crt_ec[] =
 "lgOsjnhw3fIOoLIWy2WOGsk/LGF++DzvrRzuNiACMQCd8iem1XS4JK7haj8xocpU\r\n"
 "LwjQje5PDGHfd3h9tP38Qknu5bJqws0md2KOKHyeV0U=\r\n"
 "-----END CERTIFICATE-----\r\n";
-<<<<<<< HEAD
-=======
 const size_t mbedtls_test_cli_crt_ec_len = sizeof( mbedtls_test_cli_crt_ec );
->>>>>>> local
 
 const char mbedtls_test_cli_key_ec[] =
 "-----BEGIN EC PRIVATE KEY-----\r\n"
@@ -9037,22 +8408,6 @@ const char mbedtls_test_cli_key_ec[] =
 "AwEHoUQDQgAEV+WusXPf06y7k7iB/xKu7uZTrM5VU/Y0Dswu42MlC9+Y4vNcYDaW\r\n"
 "wNUYFHDlf5/VS0UY5bBs1Vz4lo+HcKPkxw==\r\n"
 "-----END EC PRIVATE KEY-----\r\n";
-<<<<<<< HEAD
-
-const size_t mbedtls_test_ca_crt_ec_len  = sizeof( mbedtls_test_ca_crt_ec );
-const size_t mbedtls_test_ca_key_ec_len  = sizeof( mbedtls_test_ca_key_ec );
-const size_t mbedtls_test_ca_pwd_ec_len  = sizeof( mbedtls_test_ca_pwd_ec ) - 1;
-const size_t mbedtls_test_srv_crt_ec_len = sizeof( mbedtls_test_srv_crt_ec );
-const size_t mbedtls_test_srv_key_ec_len = sizeof( mbedtls_test_srv_key_ec );
-const size_t mbedtls_test_cli_crt_ec_len = sizeof( mbedtls_test_cli_crt_ec );
-const size_t mbedtls_test_cli_key_ec_len = sizeof( mbedtls_test_cli_key_ec );
-#else
-#define TEST_CA_CRT_EC
-#endif /* MBEDTLS_ECDSA_C */
-
-#if defined(MBEDTLS_RSA_C)
-#define TEST_CA_CRT_RSA                                                 \
-=======
 const size_t mbedtls_test_cli_key_ec_len = sizeof( mbedtls_test_cli_key_ec );
 #endif /* MBEDTLS_ECDSA_C */
 
@@ -9092,7 +8447,6 @@ static const char mbedtls_test_ca_crt_rsa_sha256[] = TEST_CA_CRT_RSA_SHA256;
 
 #if !defined(TEST_CA_CRT_RSA_SOME) || defined(MBEDTLS_SHA1_C)
 #define TEST_CA_CRT_RSA_SHA1                                            \
->>>>>>> local
 "-----BEGIN CERTIFICATE-----\r\n"                                       \
 "MIIDhzCCAm+gAwIBAgIBADANBgkqhkiG9w0BAQUFADA7MQswCQYDVQQGEwJOTDER\r\n"  \
 "MA8GA1UEChMIUG9sYXJTU0wxGTAXBgNVBAMTEFBvbGFyU1NMIFRlc3QgQ0EwHhcN\r\n"  \
@@ -9114,9 +8468,6 @@ static const char mbedtls_test_ca_crt_rsa_sha256[] = TEST_CA_CRT_RSA_SHA256;
 "m/UTSLBNFNHesiTZeH31NcxYGdHSme9Nc/gfidRa0FLOCfWxRlFqAI47zG9jAQCZ\r\n"  \
 "7Z2mCGDNMhjQc+BYcdnl0lPXjdDK6V0qCg1dVewhUBcW5gZKzV7e9+DpVA==\r\n"      \
 "-----END CERTIFICATE-----\r\n"
-<<<<<<< HEAD
-const char mbedtls_test_ca_crt_rsa[] = TEST_CA_CRT_RSA;
-=======
 
 #if !defined (TEST_CA_CRT_RSA_SOME)
 const char   mbedtls_test_ca_crt_rsa[]   = TEST_CA_CRT_RSA_SHA1;
@@ -9126,7 +8477,6 @@ const size_t mbedtls_test_ca_crt_rsa_len = sizeof( mbedtls_test_ca_crt_rsa );
 static const char mbedtls_test_ca_crt_rsa_sha1[] = TEST_CA_CRT_RSA_SHA1;
 
 #endif
->>>>>>> local
 
 const char mbedtls_test_ca_key_rsa[] =
 "-----BEGIN RSA PRIVATE KEY-----\r\n"
@@ -9159,15 +8509,10 @@ const char mbedtls_test_ca_key_rsa[] =
 "wN48lslbHnqqagr6Xm1nNOSVl8C/6kbJEsMpLhAezfRtGwvOucoaE+WbeUNolGde\r\n"
 "P/eQiddSf0brnpiLJRh7qZrl9XuqYdpUqnoEdMAfotDOID8OtV7gt8a48ad8VPW2\r\n"
 "-----END RSA PRIVATE KEY-----\r\n";
-<<<<<<< HEAD
-
-const char mbedtls_test_ca_pwd_rsa[] = "PolarSSLTest";
-=======
 const size_t mbedtls_test_ca_key_rsa_len = sizeof( mbedtls_test_ca_key_rsa );
 
 const char mbedtls_test_ca_pwd_rsa[] = "PolarSSLTest";
 const size_t mbedtls_test_ca_pwd_rsa_len = sizeof( mbedtls_test_ca_pwd_rsa ) - 1;
->>>>>>> local
 
 const char mbedtls_test_srv_crt_rsa[] =
 "-----BEGIN CERTIFICATE-----\r\n"
@@ -9190,10 +8535,7 @@ const char mbedtls_test_srv_crt_rsa[] =
 "RRQfaD8neM9c1S/iJ/amTVqJxA1KOdOS5780WhPfSArA+g4qAmSjelc3p4wWpha8\r\n"
 "zhuYwjVuX6JHG0c=\r\n"
 "-----END CERTIFICATE-----\r\n";
-<<<<<<< HEAD
-=======
 const size_t mbedtls_test_srv_crt_rsa_len = sizeof( mbedtls_test_srv_crt_rsa );
->>>>>>> local
 
 const char mbedtls_test_srv_key_rsa[] =
 "-----BEGIN RSA PRIVATE KEY-----\r\n"
@@ -9223,15 +8565,6 @@ const char mbedtls_test_srv_key_rsa[] =
 "4AgahOxIxXx2gxJnq3yfkJfIjwf0s2DyP0kY2y6Ua1OeomPeY9mrIS4tCuDQ6LrE\r\n"
 "TB6l9VGoxJL4fyHnZb8L5gGvnB1bbD8cL6YPaDiOhcRseC9vBiEuVg==\r\n"
 "-----END RSA PRIVATE KEY-----\r\n";
-<<<<<<< HEAD
-
-const char mbedtls_test_cli_crt_rsa[] =
-"-----BEGIN CERTIFICATE-----\r\n"
-"MIIDPzCCAiegAwIBAgIBBDANBgkqhkiG9w0BAQUFADA7MQswCQYDVQQGEwJOTDER\r\n"
-"MA8GA1UEChMIUG9sYXJTU0wxGTAXBgNVBAMTEFBvbGFyU1NMIFRlc3QgQ0EwHhcN\r\n"
-"MTEwMjEyMTQ0NDA3WhcNMjEwMjEyMTQ0NDA3WjA8MQswCQYDVQQGEwJOTDERMA8G\r\n"
-"A1UEChMIUG9sYXJTU0wxGjAYBgNVBAMTEVBvbGFyU1NMIENsaWVudCAyMIIBIjAN\r\n"
-=======
 const size_t mbedtls_test_srv_key_rsa_len = sizeof( mbedtls_test_srv_key_rsa );
 
 const char mbedtls_test_cli_crt_rsa[] =
@@ -9240,24 +8573,12 @@ const char mbedtls_test_cli_crt_rsa[] =
 "MA8GA1UECgwIUG9sYXJTU0wxGTAXBgNVBAMMEFBvbGFyU1NMIFRlc3QgQ0EwHhcN\r\n"
 "MTcwNTA1MTMwNzU5WhcNMjcwNTA2MTMwNzU5WjA8MQswCQYDVQQGEwJOTDERMA8G\r\n"
 "A1UECgwIUG9sYXJTU0wxGjAYBgNVBAMMEVBvbGFyU1NMIENsaWVudCAyMIIBIjAN\r\n"
->>>>>>> local
 "BgkqhkiG9w0BAQEFAAOCAQ8AMIIBCgKCAQEAyHTEzLn5tXnpRdkUYLB9u5Pyax6f\r\n"
 "M60Nj4o8VmXl3ETZzGaFB9X4J7BKNdBjngpuG7fa8H6r7gwQk4ZJGDTzqCrSV/Uu\r\n"
 "1C93KYRhTYJQj6eVSHD1bk2y1RPD0hrt5kPqQhTrdOrA7R/UV06p86jt0uDBMHEw\r\n"
 "MjDV0/YI0FZPRo7yX/k9Z5GIMC5Cst99++UMd//sMcB4j7/Cf8qtbCHWjdmLao5v\r\n"
 "4Jv4EFbMs44TFeY0BGbH7vk2DmqV9gmaBmf0ZXH4yqSxJeD+PIs1BGe64E92hfx/\r\n"
 "/DZrtenNLQNiTrM9AM+vdqBpVoNq0qjU51Bx5rU2BXcFbXvI5MT9TNUhXwIDAQAB\r\n"
-<<<<<<< HEAD
-"o00wSzAJBgNVHRMEAjAAMB0GA1UdDgQWBBRxoQBzckAvVHZeM/xSj7zx3WtGITAf\r\n"
-"BgNVHSMEGDAWgBS0WuSls97SUva51aaVD+s+vMf9/zANBgkqhkiG9w0BAQUFAAOC\r\n"
-"AQEAAn86isAM8X+mVwJqeItt6E9slhEQbAofyk+diH1Lh8Y9iLlWQSKbw/UXYjx5\r\n"
-"LLPZcniovxIcARC/BjyZR9g3UwTHNGNm+rwrqa15viuNOFBchykX/Orsk02EH7NR\r\n"
-"Alw5WLPorYjED6cdVQgBl9ot93HdJogRiXCxErM7NC8/eP511mjq+uLDjLKH8ZPQ\r\n"
-"8I4ekHJnroLsDkIwXKGIsvIBHQy2ac/NwHLCQOK6mfum1pRx52V4Utu5dLLjD5bM\r\n"
-"xOBC7KU4xZKuMXXZM6/93Yb51K/J4ahf1TxJlTWXtnzDr9saEYdNy2SKY/6ZiDNH\r\n"
-"D+stpAKiQLAWaAusIWKYEyw9MQ==\r\n"
-"-----END CERTIFICATE-----\r\n";
-=======
 "o4GSMIGPMB0GA1UdDgQWBBRxoQBzckAvVHZeM/xSj7zx3WtGITBjBgNVHSMEXDBa\r\n"
 "gBS0WuSls97SUva51aaVD+s+vMf9/6E/pD0wOzELMAkGA1UEBhMCTkwxETAPBgNV\r\n"
 "BAoMCFBvbGFyU1NMMRkwFwYDVQQDDBBQb2xhclNTTCBUZXN0IENBggEAMAkGA1Ud\r\n"
@@ -9269,7 +8590,6 @@ const char mbedtls_test_cli_crt_rsa[] =
 "c5PLSkXBeLE5+fedkyfTaLxxQlgCpuoOhKBm04/R1pWNzUHyqagjO9Q=\r\n"
 "-----END CERTIFICATE-----\r\n";
 const size_t mbedtls_test_cli_crt_rsa_len = sizeof( mbedtls_test_cli_crt_rsa );
->>>>>>> local
 
 const char mbedtls_test_cli_key_rsa[] =
 "-----BEGIN RSA PRIVATE KEY-----\r\n"
@@ -9299,27 +8619,11 @@ const char mbedtls_test_cli_key_rsa[] =
 "bHFVW2r0dBTqegP2/KTOxKzaHfC1qf0RGDsUoJCNJrd1cwoCLG8P2EF4w3OBrKqv\r\n"
 "8u4ytY0F+Vlanj5lm3TaoHSVF1+NWPyOTiwevIECGKwSxvlki4fDAA==\r\n"
 "-----END RSA PRIVATE KEY-----\r\n";
-<<<<<<< HEAD
-
-const size_t mbedtls_test_ca_crt_rsa_len  = sizeof( mbedtls_test_ca_crt_rsa );
-const size_t mbedtls_test_ca_key_rsa_len  = sizeof( mbedtls_test_ca_key_rsa );
-const size_t mbedtls_test_ca_pwd_rsa_len  = sizeof( mbedtls_test_ca_pwd_rsa ) - 1;
-const size_t mbedtls_test_srv_crt_rsa_len = sizeof( mbedtls_test_srv_crt_rsa );
-const size_t mbedtls_test_srv_key_rsa_len = sizeof( mbedtls_test_srv_key_rsa );
-const size_t mbedtls_test_cli_crt_rsa_len = sizeof( mbedtls_test_cli_crt_rsa );
 const size_t mbedtls_test_cli_key_rsa_len = sizeof( mbedtls_test_cli_key_rsa );
-#else
-#define TEST_CA_CRT_RSA
-=======
-const size_t mbedtls_test_cli_key_rsa_len = sizeof( mbedtls_test_cli_key_rsa );
->>>>>>> local
 #endif /* MBEDTLS_RSA_C */
 
 #if defined(MBEDTLS_PEM_PARSE_C)
 /* Concatenation of all available CA certificates */
-<<<<<<< HEAD
-const char mbedtls_test_cas_pem[] = TEST_CA_CRT_RSA TEST_CA_CRT_EC;
-=======
 const char mbedtls_test_cas_pem[] =
 #ifdef TEST_CA_CRT_RSA_SHA1
     TEST_CA_CRT_RSA_SHA1
@@ -9331,22 +8635,16 @@ const char mbedtls_test_cas_pem[] =
     TEST_CA_CRT_EC
 #endif
     "";
->>>>>>> local
 const size_t mbedtls_test_cas_pem_len = sizeof( mbedtls_test_cas_pem );
 #endif
 
 /* List of all available CA certificates */
 const char * mbedtls_test_cas[] = {
-<<<<<<< HEAD
-#if defined(MBEDTLS_RSA_C)
-    mbedtls_test_ca_crt_rsa,
-=======
 #if defined(TEST_CA_CRT_RSA_SHA1)
     mbedtls_test_ca_crt_rsa_sha1,
 #endif
 #if defined(TEST_CA_CRT_RSA_SHA256)
     mbedtls_test_ca_crt_rsa_sha256,
->>>>>>> local
 #endif
 #if defined(MBEDTLS_ECDSA_C)
     mbedtls_test_ca_crt_ec,
@@ -9354,16 +8652,11 @@ const char * mbedtls_test_cas[] = {
     NULL
 };
 const size_t mbedtls_test_cas_len[] = {
-<<<<<<< HEAD
-#if defined(MBEDTLS_RSA_C)
-    sizeof( mbedtls_test_ca_crt_rsa ),
-=======
 #if defined(TEST_CA_CRT_RSA_SHA1)
     sizeof( mbedtls_test_ca_crt_rsa_sha1 ),
 #endif
 #if defined(TEST_CA_CRT_RSA_SHA256)
     sizeof( mbedtls_test_ca_crt_rsa_sha256 ),
->>>>>>> local
 #endif
 #if defined(MBEDTLS_ECDSA_C)
     sizeof( mbedtls_test_ca_crt_ec ),
@@ -9372,11 +8665,7 @@ const size_t mbedtls_test_cas_len[] = {
 };
 
 #if defined(MBEDTLS_RSA_C)
-<<<<<<< HEAD
-const char *mbedtls_test_ca_crt  = mbedtls_test_ca_crt_rsa;
-=======
 const char *mbedtls_test_ca_crt  = mbedtls_test_ca_crt_rsa; /* SHA1 or SHA256 */
->>>>>>> local
 const char *mbedtls_test_ca_key  = mbedtls_test_ca_key_rsa;
 const char *mbedtls_test_ca_pwd  = mbedtls_test_ca_pwd_rsa;
 const char *mbedtls_test_srv_crt = mbedtls_test_srv_crt_rsa;
@@ -9409,8 +8698,6 @@ const size_t mbedtls_test_cli_key_len = sizeof( mbedtls_test_cli_key_ec );
 
 #endif /* MBEDTLS_CERTS_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -9443,15 +8730,10 @@ const size_t mbedtls_test_cli_key_len = sizeof( mbedtls_test_cli_key_ec );
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/cipher.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /**
  * \file cipher.c
  *
@@ -9499,8 +8781,6 @@ const size_t mbedtls_test_cli_key_len = sizeof( mbedtls_test_cli_key_ec );
 
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_CMAC_C)
 
 #endif
@@ -9512,22 +8792,12 @@ const size_t mbedtls_test_cli_key_len = sizeof( mbedtls_test_cli_key_ec );
 #define mbedtls_free   free
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_ARC4_C) || defined(MBEDTLS_CIPHER_NULL_CIPHER)
 #define MBEDTLS_CIPHER_MODE_STREAM
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void cipher_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-
-/* Amalgamated Release Mappings */
-#define supported_init cipher_supported_init
-=======
 /* zeroize was here */
->>>>>>> local
 
 static int supported_init = 0;
 
@@ -9602,12 +8872,6 @@ void mbedtls_cipher_free( mbedtls_cipher_context_t *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    if( ctx->cipher_ctx )
-        ctx->cipher_info->base->ctx_free_func( ctx->cipher_ctx );
-
-    cipher_zeroize( ctx, sizeof(mbedtls_cipher_context_t) );
-=======
 #if defined(MBEDTLS_CMAC_C)
     if( ctx->cmac_ctx )
     {
@@ -9620,7 +8884,6 @@ void mbedtls_cipher_free( mbedtls_cipher_context_t *ctx )
         ctx->cipher_info->base->ctx_free_func( ctx->cipher_ctx );
 
     mbedtls_zeroize( ctx, sizeof(mbedtls_cipher_context_t) );
->>>>>>> local
 }
 
 int mbedtls_cipher_setup( mbedtls_cipher_context_t *ctx, const mbedtls_cipher_info_t *cipher_info )
@@ -9742,10 +9005,7 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
                    size_t ilen, unsigned char *output, size_t *olen )
 {
     int ret;
-<<<<<<< HEAD
-=======
     size_t block_size = 0;
->>>>>>> local
 
     if( NULL == ctx || NULL == ctx->cipher_info || NULL == olen )
     {
@@ -9753,18 +9013,11 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
     }
 
     *olen = 0;
-<<<<<<< HEAD
-
-    if( ctx->cipher_info->mode == MBEDTLS_MODE_ECB )
-    {
-        if( ilen != mbedtls_cipher_get_block_size( ctx ) )
-=======
     block_size = mbedtls_cipher_get_block_size( ctx );
 
     if( ctx->cipher_info->mode == MBEDTLS_MODE_ECB )
     {
         if( ilen != block_size )
->>>>>>> local
             return( MBEDTLS_ERR_CIPHER_FULL_BLOCK_EXPECTED );
 
         *olen = ilen;
@@ -9787,10 +9040,6 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
     }
 #endif
 
-<<<<<<< HEAD
-    if( input == output &&
-       ( ctx->unprocessed_len != 0 || ilen % mbedtls_cipher_get_block_size( ctx ) ) )
-=======
     if ( 0 == block_size )
     {
         return MBEDTLS_ERR_CIPHER_INVALID_CONTEXT;
@@ -9798,7 +9047,6 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
 
     if( input == output &&
        ( ctx->unprocessed_len != 0 || ilen % block_size ) )
->>>>>>> local
     {
         return( MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA );
     }
@@ -9812,15 +9060,9 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
          * If there is not enough data for a full block, cache it.
          */
         if( ( ctx->operation == MBEDTLS_DECRYPT &&
-<<<<<<< HEAD
-                ilen + ctx->unprocessed_len <= mbedtls_cipher_get_block_size( ctx ) ) ||
-             ( ctx->operation == MBEDTLS_ENCRYPT &&
-                ilen + ctx->unprocessed_len < mbedtls_cipher_get_block_size( ctx ) ) )
-=======
                 ilen <= block_size - ctx->unprocessed_len ) ||
              ( ctx->operation == MBEDTLS_ENCRYPT &&
                 ilen < block_size - ctx->unprocessed_len ) )
->>>>>>> local
         {
             memcpy( &( ctx->unprocessed_data[ctx->unprocessed_len] ), input,
                     ilen );
@@ -9832,37 +9074,22 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
         /*
          * Process cached data first
          */
-<<<<<<< HEAD
-        if( ctx->unprocessed_len != 0 )
-        {
-            copy_len = mbedtls_cipher_get_block_size( ctx ) - ctx->unprocessed_len;
-=======
         if( 0 != ctx->unprocessed_len )
         {
             copy_len = block_size - ctx->unprocessed_len;
->>>>>>> local
 
             memcpy( &( ctx->unprocessed_data[ctx->unprocessed_len] ), input,
                     copy_len );
 
             if( 0 != ( ret = ctx->cipher_info->base->cbc_func( ctx->cipher_ctx,
-<<<<<<< HEAD
-                    ctx->operation, mbedtls_cipher_get_block_size( ctx ), ctx->iv,
-=======
                     ctx->operation, block_size, ctx->iv,
->>>>>>> local
                     ctx->unprocessed_data, output ) ) )
             {
                 return( ret );
             }
 
-<<<<<<< HEAD
-            *olen += mbedtls_cipher_get_block_size( ctx );
-            output += mbedtls_cipher_get_block_size( ctx );
-=======
             *olen += block_size;
             output += block_size;
->>>>>>> local
             ctx->unprocessed_len = 0;
 
             input += copy_len;
@@ -9874,11 +9101,6 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
          */
         if( 0 != ilen )
         {
-<<<<<<< HEAD
-            copy_len = ilen % mbedtls_cipher_get_block_size( ctx );
-            if( copy_len == 0 && ctx->operation == MBEDTLS_DECRYPT )
-                copy_len = mbedtls_cipher_get_block_size( ctx );
-=======
             if( 0 == block_size )
             {
                 return MBEDTLS_ERR_CIPHER_INVALID_CONTEXT;
@@ -9887,7 +9109,6 @@ int mbedtls_cipher_update( mbedtls_cipher_context_t *ctx, const unsigned char *i
             copy_len = ilen % block_size;
             if( copy_len == 0 && ctx->operation == MBEDTLS_DECRYPT )
                 copy_len = block_size;
->>>>>>> local
 
             memcpy( ctx->unprocessed_data, &( input[ilen - copy_len] ),
                     copy_len );
@@ -10029,24 +9250,14 @@ static int get_one_and_zeros_padding( unsigned char *input, size_t input_len,
     if( NULL == input || NULL == data_len )
         return( MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    bad = 0xFF;
-=======
     bad = 0x80;
->>>>>>> local
     *data_len = 0;
     for( i = input_len; i > 0; i-- )
     {
         prev_done = done;
-<<<<<<< HEAD
-        done |= ( input[i-1] != 0 );
-        *data_len |= ( i - 1 ) * ( done != prev_done );
-        bad &= ( input[i-1] ^ 0x80 ) | ( done == prev_done );
-=======
         done |= ( input[i - 1] != 0 );
         *data_len |= ( i - 1 ) * ( done != prev_done );
         bad ^= input[i - 1] * ( done != prev_done );
->>>>>>> local
     }
 
     return( MBEDTLS_ERR_CIPHER_INVALID_PADDING * ( bad != 0 ) );
@@ -10437,13 +9648,6 @@ int mbedtls_cipher_auth_decrypt( mbedtls_cipher_context_t *ctx,
 }
 #endif /* MBEDTLS_CIPHER_MODE_AEAD */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef supported_init
-
-#endif /* MBEDTLS_CIPHER_C */
-
-=======
 #endif /* MBEDTLS_CIPHER_C */
 
 /*
@@ -10478,15 +9682,10 @@ int mbedtls_cipher_auth_decrypt( mbedtls_cipher_context_t *ctx,
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/cipher_wrap.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /**
  * \file cipher_wrap.c
  *
@@ -11939,17 +11138,6 @@ int mbedtls_cipher_supported[NUM_CIPHERS];
 
 #endif /* MBEDTLS_CIPHER_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/ctr_drbg.c ************/
-
-
-/*
- *  CTR_DRBG implementation based on AES-256 (NIST SP 800-90)
- *
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
-=======
 /*
     Amalgamated build undefines
  */
@@ -11992,7 +11180,6 @@ int mbedtls_cipher_supported[NUM_CIPHERS];
  * \brief NIST SP800-38B compliant CMAC implementation for AES and 3DES
  *
  *  Copyright (C) 2006-2016, ARM Limited, All Rights Reserved
->>>>>>> local
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -12009,12 +11196,6 @@ int mbedtls_cipher_supported[NUM_CIPHERS];
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
  */
-<<<<<<< HEAD
-/*
- *  The NIST SP 800-90 DRBGs are described in the following publucation.
- *
- *  http://csrc.nist.gov/publications/nistpubs/800-90/SP800-90revised_March2007.pdf
-=======
 
 /*
  * References:
@@ -12033,7 +11214,6 @@ int mbedtls_cipher_supported[NUM_CIPHERS];
  *
  *   Additional test vectors: ISO/IEC 9797-1
  *
->>>>>>> local
  */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
@@ -12042,362 +11222,12 @@ int mbedtls_cipher_supported[NUM_CIPHERS];
 
 #endif
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_CTR_DRBG_C)
-=======
 #if defined(MBEDTLS_CMAC_C)
->>>>>>> local
 
 
 
 #include <string.h>
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_FS_IO)
-#include <stdio.h>
-#endif
-
-#if defined(MBEDTLS_SELF_TEST)
-#if defined(MBEDTLS_PLATFORM_C)
-
-#else
-#include <stdio.h>
-#define mbedtls_printf printf
-#endif /* MBEDTLS_PLATFORM_C */
-#endif /* MBEDTLS_SELF_TEST */
-
-/* Implementation that should never be optimized out by the compiler */
-static void ctr_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-
-/*
- * CTR_DRBG context initialization
- */
-void mbedtls_ctr_drbg_init( mbedtls_ctr_drbg_context *ctx )
-{
-    memset( ctx, 0, sizeof( mbedtls_ctr_drbg_context ) );
-
-#if defined(MBEDTLS_THREADING_C)
-    mbedtls_mutex_init( &ctx->mutex );
-#endif
-}
-
-/*
- * Non-public function wrapped by ctr_crbg_init(). Necessary to allow NIST
- * tests to succeed (which require known length fixed entropy)
- */
-int mbedtls_ctr_drbg_seed_entropy_len(
-                   mbedtls_ctr_drbg_context *ctx,
-                   int (*f_entropy)(void *, unsigned char *, size_t),
-                   void *p_entropy,
-                   const unsigned char *custom,
-                   size_t len,
-                   size_t entropy_len )
-{
-    int ret;
-    unsigned char key[MBEDTLS_CTR_DRBG_KEYSIZE];
-
-    memset( key, 0, MBEDTLS_CTR_DRBG_KEYSIZE );
-
-    mbedtls_aes_init( &ctx->aes_ctx );
-
-    ctx->f_entropy = f_entropy;
-    ctx->p_entropy = p_entropy;
-
-    ctx->entropy_len = entropy_len;
-    ctx->reseed_interval = MBEDTLS_CTR_DRBG_RESEED_INTERVAL;
-
-    /*
-     * Initialize with an empty key
-     */
-    mbedtls_aes_setkey_enc( &ctx->aes_ctx, key, MBEDTLS_CTR_DRBG_KEYBITS );
-
-    if( ( ret = mbedtls_ctr_drbg_reseed( ctx, custom, len ) ) != 0 )
-        return( ret );
-
-    return( 0 );
-}
-
-int mbedtls_ctr_drbg_seed( mbedtls_ctr_drbg_context *ctx,
-                   int (*f_entropy)(void *, unsigned char *, size_t),
-                   void *p_entropy,
-                   const unsigned char *custom,
-                   size_t len )
-{
-    return( mbedtls_ctr_drbg_seed_entropy_len( ctx, f_entropy, p_entropy, custom, len,
-                                       MBEDTLS_CTR_DRBG_ENTROPY_LEN ) );
-}
-
-void mbedtls_ctr_drbg_free( mbedtls_ctr_drbg_context *ctx )
-{
-    if( ctx == NULL )
-        return;
-
-#if defined(MBEDTLS_THREADING_C)
-    mbedtls_mutex_free( &ctx->mutex );
-#endif
-    mbedtls_aes_free( &ctx->aes_ctx );
-    ctr_zeroize( ctx, sizeof( mbedtls_ctr_drbg_context ) );
-}
-
-void mbedtls_ctr_drbg_set_prediction_resistance( mbedtls_ctr_drbg_context *ctx, int resistance )
-{
-    ctx->prediction_resistance = resistance;
-}
-
-void mbedtls_ctr_drbg_set_entropy_len( mbedtls_ctr_drbg_context *ctx, size_t len )
-{
-    ctx->entropy_len = len;
-}
-
-void mbedtls_ctr_drbg_set_reseed_interval( mbedtls_ctr_drbg_context *ctx, int interval )
-{
-    ctx->reseed_interval = interval;
-}
-
-static int block_cipher_df( unsigned char *output,
-                            const unsigned char *data, size_t data_len )
-{
-    unsigned char buf[MBEDTLS_CTR_DRBG_MAX_SEED_INPUT + MBEDTLS_CTR_DRBG_BLOCKSIZE + 16];
-    unsigned char tmp[MBEDTLS_CTR_DRBG_SEEDLEN];
-    unsigned char key[MBEDTLS_CTR_DRBG_KEYSIZE];
-    unsigned char chain[MBEDTLS_CTR_DRBG_BLOCKSIZE];
-    unsigned char *p, *iv;
-    mbedtls_aes_context aes_ctx;
-
-    int i, j;
-    size_t buf_len, use_len;
-
-    if( data_len > MBEDTLS_CTR_DRBG_MAX_SEED_INPUT )
-        return( MBEDTLS_ERR_CTR_DRBG_INPUT_TOO_BIG );
-
-    memset( buf, 0, MBEDTLS_CTR_DRBG_MAX_SEED_INPUT + MBEDTLS_CTR_DRBG_BLOCKSIZE + 16 );
-    mbedtls_aes_init( &aes_ctx );
-
-    /*
-     * Construct IV (16 bytes) and S in buffer
-     * IV = Counter (in 32-bits) padded to 16 with zeroes
-     * S = Length input string (in 32-bits) || Length of output (in 32-bits) ||
-     *     data || 0x80
-     *     (Total is padded to a multiple of 16-bytes with zeroes)
-     */
-    p = buf + MBEDTLS_CTR_DRBG_BLOCKSIZE;
-    *p++ = ( data_len >> 24 ) & 0xff;
-    *p++ = ( data_len >> 16 ) & 0xff;
-    *p++ = ( data_len >> 8  ) & 0xff;
-    *p++ = ( data_len       ) & 0xff;
-    p += 3;
-    *p++ = MBEDTLS_CTR_DRBG_SEEDLEN;
-    memcpy( p, data, data_len );
-    p[data_len] = 0x80;
-
-    buf_len = MBEDTLS_CTR_DRBG_BLOCKSIZE + 8 + data_len + 1;
-
-    for( i = 0; i < MBEDTLS_CTR_DRBG_KEYSIZE; i++ )
-        key[i] = i;
-
-    mbedtls_aes_setkey_enc( &aes_ctx, key, MBEDTLS_CTR_DRBG_KEYBITS );
-
-    /*
-     * Reduce data to MBEDTLS_CTR_DRBG_SEEDLEN bytes of data
-     */
-    for( j = 0; j < MBEDTLS_CTR_DRBG_SEEDLEN; j += MBEDTLS_CTR_DRBG_BLOCKSIZE )
-    {
-        p = buf;
-        memset( chain, 0, MBEDTLS_CTR_DRBG_BLOCKSIZE );
-        use_len = buf_len;
-
-        while( use_len > 0 )
-        {
-            for( i = 0; i < MBEDTLS_CTR_DRBG_BLOCKSIZE; i++ )
-                chain[i] ^= p[i];
-            p += MBEDTLS_CTR_DRBG_BLOCKSIZE;
-            use_len -= ( use_len >= MBEDTLS_CTR_DRBG_BLOCKSIZE ) ?
-                       MBEDTLS_CTR_DRBG_BLOCKSIZE : use_len;
-
-            mbedtls_aes_crypt_ecb( &aes_ctx, MBEDTLS_AES_ENCRYPT, chain, chain );
-        }
-
-        memcpy( tmp + j, chain, MBEDTLS_CTR_DRBG_BLOCKSIZE );
-
-        /*
-         * Update IV
-         */
-        buf[3]++;
-    }
-
-    /*
-     * Do final encryption with reduced data
-     */
-    mbedtls_aes_setkey_enc( &aes_ctx, tmp, MBEDTLS_CTR_DRBG_KEYBITS );
-    iv = tmp + MBEDTLS_CTR_DRBG_KEYSIZE;
-    p = output;
-
-    for( j = 0; j < MBEDTLS_CTR_DRBG_SEEDLEN; j += MBEDTLS_CTR_DRBG_BLOCKSIZE )
-    {
-        mbedtls_aes_crypt_ecb( &aes_ctx, MBEDTLS_AES_ENCRYPT, iv, iv );
-        memcpy( p, iv, MBEDTLS_CTR_DRBG_BLOCKSIZE );
-        p += MBEDTLS_CTR_DRBG_BLOCKSIZE;
-    }
-
-    mbedtls_aes_free( &aes_ctx );
-
-    return( 0 );
-}
-
-static int ctr_drbg_update_internal( mbedtls_ctr_drbg_context *ctx,
-                              const unsigned char data[MBEDTLS_CTR_DRBG_SEEDLEN] )
-{
-    unsigned char tmp[MBEDTLS_CTR_DRBG_SEEDLEN];
-    unsigned char *p = tmp;
-    int i, j;
-
-    memset( tmp, 0, MBEDTLS_CTR_DRBG_SEEDLEN );
-
-    for( j = 0; j < MBEDTLS_CTR_DRBG_SEEDLEN; j += MBEDTLS_CTR_DRBG_BLOCKSIZE )
-    {
-        /*
-         * Increase counter
-         */
-        for( i = MBEDTLS_CTR_DRBG_BLOCKSIZE; i > 0; i-- )
-            if( ++ctx->counter[i - 1] != 0 )
-                break;
-
-        /*
-         * Crypt counter block
-         */
-        mbedtls_aes_crypt_ecb( &ctx->aes_ctx, MBEDTLS_AES_ENCRYPT, ctx->counter, p );
-
-        p += MBEDTLS_CTR_DRBG_BLOCKSIZE;
-    }
-
-    for( i = 0; i < MBEDTLS_CTR_DRBG_SEEDLEN; i++ )
-        tmp[i] ^= data[i];
-
-    /*
-     * Update key and counter
-     */
-    mbedtls_aes_setkey_enc( &ctx->aes_ctx, tmp, MBEDTLS_CTR_DRBG_KEYBITS );
-    memcpy( ctx->counter, tmp + MBEDTLS_CTR_DRBG_KEYSIZE, MBEDTLS_CTR_DRBG_BLOCKSIZE );
-
-    return( 0 );
-}
-
-void mbedtls_ctr_drbg_update( mbedtls_ctr_drbg_context *ctx,
-                      const unsigned char *additional, size_t add_len )
-{
-    unsigned char add_input[MBEDTLS_CTR_DRBG_SEEDLEN];
-
-    if( add_len > 0 )
-    {
-        /* MAX_INPUT would be more logical here, but we have to match
-         * block_cipher_df()'s limits since we can't propagate errors */
-        if( add_len > MBEDTLS_CTR_DRBG_MAX_SEED_INPUT )
-            add_len = MBEDTLS_CTR_DRBG_MAX_SEED_INPUT;
-
-        block_cipher_df( add_input, additional, add_len );
-        ctr_drbg_update_internal( ctx, add_input );
-    }
-}
-
-int mbedtls_ctr_drbg_reseed( mbedtls_ctr_drbg_context *ctx,
-                     const unsigned char *additional, size_t len )
-{
-    unsigned char seed[MBEDTLS_CTR_DRBG_MAX_SEED_INPUT];
-    size_t seedlen = 0;
-
-    if( ctx->entropy_len + len > MBEDTLS_CTR_DRBG_MAX_SEED_INPUT )
-        return( MBEDTLS_ERR_CTR_DRBG_INPUT_TOO_BIG );
-
-    memset( seed, 0, MBEDTLS_CTR_DRBG_MAX_SEED_INPUT );
-
-    /*
-     * Gather entropy_len bytes of entropy to seed state
-     */
-    if( 0 != ctx->f_entropy( ctx->p_entropy, seed,
-                             ctx->entropy_len ) )
-    {
-        return( MBEDTLS_ERR_CTR_DRBG_ENTROPY_SOURCE_FAILED );
-    }
-
-    seedlen += ctx->entropy_len;
-
-    /*
-     * Add additional data
-     */
-    if( additional && len )
-    {
-        memcpy( seed + seedlen, additional, len );
-        seedlen += len;
-    }
-
-    /*
-     * Reduce to 384 bits
-     */
-    block_cipher_df( seed, seed, seedlen );
-
-    /*
-     * Update state
-     */
-    ctr_drbg_update_internal( ctx, seed );
-    ctx->reseed_counter = 1;
-
-    return( 0 );
-}
-
-int mbedtls_ctr_drbg_random_with_add( void *p_rng,
-                              unsigned char *output, size_t output_len,
-                              const unsigned char *additional, size_t add_len )
-{
-    int ret = 0;
-    mbedtls_ctr_drbg_context *ctx = (mbedtls_ctr_drbg_context *) p_rng;
-    unsigned char add_input[MBEDTLS_CTR_DRBG_SEEDLEN];
-    unsigned char *p = output;
-    unsigned char tmp[MBEDTLS_CTR_DRBG_BLOCKSIZE];
-    int i;
-    size_t use_len;
-
-    if( output_len > MBEDTLS_CTR_DRBG_MAX_REQUEST )
-        return( MBEDTLS_ERR_CTR_DRBG_REQUEST_TOO_BIG );
-
-    if( add_len > MBEDTLS_CTR_DRBG_MAX_INPUT )
-        return( MBEDTLS_ERR_CTR_DRBG_INPUT_TOO_BIG );
-
-    memset( add_input, 0, MBEDTLS_CTR_DRBG_SEEDLEN );
-
-    if( ctx->reseed_counter > ctx->reseed_interval ||
-        ctx->prediction_resistance )
-    {
-        if( ( ret = mbedtls_ctr_drbg_reseed( ctx, additional, add_len ) ) != 0 )
-            return( ret );
-
-        add_len = 0;
-    }
-
-    if( add_len > 0 )
-    {
-        block_cipher_df( add_input, additional, add_len );
-        ctr_drbg_update_internal( ctx, add_input );
-    }
-
-    while( output_len > 0 )
-    {
-        /*
-         * Increase counter
-         */
-        for( i = MBEDTLS_CTR_DRBG_BLOCKSIZE; i > 0; i-- )
-            if( ++ctx->counter[i - 1] != 0 )
-                break;
-
-        /*
-         * Crypt counter block
-         */
-        mbedtls_aes_crypt_ecb( &ctx->aes_ctx, MBEDTLS_AES_ENCRYPT, ctx->counter, tmp );
-
-        use_len = ( output_len > MBEDTLS_CTR_DRBG_BLOCKSIZE ) ? MBEDTLS_CTR_DRBG_BLOCKSIZE :
-                                                       output_len;
-=======
 
 #if defined(MBEDTLS_PLATFORM_C)
 
@@ -13895,7 +12725,6 @@ int mbedtls_ctr_drbg_random_with_add( void *p_rng,
 
         use_len = ( output_len > MBEDTLS_CTR_DRBG_BLOCKSIZE ) ? MBEDTLS_CTR_DRBG_BLOCKSIZE :
                                                        output_len;
->>>>>>> local
         /*
          * Copy random block to destination
          */
@@ -13904,14 +12733,10 @@ int mbedtls_ctr_drbg_random_with_add( void *p_rng,
         output_len -= use_len;
     }
 
-<<<<<<< HEAD
-    ctr_drbg_update_internal( ctx, add_input );
-=======
     if( ( ret = ctr_drbg_update_internal( ctx, add_input ) ) != 0 )
     {
         return( ret );
     }
->>>>>>> local
 
     ctx->reseed_counter++;
 
@@ -13952,16 +12777,6 @@ int mbedtls_ctr_drbg_write_seed_file( mbedtls_ctr_drbg_context *ctx, const char 
         goto exit;
 
     if( fwrite( buf, 1, MBEDTLS_CTR_DRBG_MAX_INPUT, f ) != MBEDTLS_CTR_DRBG_MAX_INPUT )
-<<<<<<< HEAD
-    {
-        ret = MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR;
-        goto exit;
-    }
-
-    ret = 0;
-
-exit:
-=======
         ret = MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR;
     else
         ret = 0;
@@ -13969,17 +12784,13 @@ exit:
 exit:
     mbedtls_zeroize( buf, sizeof( buf ) );
 
->>>>>>> local
     fclose( f );
     return( ret );
 }
 
 int mbedtls_ctr_drbg_update_seed_file( mbedtls_ctr_drbg_context *ctx, const char *path )
 {
-<<<<<<< HEAD
-=======
     int ret = 0;
->>>>>>> local
     FILE *f;
     size_t n;
     unsigned char buf[ MBEDTLS_CTR_DRBG_MAX_INPUT ];
@@ -13998,16 +12809,6 @@ int mbedtls_ctr_drbg_update_seed_file( mbedtls_ctr_drbg_context *ctx, const char
     }
 
     if( fread( buf, 1, n, f ) != n )
-<<<<<<< HEAD
-    {
-        fclose( f );
-        return( MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR );
-    }
-
-    fclose( f );
-
-    mbedtls_ctr_drbg_update( ctx, buf, n );
-=======
         ret = MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR;
     else
         mbedtls_ctr_drbg_update( ctx, buf, n );
@@ -14018,7 +12819,6 @@ int mbedtls_ctr_drbg_update_seed_file( mbedtls_ctr_drbg_context *ctx, const char
 
     if( ret != 0 )
         return( ret );
->>>>>>> local
 
     return( mbedtls_ctr_drbg_write_seed_file( ctx, path ) );
 }
@@ -14142,13 +12942,6 @@ int mbedtls_ctr_drbg_self_test( int verbose )
 
 #endif /* MBEDTLS_CTR_DRBG_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/debug.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -14185,7 +12978,6 @@ int mbedtls_ctr_drbg_self_test( int verbose )
 
 /********* Start of file library/debug.c ************/
 
->>>>>>> local
 /*
  *  Debugging routines
  *
@@ -14215,26 +13007,12 @@ int mbedtls_ctr_drbg_self_test( int verbose )
 
 #if defined(MBEDTLS_DEBUG_C)
 
-<<<<<<< HEAD
-
-
-#include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
-
-=======
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
 #include <stdlib.h>
 #define mbedtls_calloc      calloc
 #define mbedtls_free        free
-<<<<<<< HEAD
-#define mbedtls_snprintf    snprintf
-#endif
-
-=======
 #define mbedtls_time_t      time_t
 #define mbedtls_snprintf    snprintf
 #endif
@@ -14245,7 +13023,6 @@ int mbedtls_ctr_drbg_self_test( int verbose )
 #include <stdio.h>
 #include <string.h>
 
->>>>>>> local
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
     !defined(inline) && !defined(__cplusplus)
 #define inline __inline
@@ -14274,11 +13051,7 @@ static inline void debug_send_line( const mbedtls_ssl_context *ssl, int level,
      */
 #if defined(MBEDTLS_THREADING_C)
     char idstr[20 + DEBUG_BUF_SIZE]; /* 0x + 16 nibbles + ': ' */
-<<<<<<< HEAD
-    mbedtls_snprintf( idstr, sizeof( idstr ), "%p: %s", ssl, str );
-=======
     mbedtls_snprintf( idstr, sizeof( idstr ), "%p: %s", (void*)ssl, str );
->>>>>>> local
     ssl->conf->f_dbg( ssl->conf->p_dbg, level, file, line, idstr );
 #else
     ssl->conf->f_dbg( ssl->conf->p_dbg, level, file, line, str );
@@ -14293,20 +13066,12 @@ void mbedtls_debug_print_msg( const mbedtls_ssl_context *ssl, int level,
     char str[DEBUG_BUF_SIZE];
     int ret;
 
-<<<<<<< HEAD
-    if( ssl->conf == NULL || ssl->conf->f_dbg == NULL || level > debug_threshold )
-=======
     if( NULL == ssl || NULL == ssl->conf || NULL == ssl->conf->f_dbg || level > debug_threshold )
->>>>>>> local
         return;
 
     va_start( argp, format );
 #if defined(_WIN32)
-<<<<<<< HEAD
-#if defined(_TRUNCATE)
-=======
 #if defined(_TRUNCATE) && !defined(__MINGW32__)
->>>>>>> local
     ret = _vsnprintf_s( str, DEBUG_BUF_SIZE, _TRUNCATE, format, argp );
 #else
     ret = _vsnprintf( str, DEBUG_BUF_SIZE, format, argp );
@@ -14582,12 +13347,6 @@ void mbedtls_debug_print_crt( const mbedtls_ssl_context *ssl, int level,
 
 #endif /* MBEDTLS_DEBUG_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/des.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -14623,7 +13382,6 @@ void mbedtls_debug_print_crt( const mbedtls_ssl_context *ssl, int level,
 
 
 /********* Start of file library/des.c ************/
->>>>>>> local
 
 /*
  *  FIPS-46-3 compliant Triple-DES implementation
@@ -14676,13 +13434,7 @@ void mbedtls_debug_print_crt( const mbedtls_ssl_context *ssl, int level,
 #if !defined(MBEDTLS_DES_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void des_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (big endian)
@@ -14947,11 +13699,7 @@ void mbedtls_des_free( mbedtls_des_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    des_zeroize( ctx, sizeof( mbedtls_des_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_des_context ) );
->>>>>>> local
 }
 
 void mbedtls_des3_init( mbedtls_des3_context *ctx )
@@ -14964,11 +13712,7 @@ void mbedtls_des3_free( mbedtls_des3_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    des_zeroize( ctx, sizeof( mbedtls_des3_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_des3_context ) );
->>>>>>> local
 }
 
 static const unsigned char odd_parity_table[128] = { 1,  2,  4,  7,  8,
@@ -15192,11 +13936,7 @@ int mbedtls_des3_set2key_enc( mbedtls_des3_context *ctx,
     uint32_t sk[96];
 
     des3_set2key( ctx->sk, sk, key );
-<<<<<<< HEAD
-    des_zeroize( sk,  sizeof( sk ) );
-=======
     mbedtls_zeroize( sk,  sizeof( sk ) );
->>>>>>> local
 
     return( 0 );
 }
@@ -15210,11 +13950,7 @@ int mbedtls_des3_set2key_dec( mbedtls_des3_context *ctx,
     uint32_t sk[96];
 
     des3_set2key( sk, ctx->sk, key );
-<<<<<<< HEAD
-    des_zeroize( sk,  sizeof( sk ) );
-=======
     mbedtls_zeroize( sk,  sizeof( sk ) );
->>>>>>> local
 
     return( 0 );
 }
@@ -15251,11 +13987,7 @@ int mbedtls_des3_set3key_enc( mbedtls_des3_context *ctx,
     uint32_t sk[96];
 
     des3_set3key( ctx->sk, sk, key );
-<<<<<<< HEAD
-    des_zeroize( sk,  sizeof( sk ) );
-=======
     mbedtls_zeroize( sk,  sizeof( sk ) );
->>>>>>> local
 
     return( 0 );
 }
@@ -15269,11 +14001,7 @@ int mbedtls_des3_set3key_dec( mbedtls_des3_context *ctx,
     uint32_t sk[96];
 
     des3_set3key( sk, ctx->sk, key );
-<<<<<<< HEAD
-    des_zeroize( sk,  sizeof( sk ) );
-=======
     mbedtls_zeroize( sk,  sizeof( sk ) );
->>>>>>> local
 
     return( 0 );
 }
@@ -15715,13 +14443,6 @@ exit:
 
 #endif /* MBEDTLS_DES_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/dhm.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -15758,7 +14479,6 @@ exit:
 
 /********* Start of file library/dhm.c ************/
 
->>>>>>> local
 /*
  *  Diffie-Hellman-Merkle key exchange
  *
@@ -15780,18 +14500,12 @@ exit:
  *  This file is part of mbed TLS (https://tls.mbed.org)
  */
 /*
-<<<<<<< HEAD
- *  Reference:
- *
- *  http://www.cacr.math.uwaterloo.ca/hac/ (chapter 12)
-=======
  *  The following sources were referenced in the design of this implementation
  *  of the Diffie-Hellman-Merkle algorithm:
  *
  *  [1] Handbook of Applied Cryptography - 1997, Chapter 12
  *      Menezes, van Oorschot and Vanstone
  *
->>>>>>> local
  */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
@@ -15824,16 +14538,9 @@ exit:
 #define mbedtls_free       free
 #endif
 
-<<<<<<< HEAD
-/* Implementation that should never be optimized out by the compiler */
-static void dhm_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #if !defined(MBEDTLS_DHM_ALT)
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 
 /*
  * helper to validate the mbedtls_mpi size and import it
@@ -15866,12 +14573,9 @@ static int dhm_read_bignum( mbedtls_mpi *X,
  *
  * Parameter should be: 2 <= public_param <= P - 2
  *
-<<<<<<< HEAD
-=======
  * This means that we need to return an error if
  *              public_param < 2 or public_param > P-2
  *
->>>>>>> local
  * For more information on the attack, see:
  *  http://www.cl.cam.ac.uk/~rja14/Papers/psandqs.pdf
  *  http://web.nvd.nist.gov/view/vuln/detail?vulnId=CVE-2005-2643
@@ -15879,28 +14583,17 @@ static int dhm_read_bignum( mbedtls_mpi *X,
 static int dhm_check_range( const mbedtls_mpi *param, const mbedtls_mpi *P )
 {
     mbedtls_mpi L, U;
-<<<<<<< HEAD
-    int ret = MBEDTLS_ERR_DHM_BAD_INPUT_DATA;
-=======
     int ret = 0;
->>>>>>> local
 
     mbedtls_mpi_init( &L ); mbedtls_mpi_init( &U );
 
     MBEDTLS_MPI_CHK( mbedtls_mpi_lset( &L, 2 ) );
     MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &U, P, 2 ) );
 
-<<<<<<< HEAD
-    if( mbedtls_mpi_cmp_mpi( param, &L ) >= 0 &&
-        mbedtls_mpi_cmp_mpi( param, &U ) <= 0 )
-    {
-        ret = 0;
-=======
     if( mbedtls_mpi_cmp_mpi( param, &L ) < 0 ||
         mbedtls_mpi_cmp_mpi( param, &U ) > 0 )
     {
         ret = MBEDTLS_ERR_DHM_BAD_INPUT_DATA;
->>>>>>> local
     }
 
 cleanup:
@@ -15955,11 +14648,7 @@ int mbedtls_dhm_make_params( mbedtls_dhm_context *ctx, int x_size,
      */
     do
     {
-<<<<<<< HEAD
-        mbedtls_mpi_fill_random( &ctx->X, x_size, f_rng, p_rng );
-=======
         MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( &ctx->X, x_size, f_rng, p_rng ) );
->>>>>>> local
 
         while( mbedtls_mpi_cmp_mpi( &ctx->X, &ctx->P ) >= 0 )
             MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &ctx->X, 1 ) );
@@ -15981,12 +14670,6 @@ int mbedtls_dhm_make_params( mbedtls_dhm_context *ctx, int x_size,
     /*
      * export P, G, GX
      */
-<<<<<<< HEAD
-#define DHM_MPI_EXPORT(X,n)                     \
-    MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( X, p + 2, n ) ); \
-    *p++ = (unsigned char)( n >> 8 );           \
-    *p++ = (unsigned char)( n      ); p += n;
-=======
 #define DHM_MPI_EXPORT( X, n )                                          \
     do {                                                                \
         MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( ( X ),               \
@@ -15996,7 +14679,6 @@ int mbedtls_dhm_make_params( mbedtls_dhm_context *ctx, int x_size,
         *p++ = (unsigned char)( ( n )      );                           \
         p += ( n );                                                     \
     } while( 0 )
->>>>>>> local
 
     n1 = mbedtls_mpi_size( &ctx->P  );
     n2 = mbedtls_mpi_size( &ctx->G  );
@@ -16007,11 +14689,7 @@ int mbedtls_dhm_make_params( mbedtls_dhm_context *ctx, int x_size,
     DHM_MPI_EXPORT( &ctx->G , n2 );
     DHM_MPI_EXPORT( &ctx->GX, n3 );
 
-<<<<<<< HEAD
-    *olen  = p - output;
-=======
     *olen = p - output;
->>>>>>> local
 
     ctx->len = n1;
 
@@ -16024,8 +14702,6 @@ cleanup:
 }
 
 /*
-<<<<<<< HEAD
-=======
  * Set prime modulus and generator
  */
 int mbedtls_dhm_set_group( mbedtls_dhm_context *ctx,
@@ -16048,7 +14724,6 @@ int mbedtls_dhm_set_group( mbedtls_dhm_context *ctx,
 }
 
 /*
->>>>>>> local
  * Import the peer's public value G^Y
  */
 int mbedtls_dhm_read_public( mbedtls_dhm_context *ctx,
@@ -16086,11 +14761,7 @@ int mbedtls_dhm_make_public( mbedtls_dhm_context *ctx, int x_size,
      */
     do
     {
-<<<<<<< HEAD
-        mbedtls_mpi_fill_random( &ctx->X, x_size, f_rng, p_rng );
-=======
         MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( &ctx->X, x_size, f_rng, p_rng ) );
->>>>>>> local
 
         while( mbedtls_mpi_cmp_mpi( &ctx->X, &ctx->P ) >= 0 )
             MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &ctx->X, 1 ) );
@@ -16163,11 +14834,7 @@ static int dhm_update_blinding( mbedtls_dhm_context *ctx,
     count = 0;
     do
     {
-<<<<<<< HEAD
-        mbedtls_mpi_fill_random( &ctx->Vi, mbedtls_mpi_size( &ctx->P ), f_rng, p_rng );
-=======
         MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( &ctx->Vi, mbedtls_mpi_size( &ctx->P ), f_rng, p_rng ) );
->>>>>>> local
 
         while( mbedtls_mpi_cmp_mpi( &ctx->Vi, &ctx->P ) >= 0 )
             MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &ctx->Vi, 1 ) );
@@ -16243,14 +14910,6 @@ cleanup:
  */
 void mbedtls_dhm_free( mbedtls_dhm_context *ctx )
 {
-<<<<<<< HEAD
-    mbedtls_mpi_free( &ctx->pX); mbedtls_mpi_free( &ctx->Vf ); mbedtls_mpi_free( &ctx->Vi );
-    mbedtls_mpi_free( &ctx->RP ); mbedtls_mpi_free( &ctx->K ); mbedtls_mpi_free( &ctx->GY );
-    mbedtls_mpi_free( &ctx->GX ); mbedtls_mpi_free( &ctx->X ); mbedtls_mpi_free( &ctx->G );
-    mbedtls_mpi_free( &ctx->P );
-
-    dhm_zeroize( ctx, sizeof( mbedtls_dhm_context ) );
-=======
     mbedtls_mpi_free( &ctx->pX ); mbedtls_mpi_free( &ctx->Vf );
     mbedtls_mpi_free( &ctx->Vi ); mbedtls_mpi_free( &ctx->RP );
     mbedtls_mpi_free( &ctx->K  ); mbedtls_mpi_free( &ctx->GY );
@@ -16258,7 +14917,6 @@ void mbedtls_dhm_free( mbedtls_dhm_context *ctx )
     mbedtls_mpi_free( &ctx->G  ); mbedtls_mpi_free( &ctx->P  );
 
     mbedtls_zeroize( ctx, sizeof( mbedtls_dhm_context ) );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_ASN1_PARSE_C)
@@ -16395,14 +15053,10 @@ static int load_file( const char *path, unsigned char **buf, size_t *n )
     if( fread( *buf, 1, *n, f ) != *n )
     {
         fclose( f );
-<<<<<<< HEAD
-        mbedtls_free( *buf );
-=======
 
         mbedtls_zeroize( *buf, *n + 1 );
         mbedtls_free( *buf );
 
->>>>>>> local
         return( MBEDTLS_ERR_DHM_FILE_IO_ERROR );
     }
 
@@ -16430,21 +15084,14 @@ int mbedtls_dhm_parse_dhmfile( mbedtls_dhm_context *dhm, const char *path )
 
     ret = mbedtls_dhm_parse_dhm( dhm, buf, n );
 
-<<<<<<< HEAD
-    dhm_zeroize( buf, n );
-=======
     mbedtls_zeroize( buf, n );
->>>>>>> local
     mbedtls_free( buf );
 
     return( ret );
 }
 #endif /* MBEDTLS_FS_IO */
 #endif /* MBEDTLS_ASN1_PARSE_C */
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_DHM_ALT */
->>>>>>> local
 
 #if defined(MBEDTLS_SELF_TEST)
 
@@ -16494,12 +15141,6 @@ exit:
 
 #endif /* MBEDTLS_DHM_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/ecdh.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -16535,7 +15176,6 @@ exit:
 
 
 /********* Start of file library/ecdh.c ************/
->>>>>>> local
 
 /*
  *  Elliptic curve Diffie-Hellman
@@ -16577,10 +15217,7 @@ exit:
 
 #include <string.h>
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_ECDH_GEN_PUBLIC_ALT)
->>>>>>> local
 /*
  * Generate public key: simple wrapper around mbedtls_ecp_gen_keypair
  */
@@ -16590,13 +15227,9 @@ int mbedtls_ecdh_gen_public( mbedtls_ecp_group *grp, mbedtls_mpi *d, mbedtls_ecp
 {
     return mbedtls_ecp_gen_keypair( grp, d, Q, f_rng, p_rng );
 }
-<<<<<<< HEAD
-
-=======
 #endif /* MBEDTLS_ECDH_GEN_PUBLIC_ALT */
 
 #if !defined(MBEDTLS_ECDH_COMPUTE_SHARED_ALT)
->>>>>>> local
 /*
  * Compute shared secret (SEC1 3.3.1)
  */
@@ -16630,10 +15263,7 @@ cleanup:
 
     return( ret );
 }
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECDH_COMPUTE_SHARED_ALT */
->>>>>>> local
 
 /*
  * Initialize context
@@ -16816,12 +15446,6 @@ int mbedtls_ecdh_calc_secret( mbedtls_ecdh_context *ctx, size_t *olen,
 
 #endif /* MBEDTLS_ECDH_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/ecdsa.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -16857,7 +15481,6 @@ int mbedtls_ecdh_calc_secret( mbedtls_ecdh_context *ctx, size_t *olen,
 
 
 /********* Start of file library/ecdsa.c ************/
->>>>>>> local
 
 /*
  *  Elliptic curve DSA
@@ -16926,10 +15549,7 @@ cleanup:
     return( ret );
 }
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_ECDSA_SIGN_ALT)
->>>>>>> local
 /*
  * Compute ECDSA signature of a hashed message (SEC1 4.1.3)
  * Obviously, compared to SEC1 4.1.3, we skip step 4 (hash message)
@@ -16946,13 +15566,10 @@ int mbedtls_ecdsa_sign( mbedtls_ecp_group *grp, mbedtls_mpi *r, mbedtls_mpi *s,
     if( grp->N.p == NULL )
         return( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-=======
     /* Make sure d is in range 1..n-1 */
     if( mbedtls_mpi_cmp_int( d, 1 ) < 0 || mbedtls_mpi_cmp_mpi( d, &grp->N ) >= 0 )
         return( MBEDTLS_ERR_ECP_INVALID_KEY );
 
->>>>>>> local
     mbedtls_ecp_point_init( &R );
     mbedtls_mpi_init( &k ); mbedtls_mpi_init( &e ); mbedtls_mpi_init( &t );
 
@@ -17025,10 +15642,7 @@ cleanup:
 
     return( ret );
 }
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECDSA_SIGN_ALT */
->>>>>>> local
 
 #if defined(MBEDTLS_ECDSA_DETERMINISTIC)
 /*
@@ -17068,10 +15682,7 @@ cleanup:
 }
 #endif /* MBEDTLS_ECDSA_DETERMINISTIC */
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_ECDSA_VERIFY_ALT)
->>>>>>> local
 /*
  * Verify ECDSA signature of hashed message (SEC1 4.1.4)
  * Obviously, compared to SEC1 4.1.3, we skip step 2 (hash message)
@@ -17157,10 +15768,7 @@ cleanup:
 
     return( ret );
 }
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECDSA_VERIFY_ALT */
->>>>>>> local
 
 /*
  * Convert a signature (given by context) to ASN.1
@@ -17286,10 +15894,7 @@ cleanup:
     return( ret );
 }
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_ECDSA_GENKEY_ALT)
->>>>>>> local
 /*
  * Generate key pair
  */
@@ -17299,10 +15904,7 @@ int mbedtls_ecdsa_genkey( mbedtls_ecdsa_context *ctx, mbedtls_ecp_group_id gid,
     return( mbedtls_ecp_group_load( &ctx->grp, gid ) ||
             mbedtls_ecp_gen_keypair( &ctx->grp, &ctx->d, &ctx->Q, f_rng, p_rng ) );
 }
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECDSA_GENKEY_ALT */
->>>>>>> local
 
 /*
  * Set context from an mbedtls_ecp_keypair
@@ -17339,13 +15941,6 @@ void mbedtls_ecdsa_free( mbedtls_ecdsa_context *ctx )
 
 #endif /* MBEDTLS_ECDSA_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/ecjpake.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -17382,7 +15977,6 @@ void mbedtls_ecdsa_free( mbedtls_ecdsa_context *ctx )
 
 /********* Start of file library/ecjpake.c ************/
 
->>>>>>> local
 /*
  *  Elliptic curve J-PAKE
  *
@@ -17421,11 +16015,8 @@ void mbedtls_ecdsa_free( mbedtls_ecdsa_context *ctx )
 
 #include <string.h>
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_ECJPAKE_ALT)
 
->>>>>>> local
 /*
  * Convert a mbedtls_ecjpake_role to identifier string
  */
@@ -18154,10 +16745,7 @@ cleanup:
 #undef ID_MINE
 #undef ID_PEER
 
-<<<<<<< HEAD
-=======
 #endif /* ! MBEDTLS_ECJPAKE_ALT */
->>>>>>> local
 
 #if defined(MBEDTLS_SELF_TEST)
 
@@ -18496,12 +17084,6 @@ cleanup:
 
 #endif /* MBEDTLS_ECJPAKE_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/ecp.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -18537,7 +17119,6 @@ cleanup:
 
 
 /********* Start of file library/ecp.c ************/
->>>>>>> local
 
 /*
  *  Elliptic curves over GF(p): generic functions
@@ -18591,16 +17172,11 @@ cleanup:
 
 
 
-<<<<<<< HEAD
-#include <string.h>
-
-=======
 
 #include <string.h>
 
 #if !defined(MBEDTLS_ECP_ALT)
 
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
@@ -18611,24 +17187,15 @@ cleanup:
 #define mbedtls_free       free
 #endif
 
-<<<<<<< HEAD
-=======
 
 
->>>>>>> local
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
     !defined(inline) && !defined(__cplusplus)
 #define inline __inline
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void ecp_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 #if defined(MBEDTLS_SELF_TEST)
 /*
@@ -18899,11 +17466,7 @@ void mbedtls_ecp_group_free( mbedtls_ecp_group *grp )
         mbedtls_free( grp->T );
     }
 
-<<<<<<< HEAD
-    ecp_zeroize( grp, sizeof( mbedtls_ecp_group ) );
-=======
     mbedtls_zeroize( grp, sizeof( mbedtls_ecp_group ) );
->>>>>>> local
 }
 
 /*
@@ -19310,15 +17873,12 @@ static int ecp_normalize_jac( const mbedtls_ecp_group *grp, mbedtls_ecp_point *p
     if( mbedtls_mpi_cmp_int( &pt->Z, 0 ) == 0 )
         return( 0 );
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_NORMALIZE_JAC_ALT)
     if ( mbedtls_internal_ecp_grp_capable( grp ) )
     {
         return mbedtls_internal_ecp_normalize_jac( grp, pt );
     }
 #endif /* MBEDTLS_ECP_NORMALIZE_JAC_ALT */
->>>>>>> local
     mbedtls_mpi_init( &Zi ); mbedtls_mpi_init( &ZZi );
 
     /*
@@ -19367,8 +17927,6 @@ static int ecp_normalize_jac_many( const mbedtls_ecp_group *grp,
     if( t_len < 2 )
         return( ecp_normalize_jac( grp, *T ) );
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_NORMALIZE_JAC_MANY_ALT)
     if ( mbedtls_internal_ecp_grp_capable( grp ) )
     {
@@ -19376,7 +17934,6 @@ static int ecp_normalize_jac_many( const mbedtls_ecp_group *grp,
     }
 #endif
 
->>>>>>> local
     if( ( c = mbedtls_calloc( t_len, sizeof( mbedtls_mpi ) ) ) == NULL )
         return( MBEDTLS_ERR_ECP_ALLOC_FAILED );
 
@@ -19493,8 +18050,6 @@ static int ecp_double_jac( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     dbl_count++;
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_DOUBLE_JAC_ALT)
     if ( mbedtls_internal_ecp_grp_capable( grp ) )
     {
@@ -19502,7 +18057,6 @@ static int ecp_double_jac( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     }
 #endif /* MBEDTLS_ECP_DOUBLE_JAC_ALT */
 
->>>>>>> local
     mbedtls_mpi_init( &M ); mbedtls_mpi_init( &S ); mbedtls_mpi_init( &T ); mbedtls_mpi_init( &U );
 
     /* Special case for A = -3 */
@@ -19594,8 +18148,6 @@ static int ecp_add_mixed( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     add_count++;
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_ADD_MIXED_ALT)
     if ( mbedtls_internal_ecp_grp_capable( grp ) )
     {
@@ -19603,7 +18155,6 @@ static int ecp_add_mixed( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     }
 #endif /* MBEDTLS_ECP_ADD_MIXED_ALT */
 
->>>>>>> local
     /*
      * Trivial cases: P == 0 or Q == 0 (case 1)
      */
@@ -19681,11 +18232,6 @@ static int ecp_randomize_jac( const mbedtls_ecp_group *grp, mbedtls_ecp_point *p
 {
     int ret;
     mbedtls_mpi l, ll;
-<<<<<<< HEAD
-    size_t p_size = ( grp->pbits + 7 ) / 8;
-    int count = 0;
-
-=======
     size_t p_size;
     int count = 0;
 
@@ -19697,17 +18243,12 @@ static int ecp_randomize_jac( const mbedtls_ecp_group *grp, mbedtls_ecp_point *p
 #endif /* MBEDTLS_ECP_RANDOMIZE_JAC_ALT */
 
     p_size = ( grp->pbits + 7 ) / 8;
->>>>>>> local
     mbedtls_mpi_init( &l ); mbedtls_mpi_init( &ll );
 
     /* Generate l such that 1 < l < p */
     do
     {
-<<<<<<< HEAD
-        mbedtls_mpi_fill_random( &l, p_size, f_rng, p_rng );
-=======
         MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( &l, p_size, f_rng, p_rng ) );
->>>>>>> local
 
         while( mbedtls_mpi_cmp_mpi( &l, &grp->P ) >= 0 )
             MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &l, 1 ) );
@@ -19853,10 +18394,7 @@ static int ecp_precompute_comb( const mbedtls_ecp_group *grp,
     MBEDTLS_MPI_CHK( ecp_normalize_jac_many( grp, TT, k ) );
 
 cleanup:
-<<<<<<< HEAD
-=======
 
->>>>>>> local
     return( ret );
 }
 
@@ -19920,10 +18458,7 @@ static int ecp_mul_comb_core( const mbedtls_ecp_group *grp, mbedtls_ecp_point *R
     }
 
 cleanup:
-<<<<<<< HEAD
-=======
 
->>>>>>> local
     mbedtls_ecp_point_free( &Txi );
 
     return( ret );
@@ -20068,8 +18603,6 @@ static int ecp_normalize_mxz( const mbedtls_ecp_group *grp, mbedtls_ecp_point *P
 {
     int ret;
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_NORMALIZE_MXZ_ALT)
     if ( mbedtls_internal_ecp_grp_capable( grp ) )
     {
@@ -20077,7 +18610,6 @@ static int ecp_normalize_mxz( const mbedtls_ecp_group *grp, mbedtls_ecp_point *P
     }
 #endif /* MBEDTLS_ECP_NORMALIZE_MXZ_ALT */
 
->>>>>>> local
     MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( &P->Z, &P->Z, &grp->P ) );
     MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &P->X, &P->X, &P->Z ) ); MOD_MUL( P->X );
     MBEDTLS_MPI_CHK( mbedtls_mpi_lset( &P->Z, 1 ) );
@@ -20099,11 +18631,6 @@ static int ecp_randomize_mxz( const mbedtls_ecp_group *grp, mbedtls_ecp_point *P
 {
     int ret;
     mbedtls_mpi l;
-<<<<<<< HEAD
-    size_t p_size = ( grp->pbits + 7 ) / 8;
-    int count = 0;
-
-=======
     size_t p_size;
     int count = 0;
 
@@ -20115,17 +18642,12 @@ static int ecp_randomize_mxz( const mbedtls_ecp_group *grp, mbedtls_ecp_point *P
 #endif /* MBEDTLS_ECP_RANDOMIZE_MXZ_ALT */
 
     p_size = ( grp->pbits + 7 ) / 8;
->>>>>>> local
     mbedtls_mpi_init( &l );
 
     /* Generate l such that 1 < l < p */
     do
     {
-<<<<<<< HEAD
-        mbedtls_mpi_fill_random( &l, p_size, f_rng, p_rng );
-=======
         MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( &l, p_size, f_rng, p_rng ) );
->>>>>>> local
 
         while( mbedtls_mpi_cmp_mpi( &l, &grp->P ) >= 0 )
             MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &l, 1 ) );
@@ -20167,8 +18689,6 @@ static int ecp_double_add_mxz( const mbedtls_ecp_group *grp,
     int ret;
     mbedtls_mpi A, AA, B, BB, E, C, D, DA, CB;
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_DOUBLE_ADD_MXZ_ALT)
     if ( mbedtls_internal_ecp_grp_capable( grp ) )
     {
@@ -20176,7 +18696,6 @@ static int ecp_double_add_mxz( const mbedtls_ecp_group *grp,
     }
 #endif /* MBEDTLS_ECP_DOUBLE_ADD_MXZ_ALT */
 
->>>>>>> local
     mbedtls_mpi_init( &A ); mbedtls_mpi_init( &AA ); mbedtls_mpi_init( &B );
     mbedtls_mpi_init( &BB ); mbedtls_mpi_init( &E ); mbedtls_mpi_init( &C );
     mbedtls_mpi_init( &D ); mbedtls_mpi_init( &DA ); mbedtls_mpi_init( &CB );
@@ -20277,14 +18796,10 @@ int mbedtls_ecp_mul( mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
              const mbedtls_mpi *m, const mbedtls_ecp_point *P,
              int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
-<<<<<<< HEAD
-    int ret;
-=======
     int ret = MBEDTLS_ERR_ECP_BAD_INPUT_DATA;
 #if defined(MBEDTLS_ECP_INTERNAL_ALT)
     char is_grp_capable = 0;
 #endif
->>>>>>> local
 
     /* Common sanity checks */
     if( mbedtls_mpi_cmp_int( &P->Z, 1 ) != 0 )
@@ -20294,17 +18809,6 @@ int mbedtls_ecp_mul( mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
         ( ret = mbedtls_ecp_check_pubkey( grp, P ) ) != 0 )
         return( ret );
 
-<<<<<<< HEAD
-#if defined(ECP_MONTGOMERY)
-    if( ecp_get_type( grp ) == ECP_TYPE_MONTGOMERY )
-        return( ecp_mul_mxz( grp, R, m, P, f_rng, p_rng ) );
-#endif
-#if defined(ECP_SHORTWEIERSTRASS)
-    if( ecp_get_type( grp ) == ECP_TYPE_SHORT_WEIERSTRASS )
-        return( ecp_mul_comb( grp, R, m, P, f_rng, p_rng ) );
-#endif
-    return( MBEDTLS_ERR_ECP_BAD_INPUT_DATA );
-=======
 #if defined(MBEDTLS_ECP_INTERNAL_ALT)
     if ( is_grp_capable = mbedtls_internal_ecp_grp_capable( grp )  )
     {
@@ -20332,7 +18836,6 @@ cleanup:
 
 #endif /* MBEDTLS_ECP_INTERNAL_ALT */
     return( ret );
->>>>>>> local
 }
 
 #if defined(ECP_SHORTWEIERSTRASS)
@@ -20425,12 +18928,9 @@ int mbedtls_ecp_muladd( mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
 {
     int ret;
     mbedtls_ecp_point mP;
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_INTERNAL_ALT)
     char is_grp_capable = 0;
 #endif
->>>>>>> local
 
     if( ecp_get_type( grp ) != ECP_TYPE_SHORT_WEIERSTRASS )
         return( MBEDTLS_ERR_ECP_FEATURE_UNAVAILABLE );
@@ -20440,8 +18940,6 @@ int mbedtls_ecp_muladd( mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     MBEDTLS_MPI_CHK( mbedtls_ecp_mul_shortcuts( grp, &mP, m, P ) );
     MBEDTLS_MPI_CHK( mbedtls_ecp_mul_shortcuts( grp, R,   n, Q ) );
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_INTERNAL_ALT)
     if (  is_grp_capable = mbedtls_internal_ecp_grp_capable( grp )  )
     {
@@ -20449,13 +18947,10 @@ int mbedtls_ecp_muladd( mbedtls_ecp_group *grp, mbedtls_ecp_point *R,
     }
 
 #endif /* MBEDTLS_ECP_INTERNAL_ALT */
->>>>>>> local
     MBEDTLS_MPI_CHK( ecp_add_mixed( grp, R, &mP, R ) );
     MBEDTLS_MPI_CHK( ecp_normalize_jac( grp, R ) );
 
 cleanup:
-<<<<<<< HEAD
-=======
 
 #if defined(MBEDTLS_ECP_INTERNAL_ALT)
     if ( is_grp_capable )
@@ -20464,7 +18959,6 @@ cleanup:
     }
 
 #endif /* MBEDTLS_ECP_INTERNAL_ALT */
->>>>>>> local
     mbedtls_ecp_point_free( &mP );
 
     return( ret );
@@ -20556,13 +19050,9 @@ int mbedtls_ecp_gen_keypair_base( mbedtls_ecp_group *grp,
         /* [M225] page 5 */
         size_t b;
 
-<<<<<<< HEAD
-        MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( d, n_size, f_rng, p_rng ) );
-=======
         do {
             MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( d, n_size, f_rng, p_rng ) );
         } while( mbedtls_mpi_bitlen( d ) == 0);
->>>>>>> local
 
         /* Make sure the most significant bit is nbits */
         b = mbedtls_mpi_bitlen( d ) - 1; /* mbedtls_mpi_bitlen is one-based */
@@ -20583,10 +19073,6 @@ int mbedtls_ecp_gen_keypair_base( mbedtls_ecp_group *grp,
     {
         /* SEC1 3.2.1: Generate d such that 1 <= n < N */
         int count = 0;
-<<<<<<< HEAD
-        unsigned char rnd[MBEDTLS_ECP_MAX_BYTES];
-=======
->>>>>>> local
 
         /*
          * Match the procedure given in RFC 6979 (deterministic ECDSA):
@@ -20597,12 +19083,7 @@ int mbedtls_ecp_gen_keypair_base( mbedtls_ecp_group *grp,
          */
         do
         {
-<<<<<<< HEAD
-            MBEDTLS_MPI_CHK( f_rng( p_rng, rnd, n_size ) );
-            MBEDTLS_MPI_CHK( mbedtls_mpi_read_binary( d, rnd, n_size ) );
-=======
             MBEDTLS_MPI_CHK( mbedtls_mpi_fill_random( d, n_size, f_rng, p_rng ) );
->>>>>>> local
             MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( d, 8 * n_size - grp->nbits ) );
 
             /*
@@ -20829,14 +19310,6 @@ cleanup:
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-#endif /* MBEDTLS_ECP_C */
-
-
-
-/********* Start of file library/ecp_curves.c ************/
-
-=======
 #endif /* !MBEDTLS_ECP_ALT */
 
 #endif /* MBEDTLS_ECP_C */
@@ -20876,7 +19349,6 @@ cleanup:
 
 
 /********* Start of file library/ecp_curves.c ************/
->>>>>>> local
 
 /*
  *  Elliptic curves over GF(p): curve-specific data and functions
@@ -20911,22 +19383,13 @@ cleanup:
 
 #include <string.h>
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_ECP_ALT)
 
->>>>>>> local
 #if ( defined(__ARMCC_VERSION) || defined(_MSC_VER) ) && \
     !defined(inline) && !defined(__cplusplus)
 #define inline __inline
 #endif
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef ADD
-
-=======
->>>>>>> local
 /*
  * Conversion macros for embedded constants:
  * build lists of mbedtls_mpi_uint's from lists of unsigned char's grouped by 8, 4 or 2
@@ -22104,11 +20567,7 @@ static inline int ecp_mod_koblitz( mbedtls_mpi *N, mbedtls_mpi_uint *Rp, size_t 
     int ret;
     size_t i;
     mbedtls_mpi M, R;
-<<<<<<< HEAD
-    mbedtls_mpi_uint Mp[P_KOBLITZ_MAX + P_KOBLITZ_R];
-=======
     mbedtls_mpi_uint Mp[P_KOBLITZ_MAX + P_KOBLITZ_R + 1];
->>>>>>> local
 
     if( N->n < p_limbs )
         return( 0 );
@@ -22130,11 +20589,7 @@ static inline int ecp_mod_koblitz( mbedtls_mpi *N, mbedtls_mpi_uint *Rp, size_t 
     memcpy( Mp, N->p + p_limbs - adjust, M.n * sizeof( mbedtls_mpi_uint ) );
     if( shift != 0 )
         MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &M, shift ) );
-<<<<<<< HEAD
-    M.n += R.n - adjust; /* Make room for multiplication by R */
-=======
     M.n += R.n; /* Make room for multiplication by R */
->>>>>>> local
 
     /* N = A0 */
     if( mask != 0 )
@@ -22156,11 +20611,7 @@ static inline int ecp_mod_koblitz( mbedtls_mpi *N, mbedtls_mpi_uint *Rp, size_t 
     memcpy( Mp, N->p + p_limbs - adjust, M.n * sizeof( mbedtls_mpi_uint ) );
     if( shift != 0 )
         MBEDTLS_MPI_CHK( mbedtls_mpi_shift_r( &M, shift ) );
-<<<<<<< HEAD
-    M.n += R.n - adjust; /* Make room for multiplication by R */
-=======
     M.n += R.n; /* Make room for multiplication by R */
->>>>>>> local
 
     /* N = A0 */
     if( mask != 0 )
@@ -22225,17 +20676,6 @@ static int ecp_mod_p256k1( mbedtls_mpi *N )
 }
 #endif /* MBEDTLS_ECP_DP_SECP256K1_ENABLED */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef ADD
-
-#endif /* MBEDTLS_ECP_C */
-
-
-
-/********* Start of file library/entropy.c ************/
-
-=======
 #endif /* !MBEDTLS_ECP_ALT */
 
 #endif /* MBEDTLS_ECP_C */
@@ -22275,16 +20715,11 @@ static int ecp_mod_p256k1( mbedtls_mpi *N )
 
 
 /********* Start of file library/entropy.c ************/
->>>>>>> local
 
 /*
  *  Entropy accumulator implementation
  *
-<<<<<<< HEAD
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
-=======
  *  Copyright (C) 2006-2016, ARM Limited, All Rights Reserved
->>>>>>> local
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -22310,15 +20745,12 @@ static int ecp_mod_p256k1( mbedtls_mpi *N )
 
 #if defined(MBEDTLS_ENTROPY_C)
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_TEST_NULL_ENTROPY)
 #warning "**** WARNING!  MBEDTLS_TEST_NULL_ENTROPY defined! "
 #warning "**** THIS BUILD HAS NO DEFINED ENTROPY SOURCES "
 #warning "**** THIS BUILD IS *NOT* SUITABLE FOR PRODUCTION USE "
 #endif
 
->>>>>>> local
 
 
 
@@ -22328,13 +20760,10 @@ static int ecp_mod_p256k1( mbedtls_mpi *N )
 #include <stdio.h>
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
 
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 #if defined(MBEDTLS_PLATFORM_C)
 
@@ -22349,48 +20778,29 @@ static int ecp_mod_p256k1( mbedtls_mpi *N )
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void entropy_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 #define ENTROPY_MAX_LOOP    256     /**< Maximum amount to loop before error */
 
 void mbedtls_entropy_init( mbedtls_entropy_context *ctx )
 {
-<<<<<<< HEAD
-    memset( ctx, 0, sizeof(mbedtls_entropy_context) );
-=======
     ctx->source_count = 0;
     memset( ctx->source, 0, sizeof( ctx->source ) );
->>>>>>> local
 
 #if defined(MBEDTLS_THREADING_C)
     mbedtls_mutex_init( &ctx->mutex );
 #endif
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
-    mbedtls_sha512_starts( &ctx->accumulator, 0 );
-#else
-    mbedtls_sha256_starts( &ctx->accumulator, 0 );
-=======
     ctx->accumulator_started = 0;
 #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
     mbedtls_sha512_init( &ctx->accumulator );
 #else
     mbedtls_sha256_init( &ctx->accumulator );
->>>>>>> local
 #endif
 #if defined(MBEDTLS_HAVEGE_C)
     mbedtls_havege_init( &ctx->havege_data );
 #endif
 
-<<<<<<< HEAD
-=======
     /* Reminder: Update ENTROPY_HAVE_STRONG in the test files
      *           when adding more strong entropy sources here. */
 
@@ -22399,7 +20809,6 @@ void mbedtls_entropy_init( mbedtls_entropy_context *ctx )
                                 1, MBEDTLS_ENTROPY_SOURCE_STRONG );
 #endif
 
->>>>>>> local
 #if !defined(MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES)
 #if !defined(MBEDTLS_NO_PLATFORM_ENTROPY)
     mbedtls_entropy_add_source( ctx, mbedtls_platform_entropy_poll, NULL,
@@ -22421,15 +20830,12 @@ void mbedtls_entropy_init( mbedtls_entropy_context *ctx )
                                 MBEDTLS_ENTROPY_MIN_HARDWARE,
                                 MBEDTLS_ENTROPY_SOURCE_STRONG );
 #endif
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
     mbedtls_entropy_add_source( ctx, mbedtls_nv_seed_poll, NULL,
                                 MBEDTLS_ENTROPY_BLOCK_SIZE,
                                 MBEDTLS_ENTROPY_SOURCE_STRONG );
     ctx->initial_entropy_run = 0;
 #endif
->>>>>>> local
 #endif /* MBEDTLS_NO_DEFAULT_ENTROPY_SOURCES */
 }
 
@@ -22441,9 +20847,6 @@ void mbedtls_entropy_free( mbedtls_entropy_context *ctx )
 #if defined(MBEDTLS_THREADING_C)
     mbedtls_mutex_free( &ctx->mutex );
 #endif
-<<<<<<< HEAD
-    entropy_zeroize( ctx, sizeof( mbedtls_entropy_context ) );
-=======
 #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
     mbedtls_sha512_free( &ctx->accumulator );
 #else
@@ -22455,47 +20858,30 @@ void mbedtls_entropy_free( mbedtls_entropy_context *ctx )
     ctx->source_count = 0;
     mbedtls_zeroize( ctx->source, sizeof( ctx->source ) );
     ctx->accumulator_started = 0;
->>>>>>> local
 }
 
 int mbedtls_entropy_add_source( mbedtls_entropy_context *ctx,
                         mbedtls_entropy_f_source_ptr f_source, void *p_source,
                         size_t threshold, int strong )
 {
-<<<<<<< HEAD
-    int index, ret = 0;
-=======
     int idx, ret = 0;
->>>>>>> local
 
 #if defined(MBEDTLS_THREADING_C)
     if( ( ret = mbedtls_mutex_lock( &ctx->mutex ) ) != 0 )
         return( ret );
 #endif
 
-<<<<<<< HEAD
-    index = ctx->source_count;
-    if( index >= MBEDTLS_ENTROPY_MAX_SOURCES )
-=======
     idx = ctx->source_count;
     if( idx >= MBEDTLS_ENTROPY_MAX_SOURCES )
->>>>>>> local
     {
         ret = MBEDTLS_ERR_ENTROPY_MAX_SOURCES;
         goto exit;
     }
 
-<<<<<<< HEAD
-    ctx->source[index].f_source  = f_source;
-    ctx->source[index].p_source  = p_source;
-    ctx->source[index].threshold = threshold;
-    ctx->source[index].strong    = strong;
-=======
     ctx->source[idx].f_source  = f_source;
     ctx->source[idx].p_source  = p_source;
     ctx->source[idx].threshold = threshold;
     ctx->source[idx].strong    = strong;
->>>>>>> local
 
     ctx->source_count++;
 
@@ -22518,25 +20904,16 @@ static int entropy_update( mbedtls_entropy_context *ctx, unsigned char source_id
     unsigned char tmp[MBEDTLS_ENTROPY_BLOCK_SIZE];
     size_t use_len = len;
     const unsigned char *p = data;
-<<<<<<< HEAD
-=======
     int ret = 0;
->>>>>>> local
 
     if( use_len > MBEDTLS_ENTROPY_BLOCK_SIZE )
     {
 #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
-<<<<<<< HEAD
-        mbedtls_sha512( data, len, tmp, 0 );
-#else
-        mbedtls_sha256( data, len, tmp, 0 );
-=======
         if( ( ret = mbedtls_sha512_ret( data, len, tmp, 0 ) ) != 0 )
             goto cleanup;
 #else
         if( ( ret = mbedtls_sha256_ret( data, len, tmp, 0 ) ) != 0 )
             goto cleanup;
->>>>>>> local
 #endif
         p = tmp;
         use_len = MBEDTLS_ENTROPY_BLOCK_SIZE;
@@ -22545,17 +20922,6 @@ static int entropy_update( mbedtls_entropy_context *ctx, unsigned char source_id
     header[0] = source_id;
     header[1] = use_len & 0xFF;
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
-    mbedtls_sha512_update( &ctx->accumulator, header, 2 );
-    mbedtls_sha512_update( &ctx->accumulator, p, use_len );
-#else
-    mbedtls_sha256_update( &ctx->accumulator, header, 2 );
-    mbedtls_sha256_update( &ctx->accumulator, p, use_len );
-#endif
-
-    return( 0 );
-=======
     /*
      * Start the accumulator if this has not already happened. Note that
      * it is sufficient to start the accumulator here only because all calls to
@@ -22585,7 +20951,6 @@ cleanup:
     mbedtls_zeroize( tmp, sizeof( tmp ) );
 
     return( ret );
->>>>>>> local
 }
 
 int mbedtls_entropy_update_manual( mbedtls_entropy_context *ctx,
@@ -22632,11 +20997,7 @@ static int entropy_gather_internal( mbedtls_entropy_context *ctx )
         if( ( ret = ctx->source[i].f_source( ctx->source[i].p_source,
                         buf, MBEDTLS_ENTROPY_MAX_GATHER, &olen ) ) != 0 )
         {
-<<<<<<< HEAD
-            return( ret );
-=======
             goto cleanup;
->>>>>>> local
         }
 
         /*
@@ -22644,30 +21005,20 @@ static int entropy_gather_internal( mbedtls_entropy_context *ctx )
          */
         if( olen > 0 )
         {
-<<<<<<< HEAD
-            entropy_update( ctx, (unsigned char) i, buf, olen );
-=======
             if( ( ret = entropy_update( ctx, (unsigned char) i,
                                         buf, olen ) ) != 0 )
                 return( ret );
->>>>>>> local
             ctx->source[i].size += olen;
         }
     }
 
     if( have_one_strong == 0 )
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_ENTROPY_NO_STRONG_SOURCE );
-
-    return( 0 );
-=======
         ret = MBEDTLS_ERR_ENTROPY_NO_STRONG_SOURCE;
 
 cleanup:
     mbedtls_zeroize( buf, sizeof( buf ) );
 
     return( ret );
->>>>>>> local
 }
 
 /*
@@ -22701,8 +21052,6 @@ int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
     if( len > MBEDTLS_ENTROPY_BLOCK_SIZE )
         return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
     /* Update the NV entropy seed before generating any entropy for outside
      * use.
@@ -22715,7 +21064,6 @@ int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
     }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_THREADING_C)
     if( ( ret = mbedtls_mutex_lock( &ctx->mutex ) ) != 0 )
         return( ret );
@@ -22745,9 +21093,6 @@ int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
     memset( buf, 0, MBEDTLS_ENTROPY_BLOCK_SIZE );
 
 #if defined(MBEDTLS_ENTROPY_SHA512_ACCUMULATOR)
-<<<<<<< HEAD
-    mbedtls_sha512_finish( &ctx->accumulator, buf );
-=======
     /*
      * Note that at this stage it is assumed that the accumulator was started
      * in a previous call to entropy_update(). If this is not guaranteed, the
@@ -22755,16 +21100,10 @@ int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
      */
     if( ( ret = mbedtls_sha512_finish_ret( &ctx->accumulator, buf ) ) != 0 )
         goto exit;
->>>>>>> local
 
     /*
      * Reset accumulator and counters and recycle existing entropy
      */
-<<<<<<< HEAD
-    memset( &ctx->accumulator, 0, sizeof( mbedtls_sha512_context ) );
-    mbedtls_sha512_starts( &ctx->accumulator, 0 );
-    mbedtls_sha512_update( &ctx->accumulator, buf, MBEDTLS_ENTROPY_BLOCK_SIZE );
-=======
     mbedtls_sha512_free( &ctx->accumulator );
     mbedtls_sha512_init( &ctx->accumulator );
     if( ( ret = mbedtls_sha512_starts_ret( &ctx->accumulator, 0 ) ) != 0 )
@@ -22772,32 +21111,20 @@ int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
     if( ( ret = mbedtls_sha512_update_ret( &ctx->accumulator, buf,
                                            MBEDTLS_ENTROPY_BLOCK_SIZE ) ) != 0 )
         goto exit;
->>>>>>> local
 
     /*
      * Perform second SHA-512 on entropy
      */
-<<<<<<< HEAD
-    mbedtls_sha512( buf, MBEDTLS_ENTROPY_BLOCK_SIZE, buf, 0 );
-#else /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
-    mbedtls_sha256_finish( &ctx->accumulator, buf );
-=======
     if( ( ret = mbedtls_sha512_ret( buf, MBEDTLS_ENTROPY_BLOCK_SIZE,
                                     buf, 0 ) ) != 0 )
         goto exit;
 #else /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
     if( ( ret = mbedtls_sha256_finish_ret( &ctx->accumulator, buf ) ) != 0 )
         goto exit;
->>>>>>> local
 
     /*
      * Reset accumulator and counters and recycle existing entropy
      */
-<<<<<<< HEAD
-    memset( &ctx->accumulator, 0, sizeof( mbedtls_sha256_context ) );
-    mbedtls_sha256_starts( &ctx->accumulator, 0 );
-    mbedtls_sha256_update( &ctx->accumulator, buf, MBEDTLS_ENTROPY_BLOCK_SIZE );
-=======
     mbedtls_sha256_free( &ctx->accumulator );
     mbedtls_sha256_init( &ctx->accumulator );
     if( ( ret = mbedtls_sha256_starts_ret( &ctx->accumulator, 0 ) ) != 0 )
@@ -22805,18 +21132,13 @@ int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
     if( ( ret = mbedtls_sha256_update_ret( &ctx->accumulator, buf,
                                            MBEDTLS_ENTROPY_BLOCK_SIZE ) ) != 0 )
         goto exit;
->>>>>>> local
 
     /*
      * Perform second SHA-256 on entropy
      */
-<<<<<<< HEAD
-    mbedtls_sha256( buf, MBEDTLS_ENTROPY_BLOCK_SIZE, buf, 0 );
-=======
     if( ( ret = mbedtls_sha256_ret( buf, MBEDTLS_ENTROPY_BLOCK_SIZE,
                                     buf, 0 ) ) != 0 )
         goto exit;
->>>>>>> local
 #endif /* MBEDTLS_ENTROPY_SHA512_ACCUMULATOR */
 
     for( i = 0; i < ctx->source_count; i++ )
@@ -22827,11 +21149,8 @@ int mbedtls_entropy_func( void *data, unsigned char *output, size_t len )
     ret = 0;
 
 exit:
-<<<<<<< HEAD
-=======
     mbedtls_zeroize( buf, sizeof( buf ) );
 
->>>>>>> local
 #if defined(MBEDTLS_THREADING_C)
     if( mbedtls_mutex_unlock( &ctx->mutex ) != 0 )
         return( MBEDTLS_ERR_THREADING_MUTEX_ERROR );
@@ -22840,8 +21159,6 @@ exit:
     return( ret );
 }
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
 int mbedtls_entropy_update_nv_seed( mbedtls_entropy_context *ctx )
 {
@@ -22863,7 +21180,6 @@ int mbedtls_entropy_update_nv_seed( mbedtls_entropy_context *ctx )
 }
 #endif /* MBEDTLS_ENTROPY_NV_SEED */
 
->>>>>>> local
 #if defined(MBEDTLS_FS_IO)
 int mbedtls_entropy_write_seed_file( mbedtls_entropy_context *ctx, const char *path )
 {
@@ -22886,21 +21202,15 @@ int mbedtls_entropy_write_seed_file( mbedtls_entropy_context *ctx, const char *p
     ret = 0;
 
 exit:
-<<<<<<< HEAD
-=======
     mbedtls_zeroize( buf, sizeof( buf ) );
 
->>>>>>> local
     fclose( f );
     return( ret );
 }
 
 int mbedtls_entropy_update_seed_file( mbedtls_entropy_context *ctx, const char *path )
 {
-<<<<<<< HEAD
-=======
     int ret = 0;
->>>>>>> local
     FILE *f;
     size_t n;
     unsigned char buf[ MBEDTLS_ENTROPY_MAX_SEED_SIZE ];
@@ -22916,16 +21226,6 @@ int mbedtls_entropy_update_seed_file( mbedtls_entropy_context *ctx, const char *
         n = MBEDTLS_ENTROPY_MAX_SEED_SIZE;
 
     if( fread( buf, 1, n, f ) != n )
-<<<<<<< HEAD
-    {
-        fclose( f );
-        return( MBEDTLS_ERR_ENTROPY_FILE_IO_ERROR );
-    }
-
-    fclose( f );
-
-    mbedtls_entropy_update_manual( ctx, buf, n );
-=======
         ret = MBEDTLS_ERR_ENTROPY_FILE_IO_ERROR;
     else
         ret = mbedtls_entropy_update_manual( ctx, buf, n );
@@ -22936,17 +21236,13 @@ int mbedtls_entropy_update_seed_file( mbedtls_entropy_context *ctx, const char *
 
     if( ret != 0 )
         return( ret );
->>>>>>> local
 
     return( mbedtls_entropy_write_seed_file( ctx, path ) );
 }
 #endif /* MBEDTLS_FS_IO */
 
 #if defined(MBEDTLS_SELF_TEST)
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_TEST_NULL_ENTROPY)
->>>>>>> local
 /*
  * Dummy source function
  */
@@ -22960,8 +21256,6 @@ static int entropy_dummy_source( void *data, unsigned char *output,
 
     return( 0 );
 }
-<<<<<<< HEAD
-=======
 #endif /* !MBEDTLS_TEST_NULL_ENTROPY */
 
 #if defined(MBEDTLS_ENTROPY_HARDWARE_ALT)
@@ -23061,7 +21355,6 @@ cleanup:
 }
 
 #endif /* MBEDTLS_ENTROPY_HARDWARE_ALT */
->>>>>>> local
 
 /*
  * The actual entropy quality is hard to test, but we can at least
@@ -23070,28 +21363,18 @@ cleanup:
  */
 int mbedtls_entropy_self_test( int verbose )
 {
-<<<<<<< HEAD
-    int ret = 0;
-=======
     int ret = 1;
 #if !defined(MBEDTLS_TEST_NULL_ENTROPY)
->>>>>>> local
     mbedtls_entropy_context ctx;
     unsigned char buf[MBEDTLS_ENTROPY_BLOCK_SIZE] = { 0 };
     unsigned char acc[MBEDTLS_ENTROPY_BLOCK_SIZE] = { 0 };
     size_t i, j;
-<<<<<<< HEAD
-=======
 #endif /* !MBEDTLS_TEST_NULL_ENTROPY */
->>>>>>> local
 
     if( verbose != 0 )
         mbedtls_printf( "  ENTROPY test: " );
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_TEST_NULL_ENTROPY)
->>>>>>> local
     mbedtls_entropy_init( &ctx );
 
     /* First do a gather to make sure we have default sources */
@@ -23132,10 +21415,6 @@ int mbedtls_entropy_self_test( int verbose )
         }
     }
 
-<<<<<<< HEAD
-cleanup:
-    mbedtls_entropy_free( &ctx );
-=======
 #if defined(MBEDTLS_ENTROPY_HARDWARE_ALT)
     if( ( ret = mbedtls_entropy_source_self_test( 0 ) ) != 0 )
         goto cleanup;
@@ -23144,7 +21423,6 @@ cleanup:
 cleanup:
     mbedtls_entropy_free( &ctx );
 #endif /* !MBEDTLS_TEST_NULL_ENTROPY */
->>>>>>> local
 
     if( verbose != 0 )
     {
@@ -23162,12 +21440,6 @@ cleanup:
 
 #endif /* MBEDTLS_ENTROPY_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/entropy_poll.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -23203,16 +21475,11 @@ cleanup:
 
 
 /********* Start of file library/entropy_poll.c ************/
->>>>>>> local
 
 /*
  *  Platform-specific and custom entropy polling functions
  *
-<<<<<<< HEAD
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
-=======
  *  Copyright (C) 2006-2016, ARM Limited, All Rights Reserved
->>>>>>> local
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -23248,10 +21515,6 @@ cleanup:
 #if defined(MBEDTLS_HAVEGE_C)
 
 #endif
-<<<<<<< HEAD
-
-#if !defined(MBEDTLS_NO_PLATFORM_ENTROPY)
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
 
 #endif
@@ -23263,7 +21526,6 @@ cleanup:
 #error "Platform entropy sources only work on Unix and Windows, see MBEDTLS_NO_PLATFORM_ENTROPY in config.h"
 #endif
 
->>>>>>> local
 #if defined(_WIN32) && !defined(EFIX64) && !defined(EFI32)
 
 #if !defined(_WIN32_WINNT)
@@ -23286,14 +21548,10 @@ int mbedtls_platform_entropy_poll( void *data, unsigned char *output, size_t len
     }
 
     if( CryptGenRandom( provider, (DWORD) len, output ) == FALSE )
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
-=======
     {
         CryptReleaseContext( provider, 0 );
         return( MBEDTLS_ERR_ENTROPY_SOURCE_FAILED );
     }
->>>>>>> local
 
     CryptReleaseContext( provider, 0 );
     *olen = len;
@@ -23411,8 +21669,6 @@ int mbedtls_platform_entropy_poll( void *data,
 #endif /* _WIN32 && !EFIX64 && !EFI32 */
 #endif /* !MBEDTLS_NO_PLATFORM_ENTROPY */
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_TEST_NULL_ENTROPY)
 int mbedtls_null_entropy_poll( void *data,
                     unsigned char *output, size_t len, size_t *olen )
@@ -23430,7 +21686,6 @@ int mbedtls_null_entropy_poll( void *data,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_TIMING_C)
 int mbedtls_hardclock_poll( void *data,
                     unsigned char *output, size_t len, size_t *olen )
@@ -23465,14 +21720,6 @@ int mbedtls_havege_poll( void *data,
 }
 #endif /* MBEDTLS_HAVEGE_C */
 
-<<<<<<< HEAD
-#endif /* MBEDTLS_ENTROPY_C */
-
-
-
-/********* Start of file library/error.c ************/
-
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
 int mbedtls_nv_seed_poll( void *data,
                           unsigned char *output, size_t len, size_t *olen )
@@ -23533,7 +21780,6 @@ int mbedtls_nv_seed_poll( void *data,
 
 
 /********* Start of file library/error.c ************/
->>>>>>> local
 
 /*
  *  Error message information
@@ -23571,10 +21817,7 @@ int mbedtls_nv_seed_poll( void *data,
 
 #else
 #define mbedtls_snprintf snprintf
-<<<<<<< HEAD
-=======
 #define mbedtls_time_t   time_t
->>>>>>> local
 #endif
 
 #if defined(MBEDTLS_ERROR_C)
@@ -23585,13 +21828,10 @@ int mbedtls_nv_seed_poll( void *data,
 
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ARC4_C)
 
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_BASE64_C)
 
 #endif
@@ -23616,13 +21856,10 @@ int mbedtls_nv_seed_poll( void *data,
 
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_CMAC_C)
 
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_CTR_DRBG_C)
 
 #endif
@@ -23655,8 +21892,6 @@ int mbedtls_nv_seed_poll( void *data,
 
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_MD2_C)
 
 #endif
@@ -23669,7 +21904,6 @@ int mbedtls_nv_seed_poll( void *data,
 
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_NET_C)
 
 #endif
@@ -23698,19 +21932,14 @@ int mbedtls_nv_seed_poll( void *data,
 
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_RIPEMD160_C)
 
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_RSA_C)
 
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SHA1_C)
 
 #endif
@@ -23723,7 +21952,6 @@ int mbedtls_nv_seed_poll( void *data,
 
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SSL_TLS_C)
 
 #endif
@@ -23765,11 +21993,7 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         if( use_ret == -(MBEDTLS_ERR_CIPHER_FEATURE_UNAVAILABLE) )
             mbedtls_snprintf( buf, buflen, "CIPHER - The selected feature is not available" );
         if( use_ret == -(MBEDTLS_ERR_CIPHER_BAD_INPUT_DATA) )
-<<<<<<< HEAD
-            mbedtls_snprintf( buf, buflen, "CIPHER - Bad input parameters to function" );
-=======
             mbedtls_snprintf( buf, buflen, "CIPHER - Bad input parameters" );
->>>>>>> local
         if( use_ret == -(MBEDTLS_ERR_CIPHER_ALLOC_FAILED) )
             mbedtls_snprintf( buf, buflen, "CIPHER - Failed to allocate memory" );
         if( use_ret == -(MBEDTLS_ERR_CIPHER_INVALID_PADDING) )
@@ -23778,22 +22002,15 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "CIPHER - Decryption of block requires a full block" );
         if( use_ret == -(MBEDTLS_ERR_CIPHER_AUTH_FAILED) )
             mbedtls_snprintf( buf, buflen, "CIPHER - Authentication failed (for AEAD modes)" );
-<<<<<<< HEAD
-=======
         if( use_ret == -(MBEDTLS_ERR_CIPHER_INVALID_CONTEXT) )
             mbedtls_snprintf( buf, buflen, "CIPHER - The context is invalid. For example, because it was freed" );
         if( use_ret == -(MBEDTLS_ERR_CIPHER_HW_ACCEL_FAILED) )
             mbedtls_snprintf( buf, buflen, "CIPHER - Cipher hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_CIPHER_C */
 
 #if defined(MBEDTLS_DHM_C)
         if( use_ret == -(MBEDTLS_ERR_DHM_BAD_INPUT_DATA) )
-<<<<<<< HEAD
-            mbedtls_snprintf( buf, buflen, "DHM - Bad input parameters to function" );
-=======
             mbedtls_snprintf( buf, buflen, "DHM - Bad input parameters" );
->>>>>>> local
         if( use_ret == -(MBEDTLS_ERR_DHM_READ_PARAMS_FAILED) )
             mbedtls_snprintf( buf, buflen, "DHM - Reading of the DHM parameters failed" );
         if( use_ret == -(MBEDTLS_ERR_DHM_MAKE_PARAMS_FAILED) )
@@ -23809,15 +22026,11 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         if( use_ret == -(MBEDTLS_ERR_DHM_ALLOC_FAILED) )
             mbedtls_snprintf( buf, buflen, "DHM - Allocation of memory failed" );
         if( use_ret == -(MBEDTLS_ERR_DHM_FILE_IO_ERROR) )
-<<<<<<< HEAD
-            mbedtls_snprintf( buf, buflen, "DHM - Read/write of file failed" );
-=======
             mbedtls_snprintf( buf, buflen, "DHM - Read or write of file failed" );
         if( use_ret == -(MBEDTLS_ERR_DHM_HW_ACCEL_FAILED) )
             mbedtls_snprintf( buf, buflen, "DHM - DHM hardware accelerator failed" );
         if( use_ret == -(MBEDTLS_ERR_DHM_SET_GROUP_FAILED) )
             mbedtls_snprintf( buf, buflen, "DHM - Setting the modulus and generator failed" );
->>>>>>> local
 #endif /* MBEDTLS_DHM_C */
 
 #if defined(MBEDTLS_ECP_C)
@@ -23837,11 +22050,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "ECP - Invalid private or public key" );
         if( use_ret == -(MBEDTLS_ERR_ECP_SIG_LEN_MISMATCH) )
             mbedtls_snprintf( buf, buflen, "ECP - Signature is valid but shorter than the user-supplied length" );
-<<<<<<< HEAD
-=======
         if( use_ret == -(MBEDTLS_ERR_ECP_HW_ACCEL_FAILED) )
             mbedtls_snprintf( buf, buflen, "ECP - ECP hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_ECP_C */
 
 #if defined(MBEDTLS_MD_C)
@@ -23853,11 +22063,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "MD - Failed to allocate memory" );
         if( use_ret == -(MBEDTLS_ERR_MD_FILE_IO_ERROR) )
             mbedtls_snprintf( buf, buflen, "MD - Opening or reading of file failed" );
-<<<<<<< HEAD
-=======
         if( use_ret == -(MBEDTLS_ERR_MD_HW_ACCEL_FAILED) )
             mbedtls_snprintf( buf, buflen, "MD - MD hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_MD_C */
 
 #if defined(MBEDTLS_PEM_PARSE_C) || defined(MBEDTLS_PEM_WRITE_C)
@@ -23910,11 +22117,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "PK - Unavailable feature, e.g. RSA disabled for RSA key" );
         if( use_ret == -(MBEDTLS_ERR_PK_SIG_LEN_MISMATCH) )
             mbedtls_snprintf( buf, buflen, "PK - The signature is valid but its length is less than expected" );
-<<<<<<< HEAD
-=======
         if( use_ret == -(MBEDTLS_ERR_PK_HW_ACCEL_FAILED) )
             mbedtls_snprintf( buf, buflen, "PK - PK hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_PK_C */
 
 #if defined(MBEDTLS_PKCS12_C)
@@ -23947,11 +22151,7 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         if( use_ret == -(MBEDTLS_ERR_RSA_KEY_GEN_FAILED) )
             mbedtls_snprintf( buf, buflen, "RSA - Something failed during generation of a key" );
         if( use_ret == -(MBEDTLS_ERR_RSA_KEY_CHECK_FAILED) )
-<<<<<<< HEAD
-            mbedtls_snprintf( buf, buflen, "RSA - Key failed to pass the library's validity check" );
-=======
             mbedtls_snprintf( buf, buflen, "RSA - Key failed to pass the validity check of the library" );
->>>>>>> local
         if( use_ret == -(MBEDTLS_ERR_RSA_PUBLIC_FAILED) )
             mbedtls_snprintf( buf, buflen, "RSA - The public key operation failed" );
         if( use_ret == -(MBEDTLS_ERR_RSA_PRIVATE_FAILED) )
@@ -23962,13 +22162,10 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "RSA - The output buffer for decryption is not large enough" );
         if( use_ret == -(MBEDTLS_ERR_RSA_RNG_FAILED) )
             mbedtls_snprintf( buf, buflen, "RSA - The random generator failed to generate non-zeros" );
-<<<<<<< HEAD
-=======
         if( use_ret == -(MBEDTLS_ERR_RSA_UNSUPPORTED_OPERATION) )
             mbedtls_snprintf( buf, buflen, "RSA - The implementation does not offer the requested operation, for example, because of security violations or lack of functionality" );
         if( use_ret == -(MBEDTLS_ERR_RSA_HW_ACCEL_FAILED) )
             mbedtls_snprintf( buf, buflen, "RSA - RSA hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_RSA_C */
 
 #if defined(MBEDTLS_SSL_TLS_C)
@@ -24073,13 +22270,10 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "SSL - The client initiated a reconnect from the same port" );
         if( use_ret == -(MBEDTLS_ERR_SSL_UNEXPECTED_RECORD) )
             mbedtls_snprintf( buf, buflen, "SSL - Record header looks valid but is not expected" );
-<<<<<<< HEAD
-=======
         if( use_ret == -(MBEDTLS_ERR_SSL_NON_FATAL) )
             mbedtls_snprintf( buf, buflen, "SSL - The alert message received indicates a non-fatal error" );
         if( use_ret == -(MBEDTLS_ERR_SSL_INVALID_VERIFY_HASH) )
             mbedtls_snprintf( buf, buflen, "SSL - Couldn't set the hash for verifying CertificateVerify" );
->>>>>>> local
 #endif /* MBEDTLS_SSL_TLS_C */
 
 #if defined(MBEDTLS_X509_USE_C) || defined(MBEDTLS_X509_CREATE_C)
@@ -24121,11 +22315,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
             mbedtls_snprintf( buf, buflen, "X509 - Read/write of file failed" );
         if( use_ret == -(MBEDTLS_ERR_X509_BUFFER_TOO_SMALL) )
             mbedtls_snprintf( buf, buflen, "X509 - Destination buffer is too small" );
-<<<<<<< HEAD
-=======
         if( use_ret == -(MBEDTLS_ERR_X509_FATAL_ERROR) )
             mbedtls_snprintf( buf, buflen, "X509 - A fatal error occured, eg the chain is too long or the vrfy callback failed" );
->>>>>>> local
 #endif /* MBEDTLS_X509_USE_C || MBEDTLS_X509_CREATE_C */
         // END generated code
 
@@ -24162,10 +22353,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "AES - Invalid key length" );
     if( use_ret == -(MBEDTLS_ERR_AES_INVALID_INPUT_LENGTH) )
         mbedtls_snprintf( buf, buflen, "AES - Invalid data input length" );
-<<<<<<< HEAD
-#endif /* MBEDTLS_AES_C */
-
-=======
     if( use_ret == -(MBEDTLS_ERR_AES_FEATURE_UNAVAILABLE) )
         mbedtls_snprintf( buf, buflen, "AES - Feature not available. For example, an unsupported AES key size" );
     if( use_ret == -(MBEDTLS_ERR_AES_HW_ACCEL_FAILED) )
@@ -24177,7 +22364,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "ARC4 - ARC4 hardware accelerator failed" );
 #endif /* MBEDTLS_ARC4_C */
 
->>>>>>> local
 #if defined(MBEDTLS_ASN1_PARSE_C)
     if( use_ret == -(MBEDTLS_ERR_ASN1_OUT_OF_DATA) )
         mbedtls_snprintf( buf, buflen, "ASN1 - Out of data when parsing an ASN1 data structure" );
@@ -24224,11 +22410,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 #if defined(MBEDTLS_BLOWFISH_C)
     if( use_ret == -(MBEDTLS_ERR_BLOWFISH_INVALID_KEY_LENGTH) )
         mbedtls_snprintf( buf, buflen, "BLOWFISH - Invalid key length" );
-<<<<<<< HEAD
-=======
     if( use_ret == -(MBEDTLS_ERR_BLOWFISH_HW_ACCEL_FAILED) )
         mbedtls_snprintf( buf, buflen, "BLOWFISH - Blowfish hardware accelerator failed" );
->>>>>>> local
     if( use_ret == -(MBEDTLS_ERR_BLOWFISH_INVALID_INPUT_LENGTH) )
         mbedtls_snprintf( buf, buflen, "BLOWFISH - Invalid data input length" );
 #endif /* MBEDTLS_BLOWFISH_C */
@@ -24238,22 +22421,12 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "CAMELLIA - Invalid key length" );
     if( use_ret == -(MBEDTLS_ERR_CAMELLIA_INVALID_INPUT_LENGTH) )
         mbedtls_snprintf( buf, buflen, "CAMELLIA - Invalid data input length" );
-<<<<<<< HEAD
-=======
     if( use_ret == -(MBEDTLS_ERR_CAMELLIA_HW_ACCEL_FAILED) )
         mbedtls_snprintf( buf, buflen, "CAMELLIA - Camellia hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_CAMELLIA_C */
 
 #if defined(MBEDTLS_CCM_C)
     if( use_ret == -(MBEDTLS_ERR_CCM_BAD_INPUT) )
-<<<<<<< HEAD
-        mbedtls_snprintf( buf, buflen, "CCM - Bad input parameters to function" );
-    if( use_ret == -(MBEDTLS_ERR_CCM_AUTH_FAILED) )
-        mbedtls_snprintf( buf, buflen, "CCM - Authenticated decryption failed" );
-#endif /* MBEDTLS_CCM_C */
-
-=======
         mbedtls_snprintf( buf, buflen, "CCM - Bad input parameters to the function" );
     if( use_ret == -(MBEDTLS_ERR_CCM_AUTH_FAILED) )
         mbedtls_snprintf( buf, buflen, "CCM - Authenticated decryption failed" );
@@ -24266,34 +22439,22 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "CMAC - CMAC hardware accelerator failed" );
 #endif /* MBEDTLS_CMAC_C */
 
->>>>>>> local
 #if defined(MBEDTLS_CTR_DRBG_C)
     if( use_ret == -(MBEDTLS_ERR_CTR_DRBG_ENTROPY_SOURCE_FAILED) )
         mbedtls_snprintf( buf, buflen, "CTR_DRBG - The entropy source failed" );
     if( use_ret == -(MBEDTLS_ERR_CTR_DRBG_REQUEST_TOO_BIG) )
-<<<<<<< HEAD
-        mbedtls_snprintf( buf, buflen, "CTR_DRBG - Too many random requested in single call" );
-    if( use_ret == -(MBEDTLS_ERR_CTR_DRBG_INPUT_TOO_BIG) )
-        mbedtls_snprintf( buf, buflen, "CTR_DRBG - Input too large (Entropy + additional)" );
-    if( use_ret == -(MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR) )
-        mbedtls_snprintf( buf, buflen, "CTR_DRBG - Read/write error in file" );
-=======
         mbedtls_snprintf( buf, buflen, "CTR_DRBG - The requested random buffer length is too big" );
     if( use_ret == -(MBEDTLS_ERR_CTR_DRBG_INPUT_TOO_BIG) )
         mbedtls_snprintf( buf, buflen, "CTR_DRBG - The input (entropy + additional data) is too large" );
     if( use_ret == -(MBEDTLS_ERR_CTR_DRBG_FILE_IO_ERROR) )
         mbedtls_snprintf( buf, buflen, "CTR_DRBG - Read or write error in file" );
->>>>>>> local
 #endif /* MBEDTLS_CTR_DRBG_C */
 
 #if defined(MBEDTLS_DES_C)
     if( use_ret == -(MBEDTLS_ERR_DES_INVALID_INPUT_LENGTH) )
         mbedtls_snprintf( buf, buflen, "DES - The data input has an invalid length" );
-<<<<<<< HEAD
-=======
     if( use_ret == -(MBEDTLS_ERR_DES_HW_ACCEL_FAILED) )
         mbedtls_snprintf( buf, buflen, "DES - DES hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_DES_C */
 
 #if defined(MBEDTLS_ENTROPY_C)
@@ -24312,11 +22473,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 #if defined(MBEDTLS_GCM_C)
     if( use_ret == -(MBEDTLS_ERR_GCM_AUTH_FAILED) )
         mbedtls_snprintf( buf, buflen, "GCM - Authenticated decryption failed" );
-<<<<<<< HEAD
-=======
     if( use_ret == -(MBEDTLS_ERR_GCM_HW_ACCEL_FAILED) )
         mbedtls_snprintf( buf, buflen, "GCM - GCM hardware accelerator failed" );
->>>>>>> local
     if( use_ret == -(MBEDTLS_ERR_GCM_BAD_INPUT) )
         mbedtls_snprintf( buf, buflen, "GCM - Bad input parameters to function" );
 #endif /* MBEDTLS_GCM_C */
@@ -24332,8 +22490,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "HMAC_DRBG - The entropy source failed" );
 #endif /* MBEDTLS_HMAC_DRBG_C */
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_MD2_C)
     if( use_ret == -(MBEDTLS_ERR_MD2_HW_ACCEL_FAILED) )
         mbedtls_snprintf( buf, buflen, "MD2 - MD2 hardware accelerator failed" );
@@ -24349,7 +22505,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "MD5 - MD5 hardware accelerator failed" );
 #endif /* MBEDTLS_MD5_C */
 
->>>>>>> local
 #if defined(MBEDTLS_NET_C)
     if( use_ret == -(MBEDTLS_ERR_NET_SOCKET_FAILED) )
         mbedtls_snprintf( buf, buflen, "NET - Failed to open a socket" );
@@ -24387,8 +22542,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "PADLOCK - Input data should be aligned" );
 #endif /* MBEDTLS_PADLOCK_C */
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_RIPEMD160_C)
     if( use_ret == -(MBEDTLS_ERR_RIPEMD160_HW_ACCEL_FAILED) )
         mbedtls_snprintf( buf, buflen, "RIPEMD160 - RIPEMD160 hardware accelerator failed" );
@@ -24409,7 +22562,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
         mbedtls_snprintf( buf, buflen, "SHA512 - SHA-512 hardware accelerator failed" );
 #endif /* MBEDTLS_SHA512_C */
 
->>>>>>> local
 #if defined(MBEDTLS_THREADING_C)
     if( use_ret == -(MBEDTLS_ERR_THREADING_FEATURE_UNAVAILABLE) )
         mbedtls_snprintf( buf, buflen, "THREADING - The selected feature is not available" );
@@ -24422,11 +22574,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 #if defined(MBEDTLS_XTEA_C)
     if( use_ret == -(MBEDTLS_ERR_XTEA_INVALID_INPUT_LENGTH) )
         mbedtls_snprintf( buf, buflen, "XTEA - The data input has an invalid length" );
-<<<<<<< HEAD
-=======
     if( use_ret == -(MBEDTLS_ERR_XTEA_HW_ACCEL_FAILED) )
         mbedtls_snprintf( buf, buflen, "XTEA - XTEA hardware accelerator failed" );
->>>>>>> local
 #endif /* MBEDTLS_XTEA_C */
     // END generated code
 
@@ -24455,12 +22604,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 
 #endif /* MBEDTLS_ERROR_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/gcm.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -24496,7 +22639,6 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 
 
 /********* Start of file library/gcm.c ************/
->>>>>>> local
 
 /*
  *  NIST SP800-38D compliant GCM implementation
@@ -24546,10 +22688,7 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 #endif
 
 #if defined(MBEDTLS_SELF_TEST) && defined(MBEDTLS_AES_C)
-<<<<<<< HEAD
-=======
 
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
@@ -24558,11 +22697,8 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 #endif /* MBEDTLS_PLATFORM_C */
 #endif /* MBEDTLS_SELF_TEST && MBEDTLS_AES_C */
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_GCM_ALT)
 
->>>>>>> local
 /*
  * 32-bit integer manipulation macros (big endian)
  */
@@ -24587,13 +22723,7 @@ void mbedtls_strerror( int ret, char *buf, size_t buflen )
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void gcm_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * Initialize a context
@@ -24790,15 +22920,10 @@ int mbedtls_gcm_starts( mbedtls_gcm_context *ctx,
     size_t use_len, olen = 0;
 
     /* IV and AD are limited to 2^64 bits, so 2^61 bytes */
-<<<<<<< HEAD
-    if( ( (uint64_t) iv_len  ) >> 61 != 0 ||
-        ( (uint64_t) add_len ) >> 61 != 0 )
-=======
     /* IV is not allowed to be zero length */
     if( iv_len == 0 ||
       ( (uint64_t) iv_len  ) >> 61 != 0 ||
       ( (uint64_t) add_len ) >> 61 != 0 )
->>>>>>> local
     {
         return( MBEDTLS_ERR_GCM_BAD_INPUT );
     }
@@ -24935,12 +23060,7 @@ int mbedtls_gcm_finish( mbedtls_gcm_context *ctx,
     if( tag_len > 16 || tag_len < 4 )
         return( MBEDTLS_ERR_GCM_BAD_INPUT );
 
-<<<<<<< HEAD
-    if( tag_len != 0 )
-        memcpy( tag, ctx->base_ectr, tag_len );
-=======
     memcpy( tag, ctx->base_ectr, tag_len );
->>>>>>> local
 
     if( orig_len || orig_add_len )
     {
@@ -25018,11 +23138,7 @@ int mbedtls_gcm_auth_decrypt( mbedtls_gcm_context *ctx,
 
     if( diff != 0 )
     {
-<<<<<<< HEAD
-        gcm_zeroize( output, length );
-=======
         mbedtls_zeroize( output, length );
->>>>>>> local
         return( MBEDTLS_ERR_GCM_AUTH_FAILED );
     }
 
@@ -25032,17 +23148,11 @@ int mbedtls_gcm_auth_decrypt( mbedtls_gcm_context *ctx,
 void mbedtls_gcm_free( mbedtls_gcm_context *ctx )
 {
     mbedtls_cipher_free( &ctx->cipher_ctx );
-<<<<<<< HEAD
-    gcm_zeroize( ctx, sizeof( mbedtls_gcm_context ) );
-}
-
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_gcm_context ) );
 }
 
 #endif /* !MBEDTLS_GCM_ALT */
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST) && defined(MBEDTLS_AES_C)
 /*
  * AES-GCM test vectors from:
@@ -25279,39 +23389,12 @@ int mbedtls_gcm_self_test( int verbose )
     int i, j, ret;
     mbedtls_cipher_id_t cipher = MBEDTLS_CIPHER_ID_AES;
 
-<<<<<<< HEAD
-    mbedtls_gcm_init( &ctx );
-
-=======
->>>>>>> local
     for( j = 0; j < 3; j++ )
     {
         int key_len = 128 + 64 * j;
 
         for( i = 0; i < MAX_TESTS; i++ )
         {
-<<<<<<< HEAD
-            if( verbose != 0 )
-                mbedtls_printf( "  AES-GCM-%3d #%d (%s): ",
-                                 key_len, i, "enc" );
-
-            mbedtls_gcm_setkey( &ctx, cipher, key[key_index[i]], key_len );
-
-            ret = mbedtls_gcm_crypt_and_tag( &ctx, MBEDTLS_GCM_ENCRYPT,
-                                     pt_len[i],
-                                     iv[iv_index[i]], iv_len[i],
-                                     additional[add_index[i]], add_len[i],
-                                     pt[pt_index[i]], buf, 16, tag_buf );
-
-            if( ret != 0 ||
-                memcmp( buf, ct[j * 6 + i], pt_len[i] ) != 0 ||
-                memcmp( tag_buf, tag[j * 6 + i], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                return( 1 );
-=======
             mbedtls_gcm_init( &ctx );
 
             if( verbose != 0 )
@@ -25348,7 +23431,6 @@ int mbedtls_gcm_self_test( int verbose )
             {
                 ret = 1;
                 goto exit;
->>>>>>> local
             }
 
             mbedtls_gcm_free( &ctx );
@@ -25356,28 +23438,6 @@ int mbedtls_gcm_self_test( int verbose )
             if( verbose != 0 )
                 mbedtls_printf( "passed\n" );
 
-<<<<<<< HEAD
-            if( verbose != 0 )
-                mbedtls_printf( "  AES-GCM-%3d #%d (%s): ",
-                                 key_len, i, "dec" );
-
-            mbedtls_gcm_setkey( &ctx, cipher, key[key_index[i]], key_len );
-
-            ret = mbedtls_gcm_crypt_and_tag( &ctx, MBEDTLS_GCM_DECRYPT,
-                                     pt_len[i],
-                                     iv[iv_index[i]], iv_len[i],
-                                     additional[add_index[i]], add_len[i],
-                                     ct[j * 6 + i], buf, 16, tag_buf );
-
-            if( ret != 0 ||
-                memcmp( buf, pt[pt_index[i]], pt_len[i] ) != 0 ||
-                memcmp( tag_buf, tag[j * 6 + i], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                return( 1 );
-=======
             mbedtls_gcm_init( &ctx );
 
             if( verbose != 0 )
@@ -25403,7 +23463,6 @@ int mbedtls_gcm_self_test( int verbose )
             {
                 ret = 1;
                 goto exit;
->>>>>>> local
             }
 
             mbedtls_gcm_free( &ctx );
@@ -25411,24 +23470,6 @@ int mbedtls_gcm_self_test( int verbose )
             if( verbose != 0 )
                 mbedtls_printf( "passed\n" );
 
-<<<<<<< HEAD
-            if( verbose != 0 )
-                mbedtls_printf( "  AES-GCM-%3d #%d split (%s): ",
-                                 key_len, i, "enc" );
-
-            mbedtls_gcm_setkey( &ctx, cipher, key[key_index[i]], key_len );
-
-            ret = mbedtls_gcm_starts( &ctx, MBEDTLS_GCM_ENCRYPT,
-                              iv[iv_index[i]], iv_len[i],
-                              additional[add_index[i]], add_len[i] );
-            if( ret != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                return( 1 );
-            }
-=======
             mbedtls_gcm_init( &ctx );
 
             if( verbose != 0 )
@@ -25445,61 +23486,23 @@ int mbedtls_gcm_self_test( int verbose )
                                       additional[add_index[i]], add_len[i] );
             if( ret != 0 )
                 goto exit;
->>>>>>> local
 
             if( pt_len[i] > 32 )
             {
                 size_t rest_len = pt_len[i] - 32;
                 ret = mbedtls_gcm_update( &ctx, 32, pt[pt_index[i]], buf );
                 if( ret != 0 )
-<<<<<<< HEAD
-                {
-                    if( verbose != 0 )
-                        mbedtls_printf( "failed\n" );
-
-                    return( 1 );
-                }
-=======
                     goto exit;
->>>>>>> local
 
                 ret = mbedtls_gcm_update( &ctx, rest_len, pt[pt_index[i]] + 32,
                                   buf + 32 );
                 if( ret != 0 )
-<<<<<<< HEAD
-                {
-                    if( verbose != 0 )
-                        mbedtls_printf( "failed\n" );
-
-                    return( 1 );
-                }
-=======
                     goto exit;
->>>>>>> local
             }
             else
             {
                 ret = mbedtls_gcm_update( &ctx, pt_len[i], pt[pt_index[i]], buf );
                 if( ret != 0 )
-<<<<<<< HEAD
-                {
-                    if( verbose != 0 )
-                        mbedtls_printf( "failed\n" );
-
-                    return( 1 );
-                }
-            }
-
-            ret = mbedtls_gcm_finish( &ctx, tag_buf, 16 );
-            if( ret != 0 ||
-                memcmp( buf, ct[j * 6 + i], pt_len[i] ) != 0 ||
-                memcmp( tag_buf, tag[j * 6 + i], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                return( 1 );
-=======
                     goto exit;
             }
 
@@ -25512,7 +23515,6 @@ int mbedtls_gcm_self_test( int verbose )
             {
                 ret = 1;
                 goto exit;
->>>>>>> local
             }
 
             mbedtls_gcm_free( &ctx );
@@ -25520,13 +23522,6 @@ int mbedtls_gcm_self_test( int verbose )
             if( verbose != 0 )
                 mbedtls_printf( "passed\n" );
 
-<<<<<<< HEAD
-            if( verbose != 0 )
-                mbedtls_printf( "  AES-GCM-%3d #%d split (%s): ",
-                                 key_len, i, "dec" );
-
-            mbedtls_gcm_setkey( &ctx, cipher, key[key_index[i]], key_len );
-=======
             mbedtls_gcm_init( &ctx );
 
             if( verbose != 0 )
@@ -25537,68 +23532,18 @@ int mbedtls_gcm_self_test( int verbose )
                                       key_len );
             if( ret != 0 )
                 goto exit;
->>>>>>> local
 
             ret = mbedtls_gcm_starts( &ctx, MBEDTLS_GCM_DECRYPT,
                               iv[iv_index[i]], iv_len[i],
                               additional[add_index[i]], add_len[i] );
             if( ret != 0 )
-<<<<<<< HEAD
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                return( 1 );
-            }
-=======
                 goto exit;
->>>>>>> local
 
             if( pt_len[i] > 32 )
             {
                 size_t rest_len = pt_len[i] - 32;
                 ret = mbedtls_gcm_update( &ctx, 32, ct[j * 6 + i], buf );
                 if( ret != 0 )
-<<<<<<< HEAD
-                {
-                    if( verbose != 0 )
-                        mbedtls_printf( "failed\n" );
-
-                    return( 1 );
-                }
-
-                ret = mbedtls_gcm_update( &ctx, rest_len, ct[j * 6 + i] + 32,
-                                  buf + 32 );
-                if( ret != 0 )
-                {
-                    if( verbose != 0 )
-                        mbedtls_printf( "failed\n" );
-
-                    return( 1 );
-                }
-            }
-            else
-            {
-                ret = mbedtls_gcm_update( &ctx, pt_len[i], ct[j * 6 + i], buf );
-                if( ret != 0 )
-                {
-                    if( verbose != 0 )
-                        mbedtls_printf( "failed\n" );
-
-                    return( 1 );
-                }
-            }
-
-            ret = mbedtls_gcm_finish( &ctx, tag_buf, 16 );
-            if( ret != 0 ||
-                memcmp( buf, pt[pt_index[i]], pt_len[i] ) != 0 ||
-                memcmp( tag_buf, tag[j * 6 + i], 16 ) != 0 )
-            {
-                if( verbose != 0 )
-                    mbedtls_printf( "failed\n" );
-
-                return( 1 );
-=======
                     goto exit;
 
                 ret = mbedtls_gcm_update( &ctx, rest_len, ct[j * 6 + i] + 32,
@@ -25623,26 +23568,18 @@ int mbedtls_gcm_self_test( int verbose )
             {
                 ret = 1;
                 goto exit;
->>>>>>> local
             }
 
             mbedtls_gcm_free( &ctx );
 
             if( verbose != 0 )
                 mbedtls_printf( "passed\n" );
-<<<<<<< HEAD
-
-=======
->>>>>>> local
         }
     }
 
     if( verbose != 0 )
         mbedtls_printf( "\n" );
 
-<<<<<<< HEAD
-    return( 0 );
-=======
     ret = 0;
 
 exit:
@@ -25654,15 +23591,12 @@ exit:
     }
 
     return( ret );
->>>>>>> local
 }
 
 #endif /* MBEDTLS_SELF_TEST && MBEDTLS_AES_C */
 
 #endif /* MBEDTLS_GCM_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -25695,15 +23629,10 @@ exit:
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/havege.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /**
  *  \brief HAVEGE: HArdware Volatile Entropy Gathering and Expansion
  *
@@ -25746,13 +23675,7 @@ exit:
 #include <string.h>
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void havege_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /* ------------------------------------------------------------------------
  * On average, one iteration accesses two 8-word blocks in the havege WALK
@@ -25884,11 +23807,8 @@ static void havege_fill( mbedtls_havege_state *hs )
     PTX  = U1 = 0;
     PTY  = U2 = 0;
 
-<<<<<<< HEAD
-=======
     (void)PTX;
 
->>>>>>> local
     memset( RES, 0, sizeof( RES ) );
 
     while( n < MBEDTLS_HAVEGE_COLLECT_SIZE * 4 )
@@ -25921,11 +23841,7 @@ void mbedtls_havege_free( mbedtls_havege_state *hs )
     if( hs == NULL )
         return;
 
-<<<<<<< HEAD
-    havege_zeroize( hs, sizeof( mbedtls_havege_state ) );
-=======
     mbedtls_zeroize( hs, sizeof( mbedtls_havege_state ) );
->>>>>>> local
 }
 
 /*
@@ -25961,13 +23877,6 @@ int mbedtls_havege_random( void *p_rng, unsigned char *buf, size_t len )
 
 #endif /* MBEDTLS_HAVEGE_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/hmac_drbg.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -26004,7 +23913,6 @@ int mbedtls_havege_random( void *p_rng, unsigned char *buf, size_t len )
 
 /********* Start of file library/hmac_drbg.c ************/
 
->>>>>>> local
 /*
  *  HMAC_DRBG implementation (NIST SP 800-90)
  *
@@ -26058,13 +23966,7 @@ int mbedtls_havege_random( void *p_rng, unsigned char *buf, size_t len )
 #endif /* MBEDTLS_PLATFORM_C */
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void hmac_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * HMAC_DRBG context initialization
@@ -26349,11 +24251,7 @@ void mbedtls_hmac_drbg_free( mbedtls_hmac_drbg_context *ctx )
     mbedtls_mutex_free( &ctx->mutex );
 #endif
     mbedtls_md_free( &ctx->md_ctx );
-<<<<<<< HEAD
-    hmac_zeroize( ctx, sizeof( mbedtls_hmac_drbg_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_hmac_drbg_context ) );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_FS_IO)
@@ -26379,20 +24277,14 @@ int mbedtls_hmac_drbg_write_seed_file( mbedtls_hmac_drbg_context *ctx, const cha
 
 exit:
     fclose( f );
-<<<<<<< HEAD
-=======
     mbedtls_zeroize( buf, sizeof( buf ) );
 
->>>>>>> local
     return( ret );
 }
 
 int mbedtls_hmac_drbg_update_seed_file( mbedtls_hmac_drbg_context *ctx, const char *path )
 {
-<<<<<<< HEAD
-=======
     int ret = 0;
->>>>>>> local
     FILE *f;
     size_t n;
     unsigned char buf[ MBEDTLS_HMAC_DRBG_MAX_INPUT ];
@@ -26411,16 +24303,6 @@ int mbedtls_hmac_drbg_update_seed_file( mbedtls_hmac_drbg_context *ctx, const ch
     }
 
     if( fread( buf, 1, n, f ) != n )
-<<<<<<< HEAD
-    {
-        fclose( f );
-        return( MBEDTLS_ERR_HMAC_DRBG_FILE_IO_ERROR );
-    }
-
-    fclose( f );
-
-    mbedtls_hmac_drbg_update( ctx, buf, n );
-=======
         ret = MBEDTLS_ERR_HMAC_DRBG_FILE_IO_ERROR;
     else
         mbedtls_hmac_drbg_update( ctx, buf, n );
@@ -26431,7 +24313,6 @@ int mbedtls_hmac_drbg_update_seed_file( mbedtls_hmac_drbg_context *ctx, const ch
 
     if( ret != 0 )
         return( ret );
->>>>>>> local
 
     return( mbedtls_hmac_drbg_write_seed_file( ctx, path ) );
 }
@@ -26565,8 +24446,6 @@ int mbedtls_hmac_drbg_self_test( int verbose )
 
 #endif /* MBEDTLS_HMAC_DRBG_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -26599,15 +24478,10 @@ int mbedtls_hmac_drbg_self_test( int verbose )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/md.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /**
  * \file mbedtls_md.c
  *
@@ -26659,13 +24533,7 @@ int mbedtls_hmac_drbg_self_test( int verbose )
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void md_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * Reminder: update profiles in x509_crt.c when adding a new hash!
@@ -26807,19 +24675,11 @@ void mbedtls_md_free( mbedtls_md_context_t *ctx )
 
     if( ctx->hmac_ctx != NULL )
     {
-<<<<<<< HEAD
-        md_zeroize( ctx->hmac_ctx, 2 * ctx->md_info->block_size );
-        mbedtls_free( ctx->hmac_ctx );
-    }
-
-    md_zeroize( ctx, sizeof( mbedtls_md_context_t ) );
-=======
         mbedtls_zeroize( ctx->hmac_ctx, 2 * ctx->md_info->block_size );
         mbedtls_free( ctx->hmac_ctx );
     }
 
     mbedtls_zeroize( ctx, sizeof( mbedtls_md_context_t ) );
->>>>>>> local
 }
 
 int mbedtls_md_clone( mbedtls_md_context_t *dst,
@@ -26872,13 +24732,7 @@ int mbedtls_md_starts( mbedtls_md_context_t *ctx )
     if( ctx == NULL || ctx->md_info == NULL )
         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    ctx->md_info->starts_func( ctx->md_ctx );
-
-    return( 0 );
-=======
     return( ctx->md_info->starts_func( ctx->md_ctx ) );
->>>>>>> local
 }
 
 int mbedtls_md_update( mbedtls_md_context_t *ctx, const unsigned char *input, size_t ilen )
@@ -26886,13 +24740,7 @@ int mbedtls_md_update( mbedtls_md_context_t *ctx, const unsigned char *input, si
     if( ctx == NULL || ctx->md_info == NULL )
         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    ctx->md_info->update_func( ctx->md_ctx, input, ilen );
-
-    return( 0 );
-=======
     return( ctx->md_info->update_func( ctx->md_ctx, input, ilen ) );
->>>>>>> local
 }
 
 int mbedtls_md_finish( mbedtls_md_context_t *ctx, unsigned char *output )
@@ -26900,13 +24748,7 @@ int mbedtls_md_finish( mbedtls_md_context_t *ctx, unsigned char *output )
     if( ctx == NULL || ctx->md_info == NULL )
         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    ctx->md_info->finish_func( ctx->md_ctx, output );
-
-    return( 0 );
-=======
     return( ctx->md_info->finish_func( ctx->md_ctx, output ) );
->>>>>>> local
 }
 
 int mbedtls_md( const mbedtls_md_info_t *md_info, const unsigned char *input, size_t ilen,
@@ -26915,13 +24757,7 @@ int mbedtls_md( const mbedtls_md_info_t *md_info, const unsigned char *input, si
     if( md_info == NULL )
         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    md_info->digest_func( input, ilen, output );
-
-    return( 0 );
-=======
     return( md_info->digest_func( input, ilen, output ) );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_FS_IO)
@@ -26944,22 +24780,6 @@ int mbedtls_md_file( const mbedtls_md_info_t *md_info, const char *path, unsigne
     if( ( ret = mbedtls_md_setup( &ctx, md_info, 0 ) ) != 0 )
         goto cleanup;
 
-<<<<<<< HEAD
-    md_info->starts_func( ctx.md_ctx );
-
-    while( ( n = fread( buf, 1, sizeof( buf ), f ) ) > 0 )
-        md_info->update_func( ctx.md_ctx, buf, n );
-
-    if( ferror( f ) != 0 )
-    {
-        ret = MBEDTLS_ERR_MD_FILE_IO_ERROR;
-        goto cleanup;
-    }
-
-    md_info->finish_func( ctx.md_ctx, output );
-
-cleanup:
-=======
     if( ( ret = md_info->starts_func( ctx.md_ctx ) ) != 0 )
         goto cleanup;
 
@@ -26974,7 +24794,6 @@ cleanup:
 
 cleanup:
     mbedtls_zeroize( buf, sizeof( buf ) );
->>>>>>> local
     fclose( f );
     mbedtls_md_free( &ctx );
 
@@ -26984,10 +24803,7 @@ cleanup:
 
 int mbedtls_md_hmac_starts( mbedtls_md_context_t *ctx, const unsigned char *key, size_t keylen )
 {
-<<<<<<< HEAD
-=======
     int ret;
->>>>>>> local
     unsigned char sum[MBEDTLS_MD_MAX_SIZE];
     unsigned char *ipad, *opad;
     size_t i;
@@ -26997,18 +24813,12 @@ int mbedtls_md_hmac_starts( mbedtls_md_context_t *ctx, const unsigned char *key,
 
     if( keylen > (size_t) ctx->md_info->block_size )
     {
-<<<<<<< HEAD
-        ctx->md_info->starts_func( ctx->md_ctx );
-        ctx->md_info->update_func( ctx->md_ctx, key, keylen );
-        ctx->md_info->finish_func( ctx->md_ctx, sum );
-=======
         if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
             goto cleanup;
         if( ( ret = ctx->md_info->update_func( ctx->md_ctx, key, keylen ) ) != 0 )
             goto cleanup;
         if( ( ret = ctx->md_info->finish_func( ctx->md_ctx, sum ) ) != 0 )
             goto cleanup;
->>>>>>> local
 
         keylen = ctx->md_info->size;
         key = sum;
@@ -27026,14 +24836,6 @@ int mbedtls_md_hmac_starts( mbedtls_md_context_t *ctx, const unsigned char *key,
         opad[i] = (unsigned char)( opad[i] ^ key[i] );
     }
 
-<<<<<<< HEAD
-    md_zeroize( sum, sizeof( sum ) );
-
-    ctx->md_info->starts_func( ctx->md_ctx );
-    ctx->md_info->update_func( ctx->md_ctx, ipad, ctx->md_info->block_size );
-
-    return( 0 );
-=======
     if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
         goto cleanup;
     if( ( ret = ctx->md_info->update_func( ctx->md_ctx, ipad,
@@ -27044,7 +24846,6 @@ cleanup:
     mbedtls_zeroize( sum, sizeof( sum ) );
 
     return( ret );
->>>>>>> local
 }
 
 int mbedtls_md_hmac_update( mbedtls_md_context_t *ctx, const unsigned char *input, size_t ilen )
@@ -27052,21 +24853,12 @@ int mbedtls_md_hmac_update( mbedtls_md_context_t *ctx, const unsigned char *inpu
     if( ctx == NULL || ctx->md_info == NULL || ctx->hmac_ctx == NULL )
         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    ctx->md_info->update_func( ctx->md_ctx, input, ilen );
-
-    return( 0 );
-=======
     return( ctx->md_info->update_func( ctx->md_ctx, input, ilen ) );
->>>>>>> local
 }
 
 int mbedtls_md_hmac_finish( mbedtls_md_context_t *ctx, unsigned char *output )
 {
-<<<<<<< HEAD
-=======
     int ret;
->>>>>>> local
     unsigned char tmp[MBEDTLS_MD_MAX_SIZE];
     unsigned char *opad;
 
@@ -27075,15 +24867,6 @@ int mbedtls_md_hmac_finish( mbedtls_md_context_t *ctx, unsigned char *output )
 
     opad = (unsigned char *) ctx->hmac_ctx + ctx->md_info->block_size;
 
-<<<<<<< HEAD
-    ctx->md_info->finish_func( ctx->md_ctx, tmp );
-    ctx->md_info->starts_func( ctx->md_ctx );
-    ctx->md_info->update_func( ctx->md_ctx, opad, ctx->md_info->block_size );
-    ctx->md_info->update_func( ctx->md_ctx, tmp, ctx->md_info->size );
-    ctx->md_info->finish_func( ctx->md_ctx, output );
-
-    return( 0 );
-=======
     if( ( ret = ctx->md_info->finish_func( ctx->md_ctx, tmp ) ) != 0 )
         return( ret );
     if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
@@ -27095,15 +24878,11 @@ int mbedtls_md_hmac_finish( mbedtls_md_context_t *ctx, unsigned char *output )
                                            ctx->md_info->size ) ) != 0 )
         return( ret );
     return( ctx->md_info->finish_func( ctx->md_ctx, output ) );
->>>>>>> local
 }
 
 int mbedtls_md_hmac_reset( mbedtls_md_context_t *ctx )
 {
-<<<<<<< HEAD
-=======
     int ret;
->>>>>>> local
     unsigned char *ipad;
 
     if( ctx == NULL || ctx->md_info == NULL || ctx->hmac_ctx == NULL )
@@ -27111,17 +24890,6 @@ int mbedtls_md_hmac_reset( mbedtls_md_context_t *ctx )
 
     ipad = (unsigned char *) ctx->hmac_ctx;
 
-<<<<<<< HEAD
-    ctx->md_info->starts_func( ctx->md_ctx );
-    ctx->md_info->update_func( ctx->md_ctx, ipad, ctx->md_info->block_size );
-
-    return( 0 );
-}
-
-int mbedtls_md_hmac( const mbedtls_md_info_t *md_info, const unsigned char *key, size_t keylen,
-                const unsigned char *input, size_t ilen,
-                unsigned char *output )
-=======
     if( ( ret = ctx->md_info->starts_func( ctx->md_ctx ) ) != 0 )
         return( ret );
     return( ctx->md_info->update_func( ctx->md_ctx, ipad,
@@ -27132,7 +24900,6 @@ int mbedtls_md_hmac( const mbedtls_md_info_t *md_info,
                      const unsigned char *key, size_t keylen,
                      const unsigned char *input, size_t ilen,
                      unsigned char *output )
->>>>>>> local
 {
     mbedtls_md_context_t ctx;
     int ret;
@@ -27143,17 +24910,6 @@ int mbedtls_md_hmac( const mbedtls_md_info_t *md_info,
     mbedtls_md_init( &ctx );
 
     if( ( ret = mbedtls_md_setup( &ctx, md_info, 1 ) ) != 0 )
-<<<<<<< HEAD
-        return( ret );
-
-    mbedtls_md_hmac_starts( &ctx, key, keylen );
-    mbedtls_md_hmac_update( &ctx, input, ilen );
-    mbedtls_md_hmac_finish( &ctx, output );
-
-    mbedtls_md_free( &ctx );
-
-    return( 0 );
-=======
         goto cleanup;
 
     if( ( ret = mbedtls_md_hmac_starts( &ctx, key, keylen ) ) != 0 )
@@ -27167,7 +24923,6 @@ cleanup:
     mbedtls_md_free( &ctx );
 
     return( ret );
->>>>>>> local
 }
 
 int mbedtls_md_process( mbedtls_md_context_t *ctx, const unsigned char *data )
@@ -27175,13 +24930,7 @@ int mbedtls_md_process( mbedtls_md_context_t *ctx, const unsigned char *data )
     if( ctx == NULL || ctx->md_info == NULL )
         return( MBEDTLS_ERR_MD_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    ctx->md_info->process_func( ctx->md_ctx, data );
-
-    return( 0 );
-=======
     return( ctx->md_info->process_func( ctx->md_ctx, data ) );
->>>>>>> local
 }
 
 unsigned char mbedtls_md_get_size( const mbedtls_md_info_t *md_info )
@@ -27210,12 +24959,6 @@ const char *mbedtls_md_get_name( const mbedtls_md_info_t *md_info )
 
 #endif /* MBEDTLS_MD_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/md2.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -27251,7 +24994,6 @@ const char *mbedtls_md_get_name( const mbedtls_md_info_t *md_info )
 
 
 /********* Start of file library/md2.c ************/
->>>>>>> local
 
 /*
  *  RFC 1115/1319 compliant MD2 implementation
@@ -27304,13 +25046,7 @@ const char *mbedtls_md_get_name( const mbedtls_md_info_t *md_info )
 #if !defined(MBEDTLS_MD2_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void md2_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 static const unsigned char PI_SUBST[256] =
 {
@@ -27352,11 +25088,7 @@ void mbedtls_md2_free( mbedtls_md2_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    md2_zeroize( ctx, sizeof( mbedtls_md2_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_md2_context ) );
->>>>>>> local
 }
 
 void mbedtls_md2_clone( mbedtls_md2_context *dst,
@@ -27368,22 +25100,12 @@ void mbedtls_md2_clone( mbedtls_md2_context *dst,
 /*
  * MD2 context setup
  */
-<<<<<<< HEAD
-void mbedtls_md2_starts( mbedtls_md2_context *ctx )
-=======
 int mbedtls_md2_starts_ret( mbedtls_md2_context *ctx )
->>>>>>> local
 {
     memset( ctx->cksum, 0, 16 );
     memset( ctx->state, 0, 46 );
     memset( ctx->buffer, 0, 16 );
     ctx->left = 0;
-<<<<<<< HEAD
-}
-
-#if !defined(MBEDTLS_MD2_PROCESS_ALT)
-void mbedtls_md2_process( mbedtls_md2_context *ctx )
-=======
 
     return( 0 );
 }
@@ -27397,7 +25119,6 @@ void mbedtls_md2_starts( mbedtls_md2_context *ctx )
 
 #if !defined(MBEDTLS_MD2_PROCESS_ALT)
 int mbedtls_internal_md2_process( mbedtls_md2_context *ctx )
->>>>>>> local
 {
     int i, j;
     unsigned char t = 0;
@@ -27429,9 +25150,6 @@ int mbedtls_internal_md2_process( mbedtls_md2_context *ctx )
            ( ctx->cksum[i] ^ PI_SUBST[ctx->buffer[i] ^ t] );
         t  = ctx->cksum[i];
     }
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -27442,31 +25160,21 @@ void mbedtls_md2_process( mbedtls_md2_context *ctx )
     mbedtls_internal_md2_process( ctx );
 }
 #endif
->>>>>>> local
 #endif /* !MBEDTLS_MD2_PROCESS_ALT */
 
 /*
  * MD2 process buffer
  */
-<<<<<<< HEAD
-void mbedtls_md2_update( mbedtls_md2_context *ctx, const unsigned char *input, size_t ilen )
-{
-=======
 int mbedtls_md2_update_ret( mbedtls_md2_context *ctx,
                             const unsigned char *input,
                             size_t ilen )
 {
     int ret;
->>>>>>> local
     size_t fill;
 
     while( ilen > 0 )
     {
-<<<<<<< HEAD
-        if( ctx->left + ilen > 16 )
-=======
         if( ilen > 16 - ctx->left )
->>>>>>> local
             fill = 16 - ctx->left;
         else
             fill = ilen;
@@ -27480,18 +25188,6 @@ int mbedtls_md2_update_ret( mbedtls_md2_context *ctx,
         if( ctx->left == 16 )
         {
             ctx->left = 0;
-<<<<<<< HEAD
-            mbedtls_md2_process( ctx );
-        }
-    }
-}
-
-/*
- * MD2 final digest
- */
-void mbedtls_md2_finish( mbedtls_md2_context *ctx, unsigned char output[16] )
-{
-=======
             if( ( ret = mbedtls_internal_md2_process( ctx ) ) != 0 )
                 return( ret );
         }
@@ -27516,7 +25212,6 @@ int mbedtls_md2_finish_ret( mbedtls_md2_context *ctx,
                             unsigned char output[16] )
 {
     int ret;
->>>>>>> local
     size_t i;
     unsigned char x;
 
@@ -27525,15 +25220,6 @@ int mbedtls_md2_finish_ret( mbedtls_md2_context *ctx,
     for( i = ctx->left; i < 16; i++ )
         ctx->buffer[i] = x;
 
-<<<<<<< HEAD
-    mbedtls_md2_process( ctx );
-
-    memcpy( ctx->buffer, ctx->cksum, 16 );
-    mbedtls_md2_process( ctx );
-
-    memcpy( output, ctx->state, 16 );
-}
-=======
     if( ( ret = mbedtls_internal_md2_process( ctx ) ) != 0 )
         return( ret );
 
@@ -27553,26 +25239,12 @@ void mbedtls_md2_finish( mbedtls_md2_context *ctx,
     mbedtls_md2_finish_ret( ctx, output );
 }
 #endif
->>>>>>> local
 
 #endif /* !MBEDTLS_MD2_ALT */
 
 /*
  * output = MD2( input buffer )
  */
-<<<<<<< HEAD
-void mbedtls_md2( const unsigned char *input, size_t ilen, unsigned char output[16] )
-{
-    mbedtls_md2_context ctx;
-
-    mbedtls_md2_init( &ctx );
-    mbedtls_md2_starts( &ctx );
-    mbedtls_md2_update( &ctx, input, ilen );
-    mbedtls_md2_finish( &ctx, output );
-    mbedtls_md2_free( &ctx );
-}
-
-=======
 int mbedtls_md2_ret( const unsigned char *input,
                      size_t ilen,
                      unsigned char output[16] )
@@ -27606,17 +25278,12 @@ void mbedtls_md2( const unsigned char *input,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 
 /*
  * RFC 1319 test vectors
  */
-<<<<<<< HEAD
-static const char md2_test_str[7][81] =
-=======
 static const unsigned char md2_test_str[7][81] =
->>>>>>> local
 {
     { "" },
     { "a" },
@@ -27624,12 +25291,6 @@ static const unsigned char md2_test_str[7][81] =
     { "message digest" },
     { "abcdefghijklmnopqrstuvwxyz" },
     { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" },
-<<<<<<< HEAD
-    { "12345678901234567890123456789012345678901234567890123456789012" \
-      "345678901234567890" }
-};
-
-=======
     { "12345678901234567890123456789012345678901234567890123456789012"
       "345678901234567890" }
 };
@@ -27639,7 +25300,6 @@ static const size_t md2_test_strlen[7] =
     0, 1, 3, 14, 26, 62, 80
 };
 
->>>>>>> local
 static const unsigned char md2_test_sum[7][16] =
 {
     { 0x83, 0x50, 0xE5, 0xA3, 0xE2, 0x4C, 0x15, 0x3D,
@@ -27663,11 +25323,7 @@ static const unsigned char md2_test_sum[7][16] =
  */
 int mbedtls_md2_self_test( int verbose )
 {
-<<<<<<< HEAD
-    int i;
-=======
     int i, ret = 0;
->>>>>>> local
     unsigned char md2sum[16];
 
     for( i = 0; i < 7; i++ )
@@ -27675,17 +25331,6 @@ int mbedtls_md2_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "  MD2 test #%d: ", i + 1 );
 
-<<<<<<< HEAD
-        mbedtls_md2( (unsigned char *) md2_test_str[i],
-             strlen( md2_test_str[i] ), md2sum );
-
-        if( memcmp( md2sum, md2_test_sum[i], 16 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            return( 1 );
-=======
         ret = mbedtls_md2_ret( md2_test_str[i], md2_test_strlen[i], md2sum );
         if( ret != 0 )
             goto fail;
@@ -27694,7 +25339,6 @@ int mbedtls_md2_self_test( int verbose )
         {
             ret = 1;
             goto fail;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -27705,27 +25349,18 @@ int mbedtls_md2_self_test( int verbose )
         mbedtls_printf( "\n" );
 
     return( 0 );
-<<<<<<< HEAD
-=======
 
 fail:
     if( verbose != 0 )
         mbedtls_printf( "failed\n" );
 
     return( ret );
->>>>>>> local
 }
 
 #endif /* MBEDTLS_SELF_TEST */
 
 #endif /* MBEDTLS_MD2_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/md4.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -27761,7 +25396,6 @@ fail:
 
 
 /********* Start of file library/md4.c ************/
->>>>>>> local
 
 /*
  *  RFC 1186/1320 compliant MD4 implementation
@@ -27814,13 +25448,7 @@ fail:
 #if !defined(MBEDTLS_MD4_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void md4_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (little endian)
@@ -27855,11 +25483,7 @@ void mbedtls_md4_free( mbedtls_md4_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    md4_zeroize( ctx, sizeof( mbedtls_md4_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_md4_context ) );
->>>>>>> local
 }
 
 void mbedtls_md4_clone( mbedtls_md4_context *dst,
@@ -27871,11 +25495,7 @@ void mbedtls_md4_clone( mbedtls_md4_context *dst,
 /*
  * MD4 context setup
  */
-<<<<<<< HEAD
-void mbedtls_md4_starts( mbedtls_md4_context *ctx )
-=======
 int mbedtls_md4_starts_ret( mbedtls_md4_context *ctx )
->>>>>>> local
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -27884,12 +25504,6 @@ int mbedtls_md4_starts_ret( mbedtls_md4_context *ctx )
     ctx->state[1] = 0xEFCDAB89;
     ctx->state[2] = 0x98BADCFE;
     ctx->state[3] = 0x10325476;
-<<<<<<< HEAD
-}
-
-#if !defined(MBEDTLS_MD4_PROCESS_ALT)
-void mbedtls_md4_process( mbedtls_md4_context *ctx, const unsigned char data[64] )
-=======
 
     return( 0 );
 }
@@ -27904,7 +25518,6 @@ void mbedtls_md4_starts( mbedtls_md4_context *ctx )
 #if !defined(MBEDTLS_MD4_PROCESS_ALT)
 int mbedtls_internal_md4_process( mbedtls_md4_context *ctx,
                                   const unsigned char data[64] )
->>>>>>> local
 {
     uint32_t X[16], A, B, C, D;
 
@@ -28005,9 +25618,6 @@ int mbedtls_internal_md4_process( mbedtls_md4_context *ctx,
     ctx->state[1] += B;
     ctx->state[2] += C;
     ctx->state[3] += D;
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -28019,31 +25629,21 @@ void mbedtls_md4_process( mbedtls_md4_context *ctx,
     mbedtls_internal_md4_process( ctx, data );
 }
 #endif
->>>>>>> local
 #endif /* !MBEDTLS_MD4_PROCESS_ALT */
 
 /*
  * MD4 process buffer
  */
-<<<<<<< HEAD
-void mbedtls_md4_update( mbedtls_md4_context *ctx, const unsigned char *input, size_t ilen )
-{
-=======
 int mbedtls_md4_update_ret( mbedtls_md4_context *ctx,
                             const unsigned char *input,
                             size_t ilen )
 {
     int ret;
->>>>>>> local
     size_t fill;
     uint32_t left;
 
     if( ilen == 0 )
-<<<<<<< HEAD
-        return;
-=======
         return( 0 );
->>>>>>> local
 
     left = ctx->total[0] & 0x3F;
     fill = 64 - left;
@@ -28058,14 +25658,10 @@ int mbedtls_md4_update_ret( mbedtls_md4_context *ctx,
     {
         memcpy( (void *) (ctx->buffer + left),
                 (void *) input, fill );
-<<<<<<< HEAD
-        mbedtls_md4_process( ctx, ctx->buffer );
-=======
 
         if( ( ret = mbedtls_internal_md4_process( ctx, ctx->buffer ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += fill;
         ilen  -= fill;
         left = 0;
@@ -28073,13 +25669,9 @@ int mbedtls_md4_update_ret( mbedtls_md4_context *ctx,
 
     while( ilen >= 64 )
     {
-<<<<<<< HEAD
-        mbedtls_md4_process( ctx, input );
-=======
         if( ( ret = mbedtls_internal_md4_process( ctx, input ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += 64;
         ilen  -= 64;
     }
@@ -28089,9 +25681,6 @@ int mbedtls_md4_update_ret( mbedtls_md4_context *ctx,
         memcpy( (void *) (ctx->buffer + left),
                 (void *) input, ilen );
     }
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -28104,7 +25693,6 @@ void mbedtls_md4_update( mbedtls_md4_context *ctx,
     mbedtls_md4_update_ret( ctx, input, ilen );
 }
 #endif
->>>>>>> local
 
 static const unsigned char md4_padding[64] =
 {
@@ -28117,15 +25705,10 @@ static const unsigned char md4_padding[64] =
 /*
  * MD4 final digest
  */
-<<<<<<< HEAD
-void mbedtls_md4_finish( mbedtls_md4_context *ctx, unsigned char output[16] )
-{
-=======
 int mbedtls_md4_finish_ret( mbedtls_md4_context *ctx,
                             unsigned char output[16] )
 {
     int ret;
->>>>>>> local
     uint32_t last, padn;
     uint32_t high, low;
     unsigned char msglen[8];
@@ -28140,10 +25723,6 @@ int mbedtls_md4_finish_ret( mbedtls_md4_context *ctx,
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
-<<<<<<< HEAD
-    mbedtls_md4_update( ctx, (unsigned char *) md4_padding, padn );
-    mbedtls_md4_update( ctx, msglen, 8 );
-=======
     ret = mbedtls_md4_update_ret( ctx, (unsigned char *)md4_padding, padn );
     if( ret != 0 )
         return( ret );
@@ -28151,16 +25730,11 @@ int mbedtls_md4_finish_ret( mbedtls_md4_context *ctx,
     if( ( ret = mbedtls_md4_update_ret( ctx, msglen, 8 ) ) != 0 )
         return( ret );
 
->>>>>>> local
 
     PUT_UINT32_LE( ctx->state[0], output,  0 );
     PUT_UINT32_LE( ctx->state[1], output,  4 );
     PUT_UINT32_LE( ctx->state[2], output,  8 );
     PUT_UINT32_LE( ctx->state[3], output, 12 );
-<<<<<<< HEAD
-}
-
-=======
 
     return( 0 );
 }
@@ -28173,25 +25747,11 @@ void mbedtls_md4_finish( mbedtls_md4_context *ctx,
 }
 #endif
 
->>>>>>> local
 #endif /* !MBEDTLS_MD4_ALT */
 
 /*
  * output = MD4( input buffer )
  */
-<<<<<<< HEAD
-void mbedtls_md4( const unsigned char *input, size_t ilen, unsigned char output[16] )
-{
-    mbedtls_md4_context ctx;
-
-    mbedtls_md4_init( &ctx );
-    mbedtls_md4_starts( &ctx );
-    mbedtls_md4_update( &ctx, input, ilen );
-    mbedtls_md4_finish( &ctx, output );
-    mbedtls_md4_free( &ctx );
-}
-
-=======
 int mbedtls_md4_ret( const unsigned char *input,
                      size_t ilen,
                      unsigned char output[16] )
@@ -28225,17 +25785,12 @@ void mbedtls_md4( const unsigned char *input,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 
 /*
  * RFC 1320 test vectors
  */
-<<<<<<< HEAD
-static const char md4_test_str[7][81] =
-=======
 static const unsigned char md4_test_str[7][81] =
->>>>>>> local
 {
     { "" },
     { "a" },
@@ -28243,12 +25798,6 @@ static const unsigned char md4_test_str[7][81] =
     { "message digest" },
     { "abcdefghijklmnopqrstuvwxyz" },
     { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" },
-<<<<<<< HEAD
-    { "12345678901234567890123456789012345678901234567890123456789012" \
-      "345678901234567890" }
-};
-
-=======
     { "12345678901234567890123456789012345678901234567890123456789012"
       "345678901234567890" }
 };
@@ -28258,7 +25807,6 @@ static const size_t md4_test_strlen[7] =
     0, 1, 3, 14, 26, 62, 80
 };
 
->>>>>>> local
 static const unsigned char md4_test_sum[7][16] =
 {
     { 0x31, 0xD6, 0xCF, 0xE0, 0xD1, 0x6A, 0xE9, 0x31,
@@ -28282,11 +25830,7 @@ static const unsigned char md4_test_sum[7][16] =
  */
 int mbedtls_md4_self_test( int verbose )
 {
-<<<<<<< HEAD
-    int i;
-=======
     int i, ret = 0;
->>>>>>> local
     unsigned char md4sum[16];
 
     for( i = 0; i < 7; i++ )
@@ -28294,17 +25838,6 @@ int mbedtls_md4_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "  MD4 test #%d: ", i + 1 );
 
-<<<<<<< HEAD
-        mbedtls_md4( (unsigned char *) md4_test_str[i],
-             strlen( md4_test_str[i] ), md4sum );
-
-        if( memcmp( md4sum, md4_test_sum[i], 16 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            return( 1 );
-=======
         ret = mbedtls_md4_ret( md4_test_str[i], md4_test_strlen[i], md4sum );
         if( ret != 0 )
             goto fail;
@@ -28313,7 +25846,6 @@ int mbedtls_md4_self_test( int verbose )
         {
             ret = 1;
             goto fail;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -28324,23 +25856,18 @@ int mbedtls_md4_self_test( int verbose )
         mbedtls_printf( "\n" );
 
     return( 0 );
-<<<<<<< HEAD
-=======
 
 fail:
     if( verbose != 0 )
         mbedtls_printf( "failed\n" );
 
     return( ret );
->>>>>>> local
 }
 
 #endif /* MBEDTLS_SELF_TEST */
 
 #endif /* MBEDTLS_MD4_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -28373,15 +25900,10 @@ fail:
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/md5.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  RFC 1321 compliant MD5 implementation
  *
@@ -28432,13 +25954,7 @@ fail:
 #if !defined(MBEDTLS_MD5_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void md5_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (little endian)
@@ -28473,11 +25989,7 @@ void mbedtls_md5_free( mbedtls_md5_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    md5_zeroize( ctx, sizeof( mbedtls_md5_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_md5_context ) );
->>>>>>> local
 }
 
 void mbedtls_md5_clone( mbedtls_md5_context *dst,
@@ -28489,11 +26001,7 @@ void mbedtls_md5_clone( mbedtls_md5_context *dst,
 /*
  * MD5 context setup
  */
-<<<<<<< HEAD
-void mbedtls_md5_starts( mbedtls_md5_context *ctx )
-=======
 int mbedtls_md5_starts_ret( mbedtls_md5_context *ctx )
->>>>>>> local
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -28502,12 +26010,6 @@ int mbedtls_md5_starts_ret( mbedtls_md5_context *ctx )
     ctx->state[1] = 0xEFCDAB89;
     ctx->state[2] = 0x98BADCFE;
     ctx->state[3] = 0x10325476;
-<<<<<<< HEAD
-}
-
-#if !defined(MBEDTLS_MD5_PROCESS_ALT)
-void mbedtls_md5_process( mbedtls_md5_context *ctx, const unsigned char data[64] )
-=======
 
     return( 0 );
 }
@@ -28522,7 +26024,6 @@ void mbedtls_md5_starts( mbedtls_md5_context *ctx )
 #if !defined(MBEDTLS_MD5_PROCESS_ALT)
 int mbedtls_internal_md5_process( mbedtls_md5_context *ctx,
                                   const unsigned char data[64] )
->>>>>>> local
 {
     uint32_t X[16], A, B, C, D;
 
@@ -28643,9 +26144,6 @@ int mbedtls_internal_md5_process( mbedtls_md5_context *ctx,
     ctx->state[1] += B;
     ctx->state[2] += C;
     ctx->state[3] += D;
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -28657,31 +26155,21 @@ void mbedtls_md5_process( mbedtls_md5_context *ctx,
     mbedtls_internal_md5_process( ctx, data );
 }
 #endif
->>>>>>> local
 #endif /* !MBEDTLS_MD5_PROCESS_ALT */
 
 /*
  * MD5 process buffer
  */
-<<<<<<< HEAD
-void mbedtls_md5_update( mbedtls_md5_context *ctx, const unsigned char *input, size_t ilen )
-{
-=======
 int mbedtls_md5_update_ret( mbedtls_md5_context *ctx,
                             const unsigned char *input,
                             size_t ilen )
 {
     int ret;
->>>>>>> local
     size_t fill;
     uint32_t left;
 
     if( ilen == 0 )
-<<<<<<< HEAD
-        return;
-=======
         return( 0 );
->>>>>>> local
 
     left = ctx->total[0] & 0x3F;
     fill = 64 - left;
@@ -28695,13 +26183,9 @@ int mbedtls_md5_update_ret( mbedtls_md5_context *ctx,
     if( left && ilen >= fill )
     {
         memcpy( (void *) (ctx->buffer + left), input, fill );
-<<<<<<< HEAD
-        mbedtls_md5_process( ctx, ctx->buffer );
-=======
         if( ( ret = mbedtls_internal_md5_process( ctx, ctx->buffer ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += fill;
         ilen  -= fill;
         left = 0;
@@ -28709,13 +26193,9 @@ int mbedtls_md5_update_ret( mbedtls_md5_context *ctx,
 
     while( ilen >= 64 )
     {
-<<<<<<< HEAD
-        mbedtls_md5_process( ctx, input );
-=======
         if( ( ret = mbedtls_internal_md5_process( ctx, input ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += 64;
         ilen  -= 64;
     }
@@ -28724,10 +26204,6 @@ int mbedtls_md5_update_ret( mbedtls_md5_context *ctx,
     {
         memcpy( (void *) (ctx->buffer + left), input, ilen );
     }
-<<<<<<< HEAD
-}
-
-=======
 
     return( 0 );
 }
@@ -28741,7 +26217,6 @@ void mbedtls_md5_update( mbedtls_md5_context *ctx,
 }
 #endif
 
->>>>>>> local
 static const unsigned char md5_padding[64] =
 {
  0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -28753,15 +26228,10 @@ static const unsigned char md5_padding[64] =
 /*
  * MD5 final digest
  */
-<<<<<<< HEAD
-void mbedtls_md5_finish( mbedtls_md5_context *ctx, unsigned char output[16] )
-{
-=======
 int mbedtls_md5_finish_ret( mbedtls_md5_context *ctx,
                             unsigned char output[16] )
 {
     int ret;
->>>>>>> local
     uint32_t last, padn;
     uint32_t high, low;
     unsigned char msglen[8];
@@ -28776,24 +26246,16 @@ int mbedtls_md5_finish_ret( mbedtls_md5_context *ctx,
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
-<<<<<<< HEAD
-    mbedtls_md5_update( ctx, md5_padding, padn );
-    mbedtls_md5_update( ctx, msglen, 8 );
-=======
     if( ( ret = mbedtls_md5_update_ret( ctx, md5_padding, padn ) ) != 0 )
             return( ret );
 
     if( ( ret = mbedtls_md5_update_ret( ctx, msglen, 8 ) ) != 0 )
             return( ret );
->>>>>>> local
 
     PUT_UINT32_LE( ctx->state[0], output,  0 );
     PUT_UINT32_LE( ctx->state[1], output,  4 );
     PUT_UINT32_LE( ctx->state[2], output,  8 );
     PUT_UINT32_LE( ctx->state[3], output, 12 );
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -28805,26 +26267,12 @@ void mbedtls_md5_finish( mbedtls_md5_context *ctx,
     mbedtls_md5_finish_ret( ctx, output );
 }
 #endif
->>>>>>> local
 
 #endif /* !MBEDTLS_MD5_ALT */
 
 /*
  * output = MD5( input buffer )
  */
-<<<<<<< HEAD
-void mbedtls_md5( const unsigned char *input, size_t ilen, unsigned char output[16] )
-{
-    mbedtls_md5_context ctx;
-
-    mbedtls_md5_init( &ctx );
-    mbedtls_md5_starts( &ctx );
-    mbedtls_md5_update( &ctx, input, ilen );
-    mbedtls_md5_finish( &ctx, output );
-    mbedtls_md5_free( &ctx );
-}
-
-=======
 int mbedtls_md5_ret( const unsigned char *input,
                      size_t ilen,
                      unsigned char output[16] )
@@ -28858,7 +26306,6 @@ void mbedtls_md5( const unsigned char *input,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 /*
  * RFC 1321 test vectors
@@ -28871,19 +26318,11 @@ static const unsigned char md5_test_buf[7][81] =
     { "message digest" },
     { "abcdefghijklmnopqrstuvwxyz" },
     { "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789" },
-<<<<<<< HEAD
-    { "12345678901234567890123456789012345678901234567890123456789012" \
-      "345678901234567890" }
-};
-
-static const int md5_test_buflen[7] =
-=======
     { "12345678901234567890123456789012345678901234567890123456789012"
       "345678901234567890" }
 };
 
 static const size_t md5_test_buflen[7] =
->>>>>>> local
 {
     0, 1, 3, 14, 26, 62, 80
 };
@@ -28911,11 +26350,7 @@ static const unsigned char md5_test_sum[7][16] =
  */
 int mbedtls_md5_self_test( int verbose )
 {
-<<<<<<< HEAD
-    int i;
-=======
     int i, ret = 0;
->>>>>>> local
     unsigned char md5sum[16];
 
     for( i = 0; i < 7; i++ )
@@ -28923,16 +26358,6 @@ int mbedtls_md5_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "  MD5 test #%d: ", i + 1 );
 
-<<<<<<< HEAD
-        mbedtls_md5( md5_test_buf[i], md5_test_buflen[i], md5sum );
-
-        if( memcmp( md5sum, md5_test_sum[i], 16 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            return( 1 );
-=======
         ret = mbedtls_md5_ret( md5_test_buf[i], md5_test_buflen[i], md5sum );
         if( ret != 0 )
             goto fail;
@@ -28941,7 +26366,6 @@ int mbedtls_md5_self_test( int verbose )
         {
             ret = 1;
             goto fail;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -28952,27 +26376,16 @@ int mbedtls_md5_self_test( int verbose )
         mbedtls_printf( "\n" );
 
     return( 0 );
-<<<<<<< HEAD
-=======
 
 fail:
     if( verbose != 0 )
         mbedtls_printf( "failed\n" );
 
     return( ret );
->>>>>>> local
 }
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef F
-#undef P
-#undef S
-
-#endif /* MBEDTLS_MD5_C */
-=======
 #endif /* MBEDTLS_MD5_C */
 
 /*
@@ -29006,16 +26419,11 @@ fail:
 #undef read
 #undef supported_init
 #undef write
->>>>>>> local
 
 
 
 /********* Start of file library/md_wrap.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /**
  * \file md_wrap.c
  *
@@ -29089,22 +26497,6 @@ fail:
 
 #if defined(MBEDTLS_MD2_C)
 
-<<<<<<< HEAD
-static void md2_starts_wrap( void *ctx )
-{
-    mbedtls_md2_starts( (mbedtls_md2_context *) ctx );
-}
-
-static void md2_update_wrap( void *ctx, const unsigned char *input,
-                             size_t ilen )
-{
-    mbedtls_md2_update( (mbedtls_md2_context *) ctx, input, ilen );
-}
-
-static void md2_finish_wrap( void *ctx, unsigned char *output )
-{
-    mbedtls_md2_finish( (mbedtls_md2_context *) ctx, output );
-=======
 static int md2_starts_wrap( void *ctx )
 {
     return( mbedtls_md2_starts_ret( (mbedtls_md2_context *) ctx ) );
@@ -29119,7 +26511,6 @@ static int md2_update_wrap( void *ctx, const unsigned char *input,
 static int md2_finish_wrap( void *ctx, unsigned char *output )
 {
     return( mbedtls_md2_finish_ret( (mbedtls_md2_context *) ctx, output ) );
->>>>>>> local
 }
 
 static void *md2_ctx_alloc( void )
@@ -29144,19 +26535,11 @@ static void md2_clone_wrap( void *dst, const void *src )
                  (const mbedtls_md2_context *) src );
 }
 
-<<<<<<< HEAD
-static void md2_process_wrap( void *ctx, const unsigned char *data )
-{
-    ((void) data);
-
-    mbedtls_md2_process( (mbedtls_md2_context *) ctx );
-=======
 static int md2_process_wrap( void *ctx, const unsigned char *data )
 {
     ((void) data);
 
     return( mbedtls_internal_md2_process( (mbedtls_md2_context *) ctx ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_md2_info = {
@@ -29167,11 +26550,7 @@ const mbedtls_md_info_t mbedtls_md2_info = {
     md2_starts_wrap,
     md2_update_wrap,
     md2_finish_wrap,
-<<<<<<< HEAD
-    mbedtls_md2,
-=======
     mbedtls_md2_ret,
->>>>>>> local
     md2_ctx_alloc,
     md2_ctx_free,
     md2_clone_wrap,
@@ -29182,22 +26561,6 @@ const mbedtls_md_info_t mbedtls_md2_info = {
 
 #if defined(MBEDTLS_MD4_C)
 
-<<<<<<< HEAD
-static void md4_starts_wrap( void *ctx )
-{
-    mbedtls_md4_starts( (mbedtls_md4_context *) ctx );
-}
-
-static void md4_update_wrap( void *ctx, const unsigned char *input,
-                             size_t ilen )
-{
-    mbedtls_md4_update( (mbedtls_md4_context *) ctx, input, ilen );
-}
-
-static void md4_finish_wrap( void *ctx, unsigned char *output )
-{
-    mbedtls_md4_finish( (mbedtls_md4_context *) ctx, output );
-=======
 static int md4_starts_wrap( void *ctx )
 {
     return( mbedtls_md4_starts_ret( (mbedtls_md4_context *) ctx ) );
@@ -29212,7 +26575,6 @@ static int md4_update_wrap( void *ctx, const unsigned char *input,
 static int md4_finish_wrap( void *ctx, unsigned char *output )
 {
     return( mbedtls_md4_finish_ret( (mbedtls_md4_context *) ctx, output ) );
->>>>>>> local
 }
 
 static void *md4_ctx_alloc( void )
@@ -29234,21 +26596,12 @@ static void md4_ctx_free( void *ctx )
 static void md4_clone_wrap( void *dst, const void *src )
 {
     mbedtls_md4_clone( (mbedtls_md4_context *) dst,
-<<<<<<< HEAD
-                 (const mbedtls_md4_context *) src );
-}
-
-static void md4_process_wrap( void *ctx, const unsigned char *data )
-{
-    mbedtls_md4_process( (mbedtls_md4_context *) ctx, data );
-=======
                        (const mbedtls_md4_context *) src );
 }
 
 static int md4_process_wrap( void *ctx, const unsigned char *data )
 {
     return( mbedtls_internal_md4_process( (mbedtls_md4_context *) ctx, data ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_md4_info = {
@@ -29259,11 +26612,7 @@ const mbedtls_md_info_t mbedtls_md4_info = {
     md4_starts_wrap,
     md4_update_wrap,
     md4_finish_wrap,
-<<<<<<< HEAD
-    mbedtls_md4,
-=======
     mbedtls_md4_ret,
->>>>>>> local
     md4_ctx_alloc,
     md4_ctx_free,
     md4_clone_wrap,
@@ -29274,22 +26623,6 @@ const mbedtls_md_info_t mbedtls_md4_info = {
 
 #if defined(MBEDTLS_MD5_C)
 
-<<<<<<< HEAD
-static void md5_starts_wrap( void *ctx )
-{
-    mbedtls_md5_starts( (mbedtls_md5_context *) ctx );
-}
-
-static void md5_update_wrap( void *ctx, const unsigned char *input,
-                             size_t ilen )
-{
-    mbedtls_md5_update( (mbedtls_md5_context *) ctx, input, ilen );
-}
-
-static void md5_finish_wrap( void *ctx, unsigned char *output )
-{
-    mbedtls_md5_finish( (mbedtls_md5_context *) ctx, output );
-=======
 static int md5_starts_wrap( void *ctx )
 {
     return( mbedtls_md5_starts_ret( (mbedtls_md5_context *) ctx ) );
@@ -29304,7 +26637,6 @@ static int md5_update_wrap( void *ctx, const unsigned char *input,
 static int md5_finish_wrap( void *ctx, unsigned char *output )
 {
     return( mbedtls_md5_finish_ret( (mbedtls_md5_context *) ctx, output ) );
->>>>>>> local
 }
 
 static void *md5_ctx_alloc( void )
@@ -29326,21 +26658,12 @@ static void md5_ctx_free( void *ctx )
 static void md5_clone_wrap( void *dst, const void *src )
 {
     mbedtls_md5_clone( (mbedtls_md5_context *) dst,
-<<<<<<< HEAD
-                 (const mbedtls_md5_context *) src );
-}
-
-static void md5_process_wrap( void *ctx, const unsigned char *data )
-{
-    mbedtls_md5_process( (mbedtls_md5_context *) ctx, data );
-=======
                        (const mbedtls_md5_context *) src );
 }
 
 static int md5_process_wrap( void *ctx, const unsigned char *data )
 {
     return( mbedtls_internal_md5_process( (mbedtls_md5_context *) ctx, data ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_md5_info = {
@@ -29351,11 +26674,7 @@ const mbedtls_md_info_t mbedtls_md5_info = {
     md5_starts_wrap,
     md5_update_wrap,
     md5_finish_wrap,
-<<<<<<< HEAD
-    mbedtls_md5,
-=======
     mbedtls_md5_ret,
->>>>>>> local
     md5_ctx_alloc,
     md5_ctx_free,
     md5_clone_wrap,
@@ -29366,22 +26685,6 @@ const mbedtls_md_info_t mbedtls_md5_info = {
 
 #if defined(MBEDTLS_RIPEMD160_C)
 
-<<<<<<< HEAD
-static void ripemd160_starts_wrap( void *ctx )
-{
-    mbedtls_ripemd160_starts( (mbedtls_ripemd160_context *) ctx );
-}
-
-static void ripemd160_update_wrap( void *ctx, const unsigned char *input,
-                                   size_t ilen )
-{
-    mbedtls_ripemd160_update( (mbedtls_ripemd160_context *) ctx, input, ilen );
-}
-
-static void ripemd160_finish_wrap( void *ctx, unsigned char *output )
-{
-    mbedtls_ripemd160_finish( (mbedtls_ripemd160_context *) ctx, output );
-=======
 static int ripemd160_starts_wrap( void *ctx )
 {
     return( mbedtls_ripemd160_starts_ret( (mbedtls_ripemd160_context *) ctx ) );
@@ -29398,7 +26701,6 @@ static int ripemd160_finish_wrap( void *ctx, unsigned char *output )
 {
     return( mbedtls_ripemd160_finish_ret( (mbedtls_ripemd160_context *) ctx,
                                           output ) );
->>>>>>> local
 }
 
 static void *ripemd160_ctx_alloc( void )
@@ -29423,16 +26725,10 @@ static void ripemd160_clone_wrap( void *dst, const void *src )
                        (const mbedtls_ripemd160_context *) src );
 }
 
-<<<<<<< HEAD
-static void ripemd160_process_wrap( void *ctx, const unsigned char *data )
-{
-    mbedtls_ripemd160_process( (mbedtls_ripemd160_context *) ctx, data );
-=======
 static int ripemd160_process_wrap( void *ctx, const unsigned char *data )
 {
     return( mbedtls_internal_ripemd160_process(
                                 (mbedtls_ripemd160_context *) ctx, data ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_ripemd160_info = {
@@ -29443,11 +26739,7 @@ const mbedtls_md_info_t mbedtls_ripemd160_info = {
     ripemd160_starts_wrap,
     ripemd160_update_wrap,
     ripemd160_finish_wrap,
-<<<<<<< HEAD
-    mbedtls_ripemd160,
-=======
     mbedtls_ripemd160_ret,
->>>>>>> local
     ripemd160_ctx_alloc,
     ripemd160_ctx_free,
     ripemd160_clone_wrap,
@@ -29458,22 +26750,6 @@ const mbedtls_md_info_t mbedtls_ripemd160_info = {
 
 #if defined(MBEDTLS_SHA1_C)
 
-<<<<<<< HEAD
-static void sha1_starts_wrap( void *ctx )
-{
-    mbedtls_sha1_starts( (mbedtls_sha1_context *) ctx );
-}
-
-static void sha1_update_wrap( void *ctx, const unsigned char *input,
-                              size_t ilen )
-{
-    mbedtls_sha1_update( (mbedtls_sha1_context *) ctx, input, ilen );
-}
-
-static void sha1_finish_wrap( void *ctx, unsigned char *output )
-{
-    mbedtls_sha1_finish( (mbedtls_sha1_context *) ctx, output );
-=======
 static int sha1_starts_wrap( void *ctx )
 {
     return( mbedtls_sha1_starts_ret( (mbedtls_sha1_context *) ctx ) );
@@ -29489,7 +26765,6 @@ static int sha1_update_wrap( void *ctx, const unsigned char *input,
 static int sha1_finish_wrap( void *ctx, unsigned char *output )
 {
     return( mbedtls_sha1_finish_ret( (mbedtls_sha1_context *) ctx, output ) );
->>>>>>> local
 }
 
 static void *sha1_ctx_alloc( void )
@@ -29514,16 +26789,10 @@ static void sha1_ctx_free( void *ctx )
     mbedtls_free( ctx );
 }
 
-<<<<<<< HEAD
-static void sha1_process_wrap( void *ctx, const unsigned char *data )
-{
-    mbedtls_sha1_process( (mbedtls_sha1_context *) ctx, data );
-=======
 static int sha1_process_wrap( void *ctx, const unsigned char *data )
 {
     return( mbedtls_internal_sha1_process( (mbedtls_sha1_context *) ctx,
                                            data ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_sha1_info = {
@@ -29534,11 +26803,7 @@ const mbedtls_md_info_t mbedtls_sha1_info = {
     sha1_starts_wrap,
     sha1_update_wrap,
     sha1_finish_wrap,
-<<<<<<< HEAD
-    mbedtls_sha1,
-=======
     mbedtls_sha1_ret,
->>>>>>> local
     sha1_ctx_alloc,
     sha1_ctx_free,
     sha1_clone_wrap,
@@ -29552,28 +26817,6 @@ const mbedtls_md_info_t mbedtls_sha1_info = {
  */
 #if defined(MBEDTLS_SHA256_C)
 
-<<<<<<< HEAD
-static void sha224_starts_wrap( void *ctx )
-{
-    mbedtls_sha256_starts( (mbedtls_sha256_context *) ctx, 1 );
-}
-
-static void sha224_update_wrap( void *ctx, const unsigned char *input,
-                                size_t ilen )
-{
-    mbedtls_sha256_update( (mbedtls_sha256_context *) ctx, input, ilen );
-}
-
-static void sha224_finish_wrap( void *ctx, unsigned char *output )
-{
-    mbedtls_sha256_finish( (mbedtls_sha256_context *) ctx, output );
-}
-
-static void sha224_wrap( const unsigned char *input, size_t ilen,
-                    unsigned char *output )
-{
-    mbedtls_sha256( input, ilen, output, 1 );
-=======
 static int sha224_starts_wrap( void *ctx )
 {
     return( mbedtls_sha256_starts_ret( (mbedtls_sha256_context *) ctx, 1 ) );
@@ -29596,7 +26839,6 @@ static int sha224_wrap( const unsigned char *input, size_t ilen,
                         unsigned char *output )
 {
     return( mbedtls_sha256_ret( input, ilen, output, 1 ) );
->>>>>>> local
 }
 
 static void *sha224_ctx_alloc( void )
@@ -29621,16 +26863,10 @@ static void sha224_clone_wrap( void *dst, const void *src )
                     (const mbedtls_sha256_context *) src );
 }
 
-<<<<<<< HEAD
-static void sha224_process_wrap( void *ctx, const unsigned char *data )
-{
-    mbedtls_sha256_process( (mbedtls_sha256_context *) ctx, data );
-=======
 static int sha224_process_wrap( void *ctx, const unsigned char *data )
 {
     return( mbedtls_internal_sha256_process( (mbedtls_sha256_context *) ctx,
                                              data ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_sha224_info = {
@@ -29648,17 +26884,6 @@ const mbedtls_md_info_t mbedtls_sha224_info = {
     sha224_process_wrap,
 };
 
-<<<<<<< HEAD
-static void sha256_starts_wrap( void *ctx )
-{
-    mbedtls_sha256_starts( (mbedtls_sha256_context *) ctx, 0 );
-}
-
-static void sha256_wrap( const unsigned char *input, size_t ilen,
-                    unsigned char *output )
-{
-    mbedtls_sha256( input, ilen, output, 0 );
-=======
 static int sha256_starts_wrap( void *ctx )
 {
     return( mbedtls_sha256_starts_ret( (mbedtls_sha256_context *) ctx, 0 ) );
@@ -29668,7 +26893,6 @@ static int sha256_wrap( const unsigned char *input, size_t ilen,
                         unsigned char *output )
 {
     return( mbedtls_sha256_ret( input, ilen, output, 0 ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_sha256_info = {
@@ -29690,28 +26914,6 @@ const mbedtls_md_info_t mbedtls_sha256_info = {
 
 #if defined(MBEDTLS_SHA512_C)
 
-<<<<<<< HEAD
-static void sha384_starts_wrap( void *ctx )
-{
-    mbedtls_sha512_starts( (mbedtls_sha512_context *) ctx, 1 );
-}
-
-static void sha384_update_wrap( void *ctx, const unsigned char *input,
-                                size_t ilen )
-{
-    mbedtls_sha512_update( (mbedtls_sha512_context *) ctx, input, ilen );
-}
-
-static void sha384_finish_wrap( void *ctx, unsigned char *output )
-{
-    mbedtls_sha512_finish( (mbedtls_sha512_context *) ctx, output );
-}
-
-static void sha384_wrap( const unsigned char *input, size_t ilen,
-                    unsigned char *output )
-{
-    mbedtls_sha512( input, ilen, output, 1 );
-=======
 static int sha384_starts_wrap( void *ctx )
 {
     return( mbedtls_sha512_starts_ret( (mbedtls_sha512_context *) ctx, 1 ) );
@@ -29734,7 +26936,6 @@ static int sha384_wrap( const unsigned char *input, size_t ilen,
                         unsigned char *output )
 {
     return( mbedtls_sha512_ret( input, ilen, output, 1 ) );
->>>>>>> local
 }
 
 static void *sha384_ctx_alloc( void )
@@ -29759,16 +26960,10 @@ static void sha384_clone_wrap( void *dst, const void *src )
                     (const mbedtls_sha512_context *) src );
 }
 
-<<<<<<< HEAD
-static void sha384_process_wrap( void *ctx, const unsigned char *data )
-{
-    mbedtls_sha512_process( (mbedtls_sha512_context *) ctx, data );
-=======
 static int sha384_process_wrap( void *ctx, const unsigned char *data )
 {
     return( mbedtls_internal_sha512_process( (mbedtls_sha512_context *) ctx,
                                              data ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_sha384_info = {
@@ -29786,17 +26981,6 @@ const mbedtls_md_info_t mbedtls_sha384_info = {
     sha384_process_wrap,
 };
 
-<<<<<<< HEAD
-static void sha512_starts_wrap( void *ctx )
-{
-    mbedtls_sha512_starts( (mbedtls_sha512_context *) ctx, 0 );
-}
-
-static void sha512_wrap( const unsigned char *input, size_t ilen,
-                    unsigned char *output )
-{
-    mbedtls_sha512( input, ilen, output, 0 );
-=======
 static int sha512_starts_wrap( void *ctx )
 {
     return( mbedtls_sha512_starts_ret( (mbedtls_sha512_context *) ctx, 0 ) );
@@ -29806,7 +26990,6 @@ static int sha512_wrap( const unsigned char *input, size_t ilen,
                         unsigned char *output )
 {
     return( mbedtls_sha512_ret( input, ilen, output, 0 ) );
->>>>>>> local
 }
 
 const mbedtls_md_info_t mbedtls_sha512_info = {
@@ -29828,13 +27011,6 @@ const mbedtls_md_info_t mbedtls_sha512_info = {
 
 #endif /* MBEDTLS_MD_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/memory_buffer_alloc.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -29871,7 +27047,6 @@ const mbedtls_md_info_t mbedtls_sha512_info = {
 
 /********* Start of file library/memory_buffer_alloc.c ************/
 
->>>>>>> local
 /*
  *  Buffer-based memory allocator
  *
@@ -29917,13 +27092,7 @@ const mbedtls_md_info_t mbedtls_sha512_info = {
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void memory_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 #define MAGIC1       0xFF00AA55
 #define MAGIC2       0xEE119966
@@ -29991,11 +27160,7 @@ static void debug_header( memory_header *hdr )
 #endif
 }
 
-<<<<<<< HEAD
-static void debug_chain()
-=======
 static void debug_chain( void )
->>>>>>> local
 {
     memory_header *cur = heap.first;
 
@@ -30062,19 +27227,11 @@ static int verify_header( memory_header *hdr )
     return( 0 );
 }
 
-<<<<<<< HEAD
-static int verify_chain()
-{
-    memory_header *prv = heap.first, *cur = heap.first->next;
-
-    if( verify_header( heap.first ) != 0 )
-=======
 static int verify_chain( void )
 {
     memory_header *prv = heap.first, *cur;
 
     if( prv == NULL || verify_header( prv ) != 0 )
->>>>>>> local
     {
 #if defined(MBEDTLS_MEMORY_DEBUG)
         mbedtls_fprintf( stderr, "FATAL: verification of first header "
@@ -30092,11 +27249,8 @@ static int verify_chain( void )
         return( 1 );
     }
 
-<<<<<<< HEAD
-=======
     cur = heap.first->next;
 
->>>>>>> local
     while( cur != NULL )
     {
         if( verify_header( cur ) != 0 )
@@ -30140,13 +27294,9 @@ static void *buffer_alloc_calloc( size_t n, size_t size )
 
     original_len = len = n * size;
 
-<<<<<<< HEAD
-    if( n != 0 && len / n != size )
-=======
     if( n == 0 || size == 0 || len / n != size )
         return( NULL );
     else if( len > (size_t)-MBEDTLS_MEMORY_ALIGN_MULTIPLE )
->>>>>>> local
         return( NULL );
 
     if( len % MBEDTLS_MEMORY_ALIGN_MULTIPLE )
@@ -30287,11 +27437,7 @@ static void buffer_alloc_free( void *ptr )
     if( ptr == NULL || heap.buf == NULL || heap.first == NULL )
         return;
 
-<<<<<<< HEAD
-    if( p < heap.buf || p > heap.buf + heap.len )
-=======
     if( p < heap.buf || p >= heap.buf + heap.len )
->>>>>>> local
     {
 #if defined(MBEDTLS_MEMORY_DEBUG)
         mbedtls_fprintf( stderr, "FATAL: mbedtls_free() outside of managed "
@@ -30322,15 +27468,12 @@ static void buffer_alloc_free( void *ptr )
     heap.total_used -= hdr->size;
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_MEMORY_BACKTRACE)
     free( hdr->trace );
     hdr->trace = NULL;
     hdr->trace_count = 0;
 #endif
 
->>>>>>> local
     // Regroup with block before
     //
     if( hdr->prev != NULL && hdr->prev->alloc == 0 )
@@ -30346,12 +27489,6 @@ static void buffer_alloc_free( void *ptr )
         if( hdr->next != NULL )
             hdr->next->prev = hdr;
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_MEMORY_BACKTRACE)
-        free( old->trace );
-#endif
-=======
->>>>>>> local
         memset( old, 0, sizeof(memory_header) );
     }
 
@@ -30391,12 +27528,6 @@ static void buffer_alloc_free( void *ptr )
         if( hdr->next != NULL )
             hdr->next->prev = hdr;
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_MEMORY_BACKTRACE)
-        free( old->trace );
-#endif
-=======
->>>>>>> local
         memset( old, 0, sizeof(memory_header) );
     }
 
@@ -30411,14 +27542,6 @@ static void buffer_alloc_free( void *ptr )
         heap.first_free = hdr;
     }
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_MEMORY_BACKTRACE)
-    hdr->trace = NULL;
-    hdr->trace_count = 0;
-#endif
-
-=======
->>>>>>> local
     if( ( heap.verify & MBEDTLS_MEMORY_VERIFY_FREE ) && verify_chain() != 0 )
         mbedtls_exit( 1 );
 }
@@ -30428,21 +27551,13 @@ void mbedtls_memory_buffer_set_verify( int verify )
     heap.verify = verify;
 }
 
-<<<<<<< HEAD
-int mbedtls_memory_buffer_alloc_verify()
-=======
 int mbedtls_memory_buffer_alloc_verify( void )
->>>>>>> local
 {
     return verify_chain();
 }
 
 #if defined(MBEDTLS_MEMORY_DEBUG)
-<<<<<<< HEAD
-void mbedtls_memory_buffer_alloc_status()
-=======
 void mbedtls_memory_buffer_alloc_status( void )
->>>>>>> local
 {
     mbedtls_fprintf( stderr,
                       "Current use: %zu blocks / %zu bytes, max: %zu blocks / "
@@ -30506,12 +27621,7 @@ static void buffer_alloc_free_mutexed( void *ptr )
 
 void mbedtls_memory_buffer_alloc_init( unsigned char *buf, size_t len )
 {
-<<<<<<< HEAD
-    memset( &heap, 0, sizeof(buffer_alloc_ctx) );
-    memset( buf, 0, len );
-=======
     memset( &heap, 0, sizeof( buffer_alloc_ctx ) );
->>>>>>> local
 
 #if defined(MBEDTLS_THREADING_C)
     mbedtls_mutex_init( &heap.mutex );
@@ -30521,22 +27631,6 @@ void mbedtls_memory_buffer_alloc_init( unsigned char *buf, size_t len )
     mbedtls_platform_set_calloc_free( buffer_alloc_calloc, buffer_alloc_free );
 #endif
 
-<<<<<<< HEAD
-    if( (size_t) buf % MBEDTLS_MEMORY_ALIGN_MULTIPLE )
-    {
-        /* Adjust len first since buf is used in the computation */
-        len -= MBEDTLS_MEMORY_ALIGN_MULTIPLE
-             - (size_t) buf % MBEDTLS_MEMORY_ALIGN_MULTIPLE;
-        buf += MBEDTLS_MEMORY_ALIGN_MULTIPLE
-             - (size_t) buf % MBEDTLS_MEMORY_ALIGN_MULTIPLE;
-    }
-
-    heap.buf = buf;
-    heap.len = len;
-
-    heap.first = (memory_header *) buf;
-    heap.first->size = len - sizeof(memory_header);
-=======
     if( len < sizeof( memory_header ) + MBEDTLS_MEMORY_ALIGN_MULTIPLE )
         return;
     else if( (size_t)buf % MBEDTLS_MEMORY_ALIGN_MULTIPLE )
@@ -30555,26 +27649,17 @@ void mbedtls_memory_buffer_alloc_init( unsigned char *buf, size_t len )
 
     heap.first = (memory_header *)buf;
     heap.first->size = len - sizeof( memory_header );
->>>>>>> local
     heap.first->magic1 = MAGIC1;
     heap.first->magic2 = MAGIC2;
     heap.first_free = heap.first;
 }
 
-<<<<<<< HEAD
-void mbedtls_memory_buffer_alloc_free()
-=======
 void mbedtls_memory_buffer_alloc_free( void )
->>>>>>> local
 {
 #if defined(MBEDTLS_THREADING_C)
     mbedtls_mutex_free( &heap.mutex );
 #endif
-<<<<<<< HEAD
-    memory_zeroize( &heap, sizeof(buffer_alloc_ctx) );
-=======
     mbedtls_zeroize( &heap, sizeof(buffer_alloc_ctx) );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_SELF_TEST)
@@ -30589,11 +27674,7 @@ static int check_pointer( void *p )
     return( 0 );
 }
 
-<<<<<<< HEAD
-static int check_all_free( )
-=======
 static int check_all_free( void )
->>>>>>> local
 {
     if(
 #if defined(MBEDTLS_MEMORY_DEBUG)
@@ -30717,12 +27798,6 @@ cleanup:
 
 #endif /* MBEDTLS_MEMORY_BUFFER_ALLOC_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/net.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -30758,7 +27833,6 @@ cleanup:
 
 
 /********* Start of file library/net_sockets.c ************/
->>>>>>> local
 
 /*
  *  TCP/IP or UDP/IP networking functions
@@ -30789,8 +27863,6 @@ cleanup:
 
 #if defined(MBEDTLS_NET_C)
 
-<<<<<<< HEAD
-=======
 #if !defined(unix) && !defined(__unix__) && !defined(__unix) && \
     !defined(__APPLE__) && !defined(_WIN32)
 #error "This module only works on Unix and Windows, see MBEDTLS_NET_C in config.h"
@@ -30802,7 +27874,6 @@ cleanup:
 #include <stdlib.h>
 #endif
 
->>>>>>> local
 
 
 #include <string.h>
@@ -30828,18 +27899,8 @@ cleanup:
 #endif
 #endif /* _MSC_VER */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef read
-#undef write
-#undef close
-
-#define read(fd,buf,len)        recv(fd,(char*)buf,(int) len,0)
-#define write(fd,buf,len)       send(fd,(char*)buf,(int) len,0)
-=======
 #define read(fd,buf,len)        recv( fd, (char*)( buf ), (int)( len ), 0 )
 #define write(fd,buf,len)       send( fd, (char*)( buf ), (int)( len ), 0 )
->>>>>>> local
 #define close(fd)               closesocket(fd)
 
 static int wsa_init_done = 0;
@@ -30850,13 +27911,7 @@ static int wsa_init_done = 0;
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
-<<<<<<< HEAD
-#if !VXWORKS
 #include <sys/time.h>
-#endif
-=======
-#include <sys/time.h>
->>>>>>> local
 #include <unistd.h>
 #include <signal.h>
 #include <fcntl.h>
@@ -30866,32 +27921,18 @@ static int wsa_init_done = 0;
 #endif /* ( _WIN32 || _WIN32_WCE ) && !EFIX64 && !EFI32 */
 
 /* Some MS functions want int and MSVC warns if we pass size_t,
-<<<<<<< HEAD
- * but the standard fucntions use socklen_t, so cast only for MSVC */
-=======
  * but the standard functions use socklen_t, so cast only for MSVC */
->>>>>>> local
 #if defined(_MSC_VER)
 #define MSVC_INT_CAST   (int)
 #else
 #define MSVC_INT_CAST
 #endif
 
-<<<<<<< HEAD
-#include <stdlib.h>
-=======
->>>>>>> local
 #include <stdio.h>
 
 #include <time.h>
 
-<<<<<<< HEAD
-#if !VXWORKS
 #include <stdint.h>
-#endif
-=======
-#include <stdint.h>
->>>>>>> local
 
 /*
  * Prepare for using the sockets interface
@@ -30928,12 +27969,8 @@ void mbedtls_net_init( mbedtls_net_context *ctx )
 /*
  * Initiate a TCP connection with host:port and the given protocol
  */
-<<<<<<< HEAD
-int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host, const char *port, int proto )
-=======
 int mbedtls_net_connect( mbedtls_net_context *ctx, const char *host,
                          const char *port, int proto )
->>>>>>> local
 {
     int ret;
     struct addrinfo hints, *addr_list, *cur;
@@ -31013,15 +28050,7 @@ int mbedtls_net_bind( mbedtls_net_context *ctx, const char *bind_ip, const char 
 
         n = 1;
         if( setsockopt( ctx->fd, SOL_SOCKET, SO_REUSEADDR,
-<<<<<<< HEAD
-#if VXWORKS
-                        (char *) &n, sizeof( n ) ) != 0 )
-#else
                         (const char *) &n, sizeof( n ) ) != 0 )
-#endif
-=======
-                        (const char *) &n, sizeof( n ) ) != 0 )
->>>>>>> local
         {
             close( ctx->fd );
             ret = MBEDTLS_ERR_NET_SOCKET_FAILED;
@@ -31046,11 +28075,7 @@ int mbedtls_net_bind( mbedtls_net_context *ctx, const char *bind_ip, const char 
             }
         }
 
-<<<<<<< HEAD
-        /* I we ever get there, it's a success */
-=======
         /* Bind was successful */
->>>>>>> local
         ret = 0;
         break;
     }
@@ -31081,27 +28106,18 @@ static int net_would_block( const mbedtls_net_context *ctx )
  */
 static int net_would_block( const mbedtls_net_context *ctx )
 {
-<<<<<<< HEAD
-=======
     int err = errno;
     
->>>>>>> local
     /*
      * Never return 'WOULD BLOCK' on a non-blocking socket
      */
     if( ( fcntl( ctx->fd, F_GETFL ) & O_NONBLOCK ) != O_NONBLOCK )
-<<<<<<< HEAD
-        return( 0 );
-
-    switch( errno )
-=======
     {
         errno = err;
         return( 0 );
     }
 
     switch( errno = err )
->>>>>>> local
     {
 #if defined EAGAIN
         case EAGAIN:
@@ -31148,11 +28164,7 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
     {
         /* TCP: actual accept() */
         ret = client_ctx->fd = (int) accept( bind_ctx->fd,
-<<<<<<< HEAD
-                                         (struct sockaddr *) &client_addr, &n );
-=======
                                              (struct sockaddr *) &client_addr, &n );
->>>>>>> local
     }
     else
     {
@@ -31198,18 +28210,8 @@ int mbedtls_net_accept( mbedtls_net_context *bind_ctx,
                          (struct sockaddr *) &local_addr, &n ) != 0 ||
             ( bind_ctx->fd = (int) socket( local_addr.ss_family,
                                            SOCK_DGRAM, IPPROTO_UDP ) ) < 0 ||
-<<<<<<< HEAD
-#if VXWORKS
-            setsockopt( bind_ctx->fd, SOL_SOCKET, SO_REUSEADDR,
-                        (char *) &one, sizeof( one ) ) != 0 )
-#else
             setsockopt( bind_ctx->fd, SOL_SOCKET, SO_REUSEADDR,
                         (const char *) &one, sizeof( one ) ) != 0 )
-#endif
-=======
-            setsockopt( bind_ctx->fd, SOL_SOCKET, SO_REUSEADDR,
-                        (const char *) &one, sizeof( one ) ) != 0 )
->>>>>>> local
         {
             return( MBEDTLS_ERR_NET_SOCKET_FAILED );
         }
@@ -31383,15 +28385,7 @@ int mbedtls_net_send( void *ctx, const unsigned char *buf, size_t len )
     if( fd < 0 )
         return( MBEDTLS_ERR_NET_INVALID_CONTEXT );
 
-<<<<<<< HEAD
-#if VXWORKS
-    ret = (int) write( fd, (char*) buf, len );
-#else
     ret = (int) write( fd, buf, len );
-#endif
-=======
-    ret = (int) write( fd, buf, len );
->>>>>>> local
 
     if( ret < 0 )
     {
@@ -31430,25 +28424,6 @@ void mbedtls_net_free( mbedtls_net_context *ctx )
     ctx->fd = -1;
 }
 
-<<<<<<< HEAD
-#if (defined(_WIN32) || defined(_WIN32_WCE)) && !defined(EFIX64) && !defined(EFI32)
-/* Amalgamated Release Mappings */
-    #undef read
-    #undef write
-    #undef close
-    #define read _read
-    #define write _write
-    #define close _close
-#endif
-
-#endif /* MBEDTLS_NET_C */
-
-
-
-/********* Start of file library/oid.c ************/
-
-
-=======
 #endif /* MBEDTLS_NET_C */
 
 /*
@@ -31487,7 +28462,6 @@ void mbedtls_net_free( mbedtls_net_context *ctx )
 
 /********* Start of file library/oid.c ************/
 
->>>>>>> local
 /**
  * \file oid.c
  *
@@ -31642,10 +28616,7 @@ int FN_NAME( ATTR1_TYPE ATTR1, ATTR2_TYPE ATTR2, const char **oid ,         \
     return( MBEDTLS_ERR_OID_NOT_FOUND );                                   \
 }
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_X509_USE_C) || defined(MBEDTLS_X509_CREATE_C)
->>>>>>> local
 /*
  * For X520 attribute types
  */
@@ -31741,10 +28712,6 @@ static const oid_x520_attr_t oid_x520_attr_type[] =
 FN_OID_TYPED_FROM_ASN1(oid_x520_attr_t, x520_attr, oid_x520_attr_type)
 FN_OID_GET_ATTR1(mbedtls_oid_get_attr_short_name, oid_x520_attr_t, x520_attr, const char *, short_name)
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_X509_USE_C) || defined(MBEDTLS_X509_CREATE_C)
-=======
->>>>>>> local
 /*
  * For X509 extensions
  */
@@ -31811,47 +28778,32 @@ typedef struct {
 
 static const oid_sig_alg_t oid_sig_alg[] =
 {
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_RSA_C)
 #if defined(MBEDTLS_MD2_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_PKCS1_MD2 ),        "md2WithRSAEncryption",     "RSA with MD2" },
         MBEDTLS_MD_MD2,      MBEDTLS_PK_RSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_MD2_C */
 #if defined(MBEDTLS_MD4_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_PKCS1_MD4 ),        "md4WithRSAEncryption",     "RSA with MD4" },
         MBEDTLS_MD_MD4,      MBEDTLS_PK_RSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_MD4_C */
 #if defined(MBEDTLS_MD5_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_PKCS1_MD5 ),        "md5WithRSAEncryption",     "RSA with MD5" },
         MBEDTLS_MD_MD5,      MBEDTLS_PK_RSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_MD5_C */
 #if defined(MBEDTLS_SHA1_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_PKCS1_SHA1 ),       "sha-1WithRSAEncryption",   "RSA with SHA1" },
         MBEDTLS_MD_SHA1,     MBEDTLS_PK_RSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA1_C */
 #if defined(MBEDTLS_SHA256_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_PKCS1_SHA224 ),     "sha224WithRSAEncryption",  "RSA with SHA-224" },
         MBEDTLS_MD_SHA224,   MBEDTLS_PK_RSA,
@@ -31860,11 +28812,8 @@ static const oid_sig_alg_t oid_sig_alg[] =
         { ADD_LEN( MBEDTLS_OID_PKCS1_SHA256 ),     "sha256WithRSAEncryption",  "RSA with SHA-256" },
         MBEDTLS_MD_SHA256,   MBEDTLS_PK_RSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA256_C */
 #if defined(MBEDTLS_SHA512_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_PKCS1_SHA384 ),     "sha384WithRSAEncryption",  "RSA with SHA-384" },
         MBEDTLS_MD_SHA384,   MBEDTLS_PK_RSA,
@@ -31873,31 +28822,22 @@ static const oid_sig_alg_t oid_sig_alg[] =
         { ADD_LEN( MBEDTLS_OID_PKCS1_SHA512 ),     "sha512WithRSAEncryption",  "RSA with SHA-512" },
         MBEDTLS_MD_SHA512,   MBEDTLS_PK_RSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA512_C */
 #if defined(MBEDTLS_SHA1_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_RSA_SHA_OBS ),      "sha-1WithRSAEncryption",   "RSA with SHA1" },
         MBEDTLS_MD_SHA1,     MBEDTLS_PK_RSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA1_C */
 #endif /* MBEDTLS_RSA_C */
 #if defined(MBEDTLS_ECDSA_C)
 #if defined(MBEDTLS_SHA1_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_ECDSA_SHA1 ),       "ecdsa-with-SHA1",      "ECDSA with SHA1" },
         MBEDTLS_MD_SHA1,     MBEDTLS_PK_ECDSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA1_C */
 #if defined(MBEDTLS_SHA256_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_ECDSA_SHA224 ),     "ecdsa-with-SHA224",    "ECDSA with SHA224" },
         MBEDTLS_MD_SHA224,   MBEDTLS_PK_ECDSA,
@@ -31906,11 +28846,8 @@ static const oid_sig_alg_t oid_sig_alg[] =
         { ADD_LEN( MBEDTLS_OID_ECDSA_SHA256 ),     "ecdsa-with-SHA256",    "ECDSA with SHA256" },
         MBEDTLS_MD_SHA256,   MBEDTLS_PK_ECDSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA256_C */
 #if defined(MBEDTLS_SHA512_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_ECDSA_SHA384 ),     "ecdsa-with-SHA384",    "ECDSA with SHA384" },
         MBEDTLS_MD_SHA384,   MBEDTLS_PK_ECDSA,
@@ -31919,20 +28856,14 @@ static const oid_sig_alg_t oid_sig_alg[] =
         { ADD_LEN( MBEDTLS_OID_ECDSA_SHA512 ),     "ecdsa-with-SHA512",    "ECDSA with SHA512" },
         MBEDTLS_MD_SHA512,   MBEDTLS_PK_ECDSA,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA512_C */
 #endif /* MBEDTLS_ECDSA_C */
 #if defined(MBEDTLS_RSA_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_RSASSA_PSS ),        "RSASSA-PSS",           "RSASSA-PSS" },
         MBEDTLS_MD_NONE,     MBEDTLS_PK_RSASSA_PSS,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_RSA_C */
->>>>>>> local
     {
         { NULL, 0, NULL, NULL },
         MBEDTLS_MD_NONE, MBEDTLS_PK_NONE,
@@ -31988,108 +28919,72 @@ typedef struct {
 
 static const oid_ecp_grp_t oid_ecp_grp[] =
 {
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECP_DP_SECP192R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP192R1 ), "secp192r1",    "secp192r1" },
         MBEDTLS_ECP_DP_SECP192R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP192R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_SECP224R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP224R1 ), "secp224r1",    "secp224r1" },
         MBEDTLS_ECP_DP_SECP224R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP224R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_SECP256R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP256R1 ), "secp256r1",    "secp256r1" },
         MBEDTLS_ECP_DP_SECP256R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP256R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_SECP384R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP384R1 ), "secp384r1",    "secp384r1" },
         MBEDTLS_ECP_DP_SECP384R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP384R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_SECP521R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP521R1 ), "secp521r1",    "secp521r1" },
         MBEDTLS_ECP_DP_SECP521R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP521R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_SECP192K1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP192K1 ), "secp192k1",    "secp192k1" },
         MBEDTLS_ECP_DP_SECP192K1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP192K1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_SECP224K1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP224K1 ), "secp224k1",    "secp224k1" },
         MBEDTLS_ECP_DP_SECP224K1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP224K1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_SECP256K1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_SECP256K1 ), "secp256k1",    "secp256k1" },
         MBEDTLS_ECP_DP_SECP256K1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_SECP256K1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_BP256R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_BP256R1 ),   "brainpoolP256r1","brainpool256r1" },
         MBEDTLS_ECP_DP_BP256R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_BP256R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_BP384R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_BP384R1 ),   "brainpoolP384r1","brainpool384r1" },
         MBEDTLS_ECP_DP_BP384R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_BP384R1_ENABLED */
 #if defined(MBEDTLS_ECP_DP_BP512R1_ENABLED)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_EC_GRP_BP512R1 ),   "brainpoolP512r1","brainpool512r1" },
         MBEDTLS_ECP_DP_BP512R1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_ECP_DP_BP512R1_ENABLED */
->>>>>>> local
     {
         { NULL, 0, NULL, NULL },
         MBEDTLS_ECP_DP_NONE,
@@ -32141,46 +29036,31 @@ typedef struct {
 
 static const oid_md_alg_t oid_md_alg[] =
 {
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_MD2_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_MD2 ),       "id-md2",       "MD2" },
         MBEDTLS_MD_MD2,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_MD2_C */
 #if defined(MBEDTLS_MD4_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_MD4 ),       "id-md4",       "MD4" },
         MBEDTLS_MD_MD4,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_MD4_C */
 #if defined(MBEDTLS_MD5_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_MD5 ),       "id-md5",       "MD5" },
         MBEDTLS_MD_MD5,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_MD5_C */
 #if defined(MBEDTLS_SHA1_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_SHA1 ),      "id-sha1",      "SHA-1" },
         MBEDTLS_MD_SHA1,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA1_C */
 #if defined(MBEDTLS_SHA256_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_SHA224 ),    "id-sha224",    "SHA-224" },
         MBEDTLS_MD_SHA224,
@@ -32189,11 +29069,8 @@ static const oid_md_alg_t oid_md_alg[] =
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_SHA256 ),    "id-sha256",    "SHA-256" },
         MBEDTLS_MD_SHA256,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA256_C */
 #if defined(MBEDTLS_SHA512_C)
->>>>>>> local
     {
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_SHA384 ),    "id-sha384",    "SHA-384" },
         MBEDTLS_MD_SHA384,
@@ -32202,10 +29079,7 @@ static const oid_md_alg_t oid_md_alg[] =
         { ADD_LEN( MBEDTLS_OID_DIGEST_ALG_SHA512 ),    "id-sha512",    "SHA-512" },
         MBEDTLS_MD_SHA512,
     },
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_SHA512_C */
->>>>>>> local
     {
         { NULL, 0, NULL, NULL },
         MBEDTLS_MD_NONE,
@@ -32215,8 +29089,6 @@ static const oid_md_alg_t oid_md_alg[] =
 FN_OID_TYPED_FROM_ASN1(oid_md_alg_t, md_alg, oid_md_alg)
 FN_OID_GET_ATTR1(mbedtls_oid_get_md_alg, oid_md_alg_t, md_alg, mbedtls_md_type_t, md_alg)
 FN_OID_GET_OID_BY_ATTR1(mbedtls_oid_get_oid_by_md, oid_md_alg_t, oid_md_alg, mbedtls_md_type_t, md_alg)
-<<<<<<< HEAD
-=======
 
 /*
  * For HMAC digestAlgorithm
@@ -32262,7 +29134,6 @@ static const oid_md_hmac_t oid_md_hmac[] =
 
 FN_OID_TYPED_FROM_ASN1(oid_md_hmac_t, md_hmac, oid_md_hmac)
 FN_OID_GET_ATTR1(mbedtls_oid_get_md_hmac, oid_md_hmac_t, md_hmac, mbedtls_md_type_t, md_hmac)
->>>>>>> local
 #endif /* MBEDTLS_MD_C */
 
 #if defined(MBEDTLS_PKCS12_C)
@@ -32345,13 +29216,6 @@ int mbedtls_oid_get_numeric_string( char *buf, size_t size,
     return( (int) ( size - n ) );
 }
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef SAFE_SNPRINTF
-
-#endif /* MBEDTLS_OID_C */
-
-=======
 #endif /* MBEDTLS_OID_C */
 
 /*
@@ -32386,15 +29250,10 @@ int mbedtls_oid_get_numeric_string( char *buf, size_t size,
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/padlock.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  VIA PadLock support functions
  *
@@ -32566,12 +29425,6 @@ int mbedtls_padlock_xcryptcbc( mbedtls_aes_context *ctx,
 
 #endif /* MBEDTLS_PADLOCK_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/pem.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -32607,7 +29460,6 @@ int mbedtls_padlock_xcryptcbc( mbedtls_aes_context *ctx,
 
 
 /********* Start of file library/pem.c ************/
->>>>>>> local
 
 /*
  *  Privacy Enhanced Mail (PEM) decoding
@@ -32655,19 +29507,10 @@ int mbedtls_padlock_xcryptcbc( mbedtls_aes_context *ctx,
 #define mbedtls_free       free
 #endif
 
-<<<<<<< HEAD
-/* Implementation that should never be optimized out by the compiler */
-static void pem_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-
-#if defined(MBEDTLS_PEM_PARSE_C)
-=======
 #if defined(MBEDTLS_PEM_PARSE_C)
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
 
->>>>>>> local
 void mbedtls_pem_init( mbedtls_pem_context *ctx )
 {
     memset( ctx, 0, sizeof( mbedtls_pem_context ) );
@@ -32700,35 +29543,20 @@ static int pem_get_iv( const unsigned char *s, unsigned char *iv,
     return( 0 );
 }
 
-<<<<<<< HEAD
-static void pem_pbkdf1( unsigned char *key, size_t keylen,
-                        unsigned char *iv,
-                        const unsigned char *pwd, size_t pwdlen )
-=======
 static int pem_pbkdf1( unsigned char *key, size_t keylen,
                        unsigned char *iv,
                        const unsigned char *pwd, size_t pwdlen )
->>>>>>> local
 {
     mbedtls_md5_context md5_ctx;
     unsigned char md5sum[16];
     size_t use_len;
-<<<<<<< HEAD
-=======
     int ret;
->>>>>>> local
 
     mbedtls_md5_init( &md5_ctx );
 
     /*
      * key[ 0..15] = MD5(pwd || IV)
      */
-<<<<<<< HEAD
-    mbedtls_md5_starts( &md5_ctx );
-    mbedtls_md5_update( &md5_ctx, pwd, pwdlen );
-    mbedtls_md5_update( &md5_ctx, iv,  8 );
-    mbedtls_md5_finish( &md5_ctx, md5sum );
-=======
     if( ( ret = mbedtls_md5_starts_ret( &md5_ctx ) ) != 0 )
         goto exit;
     if( ( ret = mbedtls_md5_update_ret( &md5_ctx, pwd, pwdlen ) ) != 0 )
@@ -32737,19 +29565,11 @@ static int pem_pbkdf1( unsigned char *key, size_t keylen,
         goto exit;
     if( ( ret = mbedtls_md5_finish_ret( &md5_ctx, md5sum ) ) != 0 )
         goto exit;
->>>>>>> local
 
     if( keylen <= 16 )
     {
         memcpy( key, md5sum, keylen );
-<<<<<<< HEAD
-
-        mbedtls_md5_free( &md5_ctx );
-        pem_zeroize( md5sum, 16 );
-        return;
-=======
         goto exit;
->>>>>>> local
     }
 
     memcpy( key, md5sum, 16 );
@@ -32757,13 +29577,6 @@ static int pem_pbkdf1( unsigned char *key, size_t keylen,
     /*
      * key[16..23] = MD5(key[ 0..15] || pwd || IV])
      */
-<<<<<<< HEAD
-    mbedtls_md5_starts( &md5_ctx );
-    mbedtls_md5_update( &md5_ctx, md5sum,  16 );
-    mbedtls_md5_update( &md5_ctx, pwd, pwdlen );
-    mbedtls_md5_update( &md5_ctx, iv,  8 );
-    mbedtls_md5_finish( &md5_ctx, md5sum );
-=======
     if( ( ret = mbedtls_md5_starts_ret( &md5_ctx ) ) != 0 )
         goto exit;
     if( ( ret = mbedtls_md5_update_ret( &md5_ctx, md5sum, 16 ) ) != 0 )
@@ -32774,7 +29587,6 @@ static int pem_pbkdf1( unsigned char *key, size_t keylen,
         goto exit;
     if( ( ret = mbedtls_md5_finish_ret( &md5_ctx, md5sum ) ) != 0 )
         goto exit;
->>>>>>> local
 
     use_len = 16;
     if( keylen < 32 )
@@ -32782,41 +29594,17 @@ static int pem_pbkdf1( unsigned char *key, size_t keylen,
 
     memcpy( key + 16, md5sum, use_len );
 
-<<<<<<< HEAD
-    mbedtls_md5_free( &md5_ctx );
-    pem_zeroize( md5sum, 16 );
-=======
 exit:
     mbedtls_md5_free( &md5_ctx );
     mbedtls_zeroize( md5sum, 16 );
 
     return( ret );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_DES_C)
 /*
  * Decrypt with DES-CBC, using PBKDF1 for key derivation
  */
-<<<<<<< HEAD
-static void pem_des_decrypt( unsigned char des_iv[8],
-                               unsigned char *buf, size_t buflen,
-                               const unsigned char *pwd, size_t pwdlen )
-{
-    mbedtls_des_context des_ctx;
-    unsigned char des_key[8];
-
-    mbedtls_des_init( &des_ctx );
-
-    pem_pbkdf1( des_key, 8, des_iv, pwd, pwdlen );
-
-    mbedtls_des_setkey_dec( &des_ctx, des_key );
-    mbedtls_des_crypt_cbc( &des_ctx, MBEDTLS_DES_DECRYPT, buflen,
-                     des_iv, buf, buf );
-
-    mbedtls_des_free( &des_ctx );
-    pem_zeroize( des_key, 8 );
-=======
 static int pem_des_decrypt( unsigned char des_iv[8],
                             unsigned char *buf, size_t buflen,
                             const unsigned char *pwd, size_t pwdlen )
@@ -32840,31 +29628,11 @@ exit:
     mbedtls_zeroize( des_key, 8 );
 
     return( ret );
->>>>>>> local
 }
 
 /*
  * Decrypt with 3DES-CBC, using PBKDF1 for key derivation
  */
-<<<<<<< HEAD
-static void pem_des3_decrypt( unsigned char des3_iv[8],
-                               unsigned char *buf, size_t buflen,
-                               const unsigned char *pwd, size_t pwdlen )
-{
-    mbedtls_des3_context des3_ctx;
-    unsigned char des3_key[24];
-
-    mbedtls_des3_init( &des3_ctx );
-
-    pem_pbkdf1( des3_key, 24, des3_iv, pwd, pwdlen );
-
-    mbedtls_des3_set3key_dec( &des3_ctx, des3_key );
-    mbedtls_des3_crypt_cbc( &des3_ctx, MBEDTLS_DES_DECRYPT, buflen,
-                     des3_iv, buf, buf );
-
-    mbedtls_des3_free( &des3_ctx );
-    pem_zeroize( des3_key, 24 );
-=======
 static int pem_des3_decrypt( unsigned char des3_iv[8],
                              unsigned char *buf, size_t buflen,
                              const unsigned char *pwd, size_t pwdlen )
@@ -32888,7 +29656,6 @@ exit:
     mbedtls_zeroize( des3_key, 24 );
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_DES_C */
 
@@ -32896,25 +29663,6 @@ exit:
 /*
  * Decrypt with AES-XXX-CBC, using PBKDF1 for key derivation
  */
-<<<<<<< HEAD
-static void pem_aes_decrypt( unsigned char aes_iv[16], unsigned int keylen,
-                               unsigned char *buf, size_t buflen,
-                               const unsigned char *pwd, size_t pwdlen )
-{
-    mbedtls_aes_context aes_ctx;
-    unsigned char aes_key[32];
-
-    mbedtls_aes_init( &aes_ctx );
-
-    pem_pbkdf1( aes_key, keylen, aes_iv, pwd, pwdlen );
-
-    mbedtls_aes_setkey_dec( &aes_ctx, aes_key, keylen * 8 );
-    mbedtls_aes_crypt_cbc( &aes_ctx, MBEDTLS_AES_DECRYPT, buflen,
-                     aes_iv, buf, buf );
-
-    mbedtls_aes_free( &aes_ctx );
-    pem_zeroize( aes_key, keylen );
-=======
 static int pem_aes_decrypt( unsigned char aes_iv[16], unsigned int keylen,
                             unsigned char *buf, size_t buflen,
                             const unsigned char *pwd, size_t pwdlen )
@@ -32938,7 +29686,6 @@ exit:
     mbedtls_zeroize( aes_key, keylen );
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_AES_C */
 
@@ -32991,11 +29738,7 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
 
     enc = 0;
 
-<<<<<<< HEAD
-    if( memcmp( s1, "Proc-Type: 4,ENCRYPTED", 22 ) == 0 )
-=======
     if( s2 - s1 >= 22 && memcmp( s1, "Proc-Type: 4,ENCRYPTED", 22 ) == 0 )
->>>>>>> local
     {
 #if defined(MBEDTLS_MD5_C) && defined(MBEDTLS_CIPHER_MODE_CBC) &&         \
     ( defined(MBEDTLS_DES_C) || defined(MBEDTLS_AES_C) )
@@ -33008,38 +29751,22 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
 
 
 #if defined(MBEDTLS_DES_C)
-<<<<<<< HEAD
-        if( memcmp( s1, "DEK-Info: DES-EDE3-CBC,", 23 ) == 0 )
-=======
         if( s2 - s1 >= 23 && memcmp( s1, "DEK-Info: DES-EDE3-CBC,", 23 ) == 0 )
->>>>>>> local
         {
             enc_alg = MBEDTLS_CIPHER_DES_EDE3_CBC;
 
             s1 += 23;
-<<<<<<< HEAD
-            if( pem_get_iv( s1, pem_iv, 8 ) != 0 )
-=======
             if( s2 - s1 < 16 || pem_get_iv( s1, pem_iv, 8 ) != 0 )
->>>>>>> local
                 return( MBEDTLS_ERR_PEM_INVALID_ENC_IV );
 
             s1 += 16;
         }
-<<<<<<< HEAD
-        else if( memcmp( s1, "DEK-Info: DES-CBC,", 18 ) == 0 )
-=======
         else if( s2 - s1 >= 18 && memcmp( s1, "DEK-Info: DES-CBC,", 18 ) == 0 )
->>>>>>> local
         {
             enc_alg = MBEDTLS_CIPHER_DES_CBC;
 
             s1 += 18;
-<<<<<<< HEAD
-            if( pem_get_iv( s1, pem_iv, 8) != 0 )
-=======
             if( s2 - s1 < 16 || pem_get_iv( s1, pem_iv, 8) != 0 )
->>>>>>> local
                 return( MBEDTLS_ERR_PEM_INVALID_ENC_IV );
 
             s1 += 16;
@@ -33047,17 +29774,11 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
 #endif /* MBEDTLS_DES_C */
 
 #if defined(MBEDTLS_AES_C)
-<<<<<<< HEAD
-        if( memcmp( s1, "DEK-Info: AES-", 14 ) == 0 )
-        {
-            if( memcmp( s1, "DEK-Info: AES-128-CBC,", 22 ) == 0 )
-=======
         if( s2 - s1 >= 14 && memcmp( s1, "DEK-Info: AES-", 14 ) == 0 )
         {
             if( s2 - s1 < 22 )
                 return( MBEDTLS_ERR_PEM_UNKNOWN_ENC_ALG );
             else if( memcmp( s1, "DEK-Info: AES-128-CBC,", 22 ) == 0 )
->>>>>>> local
                 enc_alg = MBEDTLS_CIPHER_AES_128_CBC;
             else if( memcmp( s1, "DEK-Info: AES-192-CBC,", 22 ) == 0 )
                 enc_alg = MBEDTLS_CIPHER_AES_192_CBC;
@@ -33067,11 +29788,7 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
                 return( MBEDTLS_ERR_PEM_UNKNOWN_ENC_ALG );
 
             s1 += 22;
-<<<<<<< HEAD
-            if( pem_get_iv( s1, pem_iv, 16 ) != 0 )
-=======
             if( s2 - s1 < 32 || pem_get_iv( s1, pem_iv, 16 ) != 0 )
->>>>>>> local
                 return( MBEDTLS_ERR_PEM_INVALID_ENC_IV );
 
             s1 += 32;
@@ -33090,11 +29807,7 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
           ( MBEDTLS_AES_C || MBEDTLS_DES_C ) */
     }
 
-<<<<<<< HEAD
-    if( s1 == s2 )
-=======
     if( s1 >= s2 )
->>>>>>> local
         return( MBEDTLS_ERR_PEM_INVALID_DATA );
 
     ret = mbedtls_base64_decode( NULL, 0, &len, s1, s2 - s1 );
@@ -33107,10 +29820,7 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
 
     if( ( ret = mbedtls_base64_decode( buf, len, &len, s1, s2 - s1 ) ) != 0 )
     {
-<<<<<<< HEAD
-=======
         mbedtls_zeroize( buf, len );
->>>>>>> local
         mbedtls_free( buf );
         return( MBEDTLS_ERR_PEM_INVALID_DATA + ret );
     }
@@ -33121,21 +29831,11 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
     ( defined(MBEDTLS_DES_C) || defined(MBEDTLS_AES_C) )
         if( pwd == NULL )
         {
-<<<<<<< HEAD
-=======
             mbedtls_zeroize( buf, len );
->>>>>>> local
             mbedtls_free( buf );
             return( MBEDTLS_ERR_PEM_PASSWORD_REQUIRED );
         }
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_DES_C)
-        if( enc_alg == MBEDTLS_CIPHER_DES_EDE3_CBC )
-            pem_des3_decrypt( pem_iv, buf, len, pwd, pwdlen );
-        else if( enc_alg == MBEDTLS_CIPHER_DES_CBC )
-            pem_des_decrypt( pem_iv, buf, len, pwd, pwdlen );
-=======
         ret = 0;
 
 #if defined(MBEDTLS_DES_C)
@@ -33143,20 +29843,10 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
             ret = pem_des3_decrypt( pem_iv, buf, len, pwd, pwdlen );
         else if( enc_alg == MBEDTLS_CIPHER_DES_CBC )
             ret = pem_des_decrypt( pem_iv, buf, len, pwd, pwdlen );
->>>>>>> local
 #endif /* MBEDTLS_DES_C */
 
 #if defined(MBEDTLS_AES_C)
         if( enc_alg == MBEDTLS_CIPHER_AES_128_CBC )
-<<<<<<< HEAD
-            pem_aes_decrypt( pem_iv, 16, buf, len, pwd, pwdlen );
-        else if( enc_alg == MBEDTLS_CIPHER_AES_192_CBC )
-            pem_aes_decrypt( pem_iv, 24, buf, len, pwd, pwdlen );
-        else if( enc_alg == MBEDTLS_CIPHER_AES_256_CBC )
-            pem_aes_decrypt( pem_iv, 32, buf, len, pwd, pwdlen );
-#endif /* MBEDTLS_AES_C */
-
-=======
             ret = pem_aes_decrypt( pem_iv, 16, buf, len, pwd, pwdlen );
         else if( enc_alg == MBEDTLS_CIPHER_AES_192_CBC )
             ret = pem_aes_decrypt( pem_iv, 24, buf, len, pwd, pwdlen );
@@ -33170,7 +29860,6 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
             return( ret );
         }
 
->>>>>>> local
         /*
          * The result will be ASN.1 starting with a SEQUENCE tag, with 1 to 3
          * length bytes (allow 4 to be sure) in all known use cases.
@@ -33179,18 +29868,12 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
          */
         if( len <= 2 || buf[0] != 0x30 || buf[1] > 0x83 )
         {
-<<<<<<< HEAD
-=======
             mbedtls_zeroize( buf, len );
->>>>>>> local
             mbedtls_free( buf );
             return( MBEDTLS_ERR_PEM_PASSWORD_MISMATCH );
         }
 #else
-<<<<<<< HEAD
-=======
         mbedtls_zeroize( buf, len );
->>>>>>> local
         mbedtls_free( buf );
         return( MBEDTLS_ERR_PEM_FEATURE_UNAVAILABLE );
 #endif /* MBEDTLS_MD5_C && MBEDTLS_CIPHER_MODE_CBC &&
@@ -33205,19 +29888,12 @@ int mbedtls_pem_read_buffer( mbedtls_pem_context *ctx, const char *header, const
 
 void mbedtls_pem_free( mbedtls_pem_context *ctx )
 {
-<<<<<<< HEAD
-    mbedtls_free( ctx->buf );
-    mbedtls_free( ctx->info );
-
-    pem_zeroize( ctx, sizeof( mbedtls_pem_context ) );
-=======
     if( ctx->buf != NULL )
         mbedtls_zeroize( ctx->buf, ctx->buflen );
     mbedtls_free( ctx->buf );
     mbedtls_free( ctx->info );
 
     mbedtls_zeroize( ctx, sizeof( mbedtls_pem_context ) );
->>>>>>> local
 }
 #endif /* MBEDTLS_PEM_PARSE_C */
 
@@ -33227,11 +29903,7 @@ int mbedtls_pem_write_buffer( const char *header, const char *footer,
                       unsigned char *buf, size_t buf_len, size_t *olen )
 {
     int ret;
-<<<<<<< HEAD
-    unsigned char *encode_buf, *c, *p = buf;
-=======
     unsigned char *encode_buf = NULL, *c, *p = buf;
->>>>>>> local
     size_t len = 0, use_len, add_len = 0;
 
     mbedtls_base64_encode( NULL, 0, &use_len, der_data, der_len );
@@ -33243,12 +29915,8 @@ int mbedtls_pem_write_buffer( const char *header, const char *footer,
         return( MBEDTLS_ERR_BASE64_BUFFER_TOO_SMALL );
     }
 
-<<<<<<< HEAD
-    if( ( encode_buf = mbedtls_calloc( 1, use_len ) ) == NULL )
-=======
     if( use_len != 0 &&
         ( ( encode_buf = mbedtls_calloc( 1, use_len ) ) == NULL ) )
->>>>>>> local
         return( MBEDTLS_ERR_PEM_ALLOC_FAILED );
 
     if( ( ret = mbedtls_base64_encode( encode_buf, use_len, &use_len, der_data,
@@ -33284,13 +29952,6 @@ int mbedtls_pem_write_buffer( const char *header, const char *footer,
 #endif /* MBEDTLS_PEM_WRITE_C */
 #endif /* MBEDTLS_PEM_PARSE_C || MBEDTLS_PEM_WRITE_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/pk.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -33327,7 +29988,6 @@ int mbedtls_pem_write_buffer( const char *header, const char *footer,
 
 /********* Start of file library/pk.c ************/
 
->>>>>>> local
 /*
  *  Public Key abstraction layer
  *
@@ -33369,18 +30029,11 @@ int mbedtls_pem_write_buffer( const char *header, const char *footer,
 
 #endif
 
-<<<<<<< HEAD
-/* Implementation that should never be optimized out by the compiler */
-static void pk_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #include <limits.h>
 #include <stdint.h>
 
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 
 /*
  * Initialise a mbedtls_pk_context
@@ -33404,11 +30057,7 @@ void mbedtls_pk_free( mbedtls_pk_context *ctx )
 
     ctx->pk_info->ctx_free_func( ctx->pk_ctx );
 
-<<<<<<< HEAD
-    pk_zeroize( ctx, sizeof( mbedtls_pk_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_pk_context ) );
->>>>>>> local
 }
 
 /*
@@ -33551,14 +30200,11 @@ int mbedtls_pk_verify_ext( mbedtls_pk_type_t type, const void *options,
         int ret;
         const mbedtls_pk_rsassa_pss_options *pss_opts;
 
-<<<<<<< HEAD
-=======
 #if SIZE_MAX > UINT_MAX
         if( md_alg == MBEDTLS_MD_NONE && UINT_MAX < hash_len )
             return( MBEDTLS_ERR_PK_BAD_INPUT_DATA );
 #endif /* SIZE_MAX > UINT_MAX */
 
->>>>>>> local
         if( options == NULL )
             return( MBEDTLS_ERR_PK_BAD_INPUT_DATA );
 
@@ -33582,11 +30228,7 @@ int mbedtls_pk_verify_ext( mbedtls_pk_type_t type, const void *options,
         return( 0 );
 #else
         return( MBEDTLS_ERR_PK_FEATURE_UNAVAILABLE );
-<<<<<<< HEAD
-#endif
-=======
 #endif /* MBEDTLS_RSA_C && MBEDTLS_PKCS1_V21 */
->>>>>>> local
     }
 
     /* General case: no options */
@@ -33727,13 +30369,6 @@ mbedtls_pk_type_t mbedtls_pk_get_type( const mbedtls_pk_context *ctx )
 
 #endif /* MBEDTLS_PK_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/pk_wrap.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -33770,7 +30405,6 @@ mbedtls_pk_type_t mbedtls_pk_get_type( const mbedtls_pk_context *ctx )
 
 /********* Start of file library/pk_wrap.c ************/
 
->>>>>>> local
 /*
  *  Public Key abstraction layer: wrapper functions
  *
@@ -33822,20 +30456,12 @@ mbedtls_pk_type_t mbedtls_pk_get_type( const mbedtls_pk_context *ctx )
 #define mbedtls_free       free
 #endif
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)
-/* Implementation that should never be optimized out by the compiler */
-static void pk_wrap_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #include <limits.h>
 #include <stdint.h>
 
 #if defined(MBEDTLS_PK_RSA_ALT_SUPPORT)
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 #endif
 
 #if defined(MBEDTLS_RSA_C)
@@ -33847,12 +30473,8 @@ static int rsa_can_do( mbedtls_pk_type_t type )
 
 static size_t rsa_get_bitlen( const void *ctx )
 {
-<<<<<<< HEAD
-    return( 8 * ((const mbedtls_rsa_context *) ctx)->len );
-=======
     const mbedtls_rsa_context * rsa = (const mbedtls_rsa_context *) ctx;
     return( 8 * mbedtls_rsa_get_len( rsa ) );
->>>>>>> local
 }
 
 static int rsa_verify_wrap( void *ctx, mbedtls_md_type_t md_alg,
@@ -33860,13 +30482,6 @@ static int rsa_verify_wrap( void *ctx, mbedtls_md_type_t md_alg,
                    const unsigned char *sig, size_t sig_len )
 {
     int ret;
-<<<<<<< HEAD
-
-    if( sig_len < ((mbedtls_rsa_context *) ctx)->len )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( ( ret = mbedtls_rsa_pkcs1_verify( (mbedtls_rsa_context *) ctx, NULL, NULL,
-=======
     mbedtls_rsa_context * rsa = (mbedtls_rsa_context *) ctx;
     size_t rsa_len = mbedtls_rsa_get_len( rsa );
 
@@ -33879,16 +30494,11 @@ static int rsa_verify_wrap( void *ctx, mbedtls_md_type_t md_alg,
         return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
 
     if( ( ret = mbedtls_rsa_pkcs1_verify( rsa, NULL, NULL,
->>>>>>> local
                                   MBEDTLS_RSA_PUBLIC, md_alg,
                                   (unsigned int) hash_len, hash, sig ) ) != 0 )
         return( ret );
 
-<<<<<<< HEAD
-    if( sig_len > ((mbedtls_rsa_context *) ctx)->len )
-=======
     if( sig_len > rsa_len )
->>>>>>> local
         return( MBEDTLS_ERR_PK_SIG_LEN_MISMATCH );
 
     return( 0 );
@@ -33899,11 +30509,6 @@ static int rsa_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
                    unsigned char *sig, size_t *sig_len,
                    int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
-<<<<<<< HEAD
-    *sig_len = ((mbedtls_rsa_context *) ctx)->len;
-
-    return( mbedtls_rsa_pkcs1_sign( (mbedtls_rsa_context *) ctx, f_rng, p_rng, MBEDTLS_RSA_PRIVATE,
-=======
     mbedtls_rsa_context * rsa = (mbedtls_rsa_context *) ctx;
 
 #if SIZE_MAX > UINT_MAX
@@ -33914,7 +30519,6 @@ static int rsa_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
     *sig_len = mbedtls_rsa_get_len( rsa );
 
     return( mbedtls_rsa_pkcs1_sign( rsa, f_rng, p_rng, MBEDTLS_RSA_PRIVATE,
->>>>>>> local
                 md_alg, (unsigned int) hash_len, hash, sig ) );
 }
 
@@ -33923,19 +30527,12 @@ static int rsa_decrypt_wrap( void *ctx,
                     unsigned char *output, size_t *olen, size_t osize,
                     int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
-<<<<<<< HEAD
-    if( ilen != ((mbedtls_rsa_context *) ctx)->len )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-
-    return( mbedtls_rsa_pkcs1_decrypt( (mbedtls_rsa_context *) ctx, f_rng, p_rng,
-=======
     mbedtls_rsa_context * rsa = (mbedtls_rsa_context *) ctx;
 
     if( ilen != mbedtls_rsa_get_len( rsa ) )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
     return( mbedtls_rsa_pkcs1_decrypt( rsa, f_rng, p_rng,
->>>>>>> local
                 MBEDTLS_RSA_PRIVATE, olen, input, output, osize ) );
 }
 
@@ -33944,23 +30541,14 @@ static int rsa_encrypt_wrap( void *ctx,
                     unsigned char *output, size_t *olen, size_t osize,
                     int (*f_rng)(void *, unsigned char *, size_t), void *p_rng )
 {
-<<<<<<< HEAD
-    *olen = ((mbedtls_rsa_context *) ctx)->len;
-=======
     mbedtls_rsa_context * rsa = (mbedtls_rsa_context *) ctx;
     *olen = mbedtls_rsa_get_len( rsa );
->>>>>>> local
 
     if( *olen > osize )
         return( MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE );
 
-<<<<<<< HEAD
-    return( mbedtls_rsa_pkcs1_encrypt( (mbedtls_rsa_context *) ctx,
-                f_rng, p_rng, MBEDTLS_RSA_PUBLIC, ilen, input, output ) );
-=======
     return( mbedtls_rsa_pkcs1_encrypt( rsa, f_rng, p_rng, MBEDTLS_RSA_PUBLIC,
                                        ilen, input, output ) );
->>>>>>> local
 }
 
 static int rsa_check_pair_wrap( const void *pub, const void *prv )
@@ -34240,14 +30828,11 @@ static int rsa_alt_sign_wrap( void *ctx, mbedtls_md_type_t md_alg,
 {
     mbedtls_rsa_alt_context *rsa_alt = (mbedtls_rsa_alt_context *) ctx;
 
-<<<<<<< HEAD
-=======
 #if SIZE_MAX > UINT_MAX
     if( UINT_MAX < hash_len )
         return( MBEDTLS_ERR_PK_BAD_INPUT_DATA );
 #endif /* SIZE_MAX > UINT_MAX */
 
->>>>>>> local
     *sig_len = rsa_alt->key_len_func( rsa_alt->key );
 
     return( rsa_alt->sign_func( rsa_alt->key, f_rng, p_rng, MBEDTLS_RSA_PRIVATE,
@@ -34313,11 +30898,7 @@ static void *rsa_alt_alloc_wrap( void )
 
 static void rsa_alt_free_wrap( void *ctx )
 {
-<<<<<<< HEAD
-    pk_wrap_zeroize( ctx, sizeof( mbedtls_rsa_alt_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_rsa_alt_context ) );
->>>>>>> local
     mbedtls_free( ctx );
 }
 
@@ -34344,8 +30925,6 @@ const mbedtls_pk_info_t mbedtls_rsa_alt_info = {
 
 #endif /* MBEDTLS_PK_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -34378,15 +30957,10 @@ const mbedtls_pk_info_t mbedtls_rsa_alt_info = {
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/pkcs11.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /**
  * \file pkcs11.c
  *
@@ -34628,13 +31202,6 @@ int mbedtls_pkcs11_sign( mbedtls_pkcs11_context *ctx,
 
 #endif /* defined(MBEDTLS_PKCS11_C) */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/pkcs12.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -34671,7 +31238,6 @@ int mbedtls_pkcs11_sign( mbedtls_pkcs11_context *ctx,
 
 /********* Start of file library/pkcs12.c ************/
 
->>>>>>> local
 /*
  *  PKCS#12 Personal Information Exchange Syntax
  *
@@ -34722,13 +31288,7 @@ int mbedtls_pkcs11_sign( mbedtls_pkcs11_context *ctx,
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void pkcs_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 static int pkcs12_parse_pbe_params( mbedtls_asn1_buf *params,
                                     mbedtls_asn1_buf *salt, int *iterations )
@@ -34771,11 +31331,7 @@ static int pkcs12_pbe_derive_key_iv( mbedtls_asn1_buf *pbe_params, mbedtls_md_ty
                                      unsigned char *key, size_t keylen,
                                      unsigned char *iv,  size_t ivlen )
 {
-<<<<<<< HEAD
-    int ret, iterations;
-=======
     int ret, iterations = 0;
->>>>>>> local
     mbedtls_asn1_buf salt;
     size_t i;
     unsigned char unipwd[PKCS12_MAX_PWDLEN * 2 + 2];
@@ -34848,11 +31404,7 @@ int mbedtls_pkcs12_pbe_sha1_rc4_128( mbedtls_asn1_buf *pbe_params, int mode,
         goto exit;
 
 exit:
-<<<<<<< HEAD
-    pkcs_zeroize( key, sizeof( key ) );
-=======
     mbedtls_zeroize( key, sizeof( key ) );
->>>>>>> local
     mbedtls_arc4_free( &ctx );
 
     return( ret );
@@ -34909,13 +31461,8 @@ int mbedtls_pkcs12_pbe( mbedtls_asn1_buf *pbe_params, int mode,
         ret = MBEDTLS_ERR_PKCS12_PASSWORD_MISMATCH;
 
 exit:
-<<<<<<< HEAD
-    pkcs_zeroize( key, sizeof( key ) );
-    pkcs_zeroize( iv,  sizeof( iv  ) );
-=======
     mbedtls_zeroize( key, sizeof( key ) );
     mbedtls_zeroize( iv,  sizeof( iv  ) );
->>>>>>> local
     mbedtls_cipher_free( &cipher_ctx );
 
     return( ret );
@@ -35043,17 +31590,10 @@ int mbedtls_pkcs12_derivation( unsigned char *data, size_t datalen,
     ret = 0;
 
 exit:
-<<<<<<< HEAD
-    pkcs_zeroize( salt_block, sizeof( salt_block ) );
-    pkcs_zeroize( pwd_block, sizeof( pwd_block ) );
-    pkcs_zeroize( hash_block, sizeof( hash_block ) );
-    pkcs_zeroize( hash_output, sizeof( hash_output ) );
-=======
     mbedtls_zeroize( salt_block, sizeof( salt_block ) );
     mbedtls_zeroize( pwd_block, sizeof( pwd_block ) );
     mbedtls_zeroize( hash_block, sizeof( hash_block ) );
     mbedtls_zeroize( hash_output, sizeof( hash_output ) );
->>>>>>> local
 
     mbedtls_md_free( &md_ctx );
 
@@ -35062,13 +31602,6 @@ exit:
 
 #endif /* MBEDTLS_PKCS12_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/pkcs5.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -35105,7 +31638,6 @@ exit:
 
 /********* Start of file library/pkcs5.c ************/
 
->>>>>>> local
 /**
  * \file pkcs5.c
  *
@@ -35204,17 +31736,9 @@ static int pkcs5_parse_pbkdf2_params( const mbedtls_asn1_buf *params,
     if( ( ret = mbedtls_asn1_get_alg_null( &p, end, &prf_alg_oid ) ) != 0 )
         return( MBEDTLS_ERR_PKCS5_INVALID_FORMAT + ret );
 
-<<<<<<< HEAD
-    if( MBEDTLS_OID_CMP( MBEDTLS_OID_HMAC_SHA1, &prf_alg_oid ) != 0 )
-        return( MBEDTLS_ERR_PKCS5_FEATURE_UNAVAILABLE );
-
-    *md_type = MBEDTLS_MD_SHA1;
-
-=======
     if( mbedtls_oid_get_md_hmac( &prf_alg_oid, md_type ) != 0 )
         return( MBEDTLS_ERR_PKCS5_FEATURE_UNAVAILABLE );
 
->>>>>>> local
     if( p != end )
         return( MBEDTLS_ERR_PKCS5_INVALID_FORMAT +
                 MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
@@ -35505,12 +32029,8 @@ int mbedtls_pkcs5_self_test( int verbose )
             mbedtls_printf( "passed\n" );
     }
 
-<<<<<<< HEAD
-    mbedtls_printf( "\n" );
-=======
     if( verbose != 0 )
         mbedtls_printf( "\n" );
->>>>>>> local
 
 exit:
     mbedtls_md_free( &sha1_ctx );
@@ -35523,12 +32043,6 @@ exit:
 
 #endif /* MBEDTLS_PKCS5_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/pkparse.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -35564,7 +32078,6 @@ exit:
 
 
 /********* Start of file library/pkparse.c ************/
->>>>>>> local
 
 /*
  *  Public Key layer for parsing key files and structures
@@ -35628,14 +32141,6 @@ exit:
 #define mbedtls_free       free
 #endif
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_FS_IO)
-/* Implementation that should never be optimized out by the compiler */
-static void pkparse_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-
-=======
 #if defined(MBEDTLS_FS_IO) || \
     defined(MBEDTLS_PKCS12_C) || defined(MBEDTLS_PKCS5_C)
 /* Implementation that should never be optimized out by the compiler */
@@ -35643,7 +32148,6 @@ static void pkparse_zeroize( void *v, size_t n ) {
 #endif
 
 #if defined(MBEDTLS_FS_IO)
->>>>>>> local
 /*
  * Load all data from a file into a given buffer.
  *
@@ -35679,14 +32183,10 @@ int mbedtls_pk_load_file( const char *path, unsigned char **buf, size_t *n )
     if( fread( *buf, 1, *n, f ) != *n )
     {
         fclose( f );
-<<<<<<< HEAD
-        mbedtls_free( *buf );
-=======
 
         mbedtls_zeroize( *buf, *n );
         mbedtls_free( *buf );
 
->>>>>>> local
         return( MBEDTLS_ERR_PK_FILE_IO_ERROR );
     }
 
@@ -35719,11 +32219,7 @@ int mbedtls_pk_parse_keyfile( mbedtls_pk_context *ctx,
         ret = mbedtls_pk_parse_key( ctx, buf, n,
                 (const unsigned char *) pwd, strlen( pwd ) );
 
-<<<<<<< HEAD
-    pkparse_zeroize( buf, n );
-=======
     mbedtls_zeroize( buf, n );
->>>>>>> local
     mbedtls_free( buf );
 
     return( ret );
@@ -35743,11 +32239,7 @@ int mbedtls_pk_parse_public_keyfile( mbedtls_pk_context *ctx, const char *path )
 
     ret = mbedtls_pk_parse_public_key( ctx, buf, n );
 
-<<<<<<< HEAD
-    pkparse_zeroize( buf, n );
-=======
     mbedtls_zeroize( buf, n );
->>>>>>> local
     mbedtls_free( buf );
 
     return( ret );
@@ -35768,13 +32260,10 @@ static int pk_get_ecparams( unsigned char **p, const unsigned char *end,
 {
     int ret;
 
-<<<<<<< HEAD
-=======
     if ( end - *p < 1 )
         return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT +
                 MBEDTLS_ERR_ASN1_OUT_OF_DATA );
 
->>>>>>> local
     /* Tag may be either OID or SEQUENCE */
     params->tag = **p;
     if( params->tag != MBEDTLS_ASN1_OID
@@ -36120,20 +32609,6 @@ static int pk_get_rsapubkey( unsigned char **p,
         return( MBEDTLS_ERR_PK_INVALID_PUBKEY +
                 MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
 
-<<<<<<< HEAD
-    if( ( ret = mbedtls_asn1_get_mpi( p, end, &rsa->N ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( p, end, &rsa->E ) ) != 0 )
-        return( MBEDTLS_ERR_PK_INVALID_PUBKEY + ret );
-
-    if( *p != end )
-        return( MBEDTLS_ERR_PK_INVALID_PUBKEY +
-                MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
-
-    if( ( ret = mbedtls_rsa_check_pubkey( rsa ) ) != 0 )
-        return( MBEDTLS_ERR_PK_INVALID_PUBKEY );
-
-    rsa->len = mbedtls_mpi_size( &rsa->N );
-=======
     /* Import N */
     if( ( ret = mbedtls_asn1_get_tag( p, end, &len, MBEDTLS_ASN1_INTEGER ) ) != 0 )
         return( MBEDTLS_ERR_PK_INVALID_PUBKEY + ret );
@@ -36163,7 +32638,6 @@ static int pk_get_rsapubkey( unsigned char **p,
     if( *p != end )
         return( MBEDTLS_ERR_PK_INVALID_PUBKEY +
                 MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
->>>>>>> local
 
     return( 0 );
 }
@@ -36275,12 +32749,6 @@ static int pk_parse_key_pkcs1_der( mbedtls_rsa_context *rsa,
                                    const unsigned char *key,
                                    size_t keylen )
 {
-<<<<<<< HEAD
-    int ret;
-    size_t len;
-    unsigned char *p, *end;
-
-=======
     int ret, version;
     size_t len;
     unsigned char *p, *end;
@@ -36288,7 +32756,6 @@ static int pk_parse_key_pkcs1_der( mbedtls_rsa_context *rsa,
     mbedtls_mpi T;
     mbedtls_mpi_init( &T );
 
->>>>>>> local
     p = (unsigned char *) key;
     end = p + keylen;
 
@@ -36316,55 +32783,16 @@ static int pk_parse_key_pkcs1_der( mbedtls_rsa_context *rsa,
 
     end = p + len;
 
-<<<<<<< HEAD
-    if( ( ret = mbedtls_asn1_get_int( &p, end, &rsa->ver ) ) != 0 )
-=======
     if( ( ret = mbedtls_asn1_get_int( &p, end, &version ) ) != 0 )
->>>>>>> local
     {
         return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret );
     }
 
-<<<<<<< HEAD
-    if( rsa->ver != 0 )
-=======
     if( version != 0 )
->>>>>>> local
     {
         return( MBEDTLS_ERR_PK_KEY_INVALID_VERSION );
     }
 
-<<<<<<< HEAD
-    if( ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->N  ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->E  ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->D  ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->P  ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->Q  ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->DP ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->DQ ) ) != 0 ||
-        ( ret = mbedtls_asn1_get_mpi( &p, end, &rsa->QP ) ) != 0 )
-    {
-        mbedtls_rsa_free( rsa );
-        return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret );
-    }
-
-    rsa->len = mbedtls_mpi_size( &rsa->N );
-
-    if( p != end )
-    {
-        mbedtls_rsa_free( rsa );
-        return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT +
-                MBEDTLS_ERR_ASN1_LENGTH_MISMATCH );
-    }
-
-    if( ( ret = mbedtls_rsa_check_privkey( rsa ) ) != 0 )
-    {
-        mbedtls_rsa_free( rsa );
-        return( ret );
-    }
-
-    return( 0 );
-=======
     /* Import N */
     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
                                       MBEDTLS_ASN1_INTEGER ) ) != 0 ||
@@ -36437,7 +32865,6 @@ cleanup:
     }
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_RSA_C */
 
@@ -36569,8 +32996,6 @@ static int pk_parse_key_sec1_der( mbedtls_ecp_keypair *eck,
 
 /*
  * Parse an unencrypted PKCS#8 encoded private key
-<<<<<<< HEAD
-=======
  *
  * Notes:
  *
@@ -36581,7 +33006,6 @@ static int pk_parse_key_sec1_der( mbedtls_ecp_keypair *eck,
  * - The function is responsible for freeing the provided
  *   PK context on failure.
  *
->>>>>>> local
  */
 static int pk_parse_key_pkcs8_unencrypted_der(
                                     mbedtls_pk_context *pk,
@@ -36597,11 +33021,7 @@ static int pk_parse_key_pkcs8_unencrypted_der(
     const mbedtls_pk_info_t *pk_info;
 
     /*
-<<<<<<< HEAD
-     * This function parses the PrivatKeyInfo object (PKCS#8 v1.2 = RFC 5208)
-=======
      * This function parses the PrivateKeyInfo object (PKCS#8 v1.2 = RFC 5208)
->>>>>>> local
      *
      *    PrivateKeyInfo ::= SEQUENCE {
      *      version                   Version,
@@ -36674,33 +33094,22 @@ static int pk_parse_key_pkcs8_unencrypted_der(
 
 /*
  * Parse an encrypted PKCS#8 encoded private key
-<<<<<<< HEAD
-=======
  *
  * To save space, the decryption happens in-place on the given key buffer.
  * Also, while this function may modify the keybuffer, it doesn't own it,
  * and instead it is the responsibility of the caller to zeroize and properly
  * free it after use.
  *
->>>>>>> local
  */
 #if defined(MBEDTLS_PKCS12_C) || defined(MBEDTLS_PKCS5_C)
 static int pk_parse_key_pkcs8_encrypted_der(
                                     mbedtls_pk_context *pk,
-<<<<<<< HEAD
-                                    const unsigned char *key, size_t keylen,
-=======
                                     unsigned char *key, size_t keylen,
->>>>>>> local
                                     const unsigned char *pwd, size_t pwdlen )
 {
     int ret, decrypted = 0;
     size_t len;
-<<<<<<< HEAD
-    unsigned char buf[2048];
-=======
     unsigned char *buf;
->>>>>>> local
     unsigned char *p, *end;
     mbedtls_asn1_buf pbe_alg_oid, pbe_params;
 #if defined(MBEDTLS_PKCS12_C)
@@ -36708,24 +33117,14 @@ static int pk_parse_key_pkcs8_encrypted_der(
     mbedtls_md_type_t md_alg;
 #endif
 
-<<<<<<< HEAD
-    memset( buf, 0, sizeof( buf ) );
-
-    p = (unsigned char *) key;
-=======
     p = key;
->>>>>>> local
     end = p + keylen;
 
     if( pwdlen == 0 )
         return( MBEDTLS_ERR_PK_PASSWORD_REQUIRED );
 
     /*
-<<<<<<< HEAD
-     * This function parses the EncryptedPrivatKeyInfo object (PKCS#8)
-=======
      * This function parses the EncryptedPrivateKeyInfo object (PKCS#8)
->>>>>>> local
      *
      *  EncryptedPrivateKeyInfo ::= SEQUENCE {
      *    encryptionAlgorithm  EncryptionAlgorithmIdentifier,
@@ -36737,10 +33136,7 @@ static int pk_parse_key_pkcs8_encrypted_der(
      *  EncryptedData ::= OCTET STRING
      *
      *  The EncryptedData OCTET STRING is a PKCS#8 PrivateKeyInfo
-<<<<<<< HEAD
-=======
      *
->>>>>>> local
      */
     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
@@ -36756,18 +33152,10 @@ static int pk_parse_key_pkcs8_encrypted_der(
     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len, MBEDTLS_ASN1_OCTET_STRING ) ) != 0 )
         return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT + ret );
 
-<<<<<<< HEAD
-    if( len > sizeof( buf ) )
-        return( MBEDTLS_ERR_PK_BAD_INPUT_DATA );
-
-    /*
-     * Decrypt EncryptedData with appropriate PDE
-=======
     buf = p;
 
     /*
      * Decrypt EncryptedData with appropriate PBE
->>>>>>> local
      */
 #if defined(MBEDTLS_PKCS12_C)
     if( mbedtls_oid_get_pkcs12_pbe_alg( &pbe_alg_oid, &md_alg, &cipher_alg ) == 0 )
@@ -36859,15 +33247,8 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *pk,
 
     if( ret == 0 )
     {
-<<<<<<< HEAD
-        if( ( pk_info = mbedtls_pk_info_from_type( MBEDTLS_PK_RSA ) ) == NULL )
-            return( MBEDTLS_ERR_PK_UNKNOWN_PK_ALG );
-
-        if( ( ret = mbedtls_pk_setup( pk, pk_info                    ) ) != 0 ||
-=======
         pk_info = mbedtls_pk_info_from_type( MBEDTLS_PK_RSA );
         if( ( ret = mbedtls_pk_setup( pk, pk_info ) ) != 0 ||
->>>>>>> local
             ( ret = pk_parse_key_pkcs1_der( mbedtls_pk_rsa( *pk ),
                                             pem.buf, pem.buflen ) ) != 0 )
         {
@@ -36896,16 +33277,9 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *pk,
                                key, pwd, pwdlen, &len );
     if( ret == 0 )
     {
-<<<<<<< HEAD
-        if( ( pk_info = mbedtls_pk_info_from_type( MBEDTLS_PK_ECKEY ) ) == NULL )
-            return( MBEDTLS_ERR_PK_UNKNOWN_PK_ALG );
-
-        if( ( ret = mbedtls_pk_setup( pk, pk_info                   ) ) != 0 ||
-=======
         pk_info = mbedtls_pk_info_from_type( MBEDTLS_PK_ECKEY );
 
         if( ( ret = mbedtls_pk_setup( pk, pk_info ) ) != 0 ||
->>>>>>> local
             ( ret = pk_parse_key_sec1_der( mbedtls_pk_ec( *pk ),
                                            pem.buf, pem.buflen ) ) != 0 )
         {
@@ -36976,21 +33350,6 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *pk,
 #endif /* MBEDTLS_PEM_PARSE_C */
 
     /*
-<<<<<<< HEAD
-    * At this point we only know it's not a PEM formatted key. Could be any
-    * of the known DER encoded private key formats
-    *
-    * We try the different DER format parsers to see if one passes without
-    * error
-    */
-#if defined(MBEDTLS_PKCS12_C) || defined(MBEDTLS_PKCS5_C)
-    if( ( ret = pk_parse_key_pkcs8_encrypted_der( pk, key, keylen,
-                                                  pwd, pwdlen ) ) == 0 )
-    {
-        return( 0 );
-    }
-
-=======
      * At this point we only know it's not a PEM formatted key. Could be any
      * of the known DER encoded private key formats
      *
@@ -37019,7 +33378,6 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *pk,
     if( ret == 0 )
         return( 0 );
 
->>>>>>> local
     mbedtls_pk_free( pk );
 
     if( ret == MBEDTLS_ERR_PK_PASSWORD_MISMATCH )
@@ -37034,13 +33392,6 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *pk,
     mbedtls_pk_free( pk );
 
 #if defined(MBEDTLS_RSA_C)
-<<<<<<< HEAD
-    if( ( pk_info = mbedtls_pk_info_from_type( MBEDTLS_PK_RSA ) ) == NULL )
-        return( MBEDTLS_ERR_PK_UNKNOWN_PK_ALG );
-
-    if( ( ret = mbedtls_pk_setup( pk, pk_info                           ) ) != 0 ||
-        ( ret = pk_parse_key_pkcs1_der( mbedtls_pk_rsa( *pk ), key, keylen ) ) == 0 )
-=======
 
     pk_info = mbedtls_pk_info_from_type( MBEDTLS_PK_RSA );
     if( ( ret = mbedtls_pk_setup( pk, pk_info ) ) != 0 ||
@@ -37050,22 +33401,10 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *pk,
         mbedtls_pk_free( pk );
     }
     else
->>>>>>> local
     {
         return( 0 );
     }
 
-<<<<<<< HEAD
-    mbedtls_pk_free( pk );
-#endif /* MBEDTLS_RSA_C */
-
-#if defined(MBEDTLS_ECP_C)
-    if( ( pk_info = mbedtls_pk_info_from_type( MBEDTLS_PK_ECKEY ) ) == NULL )
-        return( MBEDTLS_ERR_PK_UNKNOWN_PK_ALG );
-
-    if( ( ret = mbedtls_pk_setup( pk, pk_info                         ) ) != 0 ||
-        ( ret = pk_parse_key_sec1_der( mbedtls_pk_ec( *pk ), key, keylen ) ) == 0 )
-=======
 #endif /* MBEDTLS_RSA_C */
 
 #if defined(MBEDTLS_ECP_C)
@@ -37078,15 +33417,10 @@ int mbedtls_pk_parse_key( mbedtls_pk_context *pk,
         mbedtls_pk_free( pk );
     }
     else
->>>>>>> local
     {
         return( 0 );
     }
 
-<<<<<<< HEAD
-    mbedtls_pk_free( pk );
-=======
->>>>>>> local
 #endif /* MBEDTLS_ECP_C */
 
     return( MBEDTLS_ERR_PK_KEY_INVALID_FORMAT );
@@ -37100,19 +33434,14 @@ int mbedtls_pk_parse_public_key( mbedtls_pk_context *ctx,
 {
     int ret;
     unsigned char *p;
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_RSA_C)
     const mbedtls_pk_info_t *pk_info;
 #endif
->>>>>>> local
 #if defined(MBEDTLS_PEM_PARSE_C)
     size_t len;
     mbedtls_pem_context pem;
 
     mbedtls_pem_init( &pem );
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_RSA_C)
     /* Avoid calling mbedtls_pem_read_buffer() on non-null-terminated string */
     if( keylen == 0 || key[keylen - 1] != '\0' )
@@ -37144,7 +33473,6 @@ int mbedtls_pk_parse_public_key( mbedtls_pk_context *ctx,
         return( ret );
     }
 #endif /* MBEDTLS_RSA_C */
->>>>>>> local
 
     /* Avoid calling mbedtls_pem_read_buffer() on non-null-terminated string */
     if( keylen == 0 || key[keylen - 1] != '\0' )
@@ -37160,25 +33488,17 @@ int mbedtls_pk_parse_public_key( mbedtls_pk_context *ctx,
         /*
          * Was PEM encoded
          */
-<<<<<<< HEAD
-        key = pem.buf;
-        keylen = pem.buflen;
-=======
         p = pem.buf;
 
         ret = mbedtls_pk_parse_subpubkey( &p,  p + pem.buflen, ctx );
         mbedtls_pem_free( &pem );
         return( ret );
->>>>>>> local
     }
     else if( ret != MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT )
     {
         mbedtls_pem_free( &pem );
         return( ret );
     }
-<<<<<<< HEAD
-#endif /* MBEDTLS_PEM_PARSE_C */
-=======
     mbedtls_pem_free( &pem );
 #endif /* MBEDTLS_PEM_PARSE_C */
 
@@ -37201,25 +33521,15 @@ int mbedtls_pk_parse_public_key( mbedtls_pk_context *ctx,
         return( ret );
     }
 #endif /* MBEDTLS_RSA_C */
->>>>>>> local
     p = (unsigned char *) key;
 
     ret = mbedtls_pk_parse_subpubkey( &p, p + keylen, ctx );
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_PEM_PARSE_C)
-    mbedtls_pem_free( &pem );
-#endif
-
-=======
->>>>>>> local
     return( ret );
 }
 
 #endif /* MBEDTLS_PK_PARSE_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -37252,15 +33562,10 @@ int mbedtls_pk_parse_public_key( mbedtls_pk_context *ctx,
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/pkwrite.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  Public Key layer for writing key files and structures
  *
@@ -37325,15 +33630,6 @@ int mbedtls_pk_parse_public_key( mbedtls_pk_context *ctx,
  *  }
  */
 static int pk_write_rsa_pubkey( unsigned char **p, unsigned char *start,
-<<<<<<< HEAD
-                                  mbedtls_rsa_context *rsa )
-{
-    int ret;
-    size_t len = 0;
-
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( p, start, &rsa->E ) );
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( p, start, &rsa->N ) );
-=======
                                 mbedtls_rsa_context *rsa )
 {
     int ret;
@@ -37359,7 +33655,6 @@ end_of_export:
     mbedtls_mpi_free( &T );
     if( ret < 0 )
         return( ret );
->>>>>>> local
 
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_CONSTRUCTED |
@@ -37374,11 +33669,7 @@ end_of_export:
  * EC public key is an EC point
  */
 static int pk_write_ec_pubkey( unsigned char **p, unsigned char *start,
-<<<<<<< HEAD
-                                 mbedtls_ecp_keypair *ec )
-=======
                                mbedtls_ecp_keypair *ec )
->>>>>>> local
 {
     int ret;
     size_t len = 0;
@@ -37406,11 +33697,7 @@ static int pk_write_ec_pubkey( unsigned char **p, unsigned char *start,
  * }
  */
 static int pk_write_ec_param( unsigned char **p, unsigned char *start,
-<<<<<<< HEAD
-                                mbedtls_ecp_keypair *ec )
-=======
                               mbedtls_ecp_keypair *ec )
->>>>>>> local
 {
     int ret;
     size_t len = 0;
@@ -37427,11 +33714,7 @@ static int pk_write_ec_param( unsigned char **p, unsigned char *start,
 #endif /* MBEDTLS_ECP_C */
 
 int mbedtls_pk_write_pubkey( unsigned char **p, unsigned char *start,
-<<<<<<< HEAD
-                     const mbedtls_pk_context *key )
-=======
                              const mbedtls_pk_context *key )
->>>>>>> local
 {
     int ret;
     size_t len = 0;
@@ -37508,23 +33791,6 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
 #if defined(MBEDTLS_RSA_C)
     if( mbedtls_pk_get_type( key ) == MBEDTLS_PK_RSA )
     {
-<<<<<<< HEAD
-        mbedtls_rsa_context *rsa = mbedtls_pk_rsa( *key );
-
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->QP ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->DQ ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->DP ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->Q ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->P ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->D ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->E ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_mpi( &c, buf, &rsa->N ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_int( &c, buf, 0 ) );
-
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, buf, len ) );
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, buf, MBEDTLS_ASN1_CONSTRUCTED |
-                                                    MBEDTLS_ASN1_SEQUENCE ) );
-=======
         mbedtls_mpi T; /* Temporary holding the exported parameters */
         mbedtls_rsa_context *rsa = mbedtls_pk_rsa( *key );
 
@@ -37598,7 +33864,6 @@ int mbedtls_pk_write_key_der( mbedtls_pk_context *key, unsigned char *buf, size_
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c,
                                                buf, MBEDTLS_ASN1_CONSTRUCTED |
                                                MBEDTLS_ASN1_SEQUENCE ) );
->>>>>>> local
     }
     else
 #endif /* MBEDTLS_RSA_C */
@@ -37817,8 +34082,6 @@ int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_
 
 #endif /* MBEDTLS_PK_WRITE_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -37851,23 +34114,14 @@ int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/platform.c ************/
 
-<<<<<<< HEAD
-
-/*
- *  Platform abstraction layer
- *
- *  Copyright (C) 2006-2015, ARM Limited, All Rights Reserved
-=======
 /*
  *  Platform abstraction layer
  *
  *  Copyright (C) 2006-2016, ARM Limited, All Rights Reserved
->>>>>>> local
  *  SPDX-License-Identifier: Apache-2.0
  *
  *  Licensed under the Apache License, Version 2.0 (the "License"); you may
@@ -37895,15 +34149,12 @@ int mbedtls_pk_write_key_pem( mbedtls_pk_context *key, unsigned char *buf, size_
 
 
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED) && \
     !defined(MBEDTLS_PLATFORM_NO_STD_FUNCTIONS) && defined(MBEDTLS_FS_IO)
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_MEMORY)
 #if !defined(MBEDTLS_PLATFORM_STD_CALLOC)
 static void *platform_calloc_uninit( size_t n, size_t size )
@@ -37949,11 +34200,7 @@ int mbedtls_platform_win32_snprintf( char *s, size_t n, const char *fmt, ... )
         return( -1 );
 
     va_start( argp, fmt );
-<<<<<<< HEAD
-#if defined(_TRUNCATE)
-=======
 #if defined(_TRUNCATE) && !defined(__MINGW32__)
->>>>>>> local
     ret = _vsnprintf_s( s, n, _TRUNCATE, fmt, argp );
 #else
     ret = _vsnprintf( s, n, fmt, argp );
@@ -38069,10 +34316,6 @@ int mbedtls_platform_set_exit( void (*exit_func)( int status ) )
 }
 #endif /* MBEDTLS_PLATFORM_EXIT_ALT */
 
-<<<<<<< HEAD
-#endif /* MBEDTLS_PLATFORM_C */
-
-=======
 #if defined(MBEDTLS_HAVE_TIME)
 
 #if defined(MBEDTLS_PLATFORM_TIME_ALT)
@@ -38242,15 +34485,10 @@ void mbedtls_platform_teardown( mbedtls_platform_context *ctx )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/ripemd160.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  RIPE MD-160 implementation
  *
@@ -38299,11 +34537,8 @@ void mbedtls_platform_teardown( mbedtls_platform_context *ctx )
 #endif /* MBEDTLS_PLATFORM_C */
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_RIPEMD160_ALT)
 
->>>>>>> local
 /*
  * 32-bit integer manipulation macros (little endian)
  */
@@ -38328,13 +34563,7 @@ void mbedtls_platform_teardown( mbedtls_platform_context *ctx )
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void ripemd_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 void mbedtls_ripemd160_init( mbedtls_ripemd160_context *ctx )
 {
@@ -38346,11 +34575,7 @@ void mbedtls_ripemd160_free( mbedtls_ripemd160_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    ripemd_zeroize( ctx, sizeof( mbedtls_ripemd160_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_ripemd160_context ) );
->>>>>>> local
 }
 
 void mbedtls_ripemd160_clone( mbedtls_ripemd160_context *dst,
@@ -38362,11 +34587,7 @@ void mbedtls_ripemd160_clone( mbedtls_ripemd160_context *dst,
 /*
  * RIPEMD-160 context setup
  */
-<<<<<<< HEAD
-void mbedtls_ripemd160_starts( mbedtls_ripemd160_context *ctx )
-=======
 int mbedtls_ripemd160_starts_ret( mbedtls_ripemd160_context *ctx )
->>>>>>> local
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -38376,10 +34597,6 @@ int mbedtls_ripemd160_starts_ret( mbedtls_ripemd160_context *ctx )
     ctx->state[2] = 0x98BADCFE;
     ctx->state[3] = 0x10325476;
     ctx->state[4] = 0xC3D2E1F0;
-<<<<<<< HEAD
-}
-
-=======
 
     return( 0 );
 }
@@ -38391,17 +34608,12 @@ void mbedtls_ripemd160_starts( mbedtls_ripemd160_context *ctx )
 }
 #endif
 
->>>>>>> local
 #if !defined(MBEDTLS_RIPEMD160_PROCESS_ALT)
 /*
  * Process one block
  */
-<<<<<<< HEAD
-void mbedtls_ripemd160_process( mbedtls_ripemd160_context *ctx, const unsigned char data[64] )
-=======
 int mbedtls_internal_ripemd160_process( mbedtls_ripemd160_context *ctx,
                                         const unsigned char data[64] )
->>>>>>> local
 {
     uint32_t A, B, C, D, E, Ap, Bp, Cp, Dp, Ep, X[16];
 
@@ -38576,9 +34788,6 @@ int mbedtls_internal_ripemd160_process( mbedtls_ripemd160_context *ctx,
     ctx->state[3] = ctx->state[4] + A + Bp;
     ctx->state[4] = ctx->state[0] + B + Cp;
     ctx->state[0] = C;
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -38590,32 +34799,21 @@ void mbedtls_ripemd160_process( mbedtls_ripemd160_context *ctx,
     mbedtls_internal_ripemd160_process( ctx, data );
 }
 #endif
->>>>>>> local
 #endif /* !MBEDTLS_RIPEMD160_PROCESS_ALT */
 
 /*
  * RIPEMD-160 process buffer
  */
-<<<<<<< HEAD
-void mbedtls_ripemd160_update( mbedtls_ripemd160_context *ctx,
-                       const unsigned char *input, size_t ilen )
-{
-=======
 int mbedtls_ripemd160_update_ret( mbedtls_ripemd160_context *ctx,
                                   const unsigned char *input,
                                   size_t ilen )
 {
     int ret;
->>>>>>> local
     size_t fill;
     uint32_t left;
 
     if( ilen == 0 )
-<<<<<<< HEAD
-        return;
-=======
         return( 0 );
->>>>>>> local
 
     left = ctx->total[0] & 0x3F;
     fill = 64 - left;
@@ -38629,14 +34827,10 @@ int mbedtls_ripemd160_update_ret( mbedtls_ripemd160_context *ctx,
     if( left && ilen >= fill )
     {
         memcpy( (void *) (ctx->buffer + left), input, fill );
-<<<<<<< HEAD
-        mbedtls_ripemd160_process( ctx, ctx->buffer );
-=======
 
         if( ( ret = mbedtls_internal_ripemd160_process( ctx, ctx->buffer ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += fill;
         ilen  -= fill;
         left = 0;
@@ -38644,13 +34838,9 @@ int mbedtls_ripemd160_update_ret( mbedtls_ripemd160_context *ctx,
 
     while( ilen >= 64 )
     {
-<<<<<<< HEAD
-        mbedtls_ripemd160_process( ctx, input );
-=======
         if( ( ret = mbedtls_internal_ripemd160_process( ctx, input ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += 64;
         ilen  -= 64;
     }
@@ -38659,10 +34849,6 @@ int mbedtls_ripemd160_update_ret( mbedtls_ripemd160_context *ctx,
     {
         memcpy( (void *) (ctx->buffer + left), input, ilen );
     }
-<<<<<<< HEAD
-}
-
-=======
 
     return( 0 );
 }
@@ -38676,7 +34862,6 @@ void mbedtls_ripemd160_update( mbedtls_ripemd160_context *ctx,
 }
 #endif
 
->>>>>>> local
 static const unsigned char ripemd160_padding[64] =
 {
  0x80, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0,
@@ -38688,15 +34873,10 @@ static const unsigned char ripemd160_padding[64] =
 /*
  * RIPEMD-160 final digest
  */
-<<<<<<< HEAD
-void mbedtls_ripemd160_finish( mbedtls_ripemd160_context *ctx, unsigned char output[20] )
-{
-=======
 int mbedtls_ripemd160_finish_ret( mbedtls_ripemd160_context *ctx,
                                   unsigned char output[20] )
 {
     int ret;
->>>>>>> local
     uint32_t last, padn;
     uint32_t high, low;
     unsigned char msglen[8];
@@ -38711,10 +34891,6 @@ int mbedtls_ripemd160_finish_ret( mbedtls_ripemd160_context *ctx,
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
-<<<<<<< HEAD
-    mbedtls_ripemd160_update( ctx, ripemd160_padding, padn );
-    mbedtls_ripemd160_update( ctx, msglen, 8 );
-=======
     ret = mbedtls_ripemd160_update_ret( ctx, ripemd160_padding, padn );
     if( ret != 0 )
         return( ret );
@@ -38722,16 +34898,12 @@ int mbedtls_ripemd160_finish_ret( mbedtls_ripemd160_context *ctx,
     ret = mbedtls_ripemd160_update_ret( ctx, msglen, 8 );
     if( ret != 0 )
         return( ret );
->>>>>>> local
 
     PUT_UINT32_LE( ctx->state[0], output,  0 );
     PUT_UINT32_LE( ctx->state[1], output,  4 );
     PUT_UINT32_LE( ctx->state[2], output,  8 );
     PUT_UINT32_LE( ctx->state[3], output, 12 );
     PUT_UINT32_LE( ctx->state[4], output, 16 );
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -38745,25 +34917,10 @@ void mbedtls_ripemd160_finish( mbedtls_ripemd160_context *ctx,
 #endif
 
 #endif /* ! MBEDTLS_RIPEMD160_ALT */
->>>>>>> local
 
 /*
  * output = RIPEMD-160( input buffer )
  */
-<<<<<<< HEAD
-void mbedtls_ripemd160( const unsigned char *input, size_t ilen,
-                unsigned char output[20] )
-{
-    mbedtls_ripemd160_context ctx;
-
-    mbedtls_ripemd160_init( &ctx );
-    mbedtls_ripemd160_starts( &ctx );
-    mbedtls_ripemd160_update( &ctx, input, ilen );
-    mbedtls_ripemd160_finish( &ctx, output );
-    mbedtls_ripemd160_free( &ctx );
-}
-
-=======
 int mbedtls_ripemd160_ret( const unsigned char *input,
                            size_t ilen,
                            unsigned char output[20] )
@@ -38797,27 +34954,12 @@ void mbedtls_ripemd160( const unsigned char *input,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 /*
  * Test vectors from the RIPEMD-160 paper and
  * http://homes.esat.kuleuven.be/~bosselae/mbedtls_ripemd160.html#HMAC
  */
 #define TESTS   8
-<<<<<<< HEAD
-#define KEYS    2
-static const char *ripemd160_test_input[TESTS] =
-{
-    "",
-    "a",
-    "abc",
-    "message digest",
-    "abcdefghijklmnopqrstuvwxyz",
-    "abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq",
-    "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789",
-    "1234567890123456789012345678901234567890"
-        "1234567890123456789012345678901234567890",
-=======
 static const unsigned char ripemd160_test_str[TESTS][81] =
 {
     { "" },
@@ -38834,7 +34976,6 @@ static const unsigned char ripemd160_test_str[TESTS][81] =
 static const size_t ripemd160_test_strlen[TESTS] =
 {
     0, 1, 3, 14, 26, 56, 62, 80
->>>>>>> local
 };
 
 static const unsigned char ripemd160_test_md[TESTS][20] =
@@ -38862,11 +35003,7 @@ static const unsigned char ripemd160_test_md[TESTS][20] =
  */
 int mbedtls_ripemd160_self_test( int verbose )
 {
-<<<<<<< HEAD
-    int i;
-=======
     int i, ret = 0;
->>>>>>> local
     unsigned char output[20];
 
     memset( output, 0, sizeof output );
@@ -38876,18 +35013,6 @@ int mbedtls_ripemd160_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "  RIPEMD-160 test #%d: ", i + 1 );
 
-<<<<<<< HEAD
-        mbedtls_ripemd160( (const unsigned char *) ripemd160_test_input[i],
-                   strlen( ripemd160_test_input[i] ),
-                   output );
-
-        if( memcmp( output, ripemd160_test_md[i], 20 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            return( 1 );
-=======
         ret = mbedtls_ripemd160_ret( ripemd160_test_str[i],
                                      ripemd160_test_strlen[i], output );
         if( ret != 0 )
@@ -38897,16 +35022,12 @@ int mbedtls_ripemd160_self_test( int verbose )
         {
             ret = 1;
             goto fail;
->>>>>>> local
         }
 
         if( verbose != 0 )
             mbedtls_printf( "passed\n" );
     }
 
-<<<<<<< HEAD
-    return( 0 );
-=======
     if( verbose != 0 )
         mbedtls_printf( "\n" );
 
@@ -38917,16 +35038,10 @@ fail:
         mbedtls_printf( "failed\n" );
 
     return( ret );
->>>>>>> local
 }
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef F
-#undef K
-=======
 #endif /* MBEDTLS_RIPEMD160_C */
 
 /*
@@ -38938,18 +35053,11 @@ fail:
 #undef BEFORE_COLON
 #undef F
 #undef F0
->>>>>>> local
 #undef F1
 #undef F2
 #undef F3
 #undef F4
 #undef F5
-<<<<<<< HEAD
-#undef P
-#undef S
-
-#endif /* MBEDTLS_RIPEMD160_C */
-=======
 #undef FSb
 #undef K
 #undef KK
@@ -38967,16 +35075,11 @@ fail:
 #undef read
 #undef supported_init
 #undef write
->>>>>>> local
 
 
 
 /********* Start of file library/rsa.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  The RSA public-key cryptosystem
  *
@@ -38997,13 +35100,6 @@ fail:
  *
  *  This file is part of mbed TLS (https://tls.mbed.org)
  */
-<<<<<<< HEAD
-/*
- *  RSA was designed by Ron Rivest, Adi Shamir and Len Adleman.
- *
- *  http://theory.lcs.mit.edu/~rivest/rsapaper.pdf
- *  http://www.cacr.math.uwaterloo.ca/hac/about/chap8.pdf
-=======
 
 /*
  *  The following sources were referenced in the design of this implementation
@@ -39021,7 +35117,6 @@ fail:
  *      Stefan Mangard
  *      https://arxiv.org/abs/1702.08719v2
  *
->>>>>>> local
  */
 
 #if !defined(MBEDTLS_CONFIG_FILE)
@@ -39035,10 +35130,7 @@ fail:
 
 
 
-<<<<<<< HEAD
-=======
 
->>>>>>> local
 #include <string.h>
 
 #if defined(MBEDTLS_PKCS1_V21)
@@ -39058,8 +35150,6 @@ fail:
 #define mbedtls_free   free
 #endif
 
-<<<<<<< HEAD
-=======
 #if !defined(MBEDTLS_RSA_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
@@ -39444,7 +35534,6 @@ int mbedtls_rsa_export_crt( const mbedtls_rsa_context *ctx,
     return( 0 );
 }
 
->>>>>>> local
 /*
  * Initialize an RSA context
  */
@@ -39470,8 +35559,6 @@ void mbedtls_rsa_set_padding( mbedtls_rsa_context *ctx, int padding, int hash_id
     ctx->hash_id = hash_id;
 }
 
-<<<<<<< HEAD
-=======
 /*
  * Get length in bytes of RSA modulus
  */
@@ -39482,7 +35569,6 @@ size_t mbedtls_rsa_get_len( const mbedtls_rsa_context *ctx )
 }
 
 
->>>>>>> local
 #if defined(MBEDTLS_GENPRIME)
 
 /*
@@ -39494,24 +35580,16 @@ int mbedtls_rsa_gen_key( mbedtls_rsa_context *ctx,
                  unsigned int nbits, int exponent )
 {
     int ret;
-<<<<<<< HEAD
-    mbedtls_mpi P1, Q1, H, G;
-=======
     mbedtls_mpi H, G;
->>>>>>> local
 
     if( f_rng == NULL || nbits < 128 || exponent < 3 )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    mbedtls_mpi_init( &P1 ); mbedtls_mpi_init( &Q1 ); mbedtls_mpi_init( &H ); mbedtls_mpi_init( &G );
-=======
     if( nbits % 2 )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
     mbedtls_mpi_init( &H );
     mbedtls_mpi_init( &G );
->>>>>>> local
 
     /*
      * find primes P and Q with Q < P so that:
@@ -39521,22 +35599,11 @@ int mbedtls_rsa_gen_key( mbedtls_rsa_context *ctx,
 
     do
     {
-<<<<<<< HEAD
-        MBEDTLS_MPI_CHK( mbedtls_mpi_gen_prime( &ctx->P, ( nbits + 1 ) >> 1, 0,
-                                f_rng, p_rng ) );
-
-        MBEDTLS_MPI_CHK( mbedtls_mpi_gen_prime( &ctx->Q, ( nbits + 1 ) >> 1, 0,
-                                f_rng, p_rng ) );
-
-        if( mbedtls_mpi_cmp_mpi( &ctx->P, &ctx->Q ) < 0 )
-            mbedtls_mpi_swap( &ctx->P, &ctx->Q );
-=======
         MBEDTLS_MPI_CHK( mbedtls_mpi_gen_prime( &ctx->P, nbits >> 1, 0,
                                                 f_rng, p_rng ) );
 
         MBEDTLS_MPI_CHK( mbedtls_mpi_gen_prime( &ctx->Q, nbits >> 1, 0,
                                                 f_rng, p_rng ) );
->>>>>>> local
 
         if( mbedtls_mpi_cmp_mpi( &ctx->P, &ctx->Q ) == 0 )
             continue;
@@ -39545,11 +35612,6 @@ int mbedtls_rsa_gen_key( mbedtls_rsa_context *ctx,
         if( mbedtls_mpi_bitlen( &ctx->N ) != nbits )
             continue;
 
-<<<<<<< HEAD
-        MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &P1, &ctx->P, 1 ) );
-        MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &Q1, &ctx->Q, 1 ) );
-        MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &H, &P1, &Q1 ) );
-=======
         if( mbedtls_mpi_cmp_mpi( &ctx->P, &ctx->Q ) < 0 )
             mbedtls_mpi_swap( &ctx->P, &ctx->Q );
 
@@ -39557,38 +35619,22 @@ int mbedtls_rsa_gen_key( mbedtls_rsa_context *ctx,
         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &ctx->P, &ctx->P, 1 ) );
         MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &ctx->Q, &ctx->Q, 1 ) );
         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &H, &ctx->P, &ctx->Q ) );
->>>>>>> local
         MBEDTLS_MPI_CHK( mbedtls_mpi_gcd( &G, &ctx->E, &H  ) );
     }
     while( mbedtls_mpi_cmp_int( &G, 1 ) != 0 );
 
-<<<<<<< HEAD
-=======
     /* Restore P,Q */
     MBEDTLS_MPI_CHK( mbedtls_mpi_add_int( &ctx->P,  &ctx->P, 1 ) );
     MBEDTLS_MPI_CHK( mbedtls_mpi_add_int( &ctx->Q,  &ctx->Q, 1 ) );
 
     ctx->len = mbedtls_mpi_size( &ctx->N );
 
->>>>>>> local
     /*
      * D  = E^-1 mod ((P-1)*(Q-1))
      * DP = D mod (P - 1)
      * DQ = D mod (Q - 1)
      * QP = Q^-1 mod P
      */
-<<<<<<< HEAD
-    MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( &ctx->D , &ctx->E, &H  ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &ctx->DP, &ctx->D, &P1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &ctx->DQ, &ctx->D, &Q1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( &ctx->QP, &ctx->Q, &ctx->P ) );
-
-    ctx->len = ( mbedtls_mpi_bitlen( &ctx->N ) + 7 ) >> 3;
-
-cleanup:
-
-    mbedtls_mpi_free( &P1 ); mbedtls_mpi_free( &Q1 ); mbedtls_mpi_free( &H ); mbedtls_mpi_free( &G );
-=======
 
     MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( &ctx->D, &ctx->E, &H  ) );
 
@@ -39604,7 +35650,6 @@ cleanup:
 
     mbedtls_mpi_free( &H );
     mbedtls_mpi_free( &G );
->>>>>>> local
 
     if( ret != 0 )
     {
@@ -39622,22 +35667,6 @@ cleanup:
  */
 int mbedtls_rsa_check_pubkey( const mbedtls_rsa_context *ctx )
 {
-<<<<<<< HEAD
-    if( !ctx->N.p || !ctx->E.p )
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
-
-    if( ( ctx->N.p[0] & 1 ) == 0 ||
-        ( ctx->E.p[0] & 1 ) == 0 )
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
-
-    if( mbedtls_mpi_bitlen( &ctx->N ) < 128 ||
-        mbedtls_mpi_bitlen( &ctx->N ) > MBEDTLS_MPI_MAX_BITS )
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
-
-    if( mbedtls_mpi_bitlen( &ctx->E ) < 2 ||
-        mbedtls_mpi_cmp_mpi( &ctx->E, &ctx->N ) >= 0 )
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
-=======
     if( rsa_check_context( ctx, 0 /* public */, 0 /* no blinding */ ) != 0 )
         return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
 
@@ -39652,71 +35681,11 @@ int mbedtls_rsa_check_pubkey( const mbedtls_rsa_context *ctx )
     {
         return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
     }
->>>>>>> local
 
     return( 0 );
 }
 
 /*
-<<<<<<< HEAD
- * Check a private RSA key
- */
-int mbedtls_rsa_check_privkey( const mbedtls_rsa_context *ctx )
-{
-    int ret;
-    mbedtls_mpi PQ, DE, P1, Q1, H, I, G, G2, L1, L2, DP, DQ, QP;
-
-    if( ( ret = mbedtls_rsa_check_pubkey( ctx ) ) != 0 )
-        return( ret );
-
-    if( !ctx->P.p || !ctx->Q.p || !ctx->D.p )
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
-
-    mbedtls_mpi_init( &PQ ); mbedtls_mpi_init( &DE ); mbedtls_mpi_init( &P1 ); mbedtls_mpi_init( &Q1 );
-    mbedtls_mpi_init( &H  ); mbedtls_mpi_init( &I  ); mbedtls_mpi_init( &G  ); mbedtls_mpi_init( &G2 );
-    mbedtls_mpi_init( &L1 ); mbedtls_mpi_init( &L2 ); mbedtls_mpi_init( &DP ); mbedtls_mpi_init( &DQ );
-    mbedtls_mpi_init( &QP );
-
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &PQ, &ctx->P, &ctx->Q ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &DE, &ctx->D, &ctx->E ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &P1, &ctx->P, 1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_sub_int( &Q1, &ctx->Q, 1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &H, &P1, &Q1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_gcd( &G, &ctx->E, &H  ) );
-
-    MBEDTLS_MPI_CHK( mbedtls_mpi_gcd( &G2, &P1, &Q1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_div_mpi( &L1, &L2, &H, &G2 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &I, &DE, &L1  ) );
-
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &DP, &ctx->D, &P1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &DQ, &ctx->D, &Q1 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_inv_mod( &QP, &ctx->Q, &ctx->P ) );
-    /*
-     * Check for a valid PKCS1v2 private key
-     */
-    if( mbedtls_mpi_cmp_mpi( &PQ, &ctx->N ) != 0 ||
-        mbedtls_mpi_cmp_mpi( &DP, &ctx->DP ) != 0 ||
-        mbedtls_mpi_cmp_mpi( &DQ, &ctx->DQ ) != 0 ||
-        mbedtls_mpi_cmp_mpi( &QP, &ctx->QP ) != 0 ||
-        mbedtls_mpi_cmp_int( &L2, 0 ) != 0 ||
-        mbedtls_mpi_cmp_int( &I, 1 ) != 0 ||
-        mbedtls_mpi_cmp_int( &G, 1 ) != 0 )
-    {
-        ret = MBEDTLS_ERR_RSA_KEY_CHECK_FAILED;
-    }
-
-cleanup:
-    mbedtls_mpi_free( &PQ ); mbedtls_mpi_free( &DE ); mbedtls_mpi_free( &P1 ); mbedtls_mpi_free( &Q1 );
-    mbedtls_mpi_free( &H  ); mbedtls_mpi_free( &I  ); mbedtls_mpi_free( &G  ); mbedtls_mpi_free( &G2 );
-    mbedtls_mpi_free( &L1 ); mbedtls_mpi_free( &L2 ); mbedtls_mpi_free( &DP ); mbedtls_mpi_free( &DQ );
-    mbedtls_mpi_free( &QP );
-
-    if( ret == MBEDTLS_ERR_RSA_KEY_CHECK_FAILED )
-        return( ret );
-
-    if( ret != 0 )
-        return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED + ret );
-=======
  * Check for the consistency of all fields in an RSA private key context
  */
 int mbedtls_rsa_check_privkey( const mbedtls_rsa_context *ctx )
@@ -39740,7 +35709,6 @@ int mbedtls_rsa_check_privkey( const mbedtls_rsa_context *ctx )
         return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
     }
 #endif
->>>>>>> local
 
     return( 0 );
 }
@@ -39748,16 +35716,10 @@ int mbedtls_rsa_check_privkey( const mbedtls_rsa_context *ctx )
 /*
  * Check if contexts holding a public and private key match
  */
-<<<<<<< HEAD
-int mbedtls_rsa_check_pub_priv( const mbedtls_rsa_context *pub, const mbedtls_rsa_context *prv )
-{
-    if( mbedtls_rsa_check_pubkey( pub ) != 0 ||
-=======
 int mbedtls_rsa_check_pub_priv( const mbedtls_rsa_context *pub,
                                 const mbedtls_rsa_context *prv )
 {
     if( mbedtls_rsa_check_pubkey( pub )  != 0 ||
->>>>>>> local
         mbedtls_rsa_check_privkey( prv ) != 0 )
     {
         return( MBEDTLS_ERR_RSA_KEY_CHECK_FAILED );
@@ -39783,12 +35745,9 @@ int mbedtls_rsa_public( mbedtls_rsa_context *ctx,
     size_t olen;
     mbedtls_mpi T;
 
-<<<<<<< HEAD
-=======
     if( rsa_check_context( ctx, 0 /* public */, 0 /* no blinding */ ) )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
->>>>>>> local
     mbedtls_mpi_init( &T );
 
 #if defined(MBEDTLS_THREADING_C)
@@ -39863,8 +35822,6 @@ cleanup:
 }
 
 /*
-<<<<<<< HEAD
-=======
  * Exponent blinding supposed to prevent side-channel attacks using multiple
  * traces of measurements to recover the RSA key. The more collisions are there,
  * the more bits of the key can be recovered. See [3].
@@ -39886,7 +35843,6 @@ cleanup:
 #define RSA_EXPONENT_BLINDING 28
 
 /*
->>>>>>> local
  * Do an RSA private key operation
  */
 int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
@@ -39897,15 +35853,6 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
 {
     int ret;
     size_t olen;
-<<<<<<< HEAD
-    mbedtls_mpi T, T1, T2;
-
-    /* Make sure we have private key info, prevent possible misuse */
-    if( ctx->P.p == NULL || ctx->Q.p == NULL || ctx->D.p == NULL )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-
-    mbedtls_mpi_init( &T ); mbedtls_mpi_init( &T1 ); mbedtls_mpi_init( &T2 );
-=======
 
     /* Temporary holding the result */
     mbedtls_mpi T;
@@ -39944,15 +35891,12 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
     {
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
     }
->>>>>>> local
 
 #if defined(MBEDTLS_THREADING_C)
     if( ( ret = mbedtls_mutex_lock( &ctx->mutex ) ) != 0 )
         return( ret );
 #endif
 
-<<<<<<< HEAD
-=======
     /* MPI Initialization */
     mbedtls_mpi_init( &T );
 
@@ -39979,7 +35923,6 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
 
     /* End of MPI initialization */
 
->>>>>>> local
     MBEDTLS_MPI_CHK( mbedtls_mpi_read_binary( &T, input, ctx->len ) );
     if( mbedtls_mpi_cmp_mpi( &T, &ctx->N ) >= 0 )
     {
@@ -39987,11 +35930,8 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
         goto cleanup;
     }
 
-<<<<<<< HEAD
-=======
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &I, &T ) );
 
->>>>>>> local
     if( f_rng != NULL )
     {
         /*
@@ -40001,34 +35941,6 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
         MBEDTLS_MPI_CHK( rsa_prepare_blinding( ctx, f_rng, p_rng ) );
         MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &T, &T, &ctx->Vi ) );
         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &T, &T, &ctx->N ) );
-<<<<<<< HEAD
-    }
-
-#if defined(MBEDTLS_RSA_NO_CRT)
-    MBEDTLS_MPI_CHK( mbedtls_mpi_exp_mod( &T, &T, &ctx->D, &ctx->N, &ctx->RN ) );
-#else
-    /*
-     * faster decryption using the CRT
-     *
-     * T1 = input ^ dP mod P
-     * T2 = input ^ dQ mod Q
-     */
-    MBEDTLS_MPI_CHK( mbedtls_mpi_exp_mod( &T1, &T, &ctx->DP, &ctx->P, &ctx->RP ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_exp_mod( &T2, &T, &ctx->DQ, &ctx->Q, &ctx->RQ ) );
-
-    /*
-     * T = (T1 - T2) * (Q^-1 mod P) mod P
-     */
-    MBEDTLS_MPI_CHK( mbedtls_mpi_sub_mpi( &T, &T1, &T2 ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &T1, &T, &ctx->QP ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &T, &T1, &ctx->P ) );
-
-    /*
-     * T = T2 + T * Q
-     */
-    MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &T1, &T, &ctx->Q ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_add_mpi( &T, &T2, &T1 ) );
-=======
 
         /*
          * Exponent blinding
@@ -40097,7 +36009,6 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
      */
     MBEDTLS_MPI_CHK( mbedtls_mpi_mul_mpi( &TP, &T, &ctx->Q ) );
     MBEDTLS_MPI_CHK( mbedtls_mpi_add_mpi( &T, &TQ, &TP ) );
->>>>>>> local
 #endif /* MBEDTLS_RSA_NO_CRT */
 
     if( f_rng != NULL )
@@ -40110,8 +36021,6 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
         MBEDTLS_MPI_CHK( mbedtls_mpi_mod_mpi( &T, &T, &ctx->N ) );
     }
 
-<<<<<<< HEAD
-=======
     /* Verify the result to prevent glitching attacks. */
     MBEDTLS_MPI_CHK( mbedtls_mpi_exp_mod( &C, &T, &ctx->E,
                                           &ctx->N, &ctx->RN ) );
@@ -40121,7 +36030,6 @@ int mbedtls_rsa_private( mbedtls_rsa_context *ctx,
         goto cleanup;
     }
 
->>>>>>> local
     olen = ctx->len;
     MBEDTLS_MPI_CHK( mbedtls_mpi_write_binary( &T, output, olen ) );
 
@@ -40131,9 +36039,6 @@ cleanup:
         return( MBEDTLS_ERR_THREADING_MUTEX_ERROR );
 #endif
 
-<<<<<<< HEAD
-    mbedtls_mpi_free( &T ); mbedtls_mpi_free( &T1 ); mbedtls_mpi_free( &T2 );
-=======
     mbedtls_mpi_free( &P1 );
     mbedtls_mpi_free( &Q1 );
     mbedtls_mpi_free( &R );
@@ -40156,7 +36061,6 @@ cleanup:
 
     mbedtls_mpi_free( &C );
     mbedtls_mpi_free( &I );
->>>>>>> local
 
     if( ret != 0 )
         return( MBEDTLS_ERR_RSA_PRIVATE_FAILED + ret );
@@ -40174,11 +36078,7 @@ cleanup:
  * \param slen      length of the source buffer
  * \param md_ctx    message digest context to use
  */
-<<<<<<< HEAD
-static void mgf_mask( unsigned char *dst, size_t dlen, unsigned char *src,
-=======
 static int mgf_mask( unsigned char *dst, size_t dlen, unsigned char *src,
->>>>>>> local
                       size_t slen, mbedtls_md_context_t *md_ctx )
 {
     unsigned char mask[MBEDTLS_MD_MAX_SIZE];
@@ -40186,22 +36086,14 @@ static int mgf_mask( unsigned char *dst, size_t dlen, unsigned char *src,
     unsigned char *p;
     unsigned int hlen;
     size_t i, use_len;
-<<<<<<< HEAD
-=======
     int ret = 0;
->>>>>>> local
 
     memset( mask, 0, MBEDTLS_MD_MAX_SIZE );
     memset( counter, 0, 4 );
 
     hlen = mbedtls_md_get_size( md_ctx->md_info );
 
-<<<<<<< HEAD
-    // Generate and apply dbMask
-    //
-=======
     /* Generate and apply dbMask */
->>>>>>> local
     p = dst;
 
     while( dlen > 0 )
@@ -40210,12 +36102,6 @@ static int mgf_mask( unsigned char *dst, size_t dlen, unsigned char *src,
         if( dlen < hlen )
             use_len = dlen;
 
-<<<<<<< HEAD
-        mbedtls_md_starts( md_ctx );
-        mbedtls_md_update( md_ctx, src, slen );
-        mbedtls_md_update( md_ctx, counter, 4 );
-        mbedtls_md_finish( md_ctx, mask );
-=======
         if( ( ret = mbedtls_md_starts( md_ctx ) ) != 0 )
             goto exit;
         if( ( ret = mbedtls_md_update( md_ctx, src, slen ) ) != 0 )
@@ -40224,7 +36110,6 @@ static int mgf_mask( unsigned char *dst, size_t dlen, unsigned char *src,
             goto exit;
         if( ( ret = mbedtls_md_finish( md_ctx, mask ) ) != 0 )
             goto exit;
->>>>>>> local
 
         for( i = 0; i < use_len; ++i )
             *p++ ^= mask[i];
@@ -40233,14 +36118,11 @@ static int mgf_mask( unsigned char *dst, size_t dlen, unsigned char *src,
 
         dlen -= use_len;
     }
-<<<<<<< HEAD
-=======
 
 exit:
     mbedtls_zeroize( mask, sizeof( mask ) );
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_PKCS1_V21 */
 
@@ -40277,60 +36159,29 @@ int mbedtls_rsa_rsaes_oaep_encrypt( mbedtls_rsa_context *ctx,
     olen = ctx->len;
     hlen = mbedtls_md_get_size( md_info );
 
-<<<<<<< HEAD
-    if( olen < ilen + 2 * hlen + 2 )
-=======
     /* first comparison checks for overflow */
     if( ilen + 2 * hlen + 2 < ilen || olen < ilen + 2 * hlen + 2 )
->>>>>>> local
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
     memset( output, 0, olen );
 
     *p++ = 0;
 
-<<<<<<< HEAD
-    // Generate a random octet string seed
-    //
-=======
     /* Generate a random octet string seed */
->>>>>>> local
     if( ( ret = f_rng( p_rng, p, hlen ) ) != 0 )
         return( MBEDTLS_ERR_RSA_RNG_FAILED + ret );
 
     p += hlen;
 
-<<<<<<< HEAD
-    // Construct DB
-    //
-    mbedtls_md( md_info, label, label_len, p );
-=======
     /* Construct DB */
     if( ( ret = mbedtls_md( md_info, label, label_len, p ) ) != 0 )
         return( ret );
->>>>>>> local
     p += hlen;
     p += olen - 2 * hlen - 2 - ilen;
     *p++ = 1;
     memcpy( p, input, ilen );
 
     mbedtls_md_init( &md_ctx );
-<<<<<<< HEAD
-    mbedtls_md_setup( &md_ctx, md_info, 0 );
-
-    // maskedDB: Apply dbMask to DB
-    //
-    mgf_mask( output + hlen + 1, olen - hlen - 1, output + 1, hlen,
-               &md_ctx );
-
-    // maskedSeed: Apply seedMask to seed
-    //
-    mgf_mask( output + 1, hlen, output + hlen + 1, olen - hlen - 1,
-               &md_ctx );
-
-    mbedtls_md_free( &md_ctx );
-
-=======
     if( ( ret = mbedtls_md_setup( &md_ctx, md_info, 0 ) ) != 0 )
         goto exit;
 
@@ -40350,7 +36201,6 @@ exit:
     if( ret != 0 )
         return( ret );
 
->>>>>>> local
     return( ( mode == MBEDTLS_RSA_PUBLIC )
             ? mbedtls_rsa_public(  ctx, output, output )
             : mbedtls_rsa_private( ctx, f_rng, p_rng, output, output ) );
@@ -40375,22 +36225,14 @@ int mbedtls_rsa_rsaes_pkcs1_v15_encrypt( mbedtls_rsa_context *ctx,
     if( mode == MBEDTLS_RSA_PRIVATE && ctx->padding != MBEDTLS_RSA_PKCS_V15 )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    if( f_rng == NULL )
-=======
     // We don't check p_rng because it won't be dereferenced here
     if( f_rng == NULL || input == NULL || output == NULL )
->>>>>>> local
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
     olen = ctx->len;
 
-<<<<<<< HEAD
-    if( olen < ilen + 11 )
-=======
     /* first comparison checks for overflow */
     if( ilen + 11 < ilen || olen < ilen + 11 )
->>>>>>> local
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
     nb_pad = olen - 3 - ilen;
@@ -40408,12 +36250,7 @@ int mbedtls_rsa_rsaes_pkcs1_v15_encrypt( mbedtls_rsa_context *ctx,
                 ret = f_rng( p_rng, p, 1 );
             } while( *p == 0 && --rng_dl && ret == 0 );
 
-<<<<<<< HEAD
-            // Check if RNG failed to generate data
-            //
-=======
             /* Check if RNG failed to generate data */
->>>>>>> local
             if( rng_dl == 0 || ret != 0 )
                 return( MBEDTLS_ERR_RSA_RNG_FAILED + ret );
 
@@ -40504,15 +36341,12 @@ int mbedtls_rsa_rsaes_oaep_decrypt( mbedtls_rsa_context *ctx,
     if( md_info == NULL )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-=======
     hlen = mbedtls_md_get_size( md_info );
 
     // checking for integer underflow
     if( 2 * hlen + 2 > ilen )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
->>>>>>> local
     /*
      * RSA operation
      */
@@ -40521,35 +36355,11 @@ int mbedtls_rsa_rsaes_oaep_decrypt( mbedtls_rsa_context *ctx,
           : mbedtls_rsa_private( ctx, f_rng, p_rng, input, buf );
 
     if( ret != 0 )
-<<<<<<< HEAD
-        return( ret );
-=======
         goto cleanup;
->>>>>>> local
 
     /*
      * Unmask data and generate lHash
      */
-<<<<<<< HEAD
-    hlen = mbedtls_md_get_size( md_info );
-
-    mbedtls_md_init( &md_ctx );
-    mbedtls_md_setup( &md_ctx, md_info, 0 );
-
-    /* Generate lHash */
-    mbedtls_md( md_info, label, label_len, lhash );
-
-    /* seed: Apply seedMask to maskedSeed */
-    mgf_mask( buf + 1, hlen, buf + hlen + 1, ilen - hlen - 1,
-               &md_ctx );
-
-    /* DB: Apply dbMask to maskedDB */
-    mgf_mask( buf + hlen + 1, ilen - hlen - 1, buf + 1, hlen,
-               &md_ctx );
-
-    mbedtls_md_free( &md_ctx );
-
-=======
     mbedtls_md_init( &md_ctx );
     if( ( ret = mbedtls_md_setup( &md_ctx, md_info, 0 ) ) != 0 )
     {
@@ -40574,7 +36384,6 @@ int mbedtls_rsa_rsaes_oaep_decrypt( mbedtls_rsa_context *ctx,
     if( ( ret = mbedtls_md( md_info, label, label_len, lhash ) ) != 0 )
         goto cleanup;
 
->>>>>>> local
     /*
      * Check contents, in "constant-time"
      */
@@ -40609,17 +36418,6 @@ int mbedtls_rsa_rsaes_oaep_decrypt( mbedtls_rsa_context *ctx,
      * the different error conditions.
      */
     if( bad != 0 )
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_RSA_INVALID_PADDING );
-
-    if( ilen - ( p - buf ) > output_max_len )
-        return( MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE );
-
-    *olen = ilen - (p - buf);
-    memcpy( output, p, *olen );
-
-    return( 0 );
-=======
     {
         ret = MBEDTLS_ERR_RSA_INVALID_PADDING;
         goto cleanup;
@@ -40640,7 +36438,6 @@ cleanup:
     mbedtls_zeroize( lhash, sizeof( lhash ) );
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_PKCS1_V21 */
 
@@ -40674,11 +36471,7 @@ int mbedtls_rsa_rsaes_pkcs1_v15_decrypt( mbedtls_rsa_context *ctx,
           : mbedtls_rsa_private( ctx, f_rng, p_rng, input, buf );
 
     if( ret != 0 )
-<<<<<<< HEAD
-        return( ret );
-=======
         goto cleanup;
->>>>>>> local
 
     p = buf;
     bad = 0;
@@ -40720,18 +36513,6 @@ int mbedtls_rsa_rsaes_pkcs1_v15_decrypt( mbedtls_rsa_context *ctx,
         bad |= *p++; /* Must be zero */
     }
 
-<<<<<<< HEAD
-    if( bad )
-        return( MBEDTLS_ERR_RSA_INVALID_PADDING );
-
-    if( ilen - ( p - buf ) > output_max_len )
-        return( MBEDTLS_ERR_RSA_OUTPUT_TOO_LARGE );
-
-    *olen = ilen - (p - buf);
-    memcpy( output, p, *olen );
-
-    return( 0 );
-=======
     bad |= ( pad_count < 8 );
 
     if( bad )
@@ -40754,7 +36535,6 @@ cleanup:
     mbedtls_zeroize( buf, sizeof( buf ) );
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_PKCS1_V15 */
 
@@ -40821,12 +36601,7 @@ int mbedtls_rsa_rsassa_pss_sign( mbedtls_rsa_context *ctx,
 
     if( md_alg != MBEDTLS_MD_NONE )
     {
-<<<<<<< HEAD
-        // Gather length of hash to sign
-        //
-=======
         /* Gather length of hash to sign */
->>>>>>> local
         md_info = mbedtls_md_info_from_type( md_alg );
         if( md_info == NULL )
             return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
@@ -40846,21 +36621,11 @@ int mbedtls_rsa_rsassa_pss_sign( mbedtls_rsa_context *ctx,
 
     memset( sig, 0, olen );
 
-<<<<<<< HEAD
-    // Generate salt of length slen
-    //
-    if( ( ret = f_rng( p_rng, salt, slen ) ) != 0 )
-        return( MBEDTLS_ERR_RSA_RNG_FAILED + ret );
-
-    // Note: EMSA-PSS encoding is over the length of N - 1 bits
-    //
-=======
     /* Generate salt of length slen */
     if( ( ret = f_rng( p_rng, salt, slen ) ) != 0 )
         return( MBEDTLS_ERR_RSA_RNG_FAILED + ret );
 
     /* Note: EMSA-PSS encoding is over the length of N - 1 bits */
->>>>>>> local
     msb = mbedtls_mpi_bitlen( &ctx->N ) - 1;
     p += olen - hlen * 2 - 2;
     *p++ = 0x01;
@@ -40868,28 +36633,6 @@ int mbedtls_rsa_rsassa_pss_sign( mbedtls_rsa_context *ctx,
     p += slen;
 
     mbedtls_md_init( &md_ctx );
-<<<<<<< HEAD
-    mbedtls_md_setup( &md_ctx, md_info, 0 );
-
-    // Generate H = Hash( M' )
-    //
-    mbedtls_md_starts( &md_ctx );
-    mbedtls_md_update( &md_ctx, p, 8 );
-    mbedtls_md_update( &md_ctx, hash, hashlen );
-    mbedtls_md_update( &md_ctx, salt, slen );
-    mbedtls_md_finish( &md_ctx, p );
-
-    // Compensate for boundary condition when applying mask
-    //
-    if( msb % 8 == 0 )
-        offset = 1;
-
-    // maskedDB: Apply dbMask to DB
-    //
-    mgf_mask( sig + offset, olen - hlen - 1 - offset, p, hlen, &md_ctx );
-
-    mbedtls_md_free( &md_ctx );
-=======
     if( ( ret = mbedtls_md_setup( &md_ctx, md_info, 0 ) ) != 0 )
         goto exit;
 
@@ -40913,7 +36656,6 @@ int mbedtls_rsa_rsassa_pss_sign( mbedtls_rsa_context *ctx,
     if( ( ret = mgf_mask( sig + offset, olen - hlen - 1 - offset, p, hlen,
                           &md_ctx ) ) != 0 )
         goto exit;
->>>>>>> local
 
     msb = mbedtls_mpi_bitlen( &ctx->N ) - 1;
     sig[0] &= 0xFF >> ( olen * 8 - msb );
@@ -40921,8 +36663,6 @@ int mbedtls_rsa_rsassa_pss_sign( mbedtls_rsa_context *ctx,
     p += hlen;
     *p++ = 0xBC;
 
-<<<<<<< HEAD
-=======
     mbedtls_zeroize( salt, sizeof( salt ) );
 
 exit:
@@ -40931,7 +36671,6 @@ exit:
     if( ret != 0 )
         return( ret );
 
->>>>>>> local
     return( ( mode == MBEDTLS_RSA_PUBLIC )
             ? mbedtls_rsa_public(  ctx, sig, sig )
             : mbedtls_rsa_private( ctx, f_rng, p_rng, sig, sig ) );
@@ -40942,35 +36681,6 @@ exit:
 /*
  * Implementation of the PKCS#1 v2.1 RSASSA-PKCS1-V1_5-SIGN function
  */
-<<<<<<< HEAD
-/*
- * Do an RSA operation to sign the message digest
- */
-int mbedtls_rsa_rsassa_pkcs1_v15_sign( mbedtls_rsa_context *ctx,
-                               int (*f_rng)(void *, unsigned char *, size_t),
-                               void *p_rng,
-                               int mode,
-                               mbedtls_md_type_t md_alg,
-                               unsigned int hashlen,
-                               const unsigned char *hash,
-                               unsigned char *sig )
-{
-    size_t nb_pad, olen, oid_size = 0;
-    unsigned char *p = sig;
-    const char *oid = NULL;
-    unsigned char *sig_try = NULL, *verif = NULL;
-    size_t i;
-    unsigned char diff;
-    volatile unsigned char diff_no_optimize;
-    int ret;
-
-    if( mode == MBEDTLS_RSA_PRIVATE && ctx->padding != MBEDTLS_RSA_PKCS_V15 )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-
-    olen = ctx->len;
-    nb_pad = olen - 3;
-
-=======
 
 /* Construct a PKCS v1.5 encoding of a hashed message
  *
@@ -41002,7 +36712,6 @@ static int rsa_rsassa_pkcs1_v15_encode( mbedtls_md_type_t md_alg,
     const char *oid  = NULL;
 
     /* Are we signing hashed or raw data? */
->>>>>>> local
     if( md_alg != MBEDTLS_MD_NONE )
     {
         const mbedtls_md_info_t *md_info = mbedtls_md_info_from_type( md_alg );
@@ -41012,18 +36721,6 @@ static int rsa_rsassa_pkcs1_v15_encode( mbedtls_md_type_t md_alg,
         if( mbedtls_oid_get_oid_by_md( md_alg, &oid, &oid_size ) != 0 )
             return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-        nb_pad -= 10 + oid_size;
-
-        hashlen = mbedtls_md_get_size( md_info );
-    }
-
-    nb_pad -= hashlen;
-
-    if( ( nb_pad < 8 ) || ( nb_pad > olen ) )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-
-=======
         hashlen = mbedtls_md_get_size( md_info );
 
         /* Double-check that 8 + hashlen + oid_size can be used as a
@@ -41063,52 +36760,12 @@ static int rsa_rsassa_pkcs1_v15_encode( mbedtls_md_type_t md_alg,
      * with padding, and at least 8 bytes long. */
 
     /* Write signature header and padding */
->>>>>>> local
     *p++ = 0;
     *p++ = MBEDTLS_RSA_SIGN;
     memset( p, 0xFF, nb_pad );
     p += nb_pad;
     *p++ = 0;
 
-<<<<<<< HEAD
-    if( md_alg == MBEDTLS_MD_NONE )
-    {
-        memcpy( p, hash, hashlen );
-    }
-    else
-    {
-        /*
-         * DigestInfo ::= SEQUENCE {
-         *   digestAlgorithm DigestAlgorithmIdentifier,
-         *   digest Digest }
-         *
-         * DigestAlgorithmIdentifier ::= AlgorithmIdentifier
-         *
-         * Digest ::= OCTET STRING
-         */
-        *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-        *p++ = (unsigned char) ( 0x08 + oid_size + hashlen );
-        *p++ = MBEDTLS_ASN1_SEQUENCE | MBEDTLS_ASN1_CONSTRUCTED;
-        *p++ = (unsigned char) ( 0x04 + oid_size );
-        *p++ = MBEDTLS_ASN1_OID;
-        *p++ = oid_size & 0xFF;
-        memcpy( p, oid, oid_size );
-        p += oid_size;
-        *p++ = MBEDTLS_ASN1_NULL;
-        *p++ = 0x00;
-        *p++ = MBEDTLS_ASN1_OCTET_STRING;
-        *p++ = hashlen;
-        memcpy( p, hash, hashlen );
-    }
-
-    if( mode == MBEDTLS_RSA_PUBLIC )
-        return( mbedtls_rsa_public(  ctx, sig, sig ) );
-
-    /*
-     * In order to prevent Lenstra's attack, make the signature in a
-     * temporary buffer and check it before returning it.
-     */
-=======
     /* Are we signing raw data? */
     if( md_alg == MBEDTLS_MD_NONE )
     {
@@ -41197,16 +36854,11 @@ int mbedtls_rsa_rsassa_pkcs1_v15_sign( mbedtls_rsa_context *ctx,
      * temporary buffer and check it before returning it.
      */
 
->>>>>>> local
     sig_try = mbedtls_calloc( 1, ctx->len );
     if( sig_try == NULL )
         return( MBEDTLS_ERR_MPI_ALLOC_FAILED );
 
-<<<<<<< HEAD
-    verif   = mbedtls_calloc( 1, ctx->len );
-=======
     verif = mbedtls_calloc( 1, ctx->len );
->>>>>>> local
     if( verif == NULL )
     {
         mbedtls_free( sig_try );
@@ -41216,16 +36868,7 @@ int mbedtls_rsa_rsassa_pkcs1_v15_sign( mbedtls_rsa_context *ctx,
     MBEDTLS_MPI_CHK( mbedtls_rsa_private( ctx, f_rng, p_rng, sig, sig_try ) );
     MBEDTLS_MPI_CHK( mbedtls_rsa_public( ctx, sig_try, verif ) );
 
-<<<<<<< HEAD
-    /* Compare in constant time just in case */
-    for( diff = 0, i = 0; i < ctx->len; i++ )
-        diff |= verif[i] ^ sig[i];
-    diff_no_optimize = diff;
-
-    if( diff_no_optimize != 0 )
-=======
     if( mbedtls_safer_memcmp( verif, sig, ctx->len ) != 0 )
->>>>>>> local
     {
         ret = MBEDTLS_ERR_RSA_PRIVATE_FAILED;
         goto cleanup;
@@ -41290,15 +36933,6 @@ int mbedtls_rsa_rsassa_pss_verify_ext( mbedtls_rsa_context *ctx,
     int ret;
     size_t siglen;
     unsigned char *p;
-<<<<<<< HEAD
-    unsigned char buf[MBEDTLS_MPI_MAX_SIZE];
-    unsigned char result[MBEDTLS_MD_MAX_SIZE];
-    unsigned char zeros[8];
-    unsigned int hlen;
-    size_t slen, msb;
-    const mbedtls_md_info_t *md_info;
-    mbedtls_md_context_t md_ctx;
-=======
     unsigned char *hash_start;
     unsigned char result[MBEDTLS_MD_MAX_SIZE];
     unsigned char zeros[8];
@@ -41307,7 +36941,6 @@ int mbedtls_rsa_rsassa_pss_verify_ext( mbedtls_rsa_context *ctx,
     const mbedtls_md_info_t *md_info;
     mbedtls_md_context_t md_ctx;
     unsigned char buf[MBEDTLS_MPI_MAX_SIZE];
->>>>>>> local
 
     if( mode == MBEDTLS_RSA_PRIVATE && ctx->padding != MBEDTLS_RSA_PKCS_V21 )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
@@ -41331,12 +36964,7 @@ int mbedtls_rsa_rsassa_pss_verify_ext( mbedtls_rsa_context *ctx,
 
     if( md_alg != MBEDTLS_MD_NONE )
     {
-<<<<<<< HEAD
-        // Gather length of hash to sign
-        //
-=======
         /* Gather length of hash to sign */
->>>>>>> local
         md_info = mbedtls_md_info_from_type( md_alg );
         if( md_info == NULL )
             return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
@@ -41349,18 +36977,6 @@ int mbedtls_rsa_rsassa_pss_verify_ext( mbedtls_rsa_context *ctx,
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
     hlen = mbedtls_md_get_size( md_info );
-<<<<<<< HEAD
-    slen = siglen - hlen - 1; /* Currently length of salt + padding */
-
-    memset( zeros, 0, 8 );
-
-    // Note: EMSA-PSS verification is over the length of N - 1 bits
-    //
-    msb = mbedtls_mpi_bitlen( &ctx->N ) - 1;
-
-    // Compensate for boundary condition when applying mask
-    //
-=======
 
     memset( zeros, 0, 8 );
 
@@ -41373,58 +36989,11 @@ int mbedtls_rsa_rsassa_pss_verify_ext( mbedtls_rsa_context *ctx,
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
 
     /* Compensate for boundary condition when applying mask */
->>>>>>> local
     if( msb % 8 == 0 )
     {
         p++;
         siglen -= 1;
     }
-<<<<<<< HEAD
-    if( buf[0] >> ( 8 - siglen * 8 + msb ) )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-
-    mbedtls_md_init( &md_ctx );
-    mbedtls_md_setup( &md_ctx, md_info, 0 );
-
-    mgf_mask( p, siglen - hlen - 1, p + siglen - hlen - 1, hlen, &md_ctx );
-
-    buf[0] &= 0xFF >> ( siglen * 8 - msb );
-
-    while( p < buf + siglen && *p == 0 )
-        p++;
-
-    if( p == buf + siglen ||
-        *p++ != 0x01 )
-    {
-        mbedtls_md_free( &md_ctx );
-        return( MBEDTLS_ERR_RSA_INVALID_PADDING );
-    }
-
-    /* Actual salt len */
-    slen -= p - buf;
-
-    if( expected_salt_len != MBEDTLS_RSA_SALT_LEN_ANY &&
-        slen != (size_t) expected_salt_len )
-    {
-        mbedtls_md_free( &md_ctx );
-        return( MBEDTLS_ERR_RSA_INVALID_PADDING );
-    }
-
-    // Generate H = Hash( M' )
-    //
-    mbedtls_md_starts( &md_ctx );
-    mbedtls_md_update( &md_ctx, zeros, 8 );
-    mbedtls_md_update( &md_ctx, hash, hashlen );
-    mbedtls_md_update( &md_ctx, p, slen );
-    mbedtls_md_finish( &md_ctx, result );
-
-    mbedtls_md_free( &md_ctx );
-
-    if( memcmp( p + slen, result, hlen ) == 0 )
-        return( 0 );
-    else
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-=======
 
     if( siglen < hlen + 2 )
         return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
@@ -41487,7 +37056,6 @@ exit:
     mbedtls_md_free( &md_ctx );
 
     return( ret );
->>>>>>> local
 }
 
 /*
@@ -41527,110 +37095,6 @@ int mbedtls_rsa_rsassa_pkcs1_v15_verify( mbedtls_rsa_context *ctx,
                                  const unsigned char *hash,
                                  const unsigned char *sig )
 {
-<<<<<<< HEAD
-    int ret;
-    size_t len, siglen, asn1_len;
-    unsigned char *p, *end;
-    unsigned char buf[MBEDTLS_MPI_MAX_SIZE];
-    mbedtls_md_type_t msg_md_alg;
-    const mbedtls_md_info_t *md_info;
-    mbedtls_asn1_buf oid;
-
-    if( mode == MBEDTLS_RSA_PRIVATE && ctx->padding != MBEDTLS_RSA_PKCS_V15 )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-
-    siglen = ctx->len;
-
-    if( siglen < 16 || siglen > sizeof( buf ) )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-
-    ret = ( mode == MBEDTLS_RSA_PUBLIC )
-          ? mbedtls_rsa_public(  ctx, sig, buf )
-          : mbedtls_rsa_private( ctx, f_rng, p_rng, sig, buf );
-
-    if( ret != 0 )
-        return( ret );
-
-    p = buf;
-
-    if( *p++ != 0 || *p++ != MBEDTLS_RSA_SIGN )
-        return( MBEDTLS_ERR_RSA_INVALID_PADDING );
-
-    while( *p != 0 )
-    {
-        if( p >= buf + siglen - 1 || *p != 0xFF )
-            return( MBEDTLS_ERR_RSA_INVALID_PADDING );
-        p++;
-    }
-    p++;
-
-    len = siglen - ( p - buf );
-
-    if( len == hashlen && md_alg == MBEDTLS_MD_NONE )
-    {
-        if( memcmp( p, hash, hashlen ) == 0 )
-            return( 0 );
-        else
-            return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-    }
-
-    md_info = mbedtls_md_info_from_type( md_alg );
-    if( md_info == NULL )
-        return( MBEDTLS_ERR_RSA_BAD_INPUT_DATA );
-    hashlen = mbedtls_md_get_size( md_info );
-
-    end = p + len;
-
-    // Parse the ASN.1 structure inside the PKCS#1 v1.5 structure
-    //
-    if( ( ret = mbedtls_asn1_get_tag( &p, end, &asn1_len,
-            MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( asn1_len + 2 != len )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( ( ret = mbedtls_asn1_get_tag( &p, end, &asn1_len,
-            MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( asn1_len + 6 + hashlen != len )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( ( ret = mbedtls_asn1_get_tag( &p, end, &oid.len, MBEDTLS_ASN1_OID ) ) != 0 )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    oid.p = p;
-    p += oid.len;
-
-    if( mbedtls_oid_get_md_alg( &oid, &msg_md_alg ) != 0 )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( md_alg != msg_md_alg )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    /*
-     * assume the algorithm parameters must be NULL
-     */
-    if( ( ret = mbedtls_asn1_get_tag( &p, end, &asn1_len, MBEDTLS_ASN1_NULL ) ) != 0 )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( ( ret = mbedtls_asn1_get_tag( &p, end, &asn1_len, MBEDTLS_ASN1_OCTET_STRING ) ) != 0 )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( asn1_len != hashlen )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    if( memcmp( p, hash, hashlen ) != 0 )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    p += hashlen;
-
-    if( p != end )
-        return( MBEDTLS_ERR_RSA_VERIFY_FAILED );
-
-    return( 0 );
-=======
     int ret = 0;
     const size_t sig_len = ctx->len;
     unsigned char *encoded = NULL, *encoded_expected = NULL;
@@ -41689,7 +37153,6 @@ cleanup:
     }
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_PKCS1_V15 */
 
@@ -41740,15 +37203,6 @@ int mbedtls_rsa_copy( mbedtls_rsa_context *dst, const mbedtls_rsa_context *src )
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->D, &src->D ) );
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->P, &src->P ) );
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->Q, &src->Q ) );
-<<<<<<< HEAD
-    MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->DP, &src->DP ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->DQ, &src->DQ ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->QP, &src->QP ) );
-
-    MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->RN, &src->RN ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->RP, &src->RP ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->RQ, &src->RQ ) );
-=======
 
 #if !defined(MBEDTLS_RSA_NO_CRT)
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->DP, &src->DP ) );
@@ -41759,7 +37213,6 @@ int mbedtls_rsa_copy( mbedtls_rsa_context *dst, const mbedtls_rsa_context *src )
 #endif
 
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->RN, &src->RN ) );
->>>>>>> local
 
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->Vi, &src->Vi ) );
     MBEDTLS_MPI_CHK( mbedtls_mpi_copy( &dst->Vf, &src->Vf ) );
@@ -41780,13 +37233,6 @@ cleanup:
 void mbedtls_rsa_free( mbedtls_rsa_context *ctx )
 {
     mbedtls_mpi_free( &ctx->Vi ); mbedtls_mpi_free( &ctx->Vf );
-<<<<<<< HEAD
-    mbedtls_mpi_free( &ctx->RQ ); mbedtls_mpi_free( &ctx->RP ); mbedtls_mpi_free( &ctx->RN );
-    mbedtls_mpi_free( &ctx->QP ); mbedtls_mpi_free( &ctx->DQ ); mbedtls_mpi_free( &ctx->DP );
-    mbedtls_mpi_free( &ctx->Q  ); mbedtls_mpi_free( &ctx->P  ); mbedtls_mpi_free( &ctx->D );
-    mbedtls_mpi_free( &ctx->E  ); mbedtls_mpi_free( &ctx->N  );
-
-=======
     mbedtls_mpi_free( &ctx->RN ); mbedtls_mpi_free( &ctx->D  );
     mbedtls_mpi_free( &ctx->Q  ); mbedtls_mpi_free( &ctx->P  );
     mbedtls_mpi_free( &ctx->E  ); mbedtls_mpi_free( &ctx->N  );
@@ -41797,17 +37243,13 @@ void mbedtls_rsa_free( mbedtls_rsa_context *ctx )
     mbedtls_mpi_free( &ctx->DP );
 #endif /* MBEDTLS_RSA_NO_CRT */
 
->>>>>>> local
 #if defined(MBEDTLS_THREADING_C)
     mbedtls_mutex_free( &ctx->mutex );
 #endif
 }
 
-<<<<<<< HEAD
-=======
 #endif /* !MBEDTLS_RSA_ALT */
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 
 
@@ -41847,24 +37289,6 @@ void mbedtls_rsa_free( mbedtls_rsa_context *ctx )
                 "910E4168387E3C30AA1E00C339A79508" \
                 "8452DD96A9A5EA5D9DCA68DA636032AF"
 
-<<<<<<< HEAD
-#define RSA_DP  "C1ACF567564274FB07A0BBAD5D26E298" \
-                "3C94D22288ACD763FD8E5600ED4A702D" \
-                "F84198A5F06C2E72236AE490C93F07F8" \
-                "3CC559CD27BC2D1CA488811730BB5725"
-
-#define RSA_DQ  "4959CBF6F8FEF750AEE6977C155579C7" \
-                "D8AAEA56749EA28623272E4F7D0592AF" \
-                "7C1F1313CAC9471B5C523BFE592F517B" \
-                "407A1BD76C164B93DA2D32A383E58357"
-
-#define RSA_QP  "9AE7FBC99546432DF71896FC239EADAE" \
-                "F38D18D2B2F0E2DD275AA977E2BF4411" \
-                "F5A3B2A5D33605AEBBCCBA7FEB9F2D2F" \
-                "A74206CEC169D74BF5A8C50D6F48EA08"
-
-=======
->>>>>>> local
 #define PT_LEN  24
 #define RSA_PT  "\xAA\xBB\xCC\x03\x02\x01\x00\xFF\xFF\xFF\xFF\xFF" \
                 "\x11\x22\x33\x0A\x0B\x0C\xCC\xDD\xDD\xDD\xDD\xDD"
@@ -41907,19 +37331,6 @@ int mbedtls_rsa_self_test( int verbose )
     unsigned char sha1sum[20];
 #endif
 
-<<<<<<< HEAD
-    mbedtls_rsa_init( &rsa, MBEDTLS_RSA_PKCS_V15, 0 );
-
-    rsa.len = KEY_LEN;
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.N , 16, RSA_N  ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.E , 16, RSA_E  ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.D , 16, RSA_D  ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.P , 16, RSA_P  ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.Q , 16, RSA_Q  ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.DP, 16, RSA_DP ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.DQ, 16, RSA_DQ ) );
-    MBEDTLS_MPI_CHK( mbedtls_mpi_read_string( &rsa.QP, 16, RSA_QP ) );
-=======
     mbedtls_mpi K;
 
     mbedtls_mpi_init( &K );
@@ -41937,7 +37348,6 @@ int mbedtls_rsa_self_test( int verbose )
     MBEDTLS_MPI_CHK( mbedtls_rsa_import( &rsa, NULL, NULL, NULL, NULL, &K ) );
 
     MBEDTLS_MPI_CHK( mbedtls_rsa_complete( &rsa ) );
->>>>>>> local
 
     if( verbose != 0 )
         mbedtls_printf( "  RSA key validation: " );
@@ -41948,12 +37358,8 @@ int mbedtls_rsa_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "failed\n" );
 
-<<<<<<< HEAD
-        return( 1 );
-=======
         ret = 1;
         goto cleanup;
->>>>>>> local
     }
 
     if( verbose != 0 )
@@ -41961,48 +37367,29 @@ int mbedtls_rsa_self_test( int verbose )
 
     memcpy( rsa_plaintext, RSA_PT, PT_LEN );
 
-<<<<<<< HEAD
-    if( mbedtls_rsa_pkcs1_encrypt( &rsa, myrand, NULL, MBEDTLS_RSA_PUBLIC, PT_LEN,
-                           rsa_plaintext, rsa_ciphertext ) != 0 )
-=======
     if( mbedtls_rsa_pkcs1_encrypt( &rsa, myrand, NULL, MBEDTLS_RSA_PUBLIC,
                                    PT_LEN, rsa_plaintext,
                                    rsa_ciphertext ) != 0 )
->>>>>>> local
     {
         if( verbose != 0 )
             mbedtls_printf( "failed\n" );
 
-<<<<<<< HEAD
-        return( 1 );
-=======
         ret = 1;
         goto cleanup;
->>>>>>> local
     }
 
     if( verbose != 0 )
         mbedtls_printf( "passed\n  PKCS#1 decryption : " );
 
-<<<<<<< HEAD
-    if( mbedtls_rsa_pkcs1_decrypt( &rsa, myrand, NULL, MBEDTLS_RSA_PRIVATE, &len,
-                           rsa_ciphertext, rsa_decrypted,
-                           sizeof(rsa_decrypted) ) != 0 )
-=======
     if( mbedtls_rsa_pkcs1_decrypt( &rsa, myrand, NULL, MBEDTLS_RSA_PRIVATE,
                                    &len, rsa_ciphertext, rsa_decrypted,
                                    sizeof(rsa_decrypted) ) != 0 )
->>>>>>> local
     {
         if( verbose != 0 )
             mbedtls_printf( "failed\n" );
 
-<<<<<<< HEAD
-        return( 1 );
-=======
         ret = 1;
         goto cleanup;
->>>>>>> local
     }
 
     if( memcmp( rsa_decrypted, rsa_plaintext, len ) != 0 )
@@ -42010,12 +37397,8 @@ int mbedtls_rsa_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "failed\n" );
 
-<<<<<<< HEAD
-        return( 1 );
-=======
         ret = 1;
         goto cleanup;
->>>>>>> local
     }
 
     if( verbose != 0 )
@@ -42023,18 +37406,9 @@ int mbedtls_rsa_self_test( int verbose )
 
 #if defined(MBEDTLS_SHA1_C)
     if( verbose != 0 )
-<<<<<<< HEAD
-        mbedtls_printf( "PKCS#1 data sign  : " );
-
-    mbedtls_sha1( rsa_plaintext, PT_LEN, sha1sum );
-
-    if( mbedtls_rsa_pkcs1_sign( &rsa, myrand, NULL, MBEDTLS_RSA_PRIVATE, MBEDTLS_MD_SHA1, 0,
-                        sha1sum, rsa_ciphertext ) != 0 )
-=======
         mbedtls_printf( "  PKCS#1 data sign  : " );
 
     if( mbedtls_sha1_ret( rsa_plaintext, PT_LEN, sha1sum ) != 0 )
->>>>>>> local
     {
         if( verbose != 0 )
             mbedtls_printf( "failed\n" );
@@ -42042,13 +37416,6 @@ int mbedtls_rsa_self_test( int verbose )
         return( 1 );
     }
 
-<<<<<<< HEAD
-    if( verbose != 0 )
-        mbedtls_printf( "passed\n  PKCS#1 sig. verify: " );
-
-    if( mbedtls_rsa_pkcs1_verify( &rsa, NULL, NULL, MBEDTLS_RSA_PUBLIC, MBEDTLS_MD_SHA1, 0,
-                          sha1sum, rsa_ciphertext ) != 0 )
-=======
     if( mbedtls_rsa_pkcs1_sign( &rsa, myrand, NULL,
                                 MBEDTLS_RSA_PRIVATE, MBEDTLS_MD_SHA1, 0,
                                 sha1sum, rsa_ciphertext ) != 0 )
@@ -42066,17 +37433,12 @@ int mbedtls_rsa_self_test( int verbose )
     if( mbedtls_rsa_pkcs1_verify( &rsa, NULL, NULL,
                                   MBEDTLS_RSA_PUBLIC, MBEDTLS_MD_SHA1, 0,
                                   sha1sum, rsa_ciphertext ) != 0 )
->>>>>>> local
     {
         if( verbose != 0 )
             mbedtls_printf( "failed\n" );
 
-<<<<<<< HEAD
-        return( 1 );
-=======
         ret = 1;
         goto cleanup;
->>>>>>> local
     }
 
     if( verbose != 0 )
@@ -42087,10 +37449,7 @@ int mbedtls_rsa_self_test( int verbose )
         mbedtls_printf( "\n" );
 
 cleanup:
-<<<<<<< HEAD
-=======
     mbedtls_mpi_free( &K );
->>>>>>> local
     mbedtls_rsa_free( &rsa );
 #else /* MBEDTLS_PKCS1_V15 */
     ((void) verbose);
@@ -42102,13 +37461,6 @@ cleanup:
 
 #endif /* MBEDTLS_RSA_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/sha1.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -42669,7 +38021,6 @@ cleanup:
 
 /********* Start of file library/sha1.c ************/
 
->>>>>>> local
 /*
  *  FIPS-180-1 compliant SHA-1 implementation
  *
@@ -42720,13 +38071,7 @@ cleanup:
 #if !defined(MBEDTLS_SHA1_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void sha1_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (big endian)
@@ -42761,11 +38106,7 @@ void mbedtls_sha1_free( mbedtls_sha1_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    sha1_zeroize( ctx, sizeof( mbedtls_sha1_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_sha1_context ) );
->>>>>>> local
 }
 
 void mbedtls_sha1_clone( mbedtls_sha1_context *dst,
@@ -42777,11 +38118,7 @@ void mbedtls_sha1_clone( mbedtls_sha1_context *dst,
 /*
  * SHA-1 context setup
  */
-<<<<<<< HEAD
-void mbedtls_sha1_starts( mbedtls_sha1_context *ctx )
-=======
 int mbedtls_sha1_starts_ret( mbedtls_sha1_context *ctx )
->>>>>>> local
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -42791,12 +38128,6 @@ int mbedtls_sha1_starts_ret( mbedtls_sha1_context *ctx )
     ctx->state[2] = 0x98BADCFE;
     ctx->state[3] = 0x10325476;
     ctx->state[4] = 0xC3D2E1F0;
-<<<<<<< HEAD
-}
-
-#if !defined(MBEDTLS_SHA1_PROCESS_ALT)
-void mbedtls_sha1_process( mbedtls_sha1_context *ctx, const unsigned char data[64] )
-=======
 
     return( 0 );
 }
@@ -42811,7 +38142,6 @@ void mbedtls_sha1_starts( mbedtls_sha1_context *ctx )
 #if !defined(MBEDTLS_SHA1_PROCESS_ALT)
 int mbedtls_internal_sha1_process( mbedtls_sha1_context *ctx,
                                    const unsigned char data[64] )
->>>>>>> local
 {
     uint32_t temp, W[16], A, B, C, D, E;
 
@@ -42965,9 +38295,6 @@ int mbedtls_internal_sha1_process( mbedtls_sha1_context *ctx,
     ctx->state[2] += C;
     ctx->state[3] += D;
     ctx->state[4] += E;
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -42979,31 +38306,21 @@ void mbedtls_sha1_process( mbedtls_sha1_context *ctx,
     mbedtls_internal_sha1_process( ctx, data );
 }
 #endif
->>>>>>> local
 #endif /* !MBEDTLS_SHA1_PROCESS_ALT */
 
 /*
  * SHA-1 process buffer
  */
-<<<<<<< HEAD
-void mbedtls_sha1_update( mbedtls_sha1_context *ctx, const unsigned char *input, size_t ilen )
-{
-=======
 int mbedtls_sha1_update_ret( mbedtls_sha1_context *ctx,
                              const unsigned char *input,
                              size_t ilen )
 {
     int ret;
->>>>>>> local
     size_t fill;
     uint32_t left;
 
     if( ilen == 0 )
-<<<<<<< HEAD
-        return;
-=======
         return( 0 );
->>>>>>> local
 
     left = ctx->total[0] & 0x3F;
     fill = 64 - left;
@@ -43017,14 +38334,10 @@ int mbedtls_sha1_update_ret( mbedtls_sha1_context *ctx,
     if( left && ilen >= fill )
     {
         memcpy( (void *) (ctx->buffer + left), input, fill );
-<<<<<<< HEAD
-        mbedtls_sha1_process( ctx, ctx->buffer );
-=======
 
         if( ( ret = mbedtls_internal_sha1_process( ctx, ctx->buffer ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += fill;
         ilen  -= fill;
         left = 0;
@@ -43032,22 +38345,15 @@ int mbedtls_sha1_update_ret( mbedtls_sha1_context *ctx,
 
     while( ilen >= 64 )
     {
-<<<<<<< HEAD
-        mbedtls_sha1_process( ctx, input );
-=======
         if( ( ret = mbedtls_internal_sha1_process( ctx, input ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += 64;
         ilen  -= 64;
     }
 
     if( ilen > 0 )
         memcpy( (void *) (ctx->buffer + left), input, ilen );
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -43060,7 +38366,6 @@ void mbedtls_sha1_update( mbedtls_sha1_context *ctx,
     mbedtls_sha1_update_ret( ctx, input, ilen );
 }
 #endif
->>>>>>> local
 
 static const unsigned char sha1_padding[64] =
 {
@@ -43073,15 +38378,10 @@ static const unsigned char sha1_padding[64] =
 /*
  * SHA-1 final digest
  */
-<<<<<<< HEAD
-void mbedtls_sha1_finish( mbedtls_sha1_context *ctx, unsigned char output[20] )
-{
-=======
 int mbedtls_sha1_finish_ret( mbedtls_sha1_context *ctx,
                              unsigned char output[20] )
 {
     int ret;
->>>>>>> local
     uint32_t last, padn;
     uint32_t high, low;
     unsigned char msglen[8];
@@ -43096,24 +38396,16 @@ int mbedtls_sha1_finish_ret( mbedtls_sha1_context *ctx,
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
-<<<<<<< HEAD
-    mbedtls_sha1_update( ctx, sha1_padding, padn );
-    mbedtls_sha1_update( ctx, msglen, 8 );
-=======
     if( ( ret = mbedtls_sha1_update_ret( ctx, sha1_padding, padn ) ) != 0 )
         return( ret );
     if( ( ret = mbedtls_sha1_update_ret( ctx, msglen, 8 ) ) != 0 )
         return( ret );
->>>>>>> local
 
     PUT_UINT32_BE( ctx->state[0], output,  0 );
     PUT_UINT32_BE( ctx->state[1], output,  4 );
     PUT_UINT32_BE( ctx->state[2], output,  8 );
     PUT_UINT32_BE( ctx->state[3], output, 12 );
     PUT_UINT32_BE( ctx->state[4], output, 16 );
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -43125,25 +38417,12 @@ void mbedtls_sha1_finish( mbedtls_sha1_context *ctx,
     mbedtls_sha1_finish_ret( ctx, output );
 }
 #endif
->>>>>>> local
 
 #endif /* !MBEDTLS_SHA1_ALT */
 
 /*
  * output = SHA-1( input buffer )
  */
-<<<<<<< HEAD
-void mbedtls_sha1( const unsigned char *input, size_t ilen, unsigned char output[20] )
-{
-    mbedtls_sha1_context ctx;
-
-    mbedtls_sha1_init( &ctx );
-    mbedtls_sha1_starts( &ctx );
-    mbedtls_sha1_update( &ctx, input, ilen );
-    mbedtls_sha1_finish( &ctx, output );
-    mbedtls_sha1_free( &ctx );
-}
-=======
 int mbedtls_sha1_ret( const unsigned char *input,
                       size_t ilen,
                       unsigned char output[20] )
@@ -43176,7 +38455,6 @@ void mbedtls_sha1( const unsigned char *input,
     mbedtls_sha1_ret( input, ilen, output );
 }
 #endif
->>>>>>> local
 
 #if defined(MBEDTLS_SELF_TEST)
 /*
@@ -43189,11 +38467,7 @@ static const unsigned char sha1_test_buf[3][57] =
     { "" }
 };
 
-<<<<<<< HEAD
-static const int sha1_test_buflen[3] =
-=======
 static const size_t sha1_test_buflen[3] =
->>>>>>> local
 {
     3, 56, 1000
 };
@@ -43228,35 +38502,14 @@ int mbedtls_sha1_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "  SHA-1 test #%d: ", i + 1 );
 
-<<<<<<< HEAD
-        mbedtls_sha1_starts( &ctx );
-=======
         if( ( ret = mbedtls_sha1_starts_ret( &ctx ) ) != 0 )
             goto fail;
->>>>>>> local
 
         if( i == 2 )
         {
             memset( buf, 'a', buflen = 1000 );
 
             for( j = 0; j < 1000; j++ )
-<<<<<<< HEAD
-                mbedtls_sha1_update( &ctx, buf, buflen );
-        }
-        else
-            mbedtls_sha1_update( &ctx, sha1_test_buf[i],
-                               sha1_test_buflen[i] );
-
-        mbedtls_sha1_finish( &ctx, sha1sum );
-
-        if( memcmp( sha1sum, sha1_test_sum[i], 20 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            ret = 1;
-            goto exit;
-=======
             {
                 ret = mbedtls_sha1_update_ret( &ctx, buf, buflen );
                 if( ret != 0 )
@@ -43278,7 +38531,6 @@ int mbedtls_sha1_self_test( int verbose )
         {
             ret = 1;
             goto fail;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -43288,15 +38540,12 @@ int mbedtls_sha1_self_test( int verbose )
     if( verbose != 0 )
         mbedtls_printf( "\n" );
 
-<<<<<<< HEAD
-=======
     goto exit;
 
 fail:
     if( verbose != 0 )
         mbedtls_printf( "failed\n" );
 
->>>>>>> local
 exit:
     mbedtls_sha1_free( &ctx );
 
@@ -43305,15 +38554,6 @@ exit:
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef F
-#undef P
-#undef R
-#undef S
-
-#endif /* MBEDTLS_SHA1_C */
-=======
 #endif /* MBEDTLS_SHA1_C */
 
 /*
@@ -43347,16 +38587,11 @@ exit:
 #undef read
 #undef supported_init
 #undef write
->>>>>>> local
 
 
 
 /********* Start of file library/sha256.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  FIPS-180-2 compliant SHA-256 implementation
  *
@@ -43400,27 +38635,17 @@ exit:
 
 #else
 #include <stdio.h>
-<<<<<<< HEAD
-#define mbedtls_printf printf
-=======
 #include <stdlib.h>
 #define mbedtls_printf printf
 #define mbedtls_calloc    calloc
 #define mbedtls_free       free
->>>>>>> local
 #endif /* MBEDTLS_PLATFORM_C */
 #endif /* MBEDTLS_SELF_TEST */
 
 #if !defined(MBEDTLS_SHA256_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void sha256_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (big endian)
@@ -43455,11 +38680,7 @@ void mbedtls_sha256_free( mbedtls_sha256_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    sha256_zeroize( ctx, sizeof( mbedtls_sha256_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_sha256_context ) );
->>>>>>> local
 }
 
 void mbedtls_sha256_clone( mbedtls_sha256_context *dst,
@@ -43471,11 +38692,7 @@ void mbedtls_sha256_clone( mbedtls_sha256_context *dst,
 /*
  * SHA-256 context setup
  */
-<<<<<<< HEAD
-void mbedtls_sha256_starts( mbedtls_sha256_context *ctx, int is224 )
-=======
 int mbedtls_sha256_starts_ret( mbedtls_sha256_context *ctx, int is224 )
->>>>>>> local
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -43506,15 +38723,6 @@ int mbedtls_sha256_starts_ret( mbedtls_sha256_context *ctx, int is224 )
     }
 
     ctx->is224 = is224;
-<<<<<<< HEAD
-}
-
-#if !defined(MBEDTLS_SHA256_PROCESS_ALT)
-
-/* Amalgamated Release Mappings */
-#define K K256
-
-=======
 
     return( 0 );
 }
@@ -43528,7 +38736,6 @@ void mbedtls_sha256_starts( mbedtls_sha256_context *ctx,
 #endif
 
 #if !defined(MBEDTLS_SHA256_PROCESS_ALT)
->>>>>>> local
 static const uint32_t K[] =
 {
     0x428A2F98, 0x71374491, 0xB5C0FBCF, 0xE9B5DBA5,
@@ -43574,12 +38781,8 @@ static const uint32_t K[] =
     d += temp1; h = temp1 + temp2;              \
 }
 
-<<<<<<< HEAD
-void mbedtls_sha256_process( mbedtls_sha256_context *ctx, const unsigned char data[64] )
-=======
 int mbedtls_internal_sha256_process( mbedtls_sha256_context *ctx,
                                 const unsigned char data[64] )
->>>>>>> local
 {
     uint32_t temp1, temp2, W[64];
     uint32_t A[8];
@@ -43632,9 +38835,6 @@ int mbedtls_internal_sha256_process( mbedtls_sha256_context *ctx,
 
     for( i = 0; i < 8; i++ )
         ctx->state[i] += A[i];
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -43646,32 +38846,21 @@ void mbedtls_sha256_process( mbedtls_sha256_context *ctx,
     mbedtls_internal_sha256_process( ctx, data );
 }
 #endif
->>>>>>> local
 #endif /* !MBEDTLS_SHA256_PROCESS_ALT */
 
 /*
  * SHA-256 process buffer
  */
-<<<<<<< HEAD
-void mbedtls_sha256_update( mbedtls_sha256_context *ctx, const unsigned char *input,
-                    size_t ilen )
-{
-=======
 int mbedtls_sha256_update_ret( mbedtls_sha256_context *ctx,
                                const unsigned char *input,
                                size_t ilen )
 {
     int ret;
->>>>>>> local
     size_t fill;
     uint32_t left;
 
     if( ilen == 0 )
-<<<<<<< HEAD
-        return;
-=======
         return( 0 );
->>>>>>> local
 
     left = ctx->total[0] & 0x3F;
     fill = 64 - left;
@@ -43685,14 +38874,10 @@ int mbedtls_sha256_update_ret( mbedtls_sha256_context *ctx,
     if( left && ilen >= fill )
     {
         memcpy( (void *) (ctx->buffer + left), input, fill );
-<<<<<<< HEAD
-        mbedtls_sha256_process( ctx, ctx->buffer );
-=======
 
         if( ( ret = mbedtls_internal_sha256_process( ctx, ctx->buffer ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += fill;
         ilen  -= fill;
         left = 0;
@@ -43700,22 +38885,15 @@ int mbedtls_sha256_update_ret( mbedtls_sha256_context *ctx,
 
     while( ilen >= 64 )
     {
-<<<<<<< HEAD
-        mbedtls_sha256_process( ctx, input );
-=======
         if( ( ret = mbedtls_internal_sha256_process( ctx, input ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += 64;
         ilen  -= 64;
     }
 
     if( ilen > 0 )
         memcpy( (void *) (ctx->buffer + left), input, ilen );
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -43728,7 +38906,6 @@ void mbedtls_sha256_update( mbedtls_sha256_context *ctx,
     mbedtls_sha256_update_ret( ctx, input, ilen );
 }
 #endif
->>>>>>> local
 
 static const unsigned char sha256_padding[64] =
 {
@@ -43741,15 +38918,10 @@ static const unsigned char sha256_padding[64] =
 /*
  * SHA-256 final digest
  */
-<<<<<<< HEAD
-void mbedtls_sha256_finish( mbedtls_sha256_context *ctx, unsigned char output[32] )
-{
-=======
 int mbedtls_sha256_finish_ret( mbedtls_sha256_context *ctx,
                                unsigned char output[32] )
 {
     int ret;
->>>>>>> local
     uint32_t last, padn;
     uint32_t high, low;
     unsigned char msglen[8];
@@ -43764,16 +38936,11 @@ int mbedtls_sha256_finish_ret( mbedtls_sha256_context *ctx,
     last = ctx->total[0] & 0x3F;
     padn = ( last < 56 ) ? ( 56 - last ) : ( 120 - last );
 
-<<<<<<< HEAD
-    mbedtls_sha256_update( ctx, sha256_padding, padn );
-    mbedtls_sha256_update( ctx, msglen, 8 );
-=======
     if( ( ret = mbedtls_sha256_update_ret( ctx, sha256_padding, padn ) ) != 0 )
         return( ret );
 
     if( ( ret = mbedtls_sha256_update_ret( ctx, msglen, 8 ) ) != 0 )
         return( ret );
->>>>>>> local
 
     PUT_UINT32_BE( ctx->state[0], output,  0 );
     PUT_UINT32_BE( ctx->state[1], output,  4 );
@@ -43785,10 +38952,6 @@ int mbedtls_sha256_finish_ret( mbedtls_sha256_context *ctx,
 
     if( ctx->is224 == 0 )
         PUT_UINT32_BE( ctx->state[7], output, 28 );
-<<<<<<< HEAD
-}
-
-=======
 
     return( 0 );
 }
@@ -43801,26 +38964,11 @@ void mbedtls_sha256_finish( mbedtls_sha256_context *ctx,
 }
 #endif
 
->>>>>>> local
 #endif /* !MBEDTLS_SHA256_ALT */
 
 /*
  * output = SHA-256( input buffer )
  */
-<<<<<<< HEAD
-void mbedtls_sha256( const unsigned char *input, size_t ilen,
-             unsigned char output[32], int is224 )
-{
-    mbedtls_sha256_context ctx;
-
-    mbedtls_sha256_init( &ctx );
-    mbedtls_sha256_starts( &ctx, is224 );
-    mbedtls_sha256_update( &ctx, input, ilen );
-    mbedtls_sha256_finish( &ctx, output );
-    mbedtls_sha256_free( &ctx );
-}
-
-=======
 int mbedtls_sha256_ret( const unsigned char *input,
                         size_t ilen,
                         unsigned char output[32],
@@ -43856,7 +39004,6 @@ void mbedtls_sha256( const unsigned char *input,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 /*
  * FIPS-180-2 test vectors
@@ -43868,11 +39015,7 @@ static const unsigned char sha256_test_buf[3][57] =
     { "" }
 };
 
-<<<<<<< HEAD
-static const int sha256_test_buflen[3] =
-=======
 static const size_t sha256_test_buflen[3] =
->>>>>>> local
 {
     3, 56, 1000
 };
@@ -43918,12 +39061,6 @@ static const unsigned char sha256_test_sum[6][32] =
 int mbedtls_sha256_self_test( int verbose )
 {
     int i, j, k, buflen, ret = 0;
-<<<<<<< HEAD
-    unsigned char buf[1024];
-    unsigned char sha256sum[32];
-    mbedtls_sha256_context ctx;
-
-=======
     unsigned char *buf;
     unsigned char sha256sum[32];
     mbedtls_sha256_context ctx;
@@ -43937,7 +39074,6 @@ int mbedtls_sha256_self_test( int verbose )
         return( 1 );
     }
 
->>>>>>> local
     mbedtls_sha256_init( &ctx );
 
     for( i = 0; i < 6; i++ )
@@ -43948,35 +39084,14 @@ int mbedtls_sha256_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "  SHA-%d test #%d: ", 256 - k * 32, j + 1 );
 
-<<<<<<< HEAD
-        mbedtls_sha256_starts( &ctx, k );
-=======
         if( ( ret = mbedtls_sha256_starts_ret( &ctx, k ) ) != 0 )
             goto fail;
->>>>>>> local
 
         if( j == 2 )
         {
             memset( buf, 'a', buflen = 1000 );
 
             for( j = 0; j < 1000; j++ )
-<<<<<<< HEAD
-                mbedtls_sha256_update( &ctx, buf, buflen );
-        }
-        else
-            mbedtls_sha256_update( &ctx, sha256_test_buf[j],
-                                 sha256_test_buflen[j] );
-
-        mbedtls_sha256_finish( &ctx, sha256sum );
-
-        if( memcmp( sha256sum, sha256_test_sum[i], 32 - k * 4 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            ret = 1;
-            goto exit;
-=======
             {
                 ret = mbedtls_sha256_update_ret( &ctx, buf, buflen );
                 if( ret != 0 )
@@ -44000,7 +39115,6 @@ int mbedtls_sha256_self_test( int verbose )
         {
             ret = 1;
             goto fail;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -44010,10 +39124,6 @@ int mbedtls_sha256_self_test( int verbose )
     if( verbose != 0 )
         mbedtls_printf( "\n" );
 
-<<<<<<< HEAD
-exit:
-    mbedtls_sha256_free( &ctx );
-=======
     goto exit;
 
 fail:
@@ -44023,20 +39133,12 @@ fail:
 exit:
     mbedtls_sha256_free( &ctx );
     mbedtls_free( buf );
->>>>>>> local
 
     return( ret );
 }
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef P
-#undef R
-#undef SHR
-#undef ROTR
-=======
 #endif /* MBEDTLS_SHA256_C */
 
 /*
@@ -44060,34 +39162,21 @@ exit:
 #undef R
 #undef ROTR
 #undef S
->>>>>>> local
 #undef S0
 #undef S1
 #undef S2
 #undef S3
-<<<<<<< HEAD
-#undef F0
-#undef F1
-#undef K
-
-#endif /* MBEDTLS_SHA256_C */
-=======
 #undef SAFE_SNPRINTF
 #undef SHR
 #undef close
 #undef read
 #undef supported_init
 #undef write
->>>>>>> local
 
 
 
 /********* Start of file library/sha512.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  FIPS-180-2 compliant SHA-384/512 implementation
  *
@@ -44137,27 +39226,17 @@ exit:
 
 #else
 #include <stdio.h>
-<<<<<<< HEAD
-#define mbedtls_printf printf
-=======
 #include <stdlib.h>
 #define mbedtls_printf printf
 #define mbedtls_calloc    calloc
 #define mbedtls_free       free
->>>>>>> local
 #endif /* MBEDTLS_PLATFORM_C */
 #endif /* MBEDTLS_SELF_TEST */
 
 #if !defined(MBEDTLS_SHA512_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void sha512_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 64-bit integer manipulation macros (big endian)
@@ -44190,60 +39269,6 @@ static void sha512_zeroize( void *v, size_t n ) {
 }
 #endif /* PUT_UINT64_BE */
 
-<<<<<<< HEAD
-/*
- * Round constants
- */
-
-/* Amalgamated Release Mappings */
-#define K K512
-
-static const uint64_t K[80] =
-{
-    UL64(0x428A2F98D728AE22),  UL64(0x7137449123EF65CD),
-    UL64(0xB5C0FBCFEC4D3B2F),  UL64(0xE9B5DBA58189DBBC),
-    UL64(0x3956C25BF348B538),  UL64(0x59F111F1B605D019),
-    UL64(0x923F82A4AF194F9B),  UL64(0xAB1C5ED5DA6D8118),
-    UL64(0xD807AA98A3030242),  UL64(0x12835B0145706FBE),
-    UL64(0x243185BE4EE4B28C),  UL64(0x550C7DC3D5FFB4E2),
-    UL64(0x72BE5D74F27B896F),  UL64(0x80DEB1FE3B1696B1),
-    UL64(0x9BDC06A725C71235),  UL64(0xC19BF174CF692694),
-    UL64(0xE49B69C19EF14AD2),  UL64(0xEFBE4786384F25E3),
-    UL64(0x0FC19DC68B8CD5B5),  UL64(0x240CA1CC77AC9C65),
-    UL64(0x2DE92C6F592B0275),  UL64(0x4A7484AA6EA6E483),
-    UL64(0x5CB0A9DCBD41FBD4),  UL64(0x76F988DA831153B5),
-    UL64(0x983E5152EE66DFAB),  UL64(0xA831C66D2DB43210),
-    UL64(0xB00327C898FB213F),  UL64(0xBF597FC7BEEF0EE4),
-    UL64(0xC6E00BF33DA88FC2),  UL64(0xD5A79147930AA725),
-    UL64(0x06CA6351E003826F),  UL64(0x142929670A0E6E70),
-    UL64(0x27B70A8546D22FFC),  UL64(0x2E1B21385C26C926),
-    UL64(0x4D2C6DFC5AC42AED),  UL64(0x53380D139D95B3DF),
-    UL64(0x650A73548BAF63DE),  UL64(0x766A0ABB3C77B2A8),
-    UL64(0x81C2C92E47EDAEE6),  UL64(0x92722C851482353B),
-    UL64(0xA2BFE8A14CF10364),  UL64(0xA81A664BBC423001),
-    UL64(0xC24B8B70D0F89791),  UL64(0xC76C51A30654BE30),
-    UL64(0xD192E819D6EF5218),  UL64(0xD69906245565A910),
-    UL64(0xF40E35855771202A),  UL64(0x106AA07032BBD1B8),
-    UL64(0x19A4C116B8D2D0C8),  UL64(0x1E376C085141AB53),
-    UL64(0x2748774CDF8EEB99),  UL64(0x34B0BCB5E19B48A8),
-    UL64(0x391C0CB3C5C95A63),  UL64(0x4ED8AA4AE3418ACB),
-    UL64(0x5B9CCA4F7763E373),  UL64(0x682E6FF3D6B2B8A3),
-    UL64(0x748F82EE5DEFB2FC),  UL64(0x78A5636F43172F60),
-    UL64(0x84C87814A1F0AB72),  UL64(0x8CC702081A6439EC),
-    UL64(0x90BEFFFA23631E28),  UL64(0xA4506CEBDE82BDE9),
-    UL64(0xBEF9A3F7B2C67915),  UL64(0xC67178F2E372532B),
-    UL64(0xCA273ECEEA26619C),  UL64(0xD186B8C721C0C207),
-    UL64(0xEADA7DD6CDE0EB1E),  UL64(0xF57D4F7FEE6ED178),
-    UL64(0x06F067AA72176FBA),  UL64(0x0A637DC5A2C898A6),
-    UL64(0x113F9804BEF90DAE),  UL64(0x1B710B35131C471B),
-    UL64(0x28DB77F523047D84),  UL64(0x32CAAB7B40C72493),
-    UL64(0x3C9EBE0A15C9BEBC),  UL64(0x431D67C49C100D4C),
-    UL64(0x4CC5D4BECB3E42B6),  UL64(0x597F299CFC657E2A),
-    UL64(0x5FCB6FAB3AD6FAEC),  UL64(0x6C44198C4A475817)
-};
-
-=======
->>>>>>> local
 void mbedtls_sha512_init( mbedtls_sha512_context *ctx )
 {
     memset( ctx, 0, sizeof( mbedtls_sha512_context ) );
@@ -44254,11 +39279,7 @@ void mbedtls_sha512_free( mbedtls_sha512_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    sha512_zeroize( ctx, sizeof( mbedtls_sha512_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_sha512_context ) );
->>>>>>> local
 }
 
 void mbedtls_sha512_clone( mbedtls_sha512_context *dst,
@@ -44270,11 +39291,7 @@ void mbedtls_sha512_clone( mbedtls_sha512_context *dst,
 /*
  * SHA-512 context setup
  */
-<<<<<<< HEAD
-void mbedtls_sha512_starts( mbedtls_sha512_context *ctx, int is384 )
-=======
 int mbedtls_sha512_starts_ret( mbedtls_sha512_context *ctx, int is384 )
->>>>>>> local
 {
     ctx->total[0] = 0;
     ctx->total[1] = 0;
@@ -44305,12 +39322,6 @@ int mbedtls_sha512_starts_ret( mbedtls_sha512_context *ctx, int is384 )
     }
 
     ctx->is384 = is384;
-<<<<<<< HEAD
-}
-
-#if !defined(MBEDTLS_SHA512_PROCESS_ALT)
-void mbedtls_sha512_process( mbedtls_sha512_context *ctx, const unsigned char data[128] )
-=======
 
     return( 0 );
 }
@@ -44375,7 +39386,6 @@ static const uint64_t K[80] =
 
 int mbedtls_internal_sha512_process( mbedtls_sha512_context *ctx,
                                      const unsigned char data[128] )
->>>>>>> local
 {
     int i;
     uint64_t temp1, temp2, W[80];
@@ -44442,9 +39452,6 @@ int mbedtls_internal_sha512_process( mbedtls_sha512_context *ctx,
     ctx->state[5] += F;
     ctx->state[6] += G;
     ctx->state[7] += H;
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -44456,32 +39463,21 @@ void mbedtls_sha512_process( mbedtls_sha512_context *ctx,
     mbedtls_internal_sha512_process( ctx, data );
 }
 #endif
->>>>>>> local
 #endif /* !MBEDTLS_SHA512_PROCESS_ALT */
 
 /*
  * SHA-512 process buffer
  */
-<<<<<<< HEAD
-void mbedtls_sha512_update( mbedtls_sha512_context *ctx, const unsigned char *input,
-                    size_t ilen )
-{
-=======
 int mbedtls_sha512_update_ret( mbedtls_sha512_context *ctx,
                                const unsigned char *input,
                                size_t ilen )
 {
     int ret;
->>>>>>> local
     size_t fill;
     unsigned int left;
 
     if( ilen == 0 )
-<<<<<<< HEAD
-        return;
-=======
         return( 0 );
->>>>>>> local
 
     left = (unsigned int) (ctx->total[0] & 0x7F);
     fill = 128 - left;
@@ -44494,14 +39490,10 @@ int mbedtls_sha512_update_ret( mbedtls_sha512_context *ctx,
     if( left && ilen >= fill )
     {
         memcpy( (void *) (ctx->buffer + left), input, fill );
-<<<<<<< HEAD
-        mbedtls_sha512_process( ctx, ctx->buffer );
-=======
 
         if( ( ret = mbedtls_internal_sha512_process( ctx, ctx->buffer ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += fill;
         ilen  -= fill;
         left = 0;
@@ -44509,22 +39501,15 @@ int mbedtls_sha512_update_ret( mbedtls_sha512_context *ctx,
 
     while( ilen >= 128 )
     {
-<<<<<<< HEAD
-        mbedtls_sha512_process( ctx, input );
-=======
         if( ( ret = mbedtls_internal_sha512_process( ctx, input ) ) != 0 )
             return( ret );
 
->>>>>>> local
         input += 128;
         ilen  -= 128;
     }
 
     if( ilen > 0 )
         memcpy( (void *) (ctx->buffer + left), input, ilen );
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -44537,7 +39522,6 @@ void mbedtls_sha512_update( mbedtls_sha512_context *ctx,
     mbedtls_sha512_update_ret( ctx, input, ilen );
 }
 #endif
->>>>>>> local
 
 static const unsigned char sha512_padding[128] =
 {
@@ -44554,15 +39538,10 @@ static const unsigned char sha512_padding[128] =
 /*
  * SHA-512 final digest
  */
-<<<<<<< HEAD
-void mbedtls_sha512_finish( mbedtls_sha512_context *ctx, unsigned char output[64] )
-{
-=======
 int mbedtls_sha512_finish_ret( mbedtls_sha512_context *ctx,
                                unsigned char output[64] )
 {
     int ret;
->>>>>>> local
     size_t last, padn;
     uint64_t high, low;
     unsigned char msglen[16];
@@ -44577,16 +39556,11 @@ int mbedtls_sha512_finish_ret( mbedtls_sha512_context *ctx,
     last = (size_t)( ctx->total[0] & 0x7F );
     padn = ( last < 112 ) ? ( 112 - last ) : ( 240 - last );
 
-<<<<<<< HEAD
-    mbedtls_sha512_update( ctx, sha512_padding, padn );
-    mbedtls_sha512_update( ctx, msglen, 16 );
-=======
     if( ( ret = mbedtls_sha512_update_ret( ctx, sha512_padding, padn ) ) != 0 )
             return( ret );
 
     if( ( ret = mbedtls_sha512_update_ret( ctx, msglen, 16 ) ) != 0 )
             return( ret );
->>>>>>> local
 
     PUT_UINT64_BE( ctx->state[0], output,  0 );
     PUT_UINT64_BE( ctx->state[1], output,  8 );
@@ -44600,9 +39574,6 @@ int mbedtls_sha512_finish_ret( mbedtls_sha512_context *ctx,
         PUT_UINT64_BE( ctx->state[6], output, 48 );
         PUT_UINT64_BE( ctx->state[7], output, 56 );
     }
-<<<<<<< HEAD
-}
-=======
 
     return( 0 );
 }
@@ -44614,27 +39585,12 @@ void mbedtls_sha512_finish( mbedtls_sha512_context *ctx,
     mbedtls_sha512_finish_ret( ctx, output );
 }
 #endif
->>>>>>> local
 
 #endif /* !MBEDTLS_SHA512_ALT */
 
 /*
  * output = SHA-512( input buffer )
  */
-<<<<<<< HEAD
-void mbedtls_sha512( const unsigned char *input, size_t ilen,
-             unsigned char output[64], int is384 )
-{
-    mbedtls_sha512_context ctx;
-
-    mbedtls_sha512_init( &ctx );
-    mbedtls_sha512_starts( &ctx, is384 );
-    mbedtls_sha512_update( &ctx, input, ilen );
-    mbedtls_sha512_finish( &ctx, output );
-    mbedtls_sha512_free( &ctx );
-}
-
-=======
 int mbedtls_sha512_ret( const unsigned char *input,
                     size_t ilen,
                     unsigned char output[64],
@@ -44670,7 +39626,6 @@ void mbedtls_sha512( const unsigned char *input,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SELF_TEST)
 
 /*
@@ -44684,11 +39639,7 @@ static const unsigned char sha512_test_buf[3][113] =
     { "" }
 };
 
-<<<<<<< HEAD
-static const int sha512_test_buflen[3] =
-=======
 static const size_t sha512_test_buflen[3] =
->>>>>>> local
 {
     3, 112, 1000
 };
@@ -44752,12 +39703,6 @@ static const unsigned char sha512_test_sum[6][64] =
 int mbedtls_sha512_self_test( int verbose )
 {
     int i, j, k, buflen, ret = 0;
-<<<<<<< HEAD
-    unsigned char buf[1024];
-    unsigned char sha512sum[64];
-    mbedtls_sha512_context ctx;
-
-=======
     unsigned char *buf;
     unsigned char sha512sum[64];
     mbedtls_sha512_context ctx;
@@ -44771,7 +39716,6 @@ int mbedtls_sha512_self_test( int verbose )
         return( 1 );
     }
 
->>>>>>> local
     mbedtls_sha512_init( &ctx );
 
     for( i = 0; i < 6; i++ )
@@ -44782,35 +39726,14 @@ int mbedtls_sha512_self_test( int verbose )
         if( verbose != 0 )
             mbedtls_printf( "  SHA-%d test #%d: ", 512 - k * 128, j + 1 );
 
-<<<<<<< HEAD
-        mbedtls_sha512_starts( &ctx, k );
-=======
         if( ( ret = mbedtls_sha512_starts_ret( &ctx, k ) ) != 0 )
             goto fail;
->>>>>>> local
 
         if( j == 2 )
         {
             memset( buf, 'a', buflen = 1000 );
 
             for( j = 0; j < 1000; j++ )
-<<<<<<< HEAD
-                mbedtls_sha512_update( &ctx, buf, buflen );
-        }
-        else
-            mbedtls_sha512_update( &ctx, sha512_test_buf[j],
-                                 sha512_test_buflen[j] );
-
-        mbedtls_sha512_finish( &ctx, sha512sum );
-
-        if( memcmp( sha512sum, sha512_test_sum[i], 64 - k * 16 ) != 0 )
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            ret = 1;
-            goto exit;
-=======
             {
                 ret = mbedtls_sha512_update_ret( &ctx, buf, buflen );
                 if( ret != 0 )
@@ -44832,7 +39755,6 @@ int mbedtls_sha512_self_test( int verbose )
         {
             ret = 1;
             goto fail;
->>>>>>> local
         }
 
         if( verbose != 0 )
@@ -44842,10 +39764,6 @@ int mbedtls_sha512_self_test( int verbose )
     if( verbose != 0 )
         mbedtls_printf( "\n" );
 
-<<<<<<< HEAD
-exit:
-    mbedtls_sha512_free( &ctx );
-=======
     goto exit;
 
 fail:
@@ -44855,20 +39773,12 @@ fail:
 exit:
     mbedtls_sha512_free( &ctx );
     mbedtls_free( buf );
->>>>>>> local
 
     return( ret );
 }
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef P
-#undef R
-#undef SHR
-#undef ROTR
-=======
 #endif /* MBEDTLS_SHA512_C */
 
 /*
@@ -44892,34 +39802,21 @@ exit:
 #undef R
 #undef ROTR
 #undef S
->>>>>>> local
 #undef S0
 #undef S1
 #undef S2
 #undef S3
-<<<<<<< HEAD
-#undef F0
-#undef F1
-#undef K
-
-#endif /* MBEDTLS_SHA512_C */
-=======
 #undef SAFE_SNPRINTF
 #undef SHR
 #undef close
 #undef read
 #undef supported_init
 #undef write
->>>>>>> local
 
 
 
 /********* Start of file library/ssl_cache.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  SSL session cache implementation
  *
@@ -44953,23 +39850,11 @@ exit:
 
 #if defined(MBEDTLS_SSL_CACHE_C)
 
-<<<<<<< HEAD
-
-
-#include <string.h>
-
-=======
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
 #include <stdlib.h>
 #define mbedtls_calloc    calloc
-<<<<<<< HEAD
-#define mbedtls_free       free
-#endif
-
-=======
 #define mbedtls_free      free
 #endif
 
@@ -44977,7 +39862,6 @@ exit:
 
 #include <string.h>
 
->>>>>>> local
 void mbedtls_ssl_cache_init( mbedtls_ssl_cache_context *cache )
 {
     memset( cache, 0, sizeof( mbedtls_ssl_cache_context ) );
@@ -44994,11 +39878,7 @@ int mbedtls_ssl_cache_get( void *data, mbedtls_ssl_session *session )
 {
     int ret = 1;
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    time_t t = time( NULL );
-=======
     mbedtls_time_t t = mbedtls_time( NULL );
->>>>>>> local
 #endif
     mbedtls_ssl_cache_context *cache = (mbedtls_ssl_cache_context *) data;
     mbedtls_ssl_cache_entry *cur, *entry;
@@ -45077,11 +39957,7 @@ int mbedtls_ssl_cache_set( void *data, const mbedtls_ssl_session *session )
 {
     int ret = 1;
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    time_t t = time( NULL ), oldest = 0;
-=======
     mbedtls_time_t t = mbedtls_time( NULL ), oldest = 0;
->>>>>>> local
     mbedtls_ssl_cache_entry *old = NULL;
 #endif
     mbedtls_ssl_cache_context *cache = (mbedtls_ssl_cache_context *) data;
@@ -45264,16 +40140,11 @@ void mbedtls_ssl_cache_free( mbedtls_ssl_cache_context *cache )
 #if defined(MBEDTLS_THREADING_C)
     mbedtls_mutex_free( &cache->mutex );
 #endif
-<<<<<<< HEAD
-=======
     cache->chain = NULL;
->>>>>>> local
 }
 
 #endif /* MBEDTLS_SSL_CACHE_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -45306,15 +40177,10 @@ void mbedtls_ssl_cache_free( mbedtls_ssl_cache_context *cache )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/ssl_ciphersuites.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /**
  * \file ssl_ciphersuites.c
  *
@@ -45346,12 +40212,6 @@ void mbedtls_ssl_cache_free( mbedtls_ssl_cache_context *cache )
 
 #if defined(MBEDTLS_SSL_TLS_C)
 
-<<<<<<< HEAD
-
-
-
-// #include <stdlib.h>
-=======
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
@@ -45361,7 +40221,6 @@ void mbedtls_ssl_cache_free( mbedtls_ssl_cache_context *cache )
 
 
 
->>>>>>> local
 #include <string.h>
 
 /*
@@ -47026,13 +41885,6 @@ const int *mbedtls_ssl_list_ciphersuites( void )
 #define MAX_CIPHERSUITES    sizeof( ciphersuite_definitions     ) /         \
                             sizeof( ciphersuite_definitions[0]  )
 static int supported_ciphersuites[MAX_CIPHERSUITES];
-<<<<<<< HEAD
-
-/* Amalgamated Release Mappings */
-#define supported_init suites_supported_init
-
-=======
->>>>>>> local
 static int supported_init = 0;
 
 const int *mbedtls_ssl_list_ciphersuites( void )
@@ -47148,8 +42000,6 @@ mbedtls_pk_type_t mbedtls_ssl_get_ciphersuite_sig_pk_alg( const mbedtls_ssl_ciph
             return( MBEDTLS_PK_NONE );
     }
 }
-<<<<<<< HEAD
-=======
 
 mbedtls_pk_type_t mbedtls_ssl_get_ciphersuite_sig_alg( const mbedtls_ssl_ciphersuite_t *info )
 {
@@ -47168,7 +42018,6 @@ mbedtls_pk_type_t mbedtls_ssl_get_ciphersuite_sig_alg( const mbedtls_ssl_ciphers
     }
 }
 
->>>>>>> local
 #endif /* MBEDTLS_PK_C */
 
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C)
@@ -47206,13 +42055,6 @@ int mbedtls_ssl_ciphersuite_uses_psk( const mbedtls_ssl_ciphersuite_t *info )
 }
 #endif /* MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef supported_init
-
-#endif /* MBEDTLS_SSL_TLS_C */
-
-=======
 #endif /* MBEDTLS_SSL_TLS_C */
 
 /*
@@ -47247,15 +42089,10 @@ int mbedtls_ssl_ciphersuite_uses_psk( const mbedtls_ssl_ciphersuite_t *info )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/ssl_cli.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  SSLv3/TLSv1 client-side functions
  *
@@ -47285,31 +42122,11 @@ int mbedtls_ssl_ciphersuite_uses_psk( const mbedtls_ssl_ciphersuite_t *info )
 
 #if defined(MBEDTLS_SSL_CLI_C)
 
-<<<<<<< HEAD
-
-
-
-
-#include <string.h>
-
-=======
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
 #include <stdlib.h>
 #define mbedtls_calloc    calloc
-<<<<<<< HEAD
-#define mbedtls_free       free
-#endif
-
-#if !VXWORKS
-#include <stdint.h>
-#endif
-
-#if defined(MBEDTLS_HAVE_TIME)
-#include <time.h>
-=======
 #define mbedtls_free      free
 #endif
 
@@ -47323,26 +42140,15 @@ int mbedtls_ssl_ciphersuite_uses_psk( const mbedtls_ssl_ciphersuite_t *info )
 
 #if defined(MBEDTLS_HAVE_TIME)
 
->>>>>>> local
 #endif
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void ssl_cli_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-#endif
-
-#if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
-static void ssl_cli_write_hostname_ext( mbedtls_ssl_context *ssl,
-=======
 /* zeroize was here */
 #endif
 
 #if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
 static void ssl_write_hostname_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                     unsigned char *buf,
                                     size_t *olen )
 {
@@ -47367,8 +42173,6 @@ static void ssl_write_hostname_ext( mbedtls_ssl_context *ssl,
     }
 
     /*
-<<<<<<< HEAD
-=======
      * Sect. 3, RFC 6066 (TLS Extensions Definitions)
      *
      * In order to provide any of the server names, clients MAY include an
@@ -47376,7 +42180,6 @@ static void ssl_write_hostname_ext( mbedtls_ssl_context *ssl,
      * "extension_data" field of this extension SHALL contain
      * "ServerNameList" where:
      *
->>>>>>> local
      * struct {
      *     NameType name_type;
      *     select (name_type) {
@@ -47393,10 +42196,7 @@ static void ssl_write_hostname_ext( mbedtls_ssl_context *ssl,
      * struct {
      *     ServerName server_name_list<1..2^16-1>
      * } ServerNameList;
-<<<<<<< HEAD
-=======
      *
->>>>>>> local
      */
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SERVERNAME >> 8 ) & 0xFF );
     *p++ = (unsigned char)( ( MBEDTLS_TLS_EXT_SERVERNAME      ) & 0xFF );
@@ -47418,11 +42218,7 @@ static void ssl_write_hostname_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_SERVER_NAME_INDICATION */
 
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
-<<<<<<< HEAD
-static void ssl_cli_write_renegotiation_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          unsigned char *buf,
                                          size_t *olen )
 {
@@ -47431,12 +42227,9 @@ static void cli_ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
 
     *olen = 0;
 
-<<<<<<< HEAD
-=======
     /* We're always including an TLS_EMPTY_RENEGOTIATION_INFO_SCSV in the
      * initial ClientHello, in which case also adding the renegotiation
      * info extension is NOT RECOMMENDED as per RFC 5746 Section 3.4. */
->>>>>>> local
     if( ssl->renego_status != MBEDTLS_SSL_RENEGOTIATION_IN_PROGRESS )
         return;
 
@@ -47469,11 +42262,7 @@ static void cli_ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
  */
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
-<<<<<<< HEAD
-static void ssl_cli_write_signature_algorithms_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_signature_algorithms_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                                 unsigned char *buf,
                                                 size_t *olen )
 {
@@ -47558,11 +42347,7 @@ static void ssl_write_signature_algorithms_ext( mbedtls_ssl_context *ssl,
 
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-static void ssl_cli_write_supported_elliptic_curves_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_supported_elliptic_curves_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                                      unsigned char *buf,
                                                      size_t *olen )
 {
@@ -47583,14 +42368,6 @@ static void ssl_write_supported_elliptic_curves_ext( mbedtls_ssl_context *ssl,
 
 #if defined(MBEDTLS_ECP_C)
     for( grp_id = ssl->conf->curve_list; *grp_id != MBEDTLS_ECP_DP_NONE; grp_id++ )
-<<<<<<< HEAD
-    {
-        info = mbedtls_ecp_curve_info_from_grp_id( *grp_id );
-#else
-    for( info = mbedtls_ecp_curve_list(); info->grp_id != MBEDTLS_ECP_DP_NONE; info++ )
-    {
-#endif
-=======
 #else
     for( info = mbedtls_ecp_curve_list(); info->grp_id != MBEDTLS_ECP_DP_NONE; info++ )
 #endif
@@ -47604,7 +42381,6 @@ static void ssl_write_supported_elliptic_curves_ext( mbedtls_ssl_context *ssl,
             return;
         }
 
->>>>>>> local
         elliptic_curve_len += 2;
     }
 
@@ -47618,15 +42394,6 @@ static void ssl_write_supported_elliptic_curves_ext( mbedtls_ssl_context *ssl,
 
 #if defined(MBEDTLS_ECP_C)
     for( grp_id = ssl->conf->curve_list; *grp_id != MBEDTLS_ECP_DP_NONE; grp_id++ )
-<<<<<<< HEAD
-    {
-        info = mbedtls_ecp_curve_info_from_grp_id( *grp_id );
-#else
-    for( info = mbedtls_ecp_curve_list(); info->grp_id != MBEDTLS_ECP_DP_NONE; info++ )
-    {
-#endif
-
-=======
 #else
     for( info = mbedtls_ecp_curve_list(); info->grp_id != MBEDTLS_ECP_DP_NONE; info++ )
 #endif
@@ -47634,7 +42401,6 @@ static void ssl_write_supported_elliptic_curves_ext( mbedtls_ssl_context *ssl,
 #if defined(MBEDTLS_ECP_C)
         info = mbedtls_ecp_curve_info_from_grp_id( *grp_id );
 #endif
->>>>>>> local
         elliptic_curve_list[elliptic_curve_len++] = info->tls_id >> 8;
         elliptic_curve_list[elliptic_curve_len++] = info->tls_id & 0xFF;
     }
@@ -47654,11 +42420,7 @@ static void ssl_write_supported_elliptic_curves_ext( mbedtls_ssl_context *ssl,
     *olen = 6 + elliptic_curve_len;
 }
 
-<<<<<<< HEAD
-static void ssl_cli_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                                    unsigned char *buf,
                                                    size_t *olen )
 {
@@ -47690,11 +42452,7 @@ static void cli_ssl_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
           MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-static void ssl_cli_write_ecjpake_kkpp_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_ecjpake_kkpp_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                         unsigned char *buf,
                                         size_t *olen )
 {
@@ -47772,11 +42530,7 @@ static void ssl_write_ecjpake_kkpp_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
 
 #if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
-<<<<<<< HEAD
-static void ssl_cli_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                                unsigned char *buf,
                                                size_t *olen )
 {
@@ -47810,11 +42564,7 @@ static void cli_ssl_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_MAX_FRAGMENT_LENGTH */
 
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
-<<<<<<< HEAD
-static void ssl_cli_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                           unsigned char *buf, size_t *olen )
 {
     unsigned char *p = buf;
@@ -47846,11 +42596,7 @@ static void cli_ssl_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_TRUNCATED_HMAC */
 
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
-<<<<<<< HEAD
-static void ssl_cli_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                        unsigned char *buf, size_t *olen )
 {
     unsigned char *p = buf;
@@ -47884,11 +42630,7 @@ static void cli_ssl_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_ENCRYPT_THEN_MAC */
 
 #if defined(MBEDTLS_SSL_EXTENDED_MASTER_SECRET)
-<<<<<<< HEAD
-static void ssl_cli_write_extended_ms_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_extended_ms_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                        unsigned char *buf, size_t *olen )
 {
     unsigned char *p = buf;
@@ -47922,11 +42664,7 @@ static void cli_ssl_write_extended_ms_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_EXTENDED_MASTER_SECRET */
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
-<<<<<<< HEAD
-static void ssl_cli_write_session_ticket_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_session_ticket_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                           unsigned char *buf, size_t *olen )
 {
     unsigned char *p = buf;
@@ -47970,11 +42708,7 @@ static void cli_ssl_write_session_ticket_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_SESSION_TICKETS */
 
 #if defined(MBEDTLS_SSL_ALPN)
-<<<<<<< HEAD
-static void ssl_cli_write_alpn_ext( mbedtls_ssl_context *ssl,
-=======
 static void cli_ssl_write_alpn_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                 unsigned char *buf, size_t *olen )
 {
     unsigned char *p = buf;
@@ -48041,11 +42775,7 @@ static int ssl_generate_random( mbedtls_ssl_context *ssl )
     int ret;
     unsigned char *p = ssl->handshake->randbytes;
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    time_t t;
-=======
     mbedtls_time_t t;
->>>>>>> local
 #endif
 
     /*
@@ -48060,11 +42790,7 @@ static int ssl_generate_random( mbedtls_ssl_context *ssl )
 #endif
 
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    t = time( NULL );
-=======
     t = mbedtls_time( NULL );
->>>>>>> local
     *p++ = (unsigned char)( t >> 24 );
     *p++ = (unsigned char)( t >> 16 );
     *p++ = (unsigned char)( t >>  8 );
@@ -48269,11 +42995,8 @@ static int ssl_write_client_hello( mbedtls_ssl_context *ssl )
         *p++ = (unsigned char)( ciphersuites[i]      );
     }
 
-<<<<<<< HEAD
-=======
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "client hello, got %d ciphersuites (excluding SCSVs)", n ) );
 
->>>>>>> local
     /*
      * Add TLS_EMPTY_RENEGOTIATION_INFO_SCSV
      */
@@ -48281,10 +43004,7 @@ static int ssl_write_client_hello( mbedtls_ssl_context *ssl )
     if( ssl->renego_status == MBEDTLS_SSL_INITIAL_HANDSHAKE )
 #endif
     {
-<<<<<<< HEAD
-=======
         MBEDTLS_SSL_DEBUG_MSG( 3, ( "adding EMPTY_RENEGOTIATION_INFO_SCSV" ) );
->>>>>>> local
         *p++ = (unsigned char)( MBEDTLS_SSL_EMPTY_RENEGOTIATION_INFO >> 8 );
         *p++ = (unsigned char)( MBEDTLS_SSL_EMPTY_RENEGOTIATION_INFO      );
         n++;
@@ -48304,11 +43024,6 @@ static int ssl_write_client_hello( mbedtls_ssl_context *ssl )
     *q++ = (unsigned char)( n >> 7 );
     *q++ = (unsigned char)( n << 1 );
 
-<<<<<<< HEAD
-    MBEDTLS_SSL_DEBUG_MSG( 3, ( "client hello, got %d ciphersuites", n ) );
-
-=======
->>>>>>> local
 #if defined(MBEDTLS_ZLIB_SUPPORT)
     offer_compress = 1;
 #else
@@ -48349,14 +43064,6 @@ static int ssl_write_client_hello( mbedtls_ssl_context *ssl )
     // First write extensions, then the total length
     //
 #if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
-<<<<<<< HEAD
-    ssl_cli_write_hostname_ext( ssl, p + 2 + ext_len, &olen );
-    ext_len += olen;
-#endif
-
-#if defined(MBEDTLS_SSL_RENEGOTIATION)
-    ssl_cli_write_renegotiation_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_hostname_ext( ssl, p + 2 + ext_len, &olen );
     ext_len += olen;
 #endif
@@ -48365,96 +43072,56 @@ static int ssl_write_client_hello( mbedtls_ssl_context *ssl )
      * even if MBEDTLS_SSL_RENEGOTIATION is not defined. */
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
     cli_ssl_write_renegotiation_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
-<<<<<<< HEAD
-    ssl_cli_write_signature_algorithms_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_signature_algorithms_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-    ssl_cli_write_supported_elliptic_curves_ext( ssl, p + 2 + ext_len, &olen );
-    ext_len += olen;
-
-    ssl_cli_write_supported_point_formats_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_supported_elliptic_curves_ext( ssl, p + 2 + ext_len, &olen );
     ext_len += olen;
 
     cli_ssl_write_supported_point_formats_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-    ssl_cli_write_ecjpake_kkpp_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_ecjpake_kkpp_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
-<<<<<<< HEAD
-    ssl_cli_write_max_fragment_length_ext( ssl, p + 2 + ext_len, &olen );
-=======
     cli_ssl_write_max_fragment_length_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
-<<<<<<< HEAD
-    ssl_cli_write_truncated_hmac_ext( ssl, p + 2 + ext_len, &olen );
-=======
     cli_ssl_write_truncated_hmac_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
-<<<<<<< HEAD
-    ssl_cli_write_encrypt_then_mac_ext( ssl, p + 2 + ext_len, &olen );
-=======
     cli_ssl_write_encrypt_then_mac_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_EXTENDED_MASTER_SECRET)
-<<<<<<< HEAD
-    ssl_cli_write_extended_ms_ext( ssl, p + 2 + ext_len, &olen );
-=======
     cli_ssl_write_extended_ms_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_ALPN)
-<<<<<<< HEAD
-    ssl_cli_write_alpn_ext( ssl, p + 2 + ext_len, &olen );
-=======
     cli_ssl_write_alpn_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
-<<<<<<< HEAD
-    ssl_cli_write_session_ticket_ext( ssl, p + 2 + ext_len, &olen );
-=======
     cli_ssl_write_session_ticket_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
@@ -48493,19 +43160,10 @@ static int ssl_write_client_hello( mbedtls_ssl_context *ssl )
     return( 0 );
 }
 
-<<<<<<< HEAD
-static int ssl_cli_parse_renegotiation_info( mbedtls_ssl_context *ssl,
-                                         const unsigned char *buf,
-                                         size_t len )
-{
-    int ret;
-
-=======
 static int cli_ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
                                          const unsigned char *buf,
                                          size_t len )
 {
->>>>>>> local
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
     if( ssl->renego_status != MBEDTLS_SSL_INITIAL_HANDSHAKE )
     {
@@ -48518,15 +43176,8 @@ static int cli_ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
                           ssl->peer_verify_data, ssl->verify_data_len ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching renegotiation info" ) );
-<<<<<<< HEAD
-
-            if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-                return( ret );
-
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
         }
     }
@@ -48536,15 +43187,8 @@ static int cli_ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
         if( len != 1 || buf[0] != 0x00 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-zero length renegotiation info" ) );
-<<<<<<< HEAD
-
-            if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-                return( ret );
-
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
         }
 
@@ -48555,11 +43199,7 @@ static int cli_ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
 }
 
 #if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
-<<<<<<< HEAD
-static int ssl_cli_parse_max_fragment_length_ext( mbedtls_ssl_context *ssl,
-=======
 static int cli_ssl_parse_max_fragment_length_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                               const unsigned char *buf,
                                               size_t len )
 {
@@ -48571,12 +43211,9 @@ static int cli_ssl_parse_max_fragment_length_ext( mbedtls_ssl_context *ssl,
         len != 1 ||
         buf[0] != ssl->conf->mfl_code )
     {
-<<<<<<< HEAD
-=======
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching max fragment length extension" ) );
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -48585,23 +43222,16 @@ static int cli_ssl_parse_max_fragment_length_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_MAX_FRAGMENT_LENGTH */
 
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
-<<<<<<< HEAD
-static int ssl_cli_parse_truncated_hmac_ext( mbedtls_ssl_context *ssl,
-=======
 static int cli_ssl_parse_truncated_hmac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          const unsigned char *buf,
                                          size_t len )
 {
     if( ssl->conf->trunc_hmac == MBEDTLS_SSL_TRUNC_HMAC_DISABLED ||
         len != 0 )
     {
-<<<<<<< HEAD
-=======
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching truncated HMAC extension" ) );
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -48614,11 +43244,7 @@ static int cli_ssl_parse_truncated_hmac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_TRUNCATED_HMAC */
 
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
-<<<<<<< HEAD
-static int ssl_cli_parse_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
-=======
 static int cli_ssl_parse_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          const unsigned char *buf,
                                          size_t len )
 {
@@ -48626,12 +43252,9 @@ static int cli_ssl_parse_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
         ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 ||
         len != 0 )
     {
-<<<<<<< HEAD
-=======
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching encrypt-then-MAC extension" ) );
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -48644,11 +43267,7 @@ static int cli_ssl_parse_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_ENCRYPT_THEN_MAC */
 
 #if defined(MBEDTLS_SSL_EXTENDED_MASTER_SECRET)
-<<<<<<< HEAD
-static int ssl_cli_parse_extended_ms_ext( mbedtls_ssl_context *ssl,
-=======
 static int cli_ssl_parse_extended_ms_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          const unsigned char *buf,
                                          size_t len )
 {
@@ -48656,12 +43275,9 @@ static int cli_ssl_parse_extended_ms_ext( mbedtls_ssl_context *ssl,
         ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 ||
         len != 0 )
     {
-<<<<<<< HEAD
-=======
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching extended master secret extension" ) );
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -48674,23 +43290,16 @@ static int cli_ssl_parse_extended_ms_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_EXTENDED_MASTER_SECRET */
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
-<<<<<<< HEAD
-static int ssl_cli_parse_session_ticket_ext( mbedtls_ssl_context *ssl,
-=======
 static int cli_ssl_parse_session_ticket_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          const unsigned char *buf,
                                          size_t len )
 {
     if( ssl->conf->session_tickets == MBEDTLS_SSL_SESSION_TICKETS_DISABLED ||
         len != 0 )
     {
-<<<<<<< HEAD
-=======
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching session ticket extension" ) );
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -48715,11 +43324,8 @@ static int ssl_parse_supported_point_formats_ext( mbedtls_ssl_context *ssl,
     if( list_size + 1 != len )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -48731,11 +43337,7 @@ static int ssl_parse_supported_point_formats_ext( mbedtls_ssl_context *ssl,
         {
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C)
             ssl->handshake->ecdh_ctx.point_format = p[0];
-<<<<<<< HEAD
-#endif            
-=======
 #endif
->>>>>>> local
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
             ssl->handshake->ecjpake_ctx.point_format = p[0];
 #endif
@@ -48748,11 +43350,8 @@ static int ssl_parse_supported_point_formats_ext( mbedtls_ssl_context *ssl,
     }
 
     MBEDTLS_SSL_DEBUG_MSG( 1, ( "no point format in common" ) );
-<<<<<<< HEAD
-=======
     mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                     MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
     return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
 }
 #endif /* MBEDTLS_ECDH_C || MBEDTLS_ECDSA_C || 
@@ -48781,11 +43380,8 @@ static int ssl_parse_ecjpake_kkpp( mbedtls_ssl_context *ssl,
                                                 buf, len ) ) != 0 )
     {
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ecjpake_read_round_one", ret );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( ret );
     }
 
@@ -48794,11 +43390,7 @@ static int ssl_parse_ecjpake_kkpp( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
 
 #if defined(MBEDTLS_SSL_ALPN)
-<<<<<<< HEAD
-static int ssl_cli_parse_alpn_ext( mbedtls_ssl_context *ssl,
-=======
 static int cli_ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                const unsigned char *buf, size_t len )
 {
     size_t list_len, name_len;
@@ -48806,16 +43398,12 @@ static int cli_ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
 
     /* If we didn't send it, the server shouldn't send it */
     if( ssl->conf->alpn_list == NULL )
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
-=======
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching ALPN extension" ) );
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
->>>>>>> local
 
     /*
      * opaque ProtocolName<1..2^8-1>;
@@ -48829,17 +43417,6 @@ static int cli_ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
 
     /* Min length is 2 (list_len) + 1 (name_len) + 1 (name) */
     if( len < 4 )
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
-
-    list_len = ( buf[0] << 8 ) | buf[1];
-    if( list_len != len - 2 )
-        return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
-
-    name_len = buf[2];
-    if( name_len != list_len - 1 )
-        return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
-=======
     {
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
@@ -48861,7 +43438,6 @@ static int cli_ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
->>>>>>> local
 
     /* Check that the server chosen protocol was in our list and save it */
     for( p = ssl->conf->alpn_list; *p != NULL; p++ )
@@ -48874,12 +43450,9 @@ static int cli_ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
         }
     }
 
-<<<<<<< HEAD
-=======
     MBEDTLS_SSL_DEBUG_MSG( 1, ( "ALPN extension: no matching protocol" ) );
     mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                     MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
     return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
 }
 #endif /* MBEDTLS_SSL_ALPN */
@@ -48926,8 +43499,6 @@ static int ssl_parse_hello_verify_request( mbedtls_ssl_context *ssl )
     cookie_len = *p++;
     MBEDTLS_SSL_DEBUG_BUF( 3, "cookie", p, cookie_len );
 
-<<<<<<< HEAD
-=======
     if( ( ssl->in_msg + ssl->in_msglen ) - p < cookie_len )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1,
@@ -48937,7 +43508,6 @@ static int ssl_parse_hello_verify_request( mbedtls_ssl_context *ssl )
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
->>>>>>> local
     mbedtls_free( ssl->handshake->verify_cookie );
 
     ssl->handshake->verify_cookie = mbedtls_calloc( 1, cookie_len );
@@ -48977,12 +43547,6 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
 #endif
     int handshake_failure = 0;
     const mbedtls_ssl_ciphersuite_t *suite_info;
-<<<<<<< HEAD
-#if defined(MBEDTLS_DEBUG_C)
-    uint32_t t;
-#endif
-=======
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse server hello" ) );
 
@@ -48990,10 +43554,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
 
     if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
     {
-<<<<<<< HEAD
-=======
         /* No alert on a read error. */
->>>>>>> local
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
         return( ret );
     }
@@ -49014,21 +43575,15 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
             }
 
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-handshake message during renego" ) );
-<<<<<<< HEAD
-=======
 
             ssl->keep_current_message = 1;
->>>>>>> local
             return( MBEDTLS_ERR_SSL_WAITING_SERVER_HELLO_RENEGO );
         }
 #endif /* MBEDTLS_SSL_RENEGOTIATION */
 
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
 
@@ -49055,11 +43610,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         buf[0] != MBEDTLS_SSL_HS_SERVER_HELLO )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -49097,21 +43649,11 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         return( MBEDTLS_ERR_SSL_BAD_HS_PROTOCOL_VERSION );
     }
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_DEBUG_C)
-    t = ( (uint32_t) buf[2] << 24 )
-      | ( (uint32_t) buf[3] << 16 )
-      | ( (uint32_t) buf[4] <<  8 )
-      | ( (uint32_t) buf[5]       );
-    MBEDTLS_SSL_DEBUG_MSG( 3, ( "server hello, current time: %lu", t ) );
-#endif
-=======
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "server hello, current time: %lu",
                            ( (uint32_t) buf[2] << 24 ) |
                            ( (uint32_t) buf[3] << 16 ) |
                            ( (uint32_t) buf[4] <<  8 ) |
                            ( (uint32_t) buf[5]       ) ) );
->>>>>>> local
 
     memcpy( ssl->handshake->randbytes + 32, buf + 2, 32 );
 
@@ -49122,11 +43664,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
     if( n > 32 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -49139,11 +43678,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
             ssl->in_hslen != mbedtls_ssl_hs_hdr_len( ssl ) + 40 + n + ext_len )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
         }
     }
@@ -49154,11 +43690,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
     else
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -49186,11 +43719,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
 #endif/* MBEDTLS_ZLIB_SUPPORT */
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "server hello, bad compression: %d", comp ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_FEATURE_UNAVAILABLE );
     }
 
@@ -49202,11 +43732,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
     if( ssl->transform_negotiate->ciphersuite_info == NULL )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "ciphersuite info for %04x not found", i ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_INTERNAL_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
     }
 
@@ -49230,11 +43757,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         ssl->state++;
         ssl->handshake->resume = 0;
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-        ssl->session_negotiate->start = time( NULL );
-=======
         ssl->session_negotiate->start = mbedtls_time( NULL );
->>>>>>> local
 #endif
         ssl->session_negotiate->ciphersuite = i;
         ssl->session_negotiate->compression = comp;
@@ -49248,11 +43771,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         if( ( ret = mbedtls_ssl_derive_keys( ssl ) ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_derive_keys", ret );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_INTERNAL_ERROR );
->>>>>>> local
             return( ret );
         }
     }
@@ -49272,11 +43792,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -49288,11 +43805,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         if( ssl->conf->ciphersuite_list[ssl->minor_ver][i] == 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
         }
 
@@ -49310,11 +43824,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
       )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
     ssl->session_negotiate->compression = comp;
@@ -49333,11 +43844,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         if( ext_size + 4 > ext_len )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
         }
 
@@ -49349,11 +43857,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
             renegotiation_info_seen = 1;
 #endif
 
-<<<<<<< HEAD
-            if( ( ret = ssl_cli_parse_renegotiation_info( ssl, ext + 4,
-=======
             if( ( ret = cli_ssl_parse_renegotiation_info( ssl, ext + 4,
->>>>>>> local
                                                       ext_size ) ) != 0 )
                 return( ret );
 
@@ -49363,11 +43867,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         case MBEDTLS_TLS_EXT_MAX_FRAGMENT_LENGTH:
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "found max_fragment_length extension" ) );
 
-<<<<<<< HEAD
-            if( ( ret = ssl_cli_parse_max_fragment_length_ext( ssl,
-=======
             if( ( ret = cli_ssl_parse_max_fragment_length_ext( ssl,
->>>>>>> local
                             ext + 4, ext_size ) ) != 0 )
             {
                 return( ret );
@@ -49380,11 +43880,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         case MBEDTLS_TLS_EXT_TRUNCATED_HMAC:
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "found truncated_hmac extension" ) );
 
-<<<<<<< HEAD
-            if( ( ret = ssl_cli_parse_truncated_hmac_ext( ssl,
-=======
             if( ( ret = cli_ssl_parse_truncated_hmac_ext( ssl,
->>>>>>> local
                             ext + 4, ext_size ) ) != 0 )
             {
                 return( ret );
@@ -49397,11 +43893,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         case MBEDTLS_TLS_EXT_ENCRYPT_THEN_MAC:
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "found encrypt_then_mac extension" ) );
 
-<<<<<<< HEAD
-            if( ( ret = ssl_cli_parse_encrypt_then_mac_ext( ssl,
-=======
             if( ( ret = cli_ssl_parse_encrypt_then_mac_ext( ssl,
->>>>>>> local
                             ext + 4, ext_size ) ) != 0 )
             {
                 return( ret );
@@ -49414,11 +43906,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         case MBEDTLS_TLS_EXT_EXTENDED_MASTER_SECRET:
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "found extended_master_secret extension" ) );
 
-<<<<<<< HEAD
-            if( ( ret = ssl_cli_parse_extended_ms_ext( ssl,
-=======
             if( ( ret = cli_ssl_parse_extended_ms_ext( ssl,
->>>>>>> local
                             ext + 4, ext_size ) ) != 0 )
             {
                 return( ret );
@@ -49431,11 +43919,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         case MBEDTLS_TLS_EXT_SESSION_TICKET:
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "found session_ticket extension" ) );
 
-<<<<<<< HEAD
-            if( ( ret = ssl_cli_parse_session_ticket_ext( ssl,
-=======
             if( ( ret = cli_ssl_parse_session_ticket_ext( ssl,
->>>>>>> local
                             ext + 4, ext_size ) ) != 0 )
             {
                 return( ret );
@@ -49476,11 +43960,7 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
         case MBEDTLS_TLS_EXT_ALPN:
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "found alpn extension" ) );
 
-<<<<<<< HEAD
-            if( ( ret = ssl_cli_parse_alpn_ext( ssl, ext + 4, ext_size ) ) != 0 )
-=======
             if( ( ret = cli_ssl_parse_alpn_ext( ssl, ext + 4, ext_size ) ) != 0 )
->>>>>>> local
                 return( ret );
 
             break;
@@ -49536,14 +44016,8 @@ static int ssl_parse_server_hello( mbedtls_ssl_context *ssl )
 
     if( handshake_failure == 1 )
     {
-<<<<<<< HEAD
-        if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-            return( ret );
-
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO );
     }
 
@@ -49677,19 +44151,6 @@ static int ssl_parse_server_psk_hint( mbedtls_ssl_context *ssl,
      *
      * opaque psk_identity_hint<0..2^16-1>;
      */
-<<<<<<< HEAD
-    len = (*p)[0] << 8 | (*p)[1];
-    *p += 2;
-
-    if( (*p) + len > end )
-    {
-        MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message (psk_identity_hint length)" ) );
-        return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
-    }
-
-    // TODO: Retrieve PSK identity hint and callback to app
-    //
-=======
     if( (*p) > end - 2 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message "
@@ -49711,7 +44172,6 @@ static int ssl_parse_server_psk_hint( mbedtls_ssl_context *ssl,
      * PSK to be provisionned on the client. This could be changed later if
      * someone needs that feature.
      */
->>>>>>> local
     *p += len;
     ret = 0;
 
@@ -49845,13 +44305,8 @@ static int ssl_parse_signature_algorithm( mbedtls_ssl_context *ssl,
      */
     if( mbedtls_ssl_check_sig_hash( ssl, *md_alg ) != 0 )
     {
-<<<<<<< HEAD
-        MBEDTLS_SSL_DEBUG_MSG( 1, ( "server used HashAlgorithm "
-                                    "that was not offered" ) );
-=======
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "server used HashAlgorithm %d that was not offered",
                                     *(p)[0] ) );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
     }
 
@@ -49868,11 +44323,7 @@ static int ssl_parse_signature_algorithm( mbedtls_ssl_context *ssl,
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)
-<<<<<<< HEAD
-static int ssl_cli_get_ecdh_params_from_cert( mbedtls_ssl_context *ssl )
-=======
 static int cli_ssl_get_ecdh_params_from_cert( mbedtls_ssl_context *ssl )
->>>>>>> local
 {
     int ret;
     const mbedtls_ecp_keypair *peer_key;
@@ -49913,14 +44364,9 @@ static int cli_ssl_get_ecdh_params_from_cert( mbedtls_ssl_context *ssl )
 static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
 {
     int ret;
-<<<<<<< HEAD
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-    unsigned char *p, *end;
-=======
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
     unsigned char *p = NULL, *end = NULL;
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse server key exchange" ) );
 
@@ -49940,17 +44386,11 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_RSA ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA )
     {
-<<<<<<< HEAD
-        if( ( ret = ssl_cli_get_ecdh_params_from_cert( ssl ) ) != 0 )
-        {
-            MBEDTLS_SSL_DEBUG_RET( 1, "ssl_cli_get_ecdh_params_from_cert", ret );
-=======
         if( ( ret = cli_ssl_get_ecdh_params_from_cert( ssl ) ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "cli_ssl_get_ecdh_params_from_cert", ret );
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
             return( ret );
         }
 
@@ -49972,11 +44412,8 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
     if( ssl->in_msgtype != MBEDTLS_SSL_MSG_HANDSHAKE )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
 
@@ -49989,13 +44426,6 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_PSK ||
             ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA_PSK )
         {
-<<<<<<< HEAD
-            ssl->record_read = 1;
-            goto exit;
-        }
-
-        MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-=======
             /* Current message is probably either
              * CertificateRequest or ServerHelloDone */
             ssl->keep_current_message = 1;
@@ -50007,7 +44437,6 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
 
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
 
@@ -50024,11 +44453,8 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         if( ssl_parse_server_psk_hint( ssl, &p, end ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
         }
     } /* FALLTROUGH */
@@ -50050,11 +44476,8 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         if( ssl_parse_server_dh_params( ssl, &p, end ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
         }
     }
@@ -50071,11 +44494,8 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         if( ssl_parse_server_ecdh_params( ssl, &p, end ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
         }
     }
@@ -50091,11 +44511,8 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         if( ret != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ecjpake_read_round_two", ret );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
         }
     }
@@ -50106,17 +44523,8 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );
     }
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA )
-=======
 #if defined(MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED)
     if( mbedtls_ssl_ciphersuite_uses_server_signature( ciphersuite_info ) )
->>>>>>> local
     {
         size_t sig_len, hashlen;
         unsigned char hash[64];
@@ -50135,22 +44543,16 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
                                                &md_alg, &pk_alg ) != 0 )
             {
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-<<<<<<< HEAD
-=======
                 mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                                 MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
                 return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
             }
 
             if( pk_alg != mbedtls_ssl_get_ciphersuite_sig_pk_alg( ciphersuite_info ) )
             {
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-<<<<<<< HEAD
-=======
                 mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                                 MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
                 return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
             }
         }
@@ -50176,14 +44578,6 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         /*
          * Read signature
          */
-<<<<<<< HEAD
-        sig_len = ( p[0] << 8 ) | p[1];
-        p += 2;
-
-        if( end != p + sig_len )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-=======
 
         if( p > end - 2 )
         {
@@ -50200,7 +44594,6 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_KEY_EXCHANGE );
         }
 
@@ -50213,47 +44606,11 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
     defined(MBEDTLS_SSL_PROTO_TLS1_1)
         if( md_alg == MBEDTLS_MD_NONE )
         {
-<<<<<<< HEAD
-            mbedtls_md5_context mbedtls_md5;
-            mbedtls_sha1_context mbedtls_sha1;
-
-            mbedtls_md5_init(  &mbedtls_md5  );
-            mbedtls_sha1_init( &mbedtls_sha1 );
-
-            hashlen = 36;
-
-            /*
-             * digitally-signed struct {
-             *     opaque md5_hash[16];
-             *     opaque sha_hash[20];
-             * };
-             *
-             * md5_hash
-             *     MD5(ClientHello.random + ServerHello.random
-             *                            + ServerParams);
-             * sha_hash
-             *     SHA(ClientHello.random + ServerHello.random
-             *                            + ServerParams);
-             */
-            mbedtls_md5_starts( &mbedtls_md5 );
-            mbedtls_md5_update( &mbedtls_md5, ssl->handshake->randbytes, 64 );
-            mbedtls_md5_update( &mbedtls_md5, params, params_len );
-            mbedtls_md5_finish( &mbedtls_md5, hash );
-
-            mbedtls_sha1_starts( &mbedtls_sha1 );
-            mbedtls_sha1_update( &mbedtls_sha1, ssl->handshake->randbytes, 64 );
-            mbedtls_sha1_update( &mbedtls_sha1, params, params_len );
-            mbedtls_sha1_finish( &mbedtls_sha1, hash + 16 );
-
-            mbedtls_md5_free(  &mbedtls_md5  );
-            mbedtls_sha1_free( &mbedtls_sha1 );
-=======
             hashlen = 36;
             ret = mbedtls_ssl_get_key_exchange_md_ssl_tls( ssl, hash, params,
                                                            params_len );
             if( ret != 0 )
                 return( ret );
->>>>>>> local
         }
         else
 #endif /* MBEDTLS_SSL_PROTO_SSL3 || MBEDTLS_SSL_PROTO_TLS1 || \
@@ -50262,41 +44619,12 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
     defined(MBEDTLS_SSL_PROTO_TLS1_2)
         if( md_alg != MBEDTLS_MD_NONE )
         {
-<<<<<<< HEAD
-            mbedtls_md_context_t ctx;
-
-            mbedtls_md_init( &ctx );
-
-            /* Info from md_alg will be used instead */
-            hashlen = 0;
-
-            /*
-             * digitally-signed struct {
-             *     opaque client_random[32];
-             *     opaque server_random[32];
-             *     ServerDHParams params;
-             * };
-             */
-            if( ( ret = mbedtls_md_setup( &ctx,
-                                     mbedtls_md_info_from_type( md_alg ), 0 ) ) != 0 )
-            {
-                MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_md_setup", ret );
-                return( ret );
-            }
-
-            mbedtls_md_starts( &ctx );
-            mbedtls_md_update( &ctx, ssl->handshake->randbytes, 64 );
-            mbedtls_md_update( &ctx, params, params_len );
-            mbedtls_md_finish( &ctx, hash );
-            mbedtls_md_free( &ctx );
-=======
             /* Info from md_alg will be used instead */
             hashlen = 0;
             ret = mbedtls_ssl_get_key_exchange_md_tls1_2( ssl, hash, params,
                                                           params_len, md_alg );
             if( ret != 0 )
                 return( ret );
->>>>>>> local
         }
         else
 #endif /* MBEDTLS_SSL_PROTO_TLS1 || MBEDTLS_SSL_PROTO_TLS1_1 || \
@@ -50312,11 +44640,8 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         if( ssl->session_negotiate->peer_cert == NULL )
         {
             MBEDTLS_SSL_DEBUG_MSG( 2, ( "certificate required" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
         }
 
@@ -50326,33 +44651,21 @@ static int ssl_parse_server_key_exchange( mbedtls_ssl_context *ssl )
         if( ! mbedtls_pk_can_do( &ssl->session_negotiate->peer_cert->pk, pk_alg ) )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server key exchange message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_PK_TYPE_MISMATCH );
         }
 
         if( ( ret = mbedtls_pk_verify( &ssl->session_negotiate->peer_cert->pk,
                                md_alg, hash, hashlen, p, sig_len ) ) != 0 )
         {
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECRYPT_ERROR );
->>>>>>> local
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_pk_verify", ret );
             return( ret );
         }
     }
-<<<<<<< HEAD
-#endif /* MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED ||
-          MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED ||
-          MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED */
-=======
 #endif /* MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED */
->>>>>>> local
 
 exit:
     ssl->state++;
@@ -50362,23 +44675,6 @@ exit:
     return( 0 );
 }
 
-<<<<<<< HEAD
-#if !defined(MBEDTLS_KEY_EXCHANGE_RSA_ENABLED)       && \
-    !defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED)   && \
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)
-static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
-{
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-
-    MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse certificate request" ) );
-
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE )
-=======
 #if ! defined(MBEDTLS_KEY_EXCHANGE__CERT_REQ_ALLOWED__ENABLED)
 static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
 {
@@ -50388,7 +44684,6 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse certificate request" ) );
 
     if( ! mbedtls_ssl_ciphersuite_cert_req_allowed( ciphersuite_info ) )
->>>>>>> local
     {
         MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= skip parse certificate request" ) );
         ssl->state++;
@@ -50398,24 +44693,6 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
     return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );
 }
-<<<<<<< HEAD
-#else
-static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
-{
-    int ret;
-    unsigned char *buf, *p;
-    size_t n = 0, m = 0;
-    size_t cert_type_len = 0, dn_len = 0;
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-
-    MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse certificate request" ) );
-
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE )
-=======
 #else /* MBEDTLS_KEY_EXCHANGE__CERT_REQ_ALLOWED__ENABLED */
 static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
 {
@@ -50429,37 +44706,12 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse certificate request" ) );
 
     if( ! mbedtls_ssl_ciphersuite_cert_req_allowed( ciphersuite_info ) )
->>>>>>> local
     {
         MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= skip parse certificate request" ) );
         ssl->state++;
         return( 0 );
     }
 
-<<<<<<< HEAD
-    if( ssl->record_read == 0 )
-    {
-        if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
-        {
-            MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
-            return( ret );
-        }
-
-        if( ssl->in_msgtype != MBEDTLS_SSL_MSG_HANDSHAKE )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate request message" ) );
-            return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
-        }
-
-        ssl->record_read = 1;
-    }
-
-    ssl->client_auth = 0;
-    ssl->state++;
-
-    if( ssl->in_msg[0] == MBEDTLS_SSL_HS_CERTIFICATE_REQUEST )
-        ssl->client_auth++;
-=======
     if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
     {
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
@@ -50476,26 +44728,16 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
 
     ssl->state++;
     ssl->client_auth = ( ssl->in_msg[0] == MBEDTLS_SSL_HS_CERTIFICATE_REQUEST );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "got %s certificate request",
                         ssl->client_auth ? "a" : "no" ) );
 
     if( ssl->client_auth == 0 )
-<<<<<<< HEAD
-        goto exit;
-
-    ssl->record_read = 0;
-
-    // TODO: handshake_failure alert for an anonymous server to request
-    // client authentication
-=======
     {
         /* Current message is probably the ServerHelloDone */
         ssl->keep_current_message = 1;
         goto exit;
     }
->>>>>>> local
 
     /*
      *  struct {
@@ -50504,13 +44746,6 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
      *        supported_signature_algorithms<2^16-1>; -- TLS 1.2 only
      *      DistinguishedName certificate_authorities<0..2^16-1>;
      *  } CertificateRequest;
-<<<<<<< HEAD
-     */
-    buf = ssl->in_msg;
-
-    // Retrieve cert types
-    //
-=======
      *
      *  Since we only support a single certificate on clients, let's just
      *  ignore all the information that's supposed to help us pick a
@@ -50531,57 +44766,12 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
     buf = ssl->in_msg;
 
     /* certificate_types */
->>>>>>> local
     cert_type_len = buf[mbedtls_ssl_hs_hdr_len( ssl )];
     n = cert_type_len;
 
     if( ssl->in_hslen < mbedtls_ssl_hs_hdr_len( ssl ) + 2 + n )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate request message" ) );
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE_REQUEST );
-    }
-
-    p = buf + mbedtls_ssl_hs_hdr_len( ssl ) + 1;
-    while( cert_type_len > 0 )
-    {
-#if defined(MBEDTLS_RSA_C)
-        if( *p == MBEDTLS_SSL_CERT_TYPE_RSA_SIGN &&
-            mbedtls_pk_can_do( mbedtls_ssl_own_key( ssl ), MBEDTLS_PK_RSA ) )
-        {
-            ssl->handshake->cert_type = MBEDTLS_SSL_CERT_TYPE_RSA_SIGN;
-            break;
-        }
-        else
-#endif
-#if defined(MBEDTLS_ECDSA_C)
-        if( *p == MBEDTLS_SSL_CERT_TYPE_ECDSA_SIGN &&
-            mbedtls_pk_can_do( mbedtls_ssl_own_key( ssl ), MBEDTLS_PK_ECDSA ) )
-        {
-            ssl->handshake->cert_type = MBEDTLS_SSL_CERT_TYPE_ECDSA_SIGN;
-            break;
-        }
-        else
-#endif
-        {
-            ; /* Unsupported cert type, ignore */
-        }
-
-        cert_type_len--;
-        p++;
-    }
-
-#if defined(MBEDTLS_SSL_PROTO_TLS1_2)
-    if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_3 )
-    {
-        /* Ignored, see comments about hash in write_certificate_verify */
-        // TODO: should check the signature part against our pk_key though
-        size_t sig_alg_len = ( ( buf[mbedtls_ssl_hs_hdr_len( ssl ) + 1 + n] <<  8 )
-                             | ( buf[mbedtls_ssl_hs_hdr_len( ssl ) + 2 + n]       ) );
-
-        m += 2;
-        n += sig_alg_len;
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
         return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE_REQUEST );
@@ -50605,32 +44795,17 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
 #endif
 
         n += 2 + sig_alg_len;
->>>>>>> local
 
         if( ssl->in_hslen < mbedtls_ssl_hs_hdr_len( ssl ) + 2 + n )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate request message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE_REQUEST );
         }
     }
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
 
-<<<<<<< HEAD
-    /* Ignore certificate_authorities, we only have one cert anyway */
-    // TODO: should not send cert if no CA matches
-    dn_len = ( ( buf[mbedtls_ssl_hs_hdr_len( ssl ) + 1 + m + n] <<  8 )
-             | ( buf[mbedtls_ssl_hs_hdr_len( ssl ) + 2 + m + n]       ) );
-
-    n += dn_len;
-    if( ssl->in_hslen != mbedtls_ssl_hs_hdr_len( ssl ) + 3 + m + n )
-    {
-        MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate request message" ) );
-=======
     /* certificate_authorities */
     dn_len = ( ( buf[mbedtls_ssl_hs_hdr_len( ssl ) + 1 + n] <<  8 )
              | ( buf[mbedtls_ssl_hs_hdr_len( ssl ) + 2 + n]       ) );
@@ -50641,7 +44816,6 @@ static int ssl_parse_certificate_request( mbedtls_ssl_context *ssl )
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate request message" ) );
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE_REQUEST );
     }
 
@@ -50650,14 +44824,7 @@ exit:
 
     return( 0 );
 }
-<<<<<<< HEAD
-#endif /* !MBEDTLS_KEY_EXCHANGE_RSA_ENABLED &&
-          !MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED &&
-          !MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED &&
-          !MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED */
-=======
 #endif /* MBEDTLS_KEY_EXCHANGE__CERT_REQ_ALLOWED__ENABLED */
->>>>>>> local
 
 static int ssl_parse_server_hello_done( mbedtls_ssl_context *ssl )
 {
@@ -50665,23 +44832,6 @@ static int ssl_parse_server_hello_done( mbedtls_ssl_context *ssl )
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse server hello done" ) );
 
-<<<<<<< HEAD
-    if( ssl->record_read == 0 )
-    {
-        if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
-        {
-            MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
-            return( ret );
-        }
-
-        if( ssl->in_msgtype != MBEDTLS_SSL_MSG_HANDSHAKE )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello done message" ) );
-            return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
-        }
-    }
-    ssl->record_read = 0;
-=======
     if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
     {
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
@@ -50693,17 +44843,13 @@ static int ssl_parse_server_hello_done( mbedtls_ssl_context *ssl )
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello done message" ) );
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
->>>>>>> local
 
     if( ssl->in_hslen  != mbedtls_ssl_hs_hdr_len( ssl ) ||
         ssl->in_msg[0] != MBEDTLS_SSL_HS_SERVER_HELLO_DONE )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad server hello done message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_SERVER_HELLO_DONE );
     }
 
@@ -50723,12 +44869,8 @@ static int ssl_write_client_key_exchange( mbedtls_ssl_context *ssl )
 {
     int ret;
     size_t i, n;
-<<<<<<< HEAD
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-=======
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> write client key exchange" ) );
 
@@ -50815,14 +44957,7 @@ static int ssl_write_client_key_exchange( mbedtls_ssl_context *ssl )
           MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED */
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED)
-<<<<<<< HEAD
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK )
-=======
     if( mbedtls_ssl_ciphersuite_uses_psk( ciphersuite_info ) )
->>>>>>> local
     {
         /*
          * opaque psk_identity<0..2^16-1>;
@@ -50986,13 +45121,6 @@ static int ssl_write_client_key_exchange( mbedtls_ssl_context *ssl )
 
 #if !defined(MBEDTLS_KEY_EXCHANGE_RSA_ENABLED)       && \
     !defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED)   && \
-<<<<<<< HEAD
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)
-static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
-{
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-=======
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED)  && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)&& \
@@ -51001,7 +45129,6 @@ static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
 {
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
->>>>>>> local
     int ret;
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> write certificate verify" ) );
@@ -51030,12 +45157,8 @@ static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
 static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
 {
     int ret = MBEDTLS_ERR_SSL_FEATURE_UNAVAILABLE;
-<<<<<<< HEAD
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-=======
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
->>>>>>> local
     size_t n = 0, offset = 0;
     unsigned char hash[48];
     unsigned char *hash_start = hash;
@@ -51182,14 +45305,10 @@ static int ssl_write_certificate_verify( mbedtls_ssl_context *ssl )
 }
 #endif /* !MBEDTLS_KEY_EXCHANGE_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED &&
-<<<<<<< HEAD
-          !MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
-=======
           !MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED */
->>>>>>> local
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
 static int ssl_parse_new_session_ticket( mbedtls_ssl_context *ssl )
@@ -51211,11 +45330,8 @@ static int ssl_parse_new_session_ticket( mbedtls_ssl_context *ssl )
     if( ssl->in_msgtype != MBEDTLS_SSL_MSG_HANDSHAKE )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad new session ticket message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
 
@@ -51233,11 +45349,8 @@ static int ssl_parse_new_session_ticket( mbedtls_ssl_context *ssl )
         ssl->in_hslen < 6 + mbedtls_ssl_hs_hdr_len( ssl ) )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad new session ticket message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_NEW_SESSION_TICKET );
     }
 
@@ -51251,11 +45364,8 @@ static int ssl_parse_new_session_ticket( mbedtls_ssl_context *ssl )
     if( ticket_len + 6 + mbedtls_ssl_hs_hdr_len( ssl ) != ssl->in_hslen )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad new session ticket message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_NEW_SESSION_TICKET );
     }
 
@@ -51272,11 +45382,7 @@ static int ssl_parse_new_session_ticket( mbedtls_ssl_context *ssl )
     if( ticket_len == 0 )
         return( 0 );
 
-<<<<<<< HEAD
-    ssl_cli_zeroize( ssl->session_negotiate->ticket,
-=======
     mbedtls_zeroize( ssl->session_negotiate->ticket,
->>>>>>> local
                       ssl->session_negotiate->ticket_len );
     mbedtls_free( ssl->session_negotiate->ticket );
     ssl->session_negotiate->ticket = NULL;
@@ -51285,11 +45391,8 @@ static int ssl_parse_new_session_ticket( mbedtls_ssl_context *ssl )
     if( ( ticket = mbedtls_calloc( 1, ticket_len ) ) == NULL )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "ticket alloc failed" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_INTERNAL_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
     }
 
@@ -51449,11 +45552,6 @@ int mbedtls_ssl_handshake_client_step( mbedtls_ssl_context *ssl )
 
     return( ret );
 }
-<<<<<<< HEAD
-
-#endif /* MBEDTLS_SSL_CLI_C */
-
-=======
 #endif /* MBEDTLS_SSL_CLI_C */
 
 /*
@@ -51488,15 +45586,10 @@ int mbedtls_ssl_handshake_client_step( mbedtls_ssl_context *ssl )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/ssl_cookie.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  DTLS cookie callbacks implementation
  *
@@ -51530,27 +45623,10 @@ int mbedtls_ssl_handshake_client_step( mbedtls_ssl_context *ssl )
 
 #if defined(MBEDTLS_SSL_COOKIE_C)
 
-<<<<<<< HEAD
-
-
-
-=======
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
 #define mbedtls_calloc    calloc
-<<<<<<< HEAD
-#define mbedtls_free       free
-#endif
-
-#include <string.h>
-
-/* Implementation that should never be optimized out by the compiler */
-static void ssl_cookie_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #define mbedtls_free      free
 #endif
 
@@ -51561,7 +45637,6 @@ static void ssl_cookie_zeroize( void *v, size_t n ) {
 
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 
 /*
  * If DTLS is in use, then at least one of SHA-1, SHA-256, SHA-512 is
@@ -51613,17 +45688,10 @@ void mbedtls_ssl_cookie_free( mbedtls_ssl_cookie_ctx *ctx )
     mbedtls_md_free( &ctx->hmac_ctx );
 
 #if defined(MBEDTLS_THREADING_C)
-<<<<<<< HEAD
-    mbedtls_mutex_init( &ctx->mutex );
-#endif
-
-    ssl_cookie_zeroize( ctx, sizeof( mbedtls_ssl_cookie_ctx ) );
-=======
     mbedtls_mutex_free( &ctx->mutex );
 #endif
 
     mbedtls_zeroize( ctx, sizeof( mbedtls_ssl_cookie_ctx ) );
->>>>>>> local
 }
 
 int mbedtls_ssl_cookie_setup( mbedtls_ssl_cookie_ctx *ctx,
@@ -51644,11 +45712,7 @@ int mbedtls_ssl_cookie_setup( mbedtls_ssl_cookie_ctx *ctx,
     if( ret != 0 )
         return( ret );
 
-<<<<<<< HEAD
-    ssl_cookie_zeroize( key, sizeof( key ) );
-=======
     mbedtls_zeroize( key, sizeof( key ) );
->>>>>>> local
 
     return( 0 );
 }
@@ -51698,11 +45762,7 @@ int mbedtls_ssl_cookie_write( void *p_ctx,
         return( MBEDTLS_ERR_SSL_BUFFER_TOO_SMALL );
 
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    t = (unsigned long) time( NULL );
-=======
     t = (unsigned long) mbedtls_time( NULL );
->>>>>>> local
 #else
     t = ctx->serial++;
 #endif
@@ -51772,11 +45832,7 @@ int mbedtls_ssl_cookie_check( void *p_ctx,
         return( -1 );
 
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    cur_time = (unsigned long) time( NULL );
-=======
     cur_time = (unsigned long) mbedtls_time( NULL );
->>>>>>> local
 #else
     cur_time = ctx->serial;
 #endif
@@ -51793,12 +45849,6 @@ int mbedtls_ssl_cookie_check( void *p_ctx,
 }
 #endif /* MBEDTLS_SSL_COOKIE_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/ssl_srv.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -51834,7 +45884,6 @@ int mbedtls_ssl_cookie_check( void *p_ctx,
 
 
 /********* Start of file library/ssl_srv.c ************/
->>>>>>> local
 
 /*
  *  SSLv3/TLSv1 server-side functions
@@ -51865,28 +45914,6 @@ int mbedtls_ssl_cookie_check( void *p_ctx,
 
 #if defined(MBEDTLS_SSL_SRV_C)
 
-<<<<<<< HEAD
-
-
-
-
-#include <string.h>
-
-#if defined(MBEDTLS_ECP_C)
-
-#endif
-
-#if defined(MBEDTLS_PLATFORM_C)
-
-#else
-#include <stdlib.h>
-#define mbedtls_calloc    calloc
-#define mbedtls_free       free
-#endif
-
-#if defined(MBEDTLS_HAVE_TIME)
-#include <time.h>
-=======
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
@@ -51907,18 +45934,11 @@ int mbedtls_ssl_cookie_check( void *p_ctx,
 
 #if defined(MBEDTLS_HAVE_TIME)
 
->>>>>>> local
 #endif
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void ssl_srv_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 #endif
 
 #if defined(MBEDTLS_SSL_DTLS_HELLO_VERIFY)
@@ -51966,11 +45986,8 @@ static int ssl_parse_servername_ext( mbedtls_ssl_context *ssl,
     if( servername_list_size + 2 != len )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -51981,11 +45998,8 @@ static int ssl_parse_servername_ext( mbedtls_ssl_context *ssl,
         if( hostname_len + 3 > servername_list_size )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
         }
 
@@ -52010,11 +46024,8 @@ static int ssl_parse_servername_ext( mbedtls_ssl_context *ssl,
     if( servername_list_size != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52022,19 +46033,10 @@ static int ssl_parse_servername_ext( mbedtls_ssl_context *ssl,
 }
 #endif /* MBEDTLS_SSL_SERVER_NAME_INDICATION */
 
-<<<<<<< HEAD
-static int ssl_srv_parse_renegotiation_info( mbedtls_ssl_context *ssl,
-                                         const unsigned char *buf,
-                                         size_t len )
-{
-    int ret;
-
-=======
 static int ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
                                          const unsigned char *buf,
                                          size_t len )
 {
->>>>>>> local
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
     if( ssl->renego_status != MBEDTLS_SSL_INITIAL_HANDSHAKE )
     {
@@ -52045,15 +46047,8 @@ static int ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
                           ssl->verify_data_len ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-matching renegotiation info" ) );
-<<<<<<< HEAD
-
-            if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-                return( ret );
-
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
         }
     }
@@ -52063,15 +46058,8 @@ static int ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
         if( len != 1 || buf[0] != 0x0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "non-zero length renegotiation info" ) );
-<<<<<<< HEAD
-
-            if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-                return( ret );
-
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
         }
 
@@ -52083,8 +46071,6 @@ static int ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
 
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
-<<<<<<< HEAD
-=======
 
 /*
  * Status of the implementation of signature-algorithms extension:
@@ -52098,58 +46084,23 @@ static int ssl_parse_renegotiation_info( mbedtls_ssl_context *ssl,
  * This needs to be done at a later stage.
  *
  */
->>>>>>> local
 static int ssl_parse_signature_algorithms_ext( mbedtls_ssl_context *ssl,
                                                const unsigned char *buf,
                                                size_t len )
 {
     size_t sig_alg_list_size;
-<<<<<<< HEAD
-    const unsigned char *p;
-    const unsigned char *end = buf + len;
-    const int *md_cur;
-
-=======
 
     const unsigned char *p;
     const unsigned char *end = buf + len;
 
     mbedtls_md_type_t md_cur;
     mbedtls_pk_type_t sig_cur;
->>>>>>> local
 
     sig_alg_list_size = ( ( buf[0] << 8 ) | ( buf[1] ) );
     if( sig_alg_list_size + 2 != len ||
         sig_alg_list_size % 2 != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-    }
-
-    /*
-     * For now, ignore the SignatureAlgorithm part and rely on offered
-     * ciphersuites only for that part. To be fixed later.
-     *
-     * So, just look at the HashAlgorithm part.
-     */
-    for( md_cur = ssl->conf->sig_hashes; *md_cur != MBEDTLS_MD_NONE; md_cur++ ) {
-        for( p = buf + 2; p < end; p += 2 ) {
-            if( *md_cur == (int) mbedtls_ssl_md_alg_from_hash( p[0] ) ) {
-                ssl->handshake->sig_alg = p[0];
-                goto have_sig_alg;
-            }
-        }
-    }
-
-    /* Some key echanges do not need signatures at all */
-    MBEDTLS_SSL_DEBUG_MSG( 3, ( "no signature_algorithm in common" ) );
-    return( 0 );
-
-have_sig_alg:
-    MBEDTLS_SSL_DEBUG_MSG( 3, ( "client hello v3, signature_algorithm ext: %d",
-                   ssl->handshake->sig_alg ) );
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
@@ -52197,7 +46148,6 @@ have_sig_alg:
                                         "hash alg %d not supported", md_cur ) );
         }
     }
->>>>>>> local
 
     return( 0 );
 }
@@ -52219,11 +46169,8 @@ static int ssl_parse_supported_elliptic_curves( mbedtls_ssl_context *ssl,
         list_size % 2 != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52231,11 +46178,8 @@ static int ssl_parse_supported_elliptic_curves( mbedtls_ssl_context *ssl,
     if( ssl->handshake->curves != NULL )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52246,15 +46190,11 @@ static int ssl_parse_supported_elliptic_curves( mbedtls_ssl_context *ssl,
         our_size = MBEDTLS_ECP_DP_MAX;
 
     if( ( curves = mbedtls_calloc( our_size, sizeof( *curves ) ) ) == NULL )
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
-=======
     {
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_INTERNAL_ERROR );
         return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
     }
->>>>>>> local
 
     ssl->handshake->curves = curves;
 
@@ -52287,11 +46227,8 @@ static int ssl_parse_supported_point_formats( mbedtls_ssl_context *ssl,
     if( list_size + 1 != len )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52337,11 +46274,8 @@ static int ssl_parse_ecjpake_kkpp( mbedtls_ssl_context *ssl,
                                                 buf, len ) ) != 0 )
     {
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ecjpake_read_round_one", ret );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
         return( ret );
     }
 
@@ -52353,22 +46287,15 @@ static int ssl_parse_ecjpake_kkpp( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
 
 #if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
-<<<<<<< HEAD
-static int ssl_srv_parse_max_fragment_length_ext( mbedtls_ssl_context *ssl,
-=======
 static int ssl_parse_max_fragment_length_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                               const unsigned char *buf,
                                               size_t len )
 {
     if( len != 1 || buf[0] >= MBEDTLS_SSL_MAX_FRAG_LEN_INVALID )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_ILLEGAL_PARAMETER );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52379,22 +46306,15 @@ static int ssl_parse_max_fragment_length_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_MAX_FRAGMENT_LENGTH */
 
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
-<<<<<<< HEAD
-static int ssl_srv_parse_truncated_hmac_ext( mbedtls_ssl_context *ssl,
-=======
 static int ssl_parse_truncated_hmac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          const unsigned char *buf,
                                          size_t len )
 {
     if( len != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52408,22 +46328,15 @@ static int ssl_parse_truncated_hmac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_TRUNCATED_HMAC */
 
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
-<<<<<<< HEAD
-static int ssl_srv_parse_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
-=======
 static int ssl_parse_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                       const unsigned char *buf,
                                       size_t len )
 {
     if( len != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52440,22 +46353,15 @@ static int ssl_parse_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_ENCRYPT_THEN_MAC */
 
 #if defined(MBEDTLS_SSL_EXTENDED_MASTER_SECRET)
-<<<<<<< HEAD
-static int ssl_srv_parse_extended_ms_ext( mbedtls_ssl_context *ssl,
-=======
 static int ssl_parse_extended_ms_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                       const unsigned char *buf,
                                       size_t len )
 {
     if( len != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -52472,11 +46378,7 @@ static int ssl_parse_extended_ms_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_EXTENDED_MASTER_SECRET */
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
-<<<<<<< HEAD
-static int ssl_srv_parse_session_ticket_ext( mbedtls_ssl_context *ssl,
-=======
 static int ssl_parse_session_ticket_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          unsigned char *buf,
                                          size_t len )
 {
@@ -52536,11 +46438,7 @@ static int ssl_parse_session_ticket_ext( mbedtls_ssl_context *ssl,
     memcpy( ssl->session_negotiate, &session, sizeof( mbedtls_ssl_session ) );
 
     /* Zeroize instead of free as we copied the content */
-<<<<<<< HEAD
-    ssl_srv_zeroize( &session, sizeof( mbedtls_ssl_session ) );
-=======
     mbedtls_zeroize( &session, sizeof( mbedtls_ssl_session ) );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "session successfully restored from ticket" ) );
 
@@ -52554,11 +46452,7 @@ static int ssl_parse_session_ticket_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_SESSION_TICKETS */
 
 #if defined(MBEDTLS_SSL_ALPN)
-<<<<<<< HEAD
-static int ssl_srv_parse_alpn_ext( mbedtls_ssl_context *ssl,
-=======
 static int ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                const unsigned char *buf, size_t len )
 {
     size_t list_len, cur_len, ours_len;
@@ -52579,19 +46473,6 @@ static int ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
 
     /* Min length is 2 (list_len) + 1 (name_len) + 1 (name) */
     if( len < 4 )
-<<<<<<< HEAD
-        return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-
-    list_len = ( buf[0] << 8 ) | buf[1];
-    if( list_len != len - 2 )
-        return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-
-    /*
-     * Use our order of preference
-     */
-    start = buf + 2;
-    end = buf + len;
-=======
     {
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
@@ -52635,27 +46516,13 @@ static int ssl_parse_alpn_ext( mbedtls_ssl_context *ssl,
     /*
      * Use our order of preference
      */
->>>>>>> local
     for( ours = ssl->conf->alpn_list; *ours != NULL; ours++ )
     {
         ours_len = strlen( *ours );
         for( theirs = start; theirs != end; theirs += cur_len )
         {
-<<<<<<< HEAD
-            /* If the list is well formed, we should get equality first */
-            if( theirs > end )
-                return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-
             cur_len = *theirs++;
 
-            /* Empty strings MUST NOT be included */
-            if( cur_len == 0 )
-                return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-
-=======
-            cur_len = *theirs++;
-
->>>>>>> local
             if( cur_len == ours_len &&
                 memcmp( theirs, *ours, cur_len ) == 0 )
             {
@@ -52706,12 +46573,8 @@ static int ssl_pick_cert( mbedtls_ssl_context *ssl,
                           const mbedtls_ssl_ciphersuite_t * ciphersuite_info )
 {
     mbedtls_ssl_key_cert *cur, *list, *fallback = NULL;
-<<<<<<< HEAD
-    mbedtls_pk_type_t pk_alg = mbedtls_ssl_get_ciphersuite_sig_pk_alg( ciphersuite_info );
-=======
     mbedtls_pk_type_t pk_alg =
         mbedtls_ssl_get_ciphersuite_sig_pk_alg( ciphersuite_info );
->>>>>>> local
     uint32_t flags;
 
 #if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
@@ -52814,14 +46677,11 @@ static int ssl_ciphersuite_match( mbedtls_ssl_context *ssl, int suite_id,
 {
     const mbedtls_ssl_ciphersuite_t *suite_info;
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)    
     mbedtls_pk_type_t sig_type;
 #endif
 
->>>>>>> local
     suite_info = mbedtls_ssl_ciphersuite_from_id( suite_id );
     if( suite_info == NULL )
     {
@@ -52888,8 +46748,6 @@ static int ssl_ciphersuite_match( mbedtls_ssl_context *ssl, int suite_id,
     }
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
     /* If the ciphersuite requires signing, check whether
@@ -52909,7 +46767,6 @@ static int ssl_ciphersuite_match( mbedtls_ssl_context *ssl, int suite_id,
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 &&
           MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED */
 
->>>>>>> local
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     /*
      * Final check: if ciphersuite requires us to have a
@@ -52947,15 +46804,8 @@ static int ssl_parse_client_hello_v2( mbedtls_ssl_context *ssl )
     if( ssl->renego_status != MBEDTLS_SSL_INITIAL_HANDSHAKE )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "client hello v2 illegal for renegotiation" ) );
-<<<<<<< HEAD
-
-        if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-            return( ret );
-
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 #endif /* MBEDTLS_SSL_RENEGOTIATION */
@@ -53101,14 +46951,8 @@ static int ssl_parse_client_hello_v2( mbedtls_ssl_context *ssl )
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "received RENEGOTIATION SCSV "
                                     "during renegotiation" ) );
 
-<<<<<<< HEAD
-                if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-                    return( ret );
-
-=======
                 mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                                 MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
                 return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
             }
 #endif /* MBEDTLS_SSL_RENEGOTIATION */
@@ -53146,17 +46990,9 @@ static int ssl_parse_client_hello_v2( mbedtls_ssl_context *ssl )
     ciphersuite_info = NULL;
 #if defined(MBEDTLS_SSL_SRV_RESPECT_CLIENT_PREFERENCE)
     for( j = 0, p = buf + 6; j < ciph_len; j += 3, p += 3 )
-<<<<<<< HEAD
-    {
         for( i = 0; ciphersuites[i] != 0; i++ )
 #else
     for( i = 0; ciphersuites[i] != 0; i++ )
-    {
-=======
-        for( i = 0; ciphersuites[i] != 0; i++ )
-#else
-    for( i = 0; ciphersuites[i] != 0; i++ )
->>>>>>> local
         for( j = 0, p = buf + 6; j < ciph_len; j += 3, p += 3 )
 #endif
         {
@@ -53174,10 +47010,6 @@ static int ssl_parse_client_hello_v2( mbedtls_ssl_context *ssl )
             if( ciphersuite_info != NULL )
                 goto have_ciphersuite_v2;
         }
-<<<<<<< HEAD
-    }
-=======
->>>>>>> local
 
     if( got_common_suite )
     {
@@ -53196,10 +47028,6 @@ have_ciphersuite_v2:
 
     ssl->session_negotiate->ciphersuite = ciphersuites[i];
     ssl->transform_negotiate->ciphersuite_info = ciphersuite_info;
-<<<<<<< HEAD
-    mbedtls_ssl_optimize_checksum( ssl, ssl->transform_negotiate->ciphersuite_info );
-=======
->>>>>>> local
 
     /*
      * SSLv2 Client Hello relevant renegotiation security checks
@@ -53208,15 +47036,8 @@ have_ciphersuite_v2:
         ssl->conf->allow_legacy_renegotiation == MBEDTLS_SSL_LEGACY_BREAK_HANDSHAKE )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "legacy renegotiation, breaking off handshake" ) );
-<<<<<<< HEAD
-
-        if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-            return( ret );
-
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -53229,12 +47050,9 @@ have_ciphersuite_v2:
 }
 #endif /* MBEDTLS_SSL_SRV_SUPPORT_SSLV2_CLIENT_HELLO */
 
-<<<<<<< HEAD
-=======
 /* This function doesn't alert on errors that happen early during
    ClientHello parsing because they might indicate that the client is
    not talking SSL/TLS at all and would not understand our alert. */
->>>>>>> local
 static int ssl_parse_client_hello( mbedtls_ssl_context *ssl )
 {
     int ret, got_common_suite;
@@ -53253,8 +47071,6 @@ static int ssl_parse_client_hello( mbedtls_ssl_context *ssl )
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info;
     int major, minor;
 
-<<<<<<< HEAD
-=======
     /* If there is no signature-algorithm extension present,
      * we need to fall back to the default values for allowed
      * signature-hash pairs. */
@@ -53264,7 +47080,6 @@ static int ssl_parse_client_hello( mbedtls_ssl_context *ssl )
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 &&
           MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED */
 
->>>>>>> local
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse client hello" ) );
 
 #if defined(MBEDTLS_SSL_DTLS_ANTI_REPLAY)
@@ -53281,10 +47096,7 @@ read_record_header:
     {
         if( ( ret = mbedtls_ssl_fetch_input( ssl, 5 ) ) != 0 )
         {
-<<<<<<< HEAD
-=======
             /* No alert on a read error. */
->>>>>>> local
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_fetch_input", ret );
             return( ret );
         }
@@ -53297,11 +47109,7 @@ read_record_header:
     if( ssl->conf->transport == MBEDTLS_SSL_TRANSPORT_STREAM )
 #endif
         if( ( buf[0] & 0x80 ) != 0 )
-<<<<<<< HEAD
-            return ssl_parse_client_hello_v2( ssl );
-=======
             return( ssl_parse_client_hello_v2( ssl ) );
->>>>>>> local
 #endif
 
     MBEDTLS_SSL_DEBUG_BUF( 4, "record header", buf, mbedtls_ssl_hdr_len( ssl ) );
@@ -53392,12 +47200,8 @@ read_record_header:
             return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
         }
 
-<<<<<<< HEAD
-        if( ( ret = mbedtls_ssl_fetch_input( ssl, mbedtls_ssl_hdr_len( ssl ) + msg_len ) ) != 0 )
-=======
         if( ( ret = mbedtls_ssl_fetch_input( ssl,
                        mbedtls_ssl_hdr_len( ssl ) + msg_len ) ) != 0 )
->>>>>>> local
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_fetch_input", ret );
             return( ret );
@@ -53545,15 +47349,8 @@ read_record_header:
                             " [%d:%d] < [%d:%d]",
                             ssl->major_ver, ssl->minor_ver,
                             ssl->conf->min_major_ver, ssl->conf->min_minor_ver ) );
-<<<<<<< HEAD
-
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                      MBEDTLS_SSL_ALERT_MSG_PROTOCOL_VERSION );
-
-=======
-        mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
-                                     MBEDTLS_SSL_ALERT_MSG_PROTOCOL_VERSION );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_PROTOCOL_VERSION );
     }
 
@@ -53581,11 +47378,8 @@ read_record_header:
         sess_len + 34 + 2 > msg_len ) /* 2 for cipherlist length field */
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -53609,11 +47403,8 @@ read_record_header:
         if( cookie_offset + 1 + cookie_len + 2 > msg_len )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_PROTOCOL_VERSION );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
         }
 
@@ -53646,10 +47437,7 @@ read_record_header:
             /* We know we didn't send a cookie, so it should be empty */
             if( cookie_len != 0 )
             {
-<<<<<<< HEAD
-=======
                 /* This may be an attacker's probe, so don't send an alert */
->>>>>>> local
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
                 return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
             }
@@ -53674,11 +47462,8 @@ read_record_header:
         ( ciph_len % 2 ) != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -53697,11 +47482,8 @@ read_record_header:
         comp_len + comp_offset + 1 > msg_len )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -53726,86 +47508,6 @@ read_record_header:
         ssl->session_negotiate->compression = MBEDTLS_SSL_COMPRESS_NULL;
 #endif
 
-<<<<<<< HEAD
-    /*
-     * Check the extension length
-     */
-    ext_offset = comp_offset + 1 + comp_len;
-    if( msg_len > ext_offset )
-    {
-        if( msg_len < ext_offset + 2 )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-            return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-        }
-
-        ext_len = ( buf[ext_offset + 0] << 8 )
-                | ( buf[ext_offset + 1]      );
-
-        if( ( ext_len > 0 && ext_len < 4 ) ||
-            msg_len != ext_offset + 2 + ext_len )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-            return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-        }
-    }
-    else
-        ext_len = 0;
-
-    ext = buf + ext_offset + 2;
-    MBEDTLS_SSL_DEBUG_BUF( 3, "client hello extensions", ext, ext_len );
-
-    while( ext_len != 0 )
-    {
-        unsigned int ext_id   = ( ( ext[0] <<  8 )
-                                | ( ext[1]       ) );
-        unsigned int ext_size = ( ( ext[2] <<  8 )
-                                | ( ext[3]       ) );
-
-        if( ext_size + 4 > ext_len )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-            return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-        }
-        switch( ext_id )
-        {
-#if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
-        case MBEDTLS_TLS_EXT_SERVERNAME:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found ServerName extension" ) );
-            if( ssl->conf->f_sni == NULL )
-                break;
-
-            ret = ssl_parse_servername_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_SSL_SERVER_NAME_INDICATION */
-
-        case MBEDTLS_TLS_EXT_RENEGOTIATION_INFO:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found renegotiation extension" ) );
-#if defined(MBEDTLS_SSL_RENEGOTIATION)
-            renegotiation_info_seen = 1;
-#endif
-
-            ret = ssl_srv_parse_renegotiation_info( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-
-#if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
-    defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
-        case MBEDTLS_TLS_EXT_SIG_ALG:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found signature_algorithms extension" ) );
-#if defined(MBEDTLS_SSL_RENEGOTIATION)
-            if( ssl->renego_status == MBEDTLS_SSL_RENEGOTIATION_IN_PROGRESS )
-                break;
-#endif
-
-            ret = ssl_parse_signature_algorithms_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-=======
     /* Do not parse the extensions if the protocol is SSLv3 */
 #if defined(MBEDTLS_SSL_PROTO_SSL3)
     if( ( ssl->major_ver != 3 ) || ( ssl->minor_ver != 0 ) )
@@ -53893,30 +47595,11 @@ read_record_header:
 
                 sig_hash_alg_ext_present = 1;
                 break;
->>>>>>> local
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 &&
           MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED */
 
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-        case MBEDTLS_TLS_EXT_SUPPORTED_ELLIPTIC_CURVES:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found supported elliptic curves extension" ) );
-
-            ret = ssl_parse_supported_elliptic_curves( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-
-        case MBEDTLS_TLS_EXT_SUPPORTED_POINT_FORMATS:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found supported point formats extension" ) );
-            ssl->handshake->cli_exts |= MBEDTLS_TLS_EXT_SUPPORTED_POINT_FORMATS_PRESENT;
-
-            ret = ssl_parse_supported_point_formats( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-=======
             case MBEDTLS_TLS_EXT_SUPPORTED_ELLIPTIC_CURVES:
                 MBEDTLS_SSL_DEBUG_MSG( 3, ( "found supported elliptic curves extension" ) );
 
@@ -53933,99 +47616,10 @@ read_record_header:
                 if( ret != 0 )
                     return( ret );
                 break;
->>>>>>> local
 #endif /* MBEDTLS_ECDH_C || MBEDTLS_ECDSA_C ||
           MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-        case MBEDTLS_TLS_EXT_ECJPAKE_KKPP:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found ecjpake kkpp extension" ) );
-
-            ret = ssl_parse_ecjpake_kkpp( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
-
-#if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
-        case MBEDTLS_TLS_EXT_MAX_FRAGMENT_LENGTH:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found max fragment length extension" ) );
-
-            ret = ssl_srv_parse_max_fragment_length_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_SSL_MAX_FRAGMENT_LENGTH */
-
-#if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
-        case MBEDTLS_TLS_EXT_TRUNCATED_HMAC:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found truncated hmac extension" ) );
-
-            ret = ssl_srv_parse_truncated_hmac_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_SSL_TRUNCATED_HMAC */
-
-#if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
-        case MBEDTLS_TLS_EXT_ENCRYPT_THEN_MAC:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found encrypt then mac extension" ) );
-
-            ret = ssl_srv_parse_encrypt_then_mac_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_SSL_ENCRYPT_THEN_MAC */
-
-#if defined(MBEDTLS_SSL_EXTENDED_MASTER_SECRET)
-        case MBEDTLS_TLS_EXT_EXTENDED_MASTER_SECRET:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found extended master secret extension" ) );
-
-            ret = ssl_srv_parse_extended_ms_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_SSL_EXTENDED_MASTER_SECRET */
-
-#if defined(MBEDTLS_SSL_SESSION_TICKETS)
-        case MBEDTLS_TLS_EXT_SESSION_TICKET:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found session ticket extension" ) );
-
-            ret = ssl_srv_parse_session_ticket_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_SSL_SESSION_TICKETS */
-
-#if defined(MBEDTLS_SSL_ALPN)
-        case MBEDTLS_TLS_EXT_ALPN:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "found alpn extension" ) );
-
-            ret = ssl_srv_parse_alpn_ext( ssl, ext + 4, ext_size );
-            if( ret != 0 )
-                return( ret );
-            break;
-#endif /* MBEDTLS_SSL_SESSION_TICKETS */
-
-        default:
-            MBEDTLS_SSL_DEBUG_MSG( 3, ( "unknown extension found: %d (ignoring)",
-                           ext_id ) );
-        }
-
-        ext_len -= 4 + ext_size;
-        ext += 4 + ext_size;
-
-        if( ext_len > 0 && ext_len < 4 )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client hello message" ) );
-            return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
-        }
-    }
-
-#if defined(MBEDTLS_SSL_FALLBACK_SCSV)
-    for( i = 0, p = buf + 41 + sess_len; i < ciph_len; i += 2, p += 2 )
-=======
             case MBEDTLS_TLS_EXT_ECJPAKE_KKPP:
                 MBEDTLS_SSL_DEBUG_MSG( 3, ( "found ecjpake kkpp extension" ) );
 
@@ -54117,7 +47711,6 @@ read_record_header:
 
 #if defined(MBEDTLS_SSL_FALLBACK_SCSV)
     for( i = 0, p = buf + ciph_offset + 2; i < ciph_len; i += 2, p += 2 )
->>>>>>> local
     {
         if( p[0] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE >> 8 ) & 0xff ) &&
             p[1] == (unsigned char)( ( MBEDTLS_SSL_FALLBACK_SCSV_VALUE      ) & 0xff ) )
@@ -54139,8 +47732,6 @@ read_record_header:
     }
 #endif /* MBEDTLS_SSL_FALLBACK_SCSV */
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
 
@@ -54161,7 +47752,6 @@ read_record_header:
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 &&
           MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED */
 
->>>>>>> local
     /*
      * Check for TLS_EMPTY_RENEGOTIATION_INFO_SCSV
      */
@@ -54173,18 +47763,10 @@ read_record_header:
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
             if( ssl->renego_status == MBEDTLS_SSL_RENEGOTIATION_IN_PROGRESS )
             {
-<<<<<<< HEAD
-                MBEDTLS_SSL_DEBUG_MSG( 1, ( "received RENEGOTIATION SCSV during renegotiation" ) );
-
-                if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-                    return( ret );
-
-=======
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "received RENEGOTIATION SCSV "
                                             "during renegotiation" ) );
                 mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                                 MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
                 return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
             }
 #endif
@@ -54228,14 +47810,8 @@ read_record_header:
 
     if( handshake_failure == 1 )
     {
-<<<<<<< HEAD
-        if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-            return( ret );
-
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_HELLO );
     }
 
@@ -54249,17 +47825,9 @@ read_record_header:
     ciphersuite_info = NULL;
 #if defined(MBEDTLS_SSL_SRV_RESPECT_CLIENT_PREFERENCE)
     for( j = 0, p = buf + ciph_offset + 2; j < ciph_len; j += 2, p += 2 )
-<<<<<<< HEAD
-    {
         for( i = 0; ciphersuites[i] != 0; i++ )
 #else
     for( i = 0; ciphersuites[i] != 0; i++ )
-    {
-=======
-        for( i = 0; ciphersuites[i] != 0; i++ )
-#else
-    for( i = 0; ciphersuites[i] != 0; i++ )
->>>>>>> local
         for( j = 0, p = buf + ciph_offset + 2; j < ciph_len; j += 2, p += 2 )
 #endif
         {
@@ -54276,36 +47844,20 @@ read_record_header:
             if( ciphersuite_info != NULL )
                 goto have_ciphersuite;
         }
-<<<<<<< HEAD
-    }
-=======
->>>>>>> local
 
     if( got_common_suite )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "got ciphersuites in common, "
                             "but none of them usable" ) );
-<<<<<<< HEAD
-        mbedtls_ssl_send_fatal_handshake_failure( ssl );
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_NO_USABLE_CIPHERSUITE );
     }
     else
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "got no ciphersuites in common" ) );
-<<<<<<< HEAD
-        mbedtls_ssl_send_fatal_handshake_failure( ssl );
-        for( j = 0, p = buf + ciph_offset + 2; j < ciph_len; j += 2, p += 2 ) {
-            int code = (p[0] & 0xFF) << 8 | (p[1] & 0xFF);
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "Client cipher %s, 0x%04X", mbedtls_ssl_get_ciphersuite_name(code), code));
-        }
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_HANDSHAKE_FAILURE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_NO_CIPHER_CHOSEN );
     }
 
@@ -54314,10 +47866,6 @@ have_ciphersuite:
 
     ssl->session_negotiate->ciphersuite = ciphersuites[i];
     ssl->transform_negotiate->ciphersuite_info = ciphersuite_info;
-<<<<<<< HEAD
-    mbedtls_ssl_optimize_checksum( ssl, ssl->transform_negotiate->ciphersuite_info );
-=======
->>>>>>> local
 
     ssl->state++;
 
@@ -54326,8 +47874,6 @@ have_ciphersuite:
         mbedtls_ssl_recv_flight_completed( ssl );
 #endif
 
-<<<<<<< HEAD
-=======
     /* Debugging-only output for testsuite */
 #if defined(MBEDTLS_DEBUG_C)                         && \
     defined(MBEDTLS_SSL_PROTO_TLS1_2)                && \
@@ -54350,18 +47896,13 @@ have_ciphersuite:
     }
 #endif
 
->>>>>>> local
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= parse client hello" ) );
 
     return( 0 );
 }
 
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
-<<<<<<< HEAD
-static void ssl_srv_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                           unsigned char *buf,
                                           size_t *olen )
 {
@@ -54386,11 +47927,7 @@ static void ssl_write_truncated_hmac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_TRUNCATED_HMAC */
 
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
-<<<<<<< HEAD
-static void ssl_srv_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                             unsigned char *buf,
                                             size_t *olen )
 {
@@ -54398,11 +47935,7 @@ static void ssl_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
     const mbedtls_ssl_ciphersuite_t *suite = NULL;
     const mbedtls_cipher_info_t *cipher = NULL;
 
-<<<<<<< HEAD
-    if( ssl->session_negotiate->encrypt_then_mac == MBEDTLS_SSL_EXTENDED_MS_DISABLED ||
-=======
     if( ssl->session_negotiate->encrypt_then_mac == MBEDTLS_SSL_ETM_DISABLED ||
->>>>>>> local
         ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 )
     {
         *olen = 0;
@@ -54437,11 +47970,7 @@ static void ssl_write_encrypt_then_mac_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_ENCRYPT_THEN_MAC */
 
 #if defined(MBEDTLS_SSL_EXTENDED_MASTER_SECRET)
-<<<<<<< HEAD
-static void ssl_srv_write_extended_ms_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_extended_ms_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                        unsigned char *buf,
                                        size_t *olen )
 {
@@ -54468,11 +47997,7 @@ static void ssl_write_extended_ms_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_SSL_EXTENDED_MASTER_SECRET */
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
-<<<<<<< HEAD
-static void ssl_srv_write_session_ticket_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_session_ticket_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                           unsigned char *buf,
                                           size_t *olen )
 {
@@ -54496,11 +48021,7 @@ static void ssl_write_session_ticket_ext( mbedtls_ssl_context *ssl,
 }
 #endif /* MBEDTLS_SSL_SESSION_TICKETS */
 
-<<<<<<< HEAD
-static void ssl_srv_write_renegotiation_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                          unsigned char *buf,
                                          size_t *olen )
 {
@@ -54541,11 +48062,7 @@ static void ssl_write_renegotiation_ext( mbedtls_ssl_context *ssl,
 }
 
 #if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
-<<<<<<< HEAD
-static void ssl_srv_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                                unsigned char *buf,
                                                size_t *olen )
 {
@@ -54573,11 +48090,7 @@ static void ssl_write_max_fragment_length_ext( mbedtls_ssl_context *ssl,
 
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-static void ssl_srv_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                                    unsigned char *buf,
                                                    size_t *olen )
 {
@@ -54607,11 +48120,7 @@ static void ssl_write_supported_point_formats_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_ECDH_C || MBEDTLS_ECDSA_C || MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-static void ssl_srv_write_ecjpake_kkpp_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_ecjpake_kkpp_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                         unsigned char *buf,
                                         size_t *olen )
 {
@@ -54655,11 +48164,7 @@ static void ssl_write_ecjpake_kkpp_ext( mbedtls_ssl_context *ssl,
 #endif /* MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
 
 #if defined(MBEDTLS_SSL_ALPN )
-<<<<<<< HEAD
-static void ssl_srv_write_alpn_ext( mbedtls_ssl_context *ssl,
-=======
 static void ssl_write_alpn_ext( mbedtls_ssl_context *ssl,
->>>>>>> local
                                 unsigned char *buf, size_t *olen )
 {
     if( ssl->alpn_chosen == NULL )
@@ -54760,11 +48265,7 @@ static int ssl_write_hello_verify_request( mbedtls_ssl_context *ssl )
 static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
 {
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    time_t t;
-=======
     mbedtls_time_t t;
->>>>>>> local
 #endif
     int ret;
     size_t olen, ext_len = 0, n;
@@ -54807,11 +48308,7 @@ static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
                         buf[4], buf[5] ) );
 
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    t = time( NULL );
-=======
     t = mbedtls_time( NULL );
->>>>>>> local
     *p++ = (unsigned char)( t >> 24 );
     *p++ = (unsigned char)( t >> 16 );
     *p++ = (unsigned char)( t >>  8 );
@@ -54836,11 +48333,7 @@ static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
 
     /*
      * Resume is 0  by default, see ssl_handshake_init().
-<<<<<<< HEAD
-     * It may be already set to 1 by ssl_srv_parse_session_ticket_ext().
-=======
      * It may be already set to 1 by ssl_parse_session_ticket_ext().
->>>>>>> local
      * If not, try looking up session ID in our cache.
      */
     if( ssl->handshake->resume == 0 &&
@@ -54864,11 +48357,7 @@ static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
         ssl->state++;
 
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-        ssl->session_negotiate->start = time( NULL );
-=======
         ssl->session_negotiate->start = mbedtls_time( NULL );
->>>>>>> local
 #endif
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
@@ -54927,16 +48416,6 @@ static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "server hello, compress alg.: 0x%02X",
                    ssl->session_negotiate->compression ) );
 
-<<<<<<< HEAD
-    /*
-     *  First write extensions, then the total length
-     */
-    ssl_srv_write_renegotiation_ext( ssl, p + 2 + ext_len, &olen );
-    ext_len += olen;
-
-#if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
-    ssl_srv_write_max_fragment_length_ext( ssl, p + 2 + ext_len, &olen );
-=======
     /* Do not write the extensions if the protocol is SSLv3 */
 #if defined(MBEDTLS_SSL_PROTO_SSL3)
     if( ( ssl->major_ver != 3 ) || ( ssl->minor_ver != 0 ) )
@@ -54951,71 +48430,42 @@ static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
 
 #if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
     ssl_write_max_fragment_length_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
-<<<<<<< HEAD
-    ssl_srv_write_truncated_hmac_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_truncated_hmac_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
-<<<<<<< HEAD
-    ssl_srv_write_encrypt_then_mac_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_encrypt_then_mac_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_EXTENDED_MASTER_SECRET)
-<<<<<<< HEAD
-    ssl_srv_write_extended_ms_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_extended_ms_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
-<<<<<<< HEAD
-    ssl_srv_write_session_ticket_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_session_ticket_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-    ssl_srv_write_supported_point_formats_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_supported_point_formats_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-<<<<<<< HEAD
-    ssl_srv_write_ecjpake_kkpp_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_ecjpake_kkpp_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
 #if defined(MBEDTLS_SSL_ALPN)
-<<<<<<< HEAD
-    ssl_srv_write_alpn_ext( ssl, p + 2 + ext_len, &olen );
-=======
     ssl_write_alpn_ext( ssl, p + 2 + ext_len, &olen );
->>>>>>> local
     ext_len += olen;
 #endif
 
@@ -55028,13 +48478,10 @@ static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
         p += ext_len;
     }
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_PROTO_SSL3)
     }
 #endif
 
->>>>>>> local
     ssl->out_msglen  = p - buf;
     ssl->out_msgtype = MBEDTLS_SSL_MSG_HANDSHAKE;
     ssl->out_msg[0]  = MBEDTLS_SSL_HS_SERVER_HELLO;
@@ -55048,13 +48495,6 @@ static int ssl_write_server_hello( mbedtls_ssl_context *ssl )
 
 #if !defined(MBEDTLS_KEY_EXCHANGE_RSA_ENABLED)       && \
     !defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED)   && \
-<<<<<<< HEAD
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)
-static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
-{
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-=======
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED)  && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)&& \
@@ -55063,7 +48503,6 @@ static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
 {
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> write certificate request" ) );
 
@@ -55085,12 +48524,8 @@ static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
 static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
 {
     int ret = MBEDTLS_ERR_SSL_FEATURE_UNAVAILABLE;
-<<<<<<< HEAD
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-=======
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
->>>>>>> local
     size_t dn_size, total_dn_size; /* excluding length bytes */
     size_t ct_len, sa_len; /* including length bytes */
     unsigned char *buf, *p;
@@ -55170,35 +48605,11 @@ static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
      */
     if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_3 )
     {
-<<<<<<< HEAD
-        /*
-         * Only use current running hash algorithm that is already required
-         * for requested ciphersuite.
-         */
-        ssl->handshake->verify_sig_alg = MBEDTLS_SSL_HASH_SHA256;
-
-        if( ssl->transform_negotiate->ciphersuite_info->mac ==
-            MBEDTLS_MD_SHA384 )
-        {
-            ssl->handshake->verify_sig_alg = MBEDTLS_SSL_HASH_SHA384;
-        }
-=======
         const int *cur;
->>>>>>> local
 
         /*
          * Supported signature algorithms
          */
-<<<<<<< HEAD
-#if defined(MBEDTLS_RSA_C)
-        p[2 + sa_len++] = ssl->handshake->verify_sig_alg;
-        p[2 + sa_len++] = MBEDTLS_SSL_SIG_RSA;
-#endif
-#if defined(MBEDTLS_ECDSA_C)
-        p[2 + sa_len++] = ssl->handshake->verify_sig_alg;
-        p[2 + sa_len++] = MBEDTLS_SSL_SIG_ECDSA;
-#endif
-=======
         for( cur = ssl->conf->sig_hashes; *cur != MBEDTLS_MD_NONE; cur++ )
         {
             unsigned char hash = mbedtls_ssl_hash_from_md_alg( *cur );
@@ -55215,7 +48626,6 @@ static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
             p[2 + sa_len++] = MBEDTLS_SSL_SIG_ECDSA;
 #endif
         }
->>>>>>> local
 
         p[0] = (unsigned char)( sa_len >> 8 );
         p[1] = (unsigned char)( sa_len      );
@@ -55229,37 +48639,6 @@ static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
      * opaque DistinguishedName<1..2^16-1>;
      */
     p += 2;
-<<<<<<< HEAD
-#if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
-    if( ssl->handshake->sni_ca_chain != NULL )
-        crt = ssl->handshake->sni_ca_chain;
-    else
-#endif
-        crt = ssl->conf->ca_chain;
-
-    total_dn_size = 0;
-    while( crt != NULL && crt->version != 0 )
-    {
-        dn_size = crt->subject_raw.len;
-
-        if( end < p ||
-            (size_t)( end - p ) < dn_size ||
-            (size_t)( end - p ) < 2 + dn_size )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "skipping CAs: buffer too short" ) );
-            break;
-        }
-
-        *p++ = (unsigned char)( dn_size >> 8 );
-        *p++ = (unsigned char)( dn_size      );
-        memcpy( p, crt->subject_raw.p, dn_size );
-        p += dn_size;
-
-        MBEDTLS_SSL_DEBUG_BUF( 3, "requested DN", p - dn_size, dn_size );
-
-        total_dn_size += 2 + dn_size;
-        crt = crt->next;
-=======
 
     total_dn_size = 0;
 
@@ -55294,7 +48673,6 @@ static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
             total_dn_size += 2 + dn_size;
             crt = crt->next;
         }
->>>>>>> local
     }
 
     ssl->out_msglen  = p - buf;
@@ -55311,22 +48689,14 @@ static int ssl_write_certificate_request( mbedtls_ssl_context *ssl )
 }
 #endif /* !MBEDTLS_KEY_EXCHANGE_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED &&
-<<<<<<< HEAD
-          !MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED &&
-=======
           !MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED &&
->>>>>>> local
           !MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED */
 
 #if defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)
-<<<<<<< HEAD
-static int ssl_srv_get_ecdh_params_from_cert( mbedtls_ssl_context *ssl )
-=======
 static int ssl_get_ecdh_params_from_cert( mbedtls_ssl_context *ssl )
->>>>>>> local
 {
     int ret;
 
@@ -55356,44 +48726,6 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
                             ssl->transform_negotiate->ciphersuite_info;
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
-    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED) ||                       \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED) ||                     \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) ||                   \
-    defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-    unsigned char *p = ssl->out_msg + 4;
-    unsigned char *dig_signed = p;
-    size_t dig_signed_len = 0, len;
-    ((void) dig_signed);
-    ((void) dig_signed_len);
-    ((void) len);
-#endif
-
-    MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> write server key exchange" ) );
-
-#if defined(MBEDTLS_KEY_EXCHANGE_RSA_ENABLED) ||                           \
-    defined(MBEDTLS_KEY_EXCHANGE_PSK_ENABLED) ||                           \
-    defined(MBEDTLS_KEY_EXCHANGE_RSA_PSK_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_PSK ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_RSA_PSK )
-    {
-        MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= skip write server key exchange" ) );
-        ssl->state++;
-        return( 0 );
-    }
-#endif
-
-#if defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED) || \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA )
-    {
-        ssl_srv_get_ecdh_params_from_cert( ssl );
-
-=======
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME_PFS__ENABLED)
     unsigned char *p = ssl->out_msg + 4;
     size_t len;
@@ -55426,23 +48758,10 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME_NON_PFS__ENABLED)
     if( mbedtls_ssl_ciphersuite_no_pfs( ciphersuite_info ) )
     {
->>>>>>> local
         MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= skip write server key exchange" ) );
         ssl->state++;
         return( 0 );
     }
-<<<<<<< HEAD
-#endif
-
-#if defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECJPAKE )
-    {
-        size_t jlen;
-        const unsigned char *end = ssl->out_msg + MBEDTLS_SSL_MAX_CONTENT_LEN;
-
-        ret = mbedtls_ecjpake_write_round_two( &ssl->handshake->ecjpake_ctx,
-                p, end - p, &jlen, ssl->conf->f_rng, ssl->conf->p_rng );
-=======
 #endif /* MBEDTLS_KEY_EXCHANGE__NON_PFS__ENABLED */
 
     /*
@@ -55461,21 +48780,12 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
 
         ret = mbedtls_ecjpake_write_round_two( &ssl->handshake->ecjpake_ctx,
                 p, end - p, &len, ssl->conf->f_rng, ssl->conf->p_rng );
->>>>>>> local
         if( ret != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ecjpake_write_round_two", ret );
             return( ret );
         }
 
-<<<<<<< HEAD
-        p += jlen;
-        n += jlen;
-    }
-#endif /* MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED */
-
-#if defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED) ||                       \
-=======
         p += len;
         n += len;
     }
@@ -55487,15 +48797,10 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
      * we use empty support identity hints here.
      **/
 #if defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)   || \
->>>>>>> local
     defined(MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED)
     if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK ||
         ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK )
     {
-<<<<<<< HEAD
-        /* TODO: Support identity hints */
-=======
->>>>>>> local
         *(p++) = 0x00;
         *(p++) = 0x00;
 
@@ -55504,18 +48809,11 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
 #endif /* MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED ||
           MBEDTLS_KEY_EXCHANGE_ECDHE_PSK_ENABLED */
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
-    defined(MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_PSK )
-=======
     /*
      * - DHE key exchanges
      */
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME__DHE_ENABLED)
     if( mbedtls_ssl_ciphersuite_uses_dhe( ciphersuite_info ) )
->>>>>>> local
     {
         if( ssl->conf->dhm_P.p == NULL || ssl->conf->dhm_G.p == NULL )
         {
@@ -55532,18 +48830,11 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
          *     opaque dh_Ys<1..2^16-1>;
          * } ServerDHParams;
          */
-<<<<<<< HEAD
-        if( ( ret = mbedtls_mpi_copy( &ssl->handshake->dhm_ctx.P, &ssl->conf->dhm_P ) ) != 0 ||
-            ( ret = mbedtls_mpi_copy( &ssl->handshake->dhm_ctx.G, &ssl->conf->dhm_G ) ) != 0 )
-        {
-            MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_mpi_copy", ret );
-=======
         if( ( ret = mbedtls_dhm_set_group( &ssl->handshake->dhm_ctx,
                                            &ssl->conf->dhm_P,
                                            &ssl->conf->dhm_G ) ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_dhm_set_group", ret );
->>>>>>> local
             return( ret );
         }
 
@@ -55555,15 +48846,10 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
             return( ret );
         }
 
-<<<<<<< HEAD
-        dig_signed = p;
-        dig_signed_len = len;
-=======
 #if defined(MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED)        
         dig_signed = p;
         dig_signed_len = len;
 #endif
->>>>>>> local
 
         p += len;
         n += len;
@@ -55573,15 +48859,6 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
         MBEDTLS_SSL_DEBUG_MPI( 3, "DHM: G ", &ssl->handshake->dhm_ctx.G  );
         MBEDTLS_SSL_DEBUG_MPI( 3, "DHM: GX", &ssl->handshake->dhm_ctx.GX );
     }
-<<<<<<< HEAD
-#endif /* MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED ||
-          MBEDTLS_KEY_EXCHANGE_DHE_PSK_ENABLED */
-
-#if defined(MBEDTLS_KEY_EXCHANGE__SOME__ECDHE_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_PSK )
-=======
 #endif /* MBEDTLS_KEY_EXCHANGE__SOME__DHE_ENABLED */
 
     /*
@@ -55589,7 +48866,6 @@ static int ssl_write_server_key_exchange( mbedtls_ssl_context *ssl )
      */
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME__ECDHE_ENABLED)
     if( mbedtls_ssl_ciphersuite_uses_ecdhe( ciphersuite_info ) )
->>>>>>> local
     {
         /*
          * Ephemeral ECDH parameters:
@@ -55632,15 +48908,10 @@ curve_matching_done:
             return( ret );
         }
 
-<<<<<<< HEAD
-        dig_signed = p;
-        dig_signed_len = len;
-=======
 #if defined(MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED)
         dig_signed     = p;
         dig_signed_len = len;
 #endif
->>>>>>> local
 
         p += len;
         n += len;
@@ -55649,14 +48920,6 @@ curve_matching_done:
     }
 #endif /* MBEDTLS_KEY_EXCHANGE__SOME__ECDHE_ENABLED */
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||                       \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) ||                     \
-    defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)
-    if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_DHE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_RSA ||
-        ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA )
-=======
     /*
      *
      * Part 3: For key exchanges involving the server signing the
@@ -55665,26 +48928,10 @@ curve_matching_done:
      */
 #if defined(MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED)
     if( mbedtls_ssl_ciphersuite_uses_server_signature( ciphersuite_info ) )
->>>>>>> local
     {
         size_t signature_len = 0;
         unsigned int hashlen = 0;
         unsigned char hash[64];
-<<<<<<< HEAD
-        mbedtls_md_type_t md_alg = MBEDTLS_MD_NONE;
-
-        /*
-         * Choose hash algorithm. NONE means MD5 + SHA1 here.
-         */
-#if defined(MBEDTLS_SSL_PROTO_TLS1_2)
-        if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_3 )
-        {
-            md_alg = mbedtls_ssl_md_alg_from_hash( ssl->handshake->sig_alg );
-
-            if( md_alg == MBEDTLS_MD_NONE )
-            {
-                MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
-=======
 
         /*
          * 3.1: Choose hash algorithm:
@@ -55711,7 +48958,6 @@ curve_matching_done:
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
                 /* (... because we choose a cipher suite 
                  *      only if there is a matching hash.) */
->>>>>>> local
                 return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );
             }
         }
@@ -55719,21 +48965,6 @@ curve_matching_done:
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
 #if defined(MBEDTLS_SSL_PROTO_SSL3) || defined(MBEDTLS_SSL_PROTO_TLS1) || \
     defined(MBEDTLS_SSL_PROTO_TLS1_1)
-<<<<<<< HEAD
-        if( ciphersuite_info->key_exchange ==
-                  MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA )
-        {
-            md_alg = MBEDTLS_MD_SHA1;
-        }
-        else
-#endif
-        {
-            md_alg = MBEDTLS_MD_NONE;
-        }
-
-        /*
-         * Compute the hash to be signed
-=======
         if( ciphersuite_info->key_exchange == MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA )
         {
             /* B: Default hash SHA1 */
@@ -55751,54 +48982,17 @@ curve_matching_done:
 
         /*
          * 3.2: Compute the hash to be signed
->>>>>>> local
          */
 #if defined(MBEDTLS_SSL_PROTO_SSL3) || defined(MBEDTLS_SSL_PROTO_TLS1) || \
     defined(MBEDTLS_SSL_PROTO_TLS1_1)
         if( md_alg == MBEDTLS_MD_NONE )
         {
-<<<<<<< HEAD
-            mbedtls_md5_context mbedtls_md5;
-            mbedtls_sha1_context mbedtls_sha1;
-
-            mbedtls_md5_init(  &mbedtls_md5  );
-            mbedtls_sha1_init( &mbedtls_sha1 );
-
-            /*
-             * digitally-signed struct {
-             *     opaque md5_hash[16];
-             *     opaque sha_hash[20];
-             * };
-             *
-             * md5_hash
-             *     MD5(ClientHello.random + ServerHello.random
-             *                            + ServerParams);
-             * sha_hash
-             *     SHA(ClientHello.random + ServerHello.random
-             *                            + ServerParams);
-             */
-            mbedtls_md5_starts( &mbedtls_md5 );
-            mbedtls_md5_update( &mbedtls_md5, ssl->handshake->randbytes,  64 );
-            mbedtls_md5_update( &mbedtls_md5, dig_signed, dig_signed_len );
-            mbedtls_md5_finish( &mbedtls_md5, hash );
-
-            mbedtls_sha1_starts( &mbedtls_sha1 );
-            mbedtls_sha1_update( &mbedtls_sha1, ssl->handshake->randbytes,  64 );
-            mbedtls_sha1_update( &mbedtls_sha1, dig_signed, dig_signed_len );
-            mbedtls_sha1_finish( &mbedtls_sha1, hash + 16 );
-
-            hashlen = 36;
-
-            mbedtls_md5_free(  &mbedtls_md5  );
-            mbedtls_sha1_free( &mbedtls_sha1 );
-=======
             hashlen = 36;
             ret = mbedtls_ssl_get_key_exchange_md_ssl_tls( ssl, hash,
                                                            dig_signed,
                                                            dig_signed_len );
             if( ret != 0 )
                 return( ret );
->>>>>>> local
         }
         else
 #endif /* MBEDTLS_SSL_PROTO_SSL3 || MBEDTLS_SSL_PROTO_TLS1 || \
@@ -55807,34 +49001,6 @@ curve_matching_done:
     defined(MBEDTLS_SSL_PROTO_TLS1_2)
         if( md_alg != MBEDTLS_MD_NONE )
         {
-<<<<<<< HEAD
-            mbedtls_md_context_t ctx;
-            const mbedtls_md_info_t *md_info = mbedtls_md_info_from_type( md_alg );
-
-            mbedtls_md_init( &ctx );
-
-            /* Info from md_alg will be used instead */
-            hashlen = 0;
-
-            /*
-             * digitally-signed struct {
-             *     opaque client_random[32];
-             *     opaque server_random[32];
-             *     ServerDHParams params;
-             * };
-             */
-            if( ( ret = mbedtls_md_setup( &ctx, md_info, 0 ) ) != 0 )
-            {
-                MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_md_setup", ret );
-                return( ret );
-            }
-
-            mbedtls_md_starts( &ctx );
-            mbedtls_md_update( &ctx, ssl->handshake->randbytes, 64 );
-            mbedtls_md_update( &ctx, dig_signed, dig_signed_len );
-            mbedtls_md_finish( &ctx, hash );
-            mbedtls_md_free( &ctx );
-=======
             /* Info from md_alg will be used instead */
             hashlen = 0;
             ret = mbedtls_ssl_get_key_exchange_md_tls1_2( ssl, hash,
@@ -55843,7 +49009,6 @@ curve_matching_done:
                                                           md_alg );
             if( ret != 0 )
                 return( ret );
->>>>>>> local
         }
         else
 #endif /* MBEDTLS_SSL_PROTO_TLS1 || MBEDTLS_SSL_PROTO_TLS1_1 || \
@@ -55857,11 +49022,7 @@ curve_matching_done:
             (unsigned int) ( mbedtls_md_get_size( mbedtls_md_info_from_type( md_alg ) ) ) );
 
         /*
-<<<<<<< HEAD
-         * Make the signature
-=======
          * 3.3: Compute and add the signature
->>>>>>> local
          */
         if( mbedtls_ssl_own_key( ssl ) == NULL )
         {
@@ -55872,10 +49033,6 @@ curve_matching_done:
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2)
         if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_3 )
         {
-<<<<<<< HEAD
-            *(p++) = ssl->handshake->sig_alg;
-            *(p++) = mbedtls_ssl_sig_from_pk( mbedtls_ssl_own_key( ssl ) );
-=======
             /*
              * For TLS 1.2, we need to specify signature and hash algorithm
              * explicitly through a prefix to the signature.
@@ -55894,19 +49051,13 @@ curve_matching_done:
 
             *(p++) = mbedtls_ssl_hash_from_md_alg( md_alg );
             *(p++) = mbedtls_ssl_sig_from_pk_alg( sig_alg );
->>>>>>> local
 
             n += 2;
         }
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
 
         if( ( ret = mbedtls_pk_sign( mbedtls_ssl_own_key( ssl ), md_alg, hash, hashlen,
-<<<<<<< HEAD
-                        p + 2 , &signature_len,
-                        ssl->conf->f_rng, ssl->conf->p_rng ) ) != 0 )
-=======
                         p + 2 , &signature_len, ssl->conf->f_rng, ssl->conf->p_rng ) ) != 0 )
->>>>>>> local
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_pk_sign", ret );
             return( ret );
@@ -55920,15 +49071,9 @@ curve_matching_done:
 
         n += signature_len;
     }
-<<<<<<< HEAD
-#endif /* MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED) ||
-          MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED ||
-          MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED */
-=======
 #endif /* MBEDTLS_KEY_EXCHANGE__WITH_SERVER_SIGNATURE__ENABLED */
 
     /* Done with actual work; add header and send. */
->>>>>>> local
 
     ssl->out_msglen  = 4 + n;
     ssl->out_msgtype = MBEDTLS_SSL_MSG_HANDSHAKE;
@@ -56136,11 +49281,7 @@ static int ssl_parse_client_psk_identity( mbedtls_ssl_context *ssl, unsigned cha
     /*
      * Receive client pre-shared key identity name
      */
-<<<<<<< HEAD
-    if( *p + 2 > end )
-=======
     if( end - *p < 2 )
->>>>>>> local
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client key exchange message" ) );
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_KEY_EXCHANGE );
@@ -56149,11 +49290,7 @@ static int ssl_parse_client_psk_identity( mbedtls_ssl_context *ssl, unsigned cha
     n = ( (*p)[0] << 8 ) | (*p)[1];
     *p += 2;
 
-<<<<<<< HEAD
-    if( n < 1 || n > 65535 || *p + n > end )
-=======
     if( n < 1 || n > 65535 || n > (size_t) ( end - *p ) )
->>>>>>> local
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad client key exchange message" ) );
         return( MBEDTLS_ERR_SSL_BAD_HS_CLIENT_KEY_EXCHANGE );
@@ -56178,18 +49315,8 @@ static int ssl_parse_client_psk_identity( mbedtls_ssl_context *ssl, unsigned cha
     if( ret == MBEDTLS_ERR_SSL_UNKNOWN_IDENTITY )
     {
         MBEDTLS_SSL_DEBUG_BUF( 3, "Unknown PSK identity", *p, n );
-<<<<<<< HEAD
-        if( ( ret = mbedtls_ssl_send_alert_message( ssl,
-                              MBEDTLS_SSL_ALERT_LEVEL_FATAL,
-                              MBEDTLS_SSL_ALERT_MSG_UNKNOWN_PSK_IDENTITY ) ) != 0 )
-        {
-            return( ret );
-        }
-
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNKNOWN_PSK_IDENTITY );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNKNOWN_IDENTITY );
     }
 
@@ -56451,13 +49578,6 @@ static int ssl_parse_client_key_exchange( mbedtls_ssl_context *ssl )
 
 #if !defined(MBEDTLS_KEY_EXCHANGE_RSA_ENABLED)       && \
     !defined(MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED)   && \
-<<<<<<< HEAD
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
-    !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED)
-static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
-{
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-=======
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED)  && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED) && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)&& \
@@ -56466,7 +49586,6 @@ static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
 {
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse certificate verify" ) );
 
@@ -56496,12 +49615,8 @@ static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
     mbedtls_pk_type_t pk_alg;
 #endif
     mbedtls_md_type_t md_alg;
-<<<<<<< HEAD
-    const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
-=======
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info =
         ssl->transform_negotiate->ciphersuite_info;
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse certificate verify" ) );
 
@@ -56517,14 +49632,6 @@ static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
         return( 0 );
     }
 
-<<<<<<< HEAD
-    /* Needs to be done before read_record() to exclude current message */
-    ssl->handshake->calc_verify( ssl, hash );
-
-    if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
-    {
-        MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
-=======
     /* Read the message without adding it to the checksum */
     do {
 
@@ -56541,16 +49648,12 @@ static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
     if( 0 != ret )
     {
         MBEDTLS_SSL_DEBUG_RET( 1, ( "mbedtls_ssl_handle_message_type" ), ret );
->>>>>>> local
         return( ret );
     }
 
     ssl->state++;
 
-<<<<<<< HEAD
-=======
     /* Process the message contents */
->>>>>>> local
     if( ssl->in_msgtype != MBEDTLS_SSL_MSG_HANDSHAKE ||
         ssl->in_msg[0] != MBEDTLS_SSL_HS_CERTIFICATE_VERIFY )
     {
@@ -56597,27 +49700,19 @@ static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
         /*
          * Hash
          */
-<<<<<<< HEAD
-        if( ssl->in_msg[i] != ssl->handshake->verify_sig_alg )
-=======
         md_alg = mbedtls_ssl_md_alg_from_hash( ssl->in_msg[i] );
 
         if( md_alg == MBEDTLS_MD_NONE || mbedtls_ssl_set_calc_verify_md( ssl, ssl->in_msg[i] ) )
->>>>>>> local
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "peer not adhering to requested sig_alg"
                                 " for verify message" ) );
             return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE_VERIFY );
         }
 
-<<<<<<< HEAD
-        md_alg = mbedtls_ssl_md_alg_from_hash( ssl->handshake->verify_sig_alg );
-=======
 #if !defined(MBEDTLS_MD_SHA1)
         if( MBEDTLS_MD_SHA1 == md_alg )
             hash_start += 16;
 #endif
->>>>>>> local
 
         /* Info from md_alg will be used instead */
         hashlen = 0;
@@ -56668,12 +49763,9 @@ static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
         return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE_VERIFY );
     }
 
-<<<<<<< HEAD
-=======
     /* Calculate hash and verify signature */
     ssl->handshake->calc_verify( ssl, hash );
 
->>>>>>> local
     if( ( ret = mbedtls_pk_verify( &ssl->session_negotiate->peer_cert->pk,
                            md_alg, hash_start, hashlen,
                            ssl->in_msg + i, sig_len ) ) != 0 )
@@ -56682,25 +49774,18 @@ static int ssl_parse_certificate_verify( mbedtls_ssl_context *ssl )
         return( ret );
     }
 
-<<<<<<< HEAD
-=======
     mbedtls_ssl_update_handshake_status( ssl );
 
->>>>>>> local
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= parse certificate verify" ) );
 
     return( ret );
 }
 #endif /* !MBEDTLS_KEY_EXCHANGE_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_DHE_RSA_ENABLED &&
-<<<<<<< HEAD
-          !MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED */
-=======
           !MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDHE_RSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED &&
           !MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED */
->>>>>>> local
 
 #if defined(MBEDTLS_SSL_SESSION_TICKETS)
 static int ssl_write_new_session_ticket( mbedtls_ssl_context *ssl )
@@ -56893,16 +49978,6 @@ int mbedtls_ssl_handshake_server_step( mbedtls_ssl_context *ssl )
 
     return( ret );
 }
-<<<<<<< HEAD
-
-#endif /* MBEDTLS_SSL_SRV_C */
-
-
-
-/********* Start of file library/ssl_ticket.c ************/
-
-
-=======
 #endif /* MBEDTLS_SSL_SRV_C */
 
 /*
@@ -56941,7 +50016,6 @@ int mbedtls_ssl_handshake_server_step( mbedtls_ssl_context *ssl )
 
 /********* Start of file library/ssl_ticket.c ************/
 
->>>>>>> local
 /*
  *  TLS server tickets callbacks implementation
  *
@@ -56971,27 +50045,11 @@ int mbedtls_ssl_handshake_server_step( mbedtls_ssl_context *ssl )
 
 #if defined(MBEDTLS_SSL_TICKET_C)
 
-<<<<<<< HEAD
-
-
-=======
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
 #include <stdlib.h>
 #define mbedtls_calloc    calloc
-<<<<<<< HEAD
-#define mbedtls_free       free
-#endif
-
-#include <string.h>
-
-/* Implementation that should never be optimized out by the compiler */
-static void ssl_ticket_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #define mbedtls_free      free
 #endif
 
@@ -57001,7 +50059,6 @@ static void ssl_ticket_zeroize( void *v, size_t n ) {
 
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 
 /*
  * Initialze context
@@ -57028,11 +50085,7 @@ static int ssl_ticket_gen_key( mbedtls_ssl_ticket_context *ctx,
     mbedtls_ssl_ticket_key *key = ctx->keys + index;
 
 #if defined(MBEDTLS_HAVE_TIME)
-<<<<<<< HEAD
-    key->generation_time = (uint32_t) time( NULL );
-=======
     key->generation_time = (uint32_t) mbedtls_time( NULL );
->>>>>>> local
 #endif
 
     if( ( ret = ctx->f_rng( ctx->p_rng, key->name, sizeof( key->name ) ) ) != 0 )
@@ -57046,11 +50099,7 @@ static int ssl_ticket_gen_key( mbedtls_ssl_ticket_context *ctx,
                                  mbedtls_cipher_get_key_bitlen( &key->ctx ),
                                  MBEDTLS_ENCRYPT );
 
-<<<<<<< HEAD
-    ssl_ticket_zeroize( buf, sizeof( buf ) );
-=======
     mbedtls_zeroize( buf, sizeof( buf ) );
->>>>>>> local
 
     return( ret );
 }
@@ -57065,11 +50114,7 @@ static int ssl_ticket_update_keys( mbedtls_ssl_ticket_context *ctx )
 #else
     if( ctx->ticket_lifetime != 0 )
     {
-<<<<<<< HEAD
-        uint32_t current_time = (uint32_t) time( NULL );
-=======
         uint32_t current_time = (uint32_t) mbedtls_time( NULL );
->>>>>>> local
         uint32_t key_time = ctx->keys[ctx->active].generation_time;
 
         if( current_time > key_time &&
@@ -57422,11 +50467,7 @@ int mbedtls_ssl_ticket_parse( void *p_ticket,
 #if defined(MBEDTLS_HAVE_TIME)
     {
         /* Check for expiration */
-<<<<<<< HEAD
-        time_t current_time = time( NULL );
-=======
         mbedtls_time_t current_time = mbedtls_time( NULL );
->>>>>>> local
 
         if( current_time < session->start ||
             (uint32_t)( current_time - session->start ) > ctx->ticket_lifetime )
@@ -57458,17 +50499,11 @@ void mbedtls_ssl_ticket_free( mbedtls_ssl_ticket_context *ctx )
     mbedtls_mutex_free( &ctx->mutex );
 #endif
 
-<<<<<<< HEAD
-    ssl_ticket_zeroize( ctx, sizeof( mbedtls_ssl_ticket_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_ssl_ticket_context ) );
->>>>>>> local
 }
 
 #endif /* MBEDTLS_SSL_TICKET_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -57501,15 +50536,10 @@ void mbedtls_ssl_ticket_free( mbedtls_ssl_ticket_context *ctx )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/ssl_tls.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  SSLv3/TLSv1 shared functions
  *
@@ -57547,31 +50577,6 @@ void mbedtls_ssl_ticket_free( mbedtls_ssl_ticket_context *ctx )
 
 #if defined(MBEDTLS_SSL_TLS_C)
 
-<<<<<<< HEAD
-
-
-
-
-#include <string.h>
-
-#if defined(MBEDTLS_X509_CRT_PARSE_C) && \
-    defined(MBEDTLS_X509_CHECK_EXTENDED_KEY_USAGE)
-
-#endif
-
-#if defined(MBEDTLS_PLATFORM_C)
-
-#else
-#include <stdlib.h>
-#define mbedtls_calloc    calloc
-#define mbedtls_free       free
-#endif
-
-/* Implementation that should never be optimized out by the compiler */
-static void ssl_tls_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 #if defined(MBEDTLS_PLATFORM_C)
 
 #else
@@ -57592,7 +50597,6 @@ static void ssl_tls_zeroize( void *v, size_t n ) {
 
 /* Implementation that should never be optimized out by the compiler */
 /* zeroize was here */
->>>>>>> local
 
 /* Length of the "epoch" field in the record header */
 static inline size_t ssl_ep_len( const mbedtls_ssl_context *ssl )
@@ -57757,10 +50761,7 @@ static int ssl3_prf( const unsigned char *secret, size_t slen,
                      const unsigned char *random, size_t rlen,
                      unsigned char *dstbuf, size_t dlen )
 {
-<<<<<<< HEAD
-=======
     int ret = 0;
->>>>>>> local
     size_t i;
     mbedtls_md5_context md5;
     mbedtls_sha1_context sha1;
@@ -57783,27 +50784,6 @@ static int ssl3_prf( const unsigned char *secret, size_t slen,
     {
         memset( padding, (unsigned char) ('A' + i), 1 + i );
 
-<<<<<<< HEAD
-        mbedtls_sha1_starts( &sha1 );
-        mbedtls_sha1_update( &sha1, padding, 1 + i );
-        mbedtls_sha1_update( &sha1, secret, slen );
-        mbedtls_sha1_update( &sha1, random, rlen );
-        mbedtls_sha1_finish( &sha1, sha1sum );
-
-        mbedtls_md5_starts( &md5 );
-        mbedtls_md5_update( &md5, secret, slen );
-        mbedtls_md5_update( &md5, sha1sum, 20 );
-        mbedtls_md5_finish( &md5, dstbuf + i * 16 );
-    }
-
-    mbedtls_md5_free(  &md5  );
-    mbedtls_sha1_free( &sha1 );
-
-    ssl_tls_zeroize( padding, sizeof( padding ) );
-    ssl_tls_zeroize( sha1sum, sizeof( sha1sum ) );
-
-    return( 0 );
-=======
         if( ( ret = mbedtls_sha1_starts_ret( &sha1 ) ) != 0 )
             goto exit;
         if( ( ret = mbedtls_sha1_update_ret( &sha1, padding, 1 + i ) ) != 0 )
@@ -57833,7 +50813,6 @@ exit:
     mbedtls_zeroize( sha1sum, sizeof( sha1sum ) );
 
     return( ret );
->>>>>>> local
 }
 #endif /* MBEDTLS_SSL_PROTO_SSL3 */
 
@@ -57928,13 +50907,8 @@ static int tls1_prf( const unsigned char *secret, size_t slen,
 
     mbedtls_md_free( &md_ctx );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( tmp, sizeof( tmp ) );
-    ssl_tls_zeroize( h_i, sizeof( h_i ) );
-=======
     mbedtls_zeroize( tmp, sizeof( tmp ) );
     mbedtls_zeroize( h_i, sizeof( h_i ) );
->>>>>>> local
 
     return( 0 );
 }
@@ -57998,13 +50972,8 @@ static int tls_prf_generic( mbedtls_md_type_t md_type,
 
     mbedtls_md_free( &md_ctx );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( tmp, sizeof( tmp ) );
-    ssl_tls_zeroize( h_i, sizeof( h_i ) );
-=======
     mbedtls_zeroize( tmp, sizeof( tmp ) );
     mbedtls_zeroize( h_i, sizeof( h_i ) );
->>>>>>> local
 
     return( 0 );
 }
@@ -58072,10 +51041,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
     unsigned char *key2;
     unsigned char *mac_enc;
     unsigned char *mac_dec;
-<<<<<<< HEAD
-=======
     size_t mac_key_len;
->>>>>>> local
     size_t iv_copy_len;
     const mbedtls_cipher_info_t *cipher_info;
     const mbedtls_md_info_t *md_info;
@@ -58216,11 +51182,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
             return( ret );
         }
 
-<<<<<<< HEAD
-        ssl_tls_zeroize( handshake->premaster, sizeof(handshake->premaster) );
-=======
         mbedtls_zeroize( handshake->premaster, sizeof(handshake->premaster) );
->>>>>>> local
     }
     else
         MBEDTLS_SSL_DEBUG_MSG( 3, ( "no premaster (session resumed)" ) );
@@ -58231,11 +51193,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
     memcpy( tmp, handshake->randbytes, 64 );
     memcpy( handshake->randbytes, tmp + 32, 32 );
     memcpy( handshake->randbytes + 32, tmp, 32 );
-<<<<<<< HEAD
-    ssl_tls_zeroize( tmp, sizeof( tmp ) );
-=======
     mbedtls_zeroize( tmp, sizeof( tmp ) );
->>>>>>> local
 
     /*
      *  SSLv3:
@@ -58263,11 +51221,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_BUF( 4, "random bytes", handshake->randbytes, 64 );
     MBEDTLS_SSL_DEBUG_BUF( 4, "key block", keyblk, 256 );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( handshake->randbytes, sizeof( handshake->randbytes ) );
-=======
     mbedtls_zeroize( handshake->randbytes, sizeof( handshake->randbytes ) );
->>>>>>> local
 
     /*
      * Determine the appropriate key, IV and MAC length.
@@ -58279,10 +51233,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
         cipher_info->mode == MBEDTLS_MODE_CCM )
     {
         transform->maclen = 0;
-<<<<<<< HEAD
-=======
         mac_key_len = 0;
->>>>>>> local
 
         transform->ivlen = 12;
         transform->fixed_ivlen = 4;
@@ -58303,12 +51254,8 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
         }
 
         /* Get MAC length */
-<<<<<<< HEAD
-        transform->maclen = mbedtls_md_get_size( md_info );
-=======
         mac_key_len = mbedtls_md_get_size( md_info );
         transform->maclen = mac_key_len;
->>>>>>> local
 
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
         /*
@@ -58317,9 +51264,6 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
          * so we only need to adjust the length here.
          */
         if( session->trunc_hmac == MBEDTLS_SSL_TRUNC_HMAC_ENABLED )
-<<<<<<< HEAD
-            transform->maclen = MBEDTLS_SSL_TRUNCATED_HMAC_LEN;
-=======
         {
             transform->maclen = MBEDTLS_SSL_TRUNCATED_HMAC_LEN;
 
@@ -58330,7 +51274,6 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
             mac_key_len = transform->maclen;
 #endif
         }
->>>>>>> local
 #endif /* MBEDTLS_SSL_TRUNCATED_HMAC */
 
         /* IV length */
@@ -58392,19 +51335,11 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_SSL_CLI_C)
     if( ssl->conf->endpoint == MBEDTLS_SSL_IS_CLIENT )
     {
-<<<<<<< HEAD
-        key1 = keyblk + transform->maclen * 2;
-        key2 = keyblk + transform->maclen * 2 + transform->keylen;
-
-        mac_enc = keyblk;
-        mac_dec = keyblk + transform->maclen;
-=======
         key1 = keyblk + mac_key_len * 2;
         key2 = keyblk + mac_key_len * 2 + transform->keylen;
 
         mac_enc = keyblk;
         mac_dec = keyblk + mac_key_len;
->>>>>>> local
 
         /*
          * This is not used in TLS v1.1.
@@ -58420,17 +51355,10 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_SSL_SRV_C)
     if( ssl->conf->endpoint == MBEDTLS_SSL_IS_SERVER )
     {
-<<<<<<< HEAD
-        key1 = keyblk + transform->maclen * 2 + transform->keylen;
-        key2 = keyblk + transform->maclen * 2;
-
-        mac_enc = keyblk + transform->maclen;
-=======
         key1 = keyblk + mac_key_len * 2 + transform->keylen;
         key2 = keyblk + mac_key_len * 2;
 
         mac_enc = keyblk + mac_key_len;
->>>>>>> local
         mac_dec = keyblk;
 
         /*
@@ -58452,23 +51380,14 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_SSL_PROTO_SSL3)
     if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 )
     {
-<<<<<<< HEAD
-        if( transform->maclen > sizeof transform->mac_enc )
-=======
         if( mac_key_len > sizeof transform->mac_enc )
->>>>>>> local
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
             return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );
         }
 
-<<<<<<< HEAD
-        memcpy( transform->mac_enc, mac_enc, transform->maclen );
-        memcpy( transform->mac_dec, mac_dec, transform->maclen );
-=======
         memcpy( transform->mac_enc, mac_enc, mac_key_len );
         memcpy( transform->mac_dec, mac_dec, mac_key_len );
->>>>>>> local
     }
     else
 #endif /* MBEDTLS_SSL_PROTO_SSL3 */
@@ -58476,13 +51395,8 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
     defined(MBEDTLS_SSL_PROTO_TLS1_2)
     if( ssl->minor_ver >= MBEDTLS_SSL_MINOR_VERSION_1 )
     {
-<<<<<<< HEAD
-        mbedtls_md_hmac_starts( &transform->md_ctx_enc, mac_enc, transform->maclen );
-        mbedtls_md_hmac_starts( &transform->md_ctx_dec, mac_dec, transform->maclen );
-=======
         mbedtls_md_hmac_starts( &transform->md_ctx_enc, mac_enc, mac_key_len );
         mbedtls_md_hmac_starts( &transform->md_ctx_dec, mac_dec, mac_key_len );
->>>>>>> local
     }
     else
 #endif
@@ -58502,11 +51416,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
                                         transform->iv_enc, transform->iv_dec,
                                         iv_copy_len,
                                         mac_enc, mac_dec,
-<<<<<<< HEAD
-                                        transform->maclen ) ) != 0 )
-=======
                                         mac_key_len ) ) != 0 )
->>>>>>> local
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_hw_record_init", ret );
             return( MBEDTLS_ERR_SSL_HW_ACCEL_FAILED );
@@ -58519,11 +51429,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
     {
         ssl->conf->f_export_keys( ssl->conf->p_export_keys,
                                   session->master, keyblk,
-<<<<<<< HEAD
-                                  transform->maclen, transform->keylen,
-=======
                                   mac_key_len, transform->keylen,
->>>>>>> local
                                   iv_copy_len );
     }
 #endif
@@ -58577,11 +51483,7 @@ int mbedtls_ssl_derive_keys( mbedtls_ssl_context *ssl )
     }
 #endif /* MBEDTLS_CIPHER_MODE_CBC */
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( keyblk, sizeof( keyblk ) );
-=======
     mbedtls_zeroize( keyblk, sizeof( keyblk ) );
->>>>>>> local
 
 #if defined(MBEDTLS_ZLIB_SUPPORT)
     // Initialize compression
@@ -58639,27 +51541,6 @@ void ssl_calc_verify_ssl( mbedtls_ssl_context *ssl, unsigned char hash[36] )
     memset( pad_1, 0x36, 48 );
     memset( pad_2, 0x5C, 48 );
 
-<<<<<<< HEAD
-    mbedtls_md5_update( &md5, ssl->session_negotiate->master, 48 );
-    mbedtls_md5_update( &md5, pad_1, 48 );
-    mbedtls_md5_finish( &md5, hash );
-
-    mbedtls_md5_starts( &md5 );
-    mbedtls_md5_update( &md5, ssl->session_negotiate->master, 48 );
-    mbedtls_md5_update( &md5, pad_2, 48 );
-    mbedtls_md5_update( &md5, hash,  16 );
-    mbedtls_md5_finish( &md5, hash );
-
-    mbedtls_sha1_update( &sha1, ssl->session_negotiate->master, 48 );
-    mbedtls_sha1_update( &sha1, pad_1, 40 );
-    mbedtls_sha1_finish( &sha1, hash + 16 );
-
-    mbedtls_sha1_starts( &sha1 );
-    mbedtls_sha1_update( &sha1, ssl->session_negotiate->master, 48 );
-    mbedtls_sha1_update( &sha1, pad_2, 40 );
-    mbedtls_sha1_update( &sha1, hash + 16, 20 );
-    mbedtls_sha1_finish( &sha1, hash + 16 );
-=======
     mbedtls_md5_update_ret( &md5, ssl->session_negotiate->master, 48 );
     mbedtls_md5_update_ret( &md5, pad_1, 48 );
     mbedtls_md5_finish_ret( &md5, hash );
@@ -58679,7 +51560,6 @@ void ssl_calc_verify_ssl( mbedtls_ssl_context *ssl, unsigned char hash[36] )
     mbedtls_sha1_update_ret( &sha1, pad_2, 40 );
     mbedtls_sha1_update_ret( &sha1, hash + 16, 20 );
     mbedtls_sha1_finish_ret( &sha1, hash + 16 );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_BUF( 3, "calculated verify result", hash, 36 );
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc verify" ) );
@@ -58705,13 +51585,8 @@ void ssl_calc_verify_tls( mbedtls_ssl_context *ssl, unsigned char hash[36] )
     mbedtls_md5_clone( &md5, &ssl->handshake->fin_md5 );
     mbedtls_sha1_clone( &sha1, &ssl->handshake->fin_sha1 );
 
-<<<<<<< HEAD
-     mbedtls_md5_finish( &md5,  hash );
-    mbedtls_sha1_finish( &sha1, hash + 16 );
-=======
      mbedtls_md5_finish_ret( &md5,  hash );
     mbedtls_sha1_finish_ret( &sha1, hash + 16 );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_BUF( 3, "calculated verify result", hash, 36 );
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc verify" ) );
@@ -58734,11 +51609,7 @@ void ssl_calc_verify_tls_sha256( mbedtls_ssl_context *ssl, unsigned char hash[32
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> calc verify sha256" ) );
 
     mbedtls_sha256_clone( &sha256, &ssl->handshake->fin_sha256 );
-<<<<<<< HEAD
-    mbedtls_sha256_finish( &sha256, hash );
-=======
     mbedtls_sha256_finish_ret( &sha256, hash );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_BUF( 3, "calculated verify result", hash, 32 );
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc verify" ) );
@@ -58759,11 +51630,7 @@ void ssl_calc_verify_tls_sha384( mbedtls_ssl_context *ssl, unsigned char hash[48
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> calc verify sha384" ) );
 
     mbedtls_sha512_clone( &sha512, &ssl->handshake->fin_sha512 );
-<<<<<<< HEAD
-    mbedtls_sha512_finish( &sha512, hash );
-=======
     mbedtls_sha512_finish_ret( &sha512, hash );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_BUF( 3, "calculated verify result", hash, 48 );
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc verify" ) );
@@ -58899,18 +51766,12 @@ int mbedtls_ssl_psk_derive_premaster( mbedtls_ssl_context *ssl, mbedtls_key_exch
 /*
  * SSLv3.0 MAC functions
  */
-<<<<<<< HEAD
-static void ssl_mac( mbedtls_md_context_t *md_ctx, unsigned char *secret,
-                     unsigned char *buf, size_t len,
-                     unsigned char *ctr, int type )
-=======
 #define SSL_MAC_MAX_BYTES   20  /* MD-5 or SHA-1 */
 static void ssl_mac( mbedtls_md_context_t *md_ctx,
                      const unsigned char *secret,
                      const unsigned char *buf, size_t len,
                      const unsigned char *ctr, int type,
                      unsigned char out[SSL_MAC_MAX_BYTES] )
->>>>>>> local
 {
     unsigned char header[11];
     unsigned char padding[48];
@@ -58935,23 +51796,14 @@ static void ssl_mac( mbedtls_md_context_t *md_ctx,
     mbedtls_md_update( md_ctx, padding, padlen  );
     mbedtls_md_update( md_ctx, header,  11      );
     mbedtls_md_update( md_ctx, buf,     len     );
-<<<<<<< HEAD
-    mbedtls_md_finish( md_ctx, buf +    len     );
-=======
     mbedtls_md_finish( md_ctx, out              );
->>>>>>> local
 
     memset( padding, 0x5C, padlen );
     mbedtls_md_starts( md_ctx );
     mbedtls_md_update( md_ctx, secret,    md_size );
     mbedtls_md_update( md_ctx, padding,   padlen  );
-<<<<<<< HEAD
-    mbedtls_md_update( md_ctx, buf + len, md_size );
-    mbedtls_md_finish( md_ctx, buf + len          );
-=======
     mbedtls_md_update( md_ctx, out,       md_size );
     mbedtls_md_finish( md_ctx, out                );
->>>>>>> local
 }
 #endif /* MBEDTLS_SSL_PROTO_SSL3 */
 
@@ -58982,8 +51834,6 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_BUF( 4, "before encrypt: output payload",
                       ssl->out_msg, ssl->out_msglen );
 
-<<<<<<< HEAD
-=======
     if( ssl->out_msglen > MBEDTLS_SSL_MAX_CONTENT_LEN )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "Record content %u too large, maximum %d",
@@ -58992,7 +51842,6 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
     }
 
->>>>>>> local
     /*
      * Add MAC before if needed
      */
@@ -59007,12 +51856,6 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_SSL_PROTO_SSL3)
         if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 )
         {
-<<<<<<< HEAD
-            ssl_mac( &ssl->transform_out->md_ctx_enc,
-                      ssl->transform_out->mac_enc,
-                      ssl->out_msg, ssl->out_msglen,
-                      ssl->out_ctr, ssl->out_msgtype );
-=======
             unsigned char mac[SSL_MAC_MAX_BYTES];
 
             ssl_mac( &ssl->transform_out->md_ctx_enc,
@@ -59022,7 +51865,6 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
                       mac );
 
             memcpy( ssl->out_msg + ssl->out_msglen, mac, ssl->transform_out->maclen );
->>>>>>> local
         }
         else
 #endif
@@ -59030,26 +51872,17 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
         defined(MBEDTLS_SSL_PROTO_TLS1_2)
         if( ssl->minor_ver >= MBEDTLS_SSL_MINOR_VERSION_1 )
         {
-<<<<<<< HEAD
-=======
             unsigned char mac[MBEDTLS_SSL_MAC_ADD];
 
->>>>>>> local
             mbedtls_md_hmac_update( &ssl->transform_out->md_ctx_enc, ssl->out_ctr, 8 );
             mbedtls_md_hmac_update( &ssl->transform_out->md_ctx_enc, ssl->out_hdr, 3 );
             mbedtls_md_hmac_update( &ssl->transform_out->md_ctx_enc, ssl->out_len, 2 );
             mbedtls_md_hmac_update( &ssl->transform_out->md_ctx_enc,
                              ssl->out_msg, ssl->out_msglen );
-<<<<<<< HEAD
-            mbedtls_md_hmac_finish( &ssl->transform_out->md_ctx_enc,
-                             ssl->out_msg + ssl->out_msglen );
-            mbedtls_md_hmac_reset( &ssl->transform_out->md_ctx_enc );
-=======
             mbedtls_md_hmac_finish( &ssl->transform_out->md_ctx_enc, mac );
             mbedtls_md_hmac_reset( &ssl->transform_out->md_ctx_enc );
 
             memcpy( ssl->out_msg + ssl->out_msglen, mac, ssl->transform_out->maclen );
->>>>>>> local
         }
         else
 #endif
@@ -59122,20 +51955,6 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
         /*
          * Generate IV
          */
-<<<<<<< HEAD
-#if defined(MBEDTLS_SSL_AEAD_RANDOM_IV)
-        ret = ssl->conf->f_rng( ssl->conf->p_rng,
-                ssl->transform_out->iv_enc + ssl->transform_out->fixed_ivlen,
-                ssl->transform_out->ivlen - ssl->transform_out->fixed_ivlen );
-        if( ret != 0 )
-            return( ret );
-
-        memcpy( ssl->out_iv,
-                ssl->transform_out->iv_enc + ssl->transform_out->fixed_ivlen,
-                ssl->transform_out->ivlen - ssl->transform_out->fixed_ivlen );
-#else
-=======
->>>>>>> local
         if( ssl->transform_out->ivlen - ssl->transform_out->fixed_ivlen != 8 )
         {
             /* Reminder if we ever add an AEAD mode with a different size */
@@ -59146,10 +51965,6 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
         memcpy( ssl->transform_out->iv_enc + ssl->transform_out->fixed_ivlen,
                              ssl->out_ctr, 8 );
         memcpy( ssl->out_iv, ssl->out_ctr, 8 );
-<<<<<<< HEAD
-#endif
-=======
->>>>>>> local
 
         MBEDTLS_SSL_DEBUG_BUF( 4, "IV used", ssl->out_iv,
                 ssl->transform_out->ivlen - ssl->transform_out->fixed_ivlen );
@@ -59329,11 +52144,6 @@ static int ssl_encrypt_buf( mbedtls_ssl_context *ssl )
     return( 0 );
 }
 
-<<<<<<< HEAD
-#define SSL_MAX_MAC_SIZE   48
-
-=======
->>>>>>> local
 static int ssl_decrypt_buf( mbedtls_ssl_context *ssl )
 {
     size_t i;
@@ -59501,11 +52311,7 @@ static int ssl_decrypt_buf( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
         if( ssl->session_in->encrypt_then_mac == MBEDTLS_SSL_ETM_ENABLED )
         {
-<<<<<<< HEAD
-            unsigned char computed_mac[SSL_MAX_MAC_SIZE];
-=======
             unsigned char mac_expect[MBEDTLS_SSL_MAC_ADD];
->>>>>>> local
             unsigned char pseudo_hdr[13];
 
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "using encrypt then mac" ) );
@@ -59523,28 +52329,16 @@ static int ssl_decrypt_buf( mbedtls_ssl_context *ssl )
             mbedtls_md_hmac_update( &ssl->transform_in->md_ctx_dec, pseudo_hdr, 13 );
             mbedtls_md_hmac_update( &ssl->transform_in->md_ctx_dec,
                              ssl->in_iv, ssl->in_msglen );
-<<<<<<< HEAD
-            mbedtls_md_hmac_finish( &ssl->transform_in->md_ctx_dec, computed_mac );
-=======
             mbedtls_md_hmac_finish( &ssl->transform_in->md_ctx_dec, mac_expect );
->>>>>>> local
             mbedtls_md_hmac_reset( &ssl->transform_in->md_ctx_dec );
 
             MBEDTLS_SSL_DEBUG_BUF( 4, "message  mac", ssl->in_iv + ssl->in_msglen,
                                               ssl->transform_in->maclen );
-<<<<<<< HEAD
-            MBEDTLS_SSL_DEBUG_BUF( 4, "computed mac", computed_mac,
-                                              ssl->transform_in->maclen );
-
-            if( mbedtls_ssl_safer_memcmp( ssl->in_iv + ssl->in_msglen, computed_mac,
-                              ssl->transform_in->maclen ) != 0 )
-=======
             MBEDTLS_SSL_DEBUG_BUF( 4, "expected mac", mac_expect,
                                               ssl->transform_in->maclen );
 
             if( mbedtls_ssl_safer_memcmp( ssl->in_iv + ssl->in_msglen, mac_expect,
                                           ssl->transform_in->maclen ) != 0 )
->>>>>>> local
             {
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "message mac does not match" ) );
 
@@ -59704,34 +52498,21 @@ static int ssl_decrypt_buf( mbedtls_ssl_context *ssl )
 #if defined(SSL_SOME_MODES_USE_MAC)
     if( auth_done == 0 )
     {
-<<<<<<< HEAD
-        unsigned char tmp[SSL_MAX_MAC_SIZE];
-=======
         unsigned char mac_expect[MBEDTLS_SSL_MAC_ADD];
->>>>>>> local
 
         ssl->in_msglen -= ssl->transform_in->maclen;
 
         ssl->in_len[0] = (unsigned char)( ssl->in_msglen >> 8 );
         ssl->in_len[1] = (unsigned char)( ssl->in_msglen      );
 
-<<<<<<< HEAD
-        memcpy( tmp, ssl->in_msg + ssl->in_msglen, ssl->transform_in->maclen );
-
-=======
->>>>>>> local
 #if defined(MBEDTLS_SSL_PROTO_SSL3)
         if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 )
         {
             ssl_mac( &ssl->transform_in->md_ctx_dec,
                       ssl->transform_in->mac_dec,
                       ssl->in_msg, ssl->in_msglen,
-<<<<<<< HEAD
-                      ssl->in_ctr, ssl->in_msgtype );
-=======
                       ssl->in_ctr, ssl->in_msgtype,
                       mac_expect );
->>>>>>> local
         }
         else
 #endif /* MBEDTLS_SSL_PROTO_SSL3 */
@@ -59763,12 +52544,7 @@ static int ssl_decrypt_buf( mbedtls_ssl_context *ssl )
             mbedtls_md_hmac_update( &ssl->transform_in->md_ctx_dec, ssl->in_len, 2 );
             mbedtls_md_hmac_update( &ssl->transform_in->md_ctx_dec, ssl->in_msg,
                              ssl->in_msglen );
-<<<<<<< HEAD
-            mbedtls_md_hmac_finish( &ssl->transform_in->md_ctx_dec,
-                             ssl->in_msg + ssl->in_msglen );
-=======
             mbedtls_md_hmac_finish( &ssl->transform_in->md_ctx_dec, mac_expect );
->>>>>>> local
             /* Call mbedtls_md_process at least once due to cache attacks */
             for( j = 0; j < extra_run + 1; j++ )
                 mbedtls_md_process( &ssl->transform_in->md_ctx_dec, ssl->in_msg );
@@ -59783,21 +52559,12 @@ static int ssl_decrypt_buf( mbedtls_ssl_context *ssl )
             return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );
         }
 
-<<<<<<< HEAD
-        MBEDTLS_SSL_DEBUG_BUF( 4, "message  mac", tmp, ssl->transform_in->maclen );
-        MBEDTLS_SSL_DEBUG_BUF( 4, "computed mac", ssl->in_msg + ssl->in_msglen,
-                       ssl->transform_in->maclen );
-
-        if( mbedtls_ssl_safer_memcmp( tmp, ssl->in_msg + ssl->in_msglen,
-                         ssl->transform_in->maclen ) != 0 )
-=======
         MBEDTLS_SSL_DEBUG_BUF( 4, "expected mac", mac_expect, ssl->transform_in->maclen );
         MBEDTLS_SSL_DEBUG_BUF( 4, "message  mac", ssl->in_msg + ssl->in_msglen,
                                ssl->transform_in->maclen );
 
         if( mbedtls_ssl_safer_memcmp( ssl->in_msg + ssl->in_msglen, mac_expect,
                                       ssl->transform_in->maclen ) != 0 )
->>>>>>> local
         {
 #if defined(MBEDTLS_SSL_DEBUG_ALL)
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "message mac does not match" ) );
@@ -60506,11 +53273,7 @@ void mbedtls_ssl_send_flight_completed( mbedtls_ssl_context *ssl )
  */
 int mbedtls_ssl_write_record( mbedtls_ssl_context *ssl )
 {
-<<<<<<< HEAD
-    int ret, done = 0;
-=======
     int ret, done = 0, out_msg_type;
->>>>>>> local
     size_t len = ssl->out_msglen;
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> write record" ) );
@@ -60526,13 +53289,9 @@ int mbedtls_ssl_write_record( mbedtls_ssl_context *ssl )
 #endif
     if( ssl->out_msgtype == MBEDTLS_SSL_MSG_HANDSHAKE )
     {
-<<<<<<< HEAD
-        if( ssl->out_msg[0] != MBEDTLS_SSL_HS_HELLO_REQUEST &&
-=======
         out_msg_type = ssl->out_msg[0];
 
         if( out_msg_type != MBEDTLS_SSL_HS_HELLO_REQUEST &&
->>>>>>> local
             ssl->handshake == NULL )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
@@ -60554,8 +53313,6 @@ int mbedtls_ssl_write_record( mbedtls_ssl_context *ssl )
         if( ssl->conf->transport == MBEDTLS_SSL_TRANSPORT_DATAGRAM )
         {
             /* Make room for the additional DTLS fields */
-<<<<<<< HEAD
-=======
             if( MBEDTLS_SSL_MAX_CONTENT_LEN - ssl->out_msglen < 8 )
             {
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "DTLS handshake message too large: "
@@ -60565,17 +53322,12 @@ int mbedtls_ssl_write_record( mbedtls_ssl_context *ssl )
                 return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
             }
 
->>>>>>> local
             memmove( ssl->out_msg + 12, ssl->out_msg + 4, len - 4 );
             ssl->out_msglen += 8;
             len += 8;
 
             /* Write message_seq and update it, except for HelloRequest */
-<<<<<<< HEAD
-            if( ssl->out_msg[0] != MBEDTLS_SSL_HS_HELLO_REQUEST )
-=======
             if( out_msg_type != MBEDTLS_SSL_HS_HELLO_REQUEST )
->>>>>>> local
             {
                 ssl->out_msg[4] = ( ssl->handshake->out_msg_seq >> 8 ) & 0xFF;
                 ssl->out_msg[5] = ( ssl->handshake->out_msg_seq      ) & 0xFF;
@@ -60593,11 +53345,7 @@ int mbedtls_ssl_write_record( mbedtls_ssl_context *ssl )
         }
 #endif /* MBEDTLS_SSL_PROTO_DTLS */
 
-<<<<<<< HEAD
-        if( ssl->out_msg[0] != MBEDTLS_SSL_HS_HELLO_REQUEST )
-=======
         if( out_msg_type != MBEDTLS_SSL_HS_HELLO_REQUEST )
->>>>>>> local
             ssl->handshake->update_checksum( ssl, ssl->out_msg, len );
     }
 
@@ -60909,11 +53657,7 @@ static int ssl_reassemble_dtls_handshake( mbedtls_ssl_context *ssl )
 }
 #endif /* MBEDTLS_SSL_PROTO_DTLS */
 
-<<<<<<< HEAD
-static int ssl_prepare_handshake_record( mbedtls_ssl_context *ssl )
-=======
 int mbedtls_ssl_prepare_handshake_record( mbedtls_ssl_context *ssl )
->>>>>>> local
 {
     if( ssl->in_msglen < mbedtls_ssl_hs_hdr_len( ssl ) )
     {
@@ -60995,15 +53739,12 @@ int mbedtls_ssl_prepare_handshake_record( mbedtls_ssl_context *ssl )
         return( MBEDTLS_ERR_SSL_FEATURE_UNAVAILABLE );
     }
 
-<<<<<<< HEAD
-=======
     return( 0 );
 }
 
 void mbedtls_ssl_update_handshake_status( mbedtls_ssl_context *ssl )
 {
 
->>>>>>> local
     if( ssl->state != MBEDTLS_SSL_HANDSHAKE_OVER &&
         ssl->handshake != NULL )
     {
@@ -61018,11 +53759,6 @@ void mbedtls_ssl_update_handshake_status( mbedtls_ssl_context *ssl )
         ssl->handshake->in_msg_seq++;
     }
 #endif
-<<<<<<< HEAD
-
-    return( 0 );
-=======
->>>>>>> local
 }
 
 /*
@@ -61279,11 +54015,7 @@ static int ssl_handle_possible_reconnect( mbedtls_ssl_context *ssl )
 
     if( ret == MBEDTLS_ERR_SSL_HELLO_VERIFY_REQUIRED )
     {
-<<<<<<< HEAD
-        /* Dont check write errors as we can't do anything here.
-=======
         /* Don't check write errors as we can't do anything here.
->>>>>>> local
          * If the error is permanent we'll catch it later,
          * if it's not, then hopefully it'll work next time. */
         (void) ssl->f_send( ssl->p_bio, ssl->out_buf, len );
@@ -61328,10 +54060,6 @@ static int ssl_handle_possible_reconnect( mbedtls_ssl_context *ssl )
  */
 static int ssl_parse_record_header( mbedtls_ssl_context *ssl )
 {
-<<<<<<< HEAD
-    int ret;
-=======
->>>>>>> local
     int major_ver, minor_ver;
 
     MBEDTLS_SSL_DEBUG_BUF( 4, "input record header", ssl->in_hdr, mbedtls_ssl_hdr_len( ssl ) );
@@ -61353,14 +54081,6 @@ static int ssl_parse_record_header( mbedtls_ssl_context *ssl )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "unknown record type" ) );
 
-<<<<<<< HEAD
-        if( ( ret = mbedtls_ssl_send_alert_message( ssl,
-                        MBEDTLS_SSL_ALERT_LEVEL_FATAL,
-                        MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE ) ) != 0 )
-        {
-            return( ret );
-        }
-=======
 #if defined(MBEDTLS_SSL_PROTO_DTLS)
         /* Silently ignore invalid DTLS records as recommended by RFC 6347
          * Section 4.1.2.7 */
@@ -61368,7 +54088,6 @@ static int ssl_parse_record_header( mbedtls_ssl_context *ssl )
 #endif /* MBEDTLS_SSL_PROTO_DTLS */
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                     MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
->>>>>>> local
 
         return( MBEDTLS_ERR_SSL_INVALID_RECORD );
     }
@@ -61567,13 +54286,6 @@ static int ssl_prepare_record_content( mbedtls_ssl_context *ssl )
             MBEDTLS_SSL_DEBUG_RET( 1, "ssl_decompress_buf", ret );
             return( ret );
         }
-<<<<<<< HEAD
-
-        // TODO: what's the purpose of these lines? is in_len used?
-        ssl->in_len[0] = (unsigned char)( ssl->in_msglen >> 8 );
-        ssl->in_len[1] = (unsigned char)( ssl->in_msglen      );
-=======
->>>>>>> local
     }
 #endif /* MBEDTLS_ZLIB_SUPPORT */
 
@@ -61602,33 +54314,6 @@ int mbedtls_ssl_read_record( mbedtls_ssl_context *ssl )
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> read record" ) );
 
-<<<<<<< HEAD
-    if( ssl->in_hslen != 0 && ssl->in_hslen < ssl->in_msglen )
-    {
-        /*
-         * Get next Handshake message in the current record
-         */
-        ssl->in_msglen -= ssl->in_hslen;
-
-        memmove( ssl->in_msg, ssl->in_msg + ssl->in_hslen,
-                 ssl->in_msglen );
-
-        MBEDTLS_SSL_DEBUG_BUF( 4, "remaining content in record",
-                           ssl->in_msg, ssl->in_msglen );
-
-        if( ( ret = ssl_prepare_handshake_record( ssl ) ) != 0 )
-            return( ret );
-
-        return( 0 );
-    }
-
-    ssl->in_hslen = 0;
-
-    /*
-     * Read the record header and parse it
-     */
-read_record_header:
-=======
     if( ssl->keep_current_message == 0 )
     {
         do {
@@ -61779,7 +54464,6 @@ read_record_header:
 
     /* Current record either fully processed or to be discarded. */
 
->>>>>>> local
     if( ( ret = mbedtls_ssl_fetch_input( ssl, mbedtls_ssl_hdr_len( ssl ) ) ) != 0 )
     {
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_fetch_input", ret );
@@ -61871,15 +54555,12 @@ read_record_header:
                 }
 #endif
 
-<<<<<<< HEAD
-=======
                 /* As above, invalid records cause
                  * dismissal of the whole datagram. */
 
                 ssl->next_record_offset = 0;
                 ssl->in_left = 0;
 
->>>>>>> local
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "discarding invalid record (mac)" ) );
                 goto read_record_header;
             }
@@ -61942,8 +54623,6 @@ read_record_header:
     }
 #endif
 
-<<<<<<< HEAD
-=======
     return( 0 );
 }
 
@@ -61951,21 +54630,15 @@ int mbedtls_ssl_handle_message_type( mbedtls_ssl_context *ssl )
 {
     int ret;
 
->>>>>>> local
     /*
      * Handle particular types of records
      */
     if( ssl->in_msgtype == MBEDTLS_SSL_MSG_HANDSHAKE )
     {
-<<<<<<< HEAD
-        if( ( ret = ssl_prepare_handshake_record( ssl ) ) != 0 )
-            return( ret );
-=======
         if( ( ret = mbedtls_ssl_prepare_handshake_record( ssl ) ) != 0 )
         {
             return( ret );
         }
->>>>>>> local
     }
 
     if( ssl->in_msgtype == MBEDTLS_SSL_MSG_ALERT )
@@ -62013,17 +54686,9 @@ int mbedtls_ssl_handle_message_type( mbedtls_ssl_context *ssl )
 #endif /* MBEDTLS_SSL_PROTO_SSL3 && MBEDTLS_SSL_SRV_C */
 
         /* Silently ignore: fetch new message */
-<<<<<<< HEAD
-        goto read_record_header;
-    }
-
-    MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= read record" ) );
-
-=======
         return MBEDTLS_ERR_SSL_NON_FATAL;
     }
 
->>>>>>> local
     return( 0 );
 }
 
@@ -62051,10 +54716,7 @@ int mbedtls_ssl_send_alert_message( mbedtls_ssl_context *ssl,
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> send alert message" ) );
-<<<<<<< HEAD
-=======
     MBEDTLS_SSL_DEBUG_MSG( 3, ( "send alert level=%u message=%u", level, message ));
->>>>>>> local
 
     ssl->out_msgtype = MBEDTLS_SSL_MSG_ALERT;
     ssl->out_msglen = 2;
@@ -62066,10 +54728,6 @@ int mbedtls_ssl_send_alert_message( mbedtls_ssl_context *ssl,
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_write_record", ret );
         return( ret );
     }
-<<<<<<< HEAD
-
-=======
->>>>>>> local
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= send alert message" ) );
 
     return( 0 );
@@ -62085,10 +54743,7 @@ int mbedtls_ssl_send_alert_message( mbedtls_ssl_context *ssl,
     !defined(MBEDTLS_KEY_EXCHANGE_ECDHE_ECDSA_ENABLED) && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_RSA_ENABLED)    && \
     !defined(MBEDTLS_KEY_EXCHANGE_ECDH_ECDSA_ENABLED)
-<<<<<<< HEAD
-=======
 /* No certificate support -> dummy functions */
->>>>>>> local
 int mbedtls_ssl_write_certificate( mbedtls_ssl_context *ssl )
 {
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
@@ -62128,14 +54783,10 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_MSG( 1, ( "should never happen" ) );
     return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );
 }
-<<<<<<< HEAD
-#else
-=======
 
 #else
 /* Some certificate support -> implement write and parse */
 
->>>>>>> local
 int mbedtls_ssl_write_certificate( mbedtls_ssl_context *ssl )
 {
     int ret = MBEDTLS_ERR_SSL_FEATURE_UNAVAILABLE;
@@ -62258,10 +54909,7 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
     size_t i, n;
     const mbedtls_ssl_ciphersuite_t *ciphersuite_info = ssl->transform_negotiate->ciphersuite_info;
     int authmode = ssl->conf->authmode;
-<<<<<<< HEAD
-=======
     uint8_t alert;
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "=> parse certificate" ) );
 
@@ -62301,11 +54949,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
 
     if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
     {
-<<<<<<< HEAD
-=======
         /* mbedtls_ssl_read_record may have sent an alert already. We
            let it decide whether to alert. */
->>>>>>> local
         MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
         return( ret );
     }
@@ -62327,12 +54972,9 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "SSLv3 client has no certificate" ) );
 
-<<<<<<< HEAD
-=======
             /* The client was asked for a certificate but didn't send
                one. The client should know what's going on, so we
                don't send an alert. */
->>>>>>> local
             ssl->session_negotiate->verify_result = MBEDTLS_X509_BADCERT_MISSING;
             if( authmode == MBEDTLS_SSL_VERIFY_OPTIONAL )
                 return( 0 );
@@ -62354,12 +54996,9 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "TLSv1 client has no certificate" ) );
 
-<<<<<<< HEAD
-=======
             /* The client was asked for a certificate but didn't send
                one. The client should know what's going on, so we
                don't send an alert. */
->>>>>>> local
             ssl->session_negotiate->verify_result = MBEDTLS_X509_BADCERT_MISSING;
             if( authmode == MBEDTLS_SSL_VERIFY_OPTIONAL )
                 return( 0 );
@@ -62374,11 +55013,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
     if( ssl->in_msgtype != MBEDTLS_SSL_MSG_HANDSHAKE )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
 
@@ -62386,11 +55022,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         ssl->in_hslen < mbedtls_ssl_hs_hdr_len( ssl ) + 3 + 3 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE );
     }
 
@@ -62405,11 +55038,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         ssl->in_hslen != n + 3 + mbedtls_ssl_hs_hdr_len( ssl ) )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE );
     }
 
@@ -62425,11 +55055,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "alloc(%d bytes) failed",
                        sizeof( mbedtls_x509_crt ) ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_INTERNAL_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
     }
 
@@ -62442,11 +55069,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         if( ssl->in_msg[i] != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE );
         }
 
@@ -62457,20 +55081,13 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         if( n < 128 || i + n > ssl->in_hslen )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate message" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE );
         }
 
         ret = mbedtls_x509_crt_parse_der( ssl->session_negotiate->peer_cert,
                                   ssl->in_msg + i, n );
-<<<<<<< HEAD
-        if( ret != 0 )
-        {
-=======
         switch( ret )
         {
         case 0: /*ok*/
@@ -62491,7 +55108,6 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
             alert = MBEDTLS_SSL_ALERT_MSG_BAD_CERT;
         crt_parse_der_failed:
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL, alert );
->>>>>>> local
             MBEDTLS_SSL_DEBUG_RET( 1, " mbedtls_x509_crt_parse_der", ret );
             return( ret );
         }
@@ -62512,11 +55128,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
         if( ssl->session->peer_cert == NULL )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "new server cert during renegotiation" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_ACCESS_DENIED );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE );
         }
 
@@ -62527,11 +55140,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
                     ssl->session->peer_cert->raw.len ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "server cert changed during renegotiation" ) );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_ACCESS_DENIED );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE );
         }
     }
@@ -62555,15 +55165,6 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
             ca_crl   = ssl->conf->ca_crl;
         }
 
-<<<<<<< HEAD
-        if( ca_chain == NULL )
-        {
-            MBEDTLS_SSL_DEBUG_MSG( 1, ( "got no CA chain" ) );
-            return( MBEDTLS_ERR_SSL_CA_CHAIN_REQUIRED );
-        }
-
-=======
->>>>>>> local
         /*
          * Main check: verify certificate
          */
@@ -62592,11 +55193,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
             if( mbedtls_pk_can_do( pk, MBEDTLS_PK_ECKEY ) &&
                 mbedtls_ssl_check_curve( ssl, mbedtls_pk_ec( *pk )->grp.id ) != 0 )
             {
-<<<<<<< HEAD
-=======
                 ssl->session_negotiate->verify_result |= MBEDTLS_X509_BADCERT_BAD_KEY;
 
->>>>>>> local
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate (EC key curve)" ) );
                 if( ret == 0 )
                     ret = MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE;
@@ -62605,13 +55203,8 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
 #endif /* MBEDTLS_ECP_C */
 
         if( mbedtls_ssl_check_cert_usage( ssl->session_negotiate->peer_cert,
-<<<<<<< HEAD
-                                  ciphersuite_info,
-                                  ! ssl->conf->endpoint,
-=======
                                  ciphersuite_info,
                                  ! ssl->conf->endpoint,
->>>>>>> local
                                  &ssl->session_negotiate->verify_result ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad certificate (usage extensions)" ) );
@@ -62619,10 +55212,6 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
                 ret = MBEDTLS_ERR_SSL_BAD_HS_CERTIFICATE;
         }
 
-<<<<<<< HEAD
-        if( authmode == MBEDTLS_SSL_VERIFY_OPTIONAL )
-            ret = 0;
-=======
         /* mbedtls_x509_crt_verify_with_profile is supposed to report a
          * verification failure through MBEDTLS_ERR_X509_CERT_VERIFY_FAILED,
          * with details encoded in the verification flags. All other kinds
@@ -62684,7 +55273,6 @@ int mbedtls_ssl_parse_certificate( mbedtls_ssl_context *ssl )
             MBEDTLS_SSL_DEBUG_MSG( 3, ( "Certificate verification flags clear" ) );
         }
 #endif /* MBEDTLS_DEBUG_C */
->>>>>>> local
     }
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= parse certificate" ) );
@@ -62737,22 +55325,16 @@ int mbedtls_ssl_parse_change_cipher_spec( mbedtls_ssl_context *ssl )
     if( ssl->in_msgtype != MBEDTLS_SSL_MSG_CHANGE_CIPHER_SPEC )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad change cipher spec message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
 
     if( ssl->in_msglen != 1 || ssl->in_msg[0] != 1 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad change cipher spec message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_CHANGE_CIPHER_SPEC );
     }
 
@@ -62775,11 +55357,8 @@ int mbedtls_ssl_parse_change_cipher_spec( mbedtls_ssl_context *ssl )
         if( ++ssl->in_epoch == 0 )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "DTLS epoch would wrap" ) );
-<<<<<<< HEAD
-=======
             /* This is highly unlikely to happen for legitimate reasons, so
                treat it as an attack and don't send an alert. */
->>>>>>> local
             return( MBEDTLS_ERR_SSL_COUNTER_WRAPPING );
         }
     }
@@ -62804,11 +55383,8 @@ int mbedtls_ssl_parse_change_cipher_spec( mbedtls_ssl_context *ssl )
         if( ( ret = mbedtls_ssl_hw_record_activate( ssl, MBEDTLS_SSL_CHANNEL_INBOUND ) ) != 0 )
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_hw_record_activate", ret );
-<<<<<<< HEAD
-=======
             mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                             MBEDTLS_SSL_ALERT_MSG_INTERNAL_ERROR );
->>>>>>> local
             return( MBEDTLS_ERR_SSL_HW_ACCEL_FAILED );
         }
     }
@@ -62854,17 +55430,6 @@ void mbedtls_ssl_reset_checksum( mbedtls_ssl_context *ssl )
 {
 #if defined(MBEDTLS_SSL_PROTO_SSL3) || defined(MBEDTLS_SSL_PROTO_TLS1) || \
     defined(MBEDTLS_SSL_PROTO_TLS1_1)
-<<<<<<< HEAD
-     mbedtls_md5_starts( &ssl->handshake->fin_md5  );
-    mbedtls_sha1_starts( &ssl->handshake->fin_sha1 );
-#endif
-#if defined(MBEDTLS_SSL_PROTO_TLS1_2)
-#if defined(MBEDTLS_SHA256_C)
-    mbedtls_sha256_starts( &ssl->handshake->fin_sha256, 0 );
-#endif
-#if defined(MBEDTLS_SHA512_C)
-    mbedtls_sha512_starts( &ssl->handshake->fin_sha512, 1 );
-=======
      mbedtls_md5_starts_ret( &ssl->handshake->fin_md5  );
     mbedtls_sha1_starts_ret( &ssl->handshake->fin_sha1 );
 #endif
@@ -62874,7 +55439,6 @@ void mbedtls_ssl_reset_checksum( mbedtls_ssl_context *ssl )
 #endif
 #if defined(MBEDTLS_SHA512_C)
     mbedtls_sha512_starts_ret( &ssl->handshake->fin_sha512, 1 );
->>>>>>> local
 #endif
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
 }
@@ -62884,17 +55448,6 @@ static void ssl_update_checksum_start( mbedtls_ssl_context *ssl,
 {
 #if defined(MBEDTLS_SSL_PROTO_SSL3) || defined(MBEDTLS_SSL_PROTO_TLS1) || \
     defined(MBEDTLS_SSL_PROTO_TLS1_1)
-<<<<<<< HEAD
-     mbedtls_md5_update( &ssl->handshake->fin_md5 , buf, len );
-    mbedtls_sha1_update( &ssl->handshake->fin_sha1, buf, len );
-#endif
-#if defined(MBEDTLS_SSL_PROTO_TLS1_2)
-#if defined(MBEDTLS_SHA256_C)
-    mbedtls_sha256_update( &ssl->handshake->fin_sha256, buf, len );
-#endif
-#if defined(MBEDTLS_SHA512_C)
-    mbedtls_sha512_update( &ssl->handshake->fin_sha512, buf, len );
-=======
      mbedtls_md5_update_ret( &ssl->handshake->fin_md5 , buf, len );
     mbedtls_sha1_update_ret( &ssl->handshake->fin_sha1, buf, len );
 #endif
@@ -62904,7 +55457,6 @@ static void ssl_update_checksum_start( mbedtls_ssl_context *ssl,
 #endif
 #if defined(MBEDTLS_SHA512_C)
     mbedtls_sha512_update_ret( &ssl->handshake->fin_sha512, buf, len );
->>>>>>> local
 #endif
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
 }
@@ -62914,13 +55466,8 @@ static void ssl_update_checksum_start( mbedtls_ssl_context *ssl,
 static void ssl_update_checksum_md5sha1( mbedtls_ssl_context *ssl,
                                          const unsigned char *buf, size_t len )
 {
-<<<<<<< HEAD
-     mbedtls_md5_update( &ssl->handshake->fin_md5 , buf, len );
-    mbedtls_sha1_update( &ssl->handshake->fin_sha1, buf, len );
-=======
      mbedtls_md5_update_ret( &ssl->handshake->fin_md5 , buf, len );
     mbedtls_sha1_update_ret( &ssl->handshake->fin_sha1, buf, len );
->>>>>>> local
 }
 #endif
 
@@ -62929,11 +55476,7 @@ static void ssl_update_checksum_md5sha1( mbedtls_ssl_context *ssl,
 static void ssl_update_checksum_sha256( mbedtls_ssl_context *ssl,
                                         const unsigned char *buf, size_t len )
 {
-<<<<<<< HEAD
-    mbedtls_sha256_update( &ssl->handshake->fin_sha256, buf, len );
-=======
     mbedtls_sha256_update_ret( &ssl->handshake->fin_sha256, buf, len );
->>>>>>> local
 }
 #endif
 
@@ -62941,11 +55484,7 @@ static void ssl_update_checksum_sha256( mbedtls_ssl_context *ssl,
 static void ssl_update_checksum_sha384( mbedtls_ssl_context *ssl,
                                         const unsigned char *buf, size_t len )
 {
-<<<<<<< HEAD
-    mbedtls_sha512_update( &ssl->handshake->fin_sha512, buf, len );
-=======
     mbedtls_sha512_update_ret( &ssl->handshake->fin_sha512, buf, len );
->>>>>>> local
 }
 #endif
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
@@ -62998,31 +55537,6 @@ static void ssl_calc_finished_ssl(
 
     memset( padbuf, 0x36, 48 );
 
-<<<<<<< HEAD
-    mbedtls_md5_update( &md5, (const unsigned char *) sender, 4 );
-    mbedtls_md5_update( &md5, session->master, 48 );
-    mbedtls_md5_update( &md5, padbuf, 48 );
-    mbedtls_md5_finish( &md5, md5sum );
-
-    mbedtls_sha1_update( &sha1, (const unsigned char *) sender, 4 );
-    mbedtls_sha1_update( &sha1, session->master, 48 );
-    mbedtls_sha1_update( &sha1, padbuf, 40 );
-    mbedtls_sha1_finish( &sha1, sha1sum );
-
-    memset( padbuf, 0x5C, 48 );
-
-    mbedtls_md5_starts( &md5 );
-    mbedtls_md5_update( &md5, session->master, 48 );
-    mbedtls_md5_update( &md5, padbuf, 48 );
-    mbedtls_md5_update( &md5, md5sum, 16 );
-    mbedtls_md5_finish( &md5, buf );
-
-    mbedtls_sha1_starts( &sha1 );
-    mbedtls_sha1_update( &sha1, session->master, 48 );
-    mbedtls_sha1_update( &sha1, padbuf , 40 );
-    mbedtls_sha1_update( &sha1, sha1sum, 20 );
-    mbedtls_sha1_finish( &sha1, buf + 16 );
-=======
     mbedtls_md5_update_ret( &md5, (const unsigned char *) sender, 4 );
     mbedtls_md5_update_ret( &md5, session->master, 48 );
     mbedtls_md5_update_ret( &md5, padbuf, 48 );
@@ -63046,22 +55560,15 @@ static void ssl_calc_finished_ssl(
     mbedtls_sha1_update_ret( &sha1, padbuf , 40 );
     mbedtls_sha1_update_ret( &sha1, sha1sum, 20 );
     mbedtls_sha1_finish_ret( &sha1, buf + 16 );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_BUF( 3, "calc finished result", buf, 36 );
 
     mbedtls_md5_free(  &md5  );
     mbedtls_sha1_free( &sha1 );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize(  padbuf, sizeof(  padbuf ) );
-    ssl_tls_zeroize(  md5sum, sizeof(  md5sum ) );
-    ssl_tls_zeroize( sha1sum, sizeof( sha1sum ) );
-=======
     mbedtls_zeroize(  padbuf, sizeof(  padbuf ) );
     mbedtls_zeroize(  md5sum, sizeof(  md5sum ) );
     mbedtls_zeroize( sha1sum, sizeof( sha1sum ) );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc  finished" ) );
 }
@@ -63109,13 +55616,8 @@ static void ssl_calc_finished_tls(
              ? "client finished"
              : "server finished";
 
-<<<<<<< HEAD
-    mbedtls_md5_finish(  &md5, padbuf );
-    mbedtls_sha1_finish( &sha1, padbuf + 16 );
-=======
     mbedtls_md5_finish_ret(  &md5, padbuf );
     mbedtls_sha1_finish_ret( &sha1, padbuf + 16 );
->>>>>>> local
 
     ssl->handshake->tls_prf( session->master, 48, sender,
                              padbuf, 36, buf, len );
@@ -63125,11 +55627,7 @@ static void ssl_calc_finished_tls(
     mbedtls_md5_free(  &md5  );
     mbedtls_sha1_free( &sha1 );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize(  padbuf, sizeof(  padbuf ) );
-=======
     mbedtls_zeroize(  padbuf, sizeof(  padbuf ) );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc  finished" ) );
 }
@@ -63170,11 +55668,7 @@ static void ssl_calc_finished_tls_sha256(
              ? "client finished"
              : "server finished";
 
-<<<<<<< HEAD
-    mbedtls_sha256_finish( &sha256, padbuf );
-=======
     mbedtls_sha256_finish_ret( &sha256, padbuf );
->>>>>>> local
 
     ssl->handshake->tls_prf( session->master, 48, sender,
                              padbuf, 32, buf, len );
@@ -63183,11 +55677,7 @@ static void ssl_calc_finished_tls_sha256(
 
     mbedtls_sha256_free( &sha256 );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize(  padbuf, sizeof(  padbuf ) );
-=======
     mbedtls_zeroize(  padbuf, sizeof(  padbuf ) );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc  finished" ) );
 }
@@ -63227,11 +55717,7 @@ static void ssl_calc_finished_tls_sha384(
              ? "client finished"
              : "server finished";
 
-<<<<<<< HEAD
-    mbedtls_sha512_finish( &sha512, padbuf );
-=======
     mbedtls_sha512_finish_ret( &sha512, padbuf );
->>>>>>> local
 
     ssl->handshake->tls_prf( session->master, 48, sender,
                              padbuf, 48, buf, len );
@@ -63240,11 +55726,7 @@ static void ssl_calc_finished_tls_sha384(
 
     mbedtls_sha512_free( &sha512 );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize(  padbuf, sizeof( padbuf ) );
-=======
     mbedtls_zeroize(  padbuf, sizeof( padbuf ) );
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= calc  finished" ) );
 }
@@ -63357,16 +55839,12 @@ int mbedtls_ssl_write_finished( mbedtls_ssl_context *ssl )
 
     ssl->handshake->calc_finished( ssl, ssl->out_msg + 4, ssl->conf->endpoint );
 
-<<<<<<< HEAD
-    // TODO TLS/1.2 Hash length is determined by cipher suite (Page 63)
-=======
     /*
      * RFC 5246 7.4.9 (Page 63) says 12 is the default length and ciphersuites
      * may define some other value. Currently (early 2016), no defined
      * ciphersuite does this (and this is unlikely to change as activity has
      * moved to TLS 1.3 now) so we can keep the hardcoded 12 here.
      */
->>>>>>> local
     hash_len = ( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 ) ? 36 : 12;
 
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
@@ -63485,11 +55963,8 @@ int mbedtls_ssl_parse_finished( mbedtls_ssl_context *ssl )
     if( ssl->in_msgtype != MBEDTLS_SSL_MSG_HANDSHAKE )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad finished message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
     }
 
@@ -63505,11 +55980,8 @@ int mbedtls_ssl_parse_finished( mbedtls_ssl_context *ssl )
         ssl->in_hslen  != mbedtls_ssl_hs_hdr_len( ssl ) + hash_len )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad finished message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_FINISHED );
     }
 
@@ -63517,11 +55989,8 @@ int mbedtls_ssl_parse_finished( mbedtls_ssl_context *ssl )
                       buf, hash_len ) != 0 )
     {
         MBEDTLS_SSL_DEBUG_MSG( 1, ( "bad finished message" ) );
-<<<<<<< HEAD
-=======
         mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                         MBEDTLS_SSL_ALERT_MSG_DECODE_ERROR );
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_HS_FINISHED );
     }
 
@@ -63562,43 +56031,26 @@ static void ssl_handshake_params_init( mbedtls_ssl_handshake_params *handshake )
     defined(MBEDTLS_SSL_PROTO_TLS1_1)
      mbedtls_md5_init(   &handshake->fin_md5  );
     mbedtls_sha1_init(   &handshake->fin_sha1 );
-<<<<<<< HEAD
-     mbedtls_md5_starts( &handshake->fin_md5  );
-    mbedtls_sha1_starts( &handshake->fin_sha1 );
-=======
      mbedtls_md5_starts_ret( &handshake->fin_md5  );
     mbedtls_sha1_starts_ret( &handshake->fin_sha1 );
->>>>>>> local
 #endif
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2)
 #if defined(MBEDTLS_SHA256_C)
     mbedtls_sha256_init(   &handshake->fin_sha256    );
-<<<<<<< HEAD
-    mbedtls_sha256_starts( &handshake->fin_sha256, 0 );
-#endif
-#if defined(MBEDTLS_SHA512_C)
-    mbedtls_sha512_init(   &handshake->fin_sha512    );
-    mbedtls_sha512_starts( &handshake->fin_sha512, 1 );
-=======
     mbedtls_sha256_starts_ret( &handshake->fin_sha256, 0 );
 #endif
 #if defined(MBEDTLS_SHA512_C)
     mbedtls_sha512_init(   &handshake->fin_sha512    );
     mbedtls_sha512_starts_ret( &handshake->fin_sha512, 1 );
->>>>>>> local
 #endif
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2 */
 
     handshake->update_checksum = ssl_update_checksum_start;
-<<<<<<< HEAD
-    handshake->sig_alg = MBEDTLS_SSL_HASH_SHA1;
-=======
 
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
     mbedtls_ssl_sig_hash_set_init( &handshake->hash_algs );
 #endif
->>>>>>> local
 
 #if defined(MBEDTLS_DHM_C)
     mbedtls_dhm_init( &handshake->dhm_ctx );
@@ -63844,12 +56296,8 @@ static int ssl_session_reset_int( mbedtls_ssl_context *ssl, int partial )
 
     ssl->in_hslen = 0;
     ssl->nb_zero = 0;
-<<<<<<< HEAD
-    ssl->record_read = 0;
-=======
 
     ssl->keep_current_message = 0;
->>>>>>> local
 
     ssl->out_msg = ssl->out_buf + 13;
     ssl->out_msgtype = 0;
@@ -63989,15 +56437,9 @@ void mbedtls_ssl_conf_dbg( mbedtls_ssl_config *conf,
 
 void mbedtls_ssl_set_bio( mbedtls_ssl_context *ssl,
         void *p_bio,
-<<<<<<< HEAD
-        int (*f_send)(void *, const unsigned char *, size_t),
-        int (*f_recv)(void *, unsigned char *, size_t),
-        int (*f_recv_timeout)(void *, unsigned char *, size_t, uint32_t) )
-=======
         mbedtls_ssl_send_t *f_send,
         mbedtls_ssl_recv_t *f_recv,
         mbedtls_ssl_recv_timeout_t *f_recv_timeout )
->>>>>>> local
 {
     ssl->p_bio          = p_bio;
     ssl->f_send         = f_send;
@@ -64012,13 +56454,8 @@ void mbedtls_ssl_conf_read_timeout( mbedtls_ssl_config *conf, uint32_t timeout )
 
 void mbedtls_ssl_set_timer_cb( mbedtls_ssl_context *ssl,
                                void *p_timer,
-<<<<<<< HEAD
-                               void (*f_set_timer)(void *, uint32_t int_ms, uint32_t fin_ms),
-                               int (*f_get_timer)(void *) )
-=======
                                mbedtls_ssl_set_timer_t *f_set_timer,
                                mbedtls_ssl_get_timer_t *f_get_timer )
->>>>>>> local
 {
     ssl->p_timer        = p_timer;
     ssl->f_set_timer    = f_set_timer;
@@ -64172,11 +56609,7 @@ int mbedtls_ssl_set_hs_ecjpake_password( mbedtls_ssl_context *ssl,
 {
     mbedtls_ecjpake_role role;
 
-<<<<<<< HEAD
-    if( ssl->handshake == NULL && ssl->conf == NULL )
-=======
     if( ssl->handshake == NULL || ssl->conf == NULL )
->>>>>>> local
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
 
     if( ssl->conf->endpoint == MBEDTLS_SSL_IS_SERVER )
@@ -64210,14 +56643,6 @@ int mbedtls_ssl_conf_psk( mbedtls_ssl_config *conf,
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
     }
 
-<<<<<<< HEAD
-    if( conf->psk != NULL || conf->psk_identity != NULL )
-    {
-        mbedtls_free( conf->psk );
-        mbedtls_free( conf->psk_identity );
-        conf->psk = NULL;
-        conf->psk_identity = NULL;
-=======
     if( conf->psk != NULL )
     {
         mbedtls_zeroize( conf->psk, conf->psk_len );
@@ -64231,7 +56656,6 @@ int mbedtls_ssl_conf_psk( mbedtls_ssl_config *conf,
         mbedtls_free( conf->psk_identity );
         conf->psk_identity = NULL;
         conf->psk_identity_len = 0;
->>>>>>> local
     }
 
     if( ( conf->psk = mbedtls_calloc( 1, psk_len ) ) == NULL ||
@@ -64263,15 +56687,11 @@ int mbedtls_ssl_set_hs_psk( mbedtls_ssl_context *ssl,
         return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
 
     if( ssl->handshake->psk != NULL )
-<<<<<<< HEAD
-        mbedtls_free( ssl->handshake->psk );
-=======
     {
         mbedtls_zeroize( ssl->handshake->psk, ssl->handshake->psk_len );
         mbedtls_free( ssl->handshake->psk );
         ssl->handshake->psk_len = 0;
     }
->>>>>>> local
 
     if( ( ssl->handshake->psk = mbedtls_calloc( 1, psk_len ) ) == NULL )
         return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
@@ -64293,11 +56713,8 @@ void mbedtls_ssl_conf_psk_cb( mbedtls_ssl_config *conf,
 #endif /* MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED */
 
 #if defined(MBEDTLS_DHM_C) && defined(MBEDTLS_SSL_SRV_C)
-<<<<<<< HEAD
-=======
 
 #if !defined(MBEDTLS_DEPRECATED_REMOVED)
->>>>>>> local
 int mbedtls_ssl_conf_dh_param( mbedtls_ssl_config *conf, const char *dhm_P, const char *dhm_G )
 {
     int ret;
@@ -64312,8 +56729,6 @@ int mbedtls_ssl_conf_dh_param( mbedtls_ssl_config *conf, const char *dhm_P, cons
 
     return( 0 );
 }
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_DEPRECATED_REMOVED */
 
 int mbedtls_ssl_conf_dh_param_bin( mbedtls_ssl_config *conf,
@@ -64332,7 +56747,6 @@ int mbedtls_ssl_conf_dh_param_bin( mbedtls_ssl_config *conf,
 
     return( 0 );
 }
->>>>>>> local
 
 int mbedtls_ssl_conf_dh_param_ctx( mbedtls_ssl_config *conf, mbedtls_dhm_context *dhm_ctx )
 {
@@ -64370,11 +56784,7 @@ void mbedtls_ssl_conf_sig_hashes( mbedtls_ssl_config *conf,
 {
     conf->sig_hashes = hashes;
 }
-<<<<<<< HEAD
-#endif
-=======
 #endif /* MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED */
->>>>>>> local
 
 #if defined(MBEDTLS_ECP_C)
 /*
@@ -64385,42 +56795,11 @@ void mbedtls_ssl_conf_curves( mbedtls_ssl_config *conf,
 {
     conf->curve_list = curve_list;
 }
-<<<<<<< HEAD
-#endif
-=======
 #endif /* MBEDTLS_ECP_C */
->>>>>>> local
 
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
 int mbedtls_ssl_set_hostname( mbedtls_ssl_context *ssl, const char *hostname )
 {
-<<<<<<< HEAD
-    size_t hostname_len;
-
-    if( hostname == NULL )
-        return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
-
-    hostname_len = strlen( hostname );
-
-    if( hostname_len + 1 == 0 )
-        return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
-
-    if( hostname_len > MBEDTLS_SSL_MAX_HOST_NAME_LEN )
-        return( MBEDTLS_ERR_SSL_BAD_INPUT_DATA );
-
-    ssl->hostname = mbedtls_calloc( 1, hostname_len + 1 );
-
-    if( ssl->hostname == NULL )
-        return( MBEDTLS_ERR_SSL_ALLOC_FAILED );
-
-    memcpy( ssl->hostname, hostname, hostname_len );
-
-    ssl->hostname[hostname_len] = '\0';
-
-    return( 0 );
-}
-#endif
-=======
     /* Initialize to suppress unnecessary compiler warning */
     size_t hostname_len = 0;
 
@@ -64463,7 +56842,6 @@ int mbedtls_ssl_set_hostname( mbedtls_ssl_context *ssl, const char *hostname )
     return( 0 );
 }
 #endif /* MBEDTLS_X509_CRT_PARSE_C */
->>>>>>> local
 
 #if defined(MBEDTLS_SSL_SERVER_NAME_INDICATION)
 void mbedtls_ssl_conf_sni( mbedtls_ssl_config *conf,
@@ -64483,14 +56861,9 @@ int mbedtls_ssl_conf_alpn_protocols( mbedtls_ssl_config *conf, const char **prot
     const char **p;
 
     /*
-<<<<<<< HEAD
-     * "Empty strings MUST NOT be included and byte strings MUST NOT be
-     * truncated". Check lengths now rather than later.
-=======
      * RFC 7301 3.1: "Empty strings MUST NOT be included and byte strings
      * MUST NOT be truncated."
      * We check lengths now rather than later.
->>>>>>> local
      */
     tot_len = 0;
     for( p = protos; *p != NULL; p++ )
@@ -64532,8 +56905,6 @@ void mbedtls_ssl_conf_fallback( mbedtls_ssl_config *conf, char fallback )
 }
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_SRV_C)
 void mbedtls_ssl_conf_cert_req_ca_list( mbedtls_ssl_config *conf,
                                           char cert_req_ca_list )
@@ -64542,7 +56913,6 @@ void mbedtls_ssl_conf_cert_req_ca_list( mbedtls_ssl_config *conf,
 }
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SSL_ENCRYPT_THEN_MAC)
 void mbedtls_ssl_conf_encrypt_then_mac( mbedtls_ssl_config *conf, char etm )
 {
@@ -64975,13 +57345,10 @@ int mbedtls_ssl_renegotiate( mbedtls_ssl_context *ssl )
  */
 static int ssl_check_ctr_renegotiate( mbedtls_ssl_context *ssl )
 {
-<<<<<<< HEAD
-=======
     size_t ep_len = ssl_ep_len( ssl );
     int in_ctr_cmp;
     int out_ctr_cmp;
 
->>>>>>> local
     if( ssl->state != MBEDTLS_SSL_HANDSHAKE_OVER ||
         ssl->renego_status == MBEDTLS_SSL_RENEGOTIATION_PENDING ||
         ssl->conf->disable_renegotiation == MBEDTLS_SSL_RENEGOTIATION_DISABLED )
@@ -64989,17 +57356,12 @@ static int ssl_check_ctr_renegotiate( mbedtls_ssl_context *ssl )
         return( 0 );
     }
 
-<<<<<<< HEAD
-    if( memcmp( ssl->in_ctr,  ssl->conf->renego_period, 8 ) <= 0 &&
-        memcmp( ssl->out_ctr, ssl->conf->renego_period, 8 ) <= 0 )
-=======
     in_ctr_cmp = memcmp( ssl->in_ctr + ep_len,
                         ssl->conf->renego_period + ep_len, 8 - ep_len );
     out_ctr_cmp = memcmp( ssl->out_ctr + ep_len,
                           ssl->conf->renego_period + ep_len, 8 - ep_len );
 
     if( in_ctr_cmp <= 0 && out_ctr_cmp <= 0 )
->>>>>>> local
     {
         return( 0 );
     }
@@ -65014,11 +57376,7 @@ static int ssl_check_ctr_renegotiate( mbedtls_ssl_context *ssl )
  */
 int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
 {
-<<<<<<< HEAD
-    int ret, record_read = 0;
-=======
     int ret;
->>>>>>> local
     size_t n;
 
     if( ssl == NULL || ssl->conf == NULL )
@@ -65041,10 +57399,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
     }
 #endif
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_SSL_RENEGOTIATION)
-    if( ( ret = ssl_check_ctr_renegotiate( ssl ) ) != 0 )
-=======
     /*
      * Check if renegotiation is necessary and/or handshake is
      * in process. If yes, perform/continue, and fall through
@@ -65061,7 +57415,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
     ret = ssl_check_ctr_renegotiate( ssl );
     if( ret != MBEDTLS_ERR_SSL_WAITING_SERVER_HELLO_RENEGO &&
         ret != 0 )
->>>>>>> local
     {
         MBEDTLS_SSL_DEBUG_RET( 1, "ssl_check_ctr_renegotiate", ret );
         return( ret );
@@ -65071,24 +57424,14 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
     if( ssl->state != MBEDTLS_SSL_HANDSHAKE_OVER )
     {
         ret = mbedtls_ssl_handshake( ssl );
-<<<<<<< HEAD
-        if( ret == MBEDTLS_ERR_SSL_WAITING_SERVER_HELLO_RENEGO )
-        {
-            record_read = 1;
-        }
-        else if( ret != 0 )
-=======
         if( ret != MBEDTLS_ERR_SSL_WAITING_SERVER_HELLO_RENEGO &&
             ret != 0 )
->>>>>>> local
         {
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_handshake", ret );
             return( ret );
         }
     }
 
-<<<<<<< HEAD
-=======
     /*
      * TODO
      *
@@ -65124,7 +57467,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
      *
      */
 
->>>>>>> local
     if( ssl->in_offt == NULL )
     {
         /* Start timer if not already running */
@@ -65134,18 +57476,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
             ssl_set_timer( ssl, ssl->conf->read_timeout );
         }
 
-<<<<<<< HEAD
-        if( ! record_read )
-        {
-            if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
-            {
-                if( ret == MBEDTLS_ERR_SSL_CONN_EOF )
-                    return( 0 );
-
-                MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
-                return( ret );
-            }
-=======
         if( ( ret = mbedtls_ssl_read_record( ssl ) ) != 0 )
         {
             if( ret == MBEDTLS_ERR_SSL_CONN_EOF )
@@ -65153,7 +57483,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
 
             MBEDTLS_SSL_DEBUG_RET( 1, "mbedtls_ssl_read_record", ret );
             return( ret );
->>>>>>> local
         }
 
         if( ssl->in_msglen  == 0 &&
@@ -65172,20 +57501,10 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
             }
         }
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_SSL_RENEGOTIATION)
-=======
->>>>>>> local
         if( ssl->in_msgtype == MBEDTLS_SSL_MSG_HANDSHAKE )
         {
             MBEDTLS_SSL_DEBUG_MSG( 1, ( "received handshake message" ) );
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_SSL_CLI_C)
-            if( ssl->conf->endpoint == MBEDTLS_SSL_IS_CLIENT &&
-                ( ssl->in_msg[0] != MBEDTLS_SSL_HS_HELLO_REQUEST ||
-                  ssl->in_hslen != mbedtls_ssl_hs_hdr_len( ssl ) ) )
-=======
             /*
              * - For client-side, expect SERVER_HELLO_REQUEST.
              * - For server-side, expect CLIENT_HELLO.
@@ -65196,7 +57515,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
             if( ssl->conf->endpoint == MBEDTLS_SSL_IS_CLIENT &&
                 ( ssl->in_msg[0] != MBEDTLS_SSL_HS_HELLO_REQUEST ||
                   ssl->in_hslen  != mbedtls_ssl_hs_hdr_len( ssl ) ) )
->>>>>>> local
             {
                 MBEDTLS_SSL_DEBUG_MSG( 1, ( "handshake received (not HelloRequest)" ) );
 
@@ -65207,13 +57525,9 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
 #endif
                 return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
             }
-<<<<<<< HEAD
-
-=======
 #endif /* MBEDTLS_SSL_CLI_C */
 
 #if defined(MBEDTLS_SSL_SRV_C)
->>>>>>> local
             if( ssl->conf->endpoint == MBEDTLS_SSL_IS_SERVER &&
                 ssl->in_msg[0] != MBEDTLS_SSL_HS_CLIENT_HELLO )
             {
@@ -65226,15 +57540,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
 #endif
                 return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
             }
-<<<<<<< HEAD
-#endif
-
-            if( ssl->conf->disable_renegotiation == MBEDTLS_SSL_RENEGOTIATION_DISABLED ||
-                ( ssl->secure_renegotiation == MBEDTLS_SSL_LEGACY_RENEGOTIATION &&
-                  ssl->conf->allow_legacy_renegotiation ==
-                                                MBEDTLS_SSL_LEGACY_NO_RENEGOTIATION ) )
-            {
-=======
 #endif /* MBEDTLS_SSL_SRV_C */
 
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
@@ -65271,25 +57576,16 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
                  * Refuse renegotiation
                  */
 
->>>>>>> local
                 MBEDTLS_SSL_DEBUG_MSG( 3, ( "refusing renegotiation, sending alert" ) );
 
 #if defined(MBEDTLS_SSL_PROTO_SSL3)
                 if( ssl->minor_ver == MBEDTLS_SSL_MINOR_VERSION_0 )
                 {
-<<<<<<< HEAD
-                    /*
-                     * SSLv3 does not have a "no_renegotiation" alert
-                     */
-                    if( ( ret = mbedtls_ssl_send_fatal_handshake_failure( ssl ) ) != 0 )
-                        return( ret );
-=======
                     /* SSLv3 does not have a "no_renegotiation" warning, so
                        we send a fatal alert and abort the connection. */
                     mbedtls_ssl_send_alert_message( ssl, MBEDTLS_SSL_ALERT_LEVEL_FATAL,
                                                     MBEDTLS_SSL_ALERT_MSG_UNEXPECTED_MESSAGE );
                     return( MBEDTLS_ERR_SSL_UNEXPECTED_MESSAGE );
->>>>>>> local
                 }
                 else
 #endif /* MBEDTLS_SSL_PROTO_SSL3 */
@@ -65312,45 +57608,12 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
                     return( MBEDTLS_ERR_SSL_INTERNAL_ERROR );
                 }
             }
-<<<<<<< HEAD
-            else
-            {
-                /* DTLS clients need to know renego is server-initiated */
-#if defined(MBEDTLS_SSL_PROTO_DTLS)
-                if( ssl->conf->transport == MBEDTLS_SSL_TRANSPORT_DATAGRAM &&
-                    ssl->conf->endpoint == MBEDTLS_SSL_IS_CLIENT )
-                {
-                    ssl->renego_status = MBEDTLS_SSL_RENEGOTIATION_PENDING;
-                }
-#endif
-                ret = ssl_start_renegotiation( ssl );
-                if( ret == MBEDTLS_ERR_SSL_WAITING_SERVER_HELLO_RENEGO )
-                {
-                    record_read = 1;
-                }
-                else if( ret != 0 )
-                {
-                    MBEDTLS_SSL_DEBUG_RET( 1, "ssl_start_renegotiation", ret );
-                    return( ret );
-                }
-            }
-
-            /* If a non-handshake record was read during renego, fallthrough,
-             * else tell the user they should call mbedtls_ssl_read() again */
-            if( ! record_read )
-                return( MBEDTLS_ERR_SSL_WANT_READ );
-        }
-        else if( ssl->renego_status == MBEDTLS_SSL_RENEGOTIATION_PENDING )
-        {
-
-=======
 
             return( MBEDTLS_ERR_SSL_WANT_READ );
         }
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
         else if( ssl->renego_status == MBEDTLS_SSL_RENEGOTIATION_PENDING )
         {
->>>>>>> local
             if( ssl->conf->renego_max_records >= 0 )
             {
                 if( ++ssl->renego_records_seen > ssl->conf->renego_max_records )
@@ -65398,11 +57661,7 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
             }
         }
 #endif /* MBEDTLS_SSL_SRV_C && MBEDTLS_SSL_RENEGOTIATION */
-<<<<<<< HEAD
-#endif
-=======
 #endif /* MBEDTLS_SSL_PROTO_DTLS */
->>>>>>> local
     }
 
     n = ( len < ssl->in_msglen )
@@ -65412,13 +57671,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
     ssl->in_msglen -= n;
 
     if( ssl->in_msglen == 0 )
-<<<<<<< HEAD
-        /* all bytes consumed  */
-        ssl->in_offt = NULL;
-    else
-        /* more data available */
-        ssl->in_offt += n;
-=======
     {
         /* all bytes consumed */
         ssl->in_offt = NULL;
@@ -65429,7 +57681,6 @@ int mbedtls_ssl_read( mbedtls_ssl_context *ssl, unsigned char *buf, size_t len )
         /* more data available */
         ssl->in_offt += n;
     }
->>>>>>> local
 
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= read" ) );
 
@@ -65446,13 +57697,9 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
     int ret;
 #if defined(MBEDTLS_SSL_MAX_FRAGMENT_LENGTH)
     size_t max_len = mbedtls_ssl_get_max_frag_len( ssl );
-<<<<<<< HEAD
-
-=======
 #else
     size_t max_len = MBEDTLS_SSL_MAX_CONTENT_LEN;
 #endif /* MBEDTLS_SSL_MAX_FRAGMENT_LENGTH */
->>>>>>> local
     if( len > max_len )
     {
 #if defined(MBEDTLS_SSL_PROTO_DTLS)
@@ -65467,10 +57714,6 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
 #endif
             len = max_len;
     }
-<<<<<<< HEAD
-#endif /* MBEDTLS_SSL_MAX_FRAGMENT_LENGTH */
-=======
->>>>>>> local
 
     if( ssl->out_left != 0 )
     {
@@ -65501,11 +57744,7 @@ static int ssl_write_real( mbedtls_ssl_context *ssl,
  *
  * With non-blocking I/O, ssl_write_real() may return WANT_WRITE,
  * then the caller will call us again with the same arguments, so
-<<<<<<< HEAD
- * remember wether we already did the split or not.
-=======
  * remember whether we already did the split or not.
->>>>>>> local
  */
 #if defined(MBEDTLS_SSL_CBC_RECORD_SPLITTING)
 static int ssl_write_split( mbedtls_ssl_context *ssl,
@@ -65625,11 +57864,7 @@ void mbedtls_ssl_transform_free( mbedtls_ssl_transform *transform )
     mbedtls_md_free( &transform->md_ctx_enc );
     mbedtls_md_free( &transform->md_ctx_dec );
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( transform, sizeof( mbedtls_ssl_transform ) );
-=======
     mbedtls_zeroize( transform, sizeof( mbedtls_ssl_transform ) );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
@@ -65680,12 +57915,8 @@ void mbedtls_ssl_handshake_free( mbedtls_ssl_handshake_params *handshake )
 #endif
 #endif
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C)
-=======
 #if defined(MBEDTLS_ECDH_C) || defined(MBEDTLS_ECDSA_C) || \
     defined(MBEDTLS_KEY_EXCHANGE_ECJPAKE_ENABLED)
->>>>>>> local
     /* explicit void pointer cast for buggy MS compiler */
     mbedtls_free( (void *) handshake->curves );
 #endif
@@ -65693,11 +57924,7 @@ void mbedtls_ssl_handshake_free( mbedtls_ssl_handshake_params *handshake )
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED)
     if( handshake->psk != NULL )
     {
-<<<<<<< HEAD
-        ssl_tls_zeroize( handshake->psk, handshake->psk_len );
-=======
         mbedtls_zeroize( handshake->psk, handshake->psk_len );
->>>>>>> local
         mbedtls_free( handshake->psk );
     }
 #endif
@@ -65727,11 +57954,7 @@ void mbedtls_ssl_handshake_free( mbedtls_ssl_handshake_params *handshake )
     ssl_flight_free( handshake->flight );
 #endif
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( handshake, sizeof( mbedtls_ssl_handshake_params ) );
-=======
     mbedtls_zeroize( handshake, sizeof( mbedtls_ssl_handshake_params ) );
->>>>>>> local
 }
 
 void mbedtls_ssl_session_free( mbedtls_ssl_session *session )
@@ -65751,11 +57974,7 @@ void mbedtls_ssl_session_free( mbedtls_ssl_session *session )
     mbedtls_free( session->ticket );
 #endif
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( session, sizeof( mbedtls_ssl_session ) );
-=======
     mbedtls_zeroize( session, sizeof( mbedtls_ssl_session ) );
->>>>>>> local
 }
 
 /*
@@ -65770,32 +57989,20 @@ void mbedtls_ssl_free( mbedtls_ssl_context *ssl )
 
     if( ssl->out_buf != NULL )
     {
-<<<<<<< HEAD
-        ssl_tls_zeroize( ssl->out_buf, MBEDTLS_SSL_BUFFER_LEN );
-=======
         mbedtls_zeroize( ssl->out_buf, MBEDTLS_SSL_BUFFER_LEN );
->>>>>>> local
         mbedtls_free( ssl->out_buf );
     }
 
     if( ssl->in_buf != NULL )
     {
-<<<<<<< HEAD
-        ssl_tls_zeroize( ssl->in_buf, MBEDTLS_SSL_BUFFER_LEN );
-=======
         mbedtls_zeroize( ssl->in_buf, MBEDTLS_SSL_BUFFER_LEN );
->>>>>>> local
         mbedtls_free( ssl->in_buf );
     }
 
 #if defined(MBEDTLS_ZLIB_SUPPORT)
     if( ssl->compress_buf != NULL )
     {
-<<<<<<< HEAD
-        ssl_tls_zeroize( ssl->compress_buf, MBEDTLS_SSL_BUFFER_LEN );
-=======
         mbedtls_zeroize( ssl->compress_buf, MBEDTLS_SSL_BUFFER_LEN );
->>>>>>> local
         mbedtls_free( ssl->compress_buf );
     }
 #endif
@@ -65826,11 +58033,7 @@ void mbedtls_ssl_free( mbedtls_ssl_context *ssl )
 #if defined(MBEDTLS_X509_CRT_PARSE_C)
     if( ssl->hostname != NULL )
     {
-<<<<<<< HEAD
-        ssl_tls_zeroize( ssl->hostname, strlen( ssl->hostname ) );
-=======
         mbedtls_zeroize( ssl->hostname, strlen( ssl->hostname ) );
->>>>>>> local
         mbedtls_free( ssl->hostname );
     }
 #endif
@@ -65850,11 +58053,7 @@ void mbedtls_ssl_free( mbedtls_ssl_context *ssl )
     MBEDTLS_SSL_DEBUG_MSG( 2, ( "<= free" ) );
 
     /* Actually clear after last debug message */
-<<<<<<< HEAD
-    ssl_tls_zeroize( ssl, sizeof( mbedtls_ssl_context ) );
-=======
     mbedtls_zeroize( ssl, sizeof( mbedtls_ssl_context ) );
->>>>>>> local
 }
 
 /*
@@ -65875,11 +58074,7 @@ static int ssl_preset_default_hashes[] = {
     MBEDTLS_MD_SHA256,
     MBEDTLS_MD_SHA224,
 #endif
-<<<<<<< HEAD
-#if defined(MBEDTLS_SHA1_C)
-=======
 #if defined(MBEDTLS_SHA1_C) && defined(MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_KEY_EXCHANGE)
->>>>>>> local
     MBEDTLS_MD_SHA1,
 #endif
     MBEDTLS_MD_NONE
@@ -65961,13 +58156,10 @@ int mbedtls_ssl_config_defaults( mbedtls_ssl_config *conf,
     conf->anti_replay = MBEDTLS_SSL_ANTI_REPLAY_ENABLED;
 #endif
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_SRV_C)
     conf->cert_req_ca_list = MBEDTLS_SSL_CERT_REQ_CA_LIST_ENABLED;
 #endif
 
->>>>>>> local
 #if defined(MBEDTLS_SSL_PROTO_DTLS)
     conf->hs_timeout_min = MBEDTLS_SSL_DTLS_TIMEOUT_DFL_MIN;
     conf->hs_timeout_max = MBEDTLS_SSL_DTLS_TIMEOUT_DFL_MAX;
@@ -65975,23 +58167,13 @@ int mbedtls_ssl_config_defaults( mbedtls_ssl_config *conf,
 
 #if defined(MBEDTLS_SSL_RENEGOTIATION)
     conf->renego_max_records = MBEDTLS_SSL_RENEGO_MAX_RECORDS_DEFAULT;
-<<<<<<< HEAD
-    memset( conf->renego_period, 0xFF, 7 );
-    conf->renego_period[7] = 0x00;
-=======
     memset( conf->renego_period,     0x00, 2 );
     memset( conf->renego_period + 2, 0xFF, 6 );
->>>>>>> local
 #endif
 
 #if defined(MBEDTLS_DHM_C) && defined(MBEDTLS_SSL_SRV_C)
             if( endpoint == MBEDTLS_SSL_IS_SERVER )
             {
-<<<<<<< HEAD
-                if( ( ret = mbedtls_ssl_conf_dh_param( conf,
-                                MBEDTLS_DHM_RFC5114_MODP_2048_P,
-                                MBEDTLS_DHM_RFC5114_MODP_2048_G ) ) != 0 )
-=======
                 const unsigned char dhm_p[] =
                     MBEDTLS_DHM_RFC3526_MODP_2048_P_BIN;
                 const unsigned char dhm_g[] =
@@ -66000,7 +58182,6 @@ int mbedtls_ssl_config_defaults( mbedtls_ssl_config *conf,
                 if ( ( ret = mbedtls_ssl_conf_dh_param_bin( conf,
                                                dhm_p, sizeof( dhm_p ),
                                                dhm_g, sizeof( dhm_g ) ) ) != 0 )
->>>>>>> local
                 {
                     return( ret );
                 }
@@ -66044,10 +58225,6 @@ int mbedtls_ssl_config_defaults( mbedtls_ssl_config *conf,
          * Default
          */
         default:
-<<<<<<< HEAD
-            conf->min_major_ver = MBEDTLS_SSL_MAJOR_VERSION_3;
-            conf->min_minor_ver = MBEDTLS_SSL_MINOR_VERSION_1; /* TLS 1.0 */
-=======
             conf->min_major_ver = ( MBEDTLS_SSL_MIN_MAJOR_VERSION >
                                     MBEDTLS_SSL_MIN_VALID_MAJOR_VERSION ) ?
                                     MBEDTLS_SSL_MIN_MAJOR_VERSION :
@@ -66056,7 +58233,6 @@ int mbedtls_ssl_config_defaults( mbedtls_ssl_config *conf,
                                     MBEDTLS_SSL_MIN_VALID_MINOR_VERSION ) ?
                                     MBEDTLS_SSL_MIN_MINOR_VERSION :
                                     MBEDTLS_SSL_MIN_VALID_MINOR_VERSION;
->>>>>>> local
             conf->max_major_ver = MBEDTLS_SSL_MAX_MAJOR_VERSION;
             conf->max_minor_ver = MBEDTLS_SSL_MAX_MINOR_VERSION;
 
@@ -66104,13 +58280,8 @@ void mbedtls_ssl_config_free( mbedtls_ssl_config *conf )
 #if defined(MBEDTLS_KEY_EXCHANGE__SOME__PSK_ENABLED)
     if( conf->psk != NULL )
     {
-<<<<<<< HEAD
-        ssl_tls_zeroize( conf->psk, conf->psk_len );
-        ssl_tls_zeroize( conf->psk_identity, conf->psk_identity_len );
-=======
         mbedtls_zeroize( conf->psk, conf->psk_len );
         mbedtls_zeroize( conf->psk_identity, conf->psk_identity_len );
->>>>>>> local
         mbedtls_free( conf->psk );
         mbedtls_free( conf->psk_identity );
         conf->psk_len = 0;
@@ -66122,11 +58293,7 @@ void mbedtls_ssl_config_free( mbedtls_ssl_config *conf )
     ssl_key_cert_free( conf->key_cert );
 #endif
 
-<<<<<<< HEAD
-    ssl_tls_zeroize( conf, sizeof( mbedtls_ssl_config ) );
-=======
     mbedtls_zeroize( conf, sizeof( mbedtls_ssl_config ) );
->>>>>>> local
 }
 
 #if defined(MBEDTLS_PK_C) && \
@@ -66147,8 +58314,6 @@ unsigned char mbedtls_ssl_sig_from_pk( mbedtls_pk_context *pk )
     return( MBEDTLS_SSL_SIG_ANON );
 }
 
-<<<<<<< HEAD
-=======
 unsigned char mbedtls_ssl_sig_from_pk_alg( mbedtls_pk_type_t type )
 {
     switch( type ) {
@@ -66162,7 +58327,6 @@ unsigned char mbedtls_ssl_sig_from_pk_alg( mbedtls_pk_type_t type )
     }
 }
 
->>>>>>> local
 mbedtls_pk_type_t mbedtls_ssl_pk_alg_from_sig( unsigned char sig )
 {
     switch( sig )
@@ -66181,8 +58345,6 @@ mbedtls_pk_type_t mbedtls_ssl_pk_alg_from_sig( unsigned char sig )
 }
 #endif /* MBEDTLS_PK_C && ( MBEDTLS_RSA_C || MBEDTLS_ECDSA_C ) */
 
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2) && \
     defined(MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED)
 
@@ -66234,7 +58396,6 @@ void mbedtls_ssl_sig_hash_set_const_hash( mbedtls_ssl_sig_hash_set_t *set,
 #endif /* MBEDTLS_SSL_PROTO_TLS1_2) &&
           MBEDTLS_KEY_EXCHANGE__WITH_CERT__ENABLED */
 
->>>>>>> local
 /*
  * Convert from MBEDTLS_SSL_HASH_XXX to MBEDTLS_MD_XXX
  */
@@ -66436,11 +58597,7 @@ int mbedtls_ssl_check_cert_usage( const mbedtls_x509_crt *cert,
  * and, for DTLS, to/from TLS equivalent.
  *
  * For TLS this is the identity.
-<<<<<<< HEAD
- * For DTLS, use one complement (v -> 255 - v, and then map as follows:
-=======
  * For DTLS, use 1's complement (v -> 255 - v, and then map as follows:
->>>>>>> local
  * 1.0 <-> 3.2      (DTLS 1.0 is based on TLS 1.1)
  * 1.x <-> 3.x+1    for x != 0 (DTLS 1.2 based on TLS 1.2)
  */
@@ -66488,14 +58645,6 @@ void mbedtls_ssl_read_version( int *major, int *minor, int transport,
     }
 }
 
-<<<<<<< HEAD
-#endif /* MBEDTLS_SSL_TLS_C */
-
-
-
-/********* Start of file library/threading.c ************/
-
-=======
 int mbedtls_ssl_set_calc_verify_md( mbedtls_ssl_context *ssl, int md )
 {
 #if defined(MBEDTLS_SSL_PROTO_TLS1_2)
@@ -66719,7 +58868,6 @@ exit:
 
 
 /********* Start of file library/threading.c ************/
->>>>>>> local
 
 /*
  *  Threading abstraction layer
@@ -66763,18 +58911,11 @@ static void threading_mutex_init_pthread( mbedtls_threading_mutex_t *mutex )
 
 static void threading_mutex_free_pthread( mbedtls_threading_mutex_t *mutex )
 {
-<<<<<<< HEAD
-    if( mutex == NULL )
-        return;
-
-    (void) pthread_mutex_destroy( &mutex->mutex );
-=======
     if( mutex == NULL || !mutex->is_valid )
         return;
 
     (void) pthread_mutex_destroy( &mutex->mutex );
     mutex->is_valid = 0;
->>>>>>> local
 }
 
 static int threading_mutex_lock_pthread( mbedtls_threading_mutex_t *mutex )
@@ -66866,8 +59007,6 @@ mbedtls_threading_mutex_t mbedtls_threading_gmtime_mutex MUTEX_INIT;
 
 #endif /* MBEDTLS_THREADING_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -66900,15 +59039,10 @@ mbedtls_threading_mutex_t mbedtls_threading_gmtime_mutex MUTEX_INIT;
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/timing.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  Portable interface to the CPU cycle counter
  *
@@ -66949,14 +59083,11 @@ mbedtls_threading_mutex_t mbedtls_threading_gmtime_mutex MUTEX_INIT;
 
 #if !defined(MBEDTLS_TIMING_ALT)
 
-<<<<<<< HEAD
-=======
 #if !defined(unix) && !defined(__unix__) && !defined(__unix) && \
     !defined(__APPLE__) && !defined(_WIN32)
 #error "This module only works on Unix and Windows, see MBEDTLS_TIMING_C in config.h"
 #endif
 
->>>>>>> local
 #ifndef asm
 #define asm __asm
 #endif
@@ -66975,13 +59106,7 @@ struct _hr_time
 
 #include <unistd.h>
 #include <sys/types.h>
-<<<<<<< HEAD
-#if !VXWORKS
 #include <sys/time.h>
-#endif
-=======
-#include <sys/time.h>
->>>>>>> local
 #include <signal.h>
 #include <time.h>
 
@@ -67164,23 +59289,6 @@ volatile int mbedtls_timing_alarmed = 0;
 
 unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int reset )
 {
-<<<<<<< HEAD
-    unsigned long delta;
-    LARGE_INTEGER offset, hfreq;
-    struct _hr_time *t = (struct _hr_time *) val;
-
-    QueryPerformanceCounter(  &offset );
-    QueryPerformanceFrequency( &hfreq );
-
-    delta = (unsigned long)( ( 1000 *
-        ( offset.QuadPart - t->start.QuadPart ) ) /
-           hfreq.QuadPart );
-
-    if( reset )
-        QueryPerformanceCounter( &t->start );
-
-    return( delta );
-=======
     struct _hr_time *t = (struct _hr_time *) val;
 
     if( reset )
@@ -67198,7 +59306,6 @@ unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int 
                                  / hfreq.QuadPart );
         return( delta );
     }
->>>>>>> local
 }
 
 /* It's OK to use a global because alarm() is supposed to be global anyway */
@@ -67216,8 +59323,6 @@ void mbedtls_set_alarm( int seconds )
 {
     DWORD ThreadId;
 
-<<<<<<< HEAD
-=======
     if( seconds == 0 )
     {
         /* No need to create a thread for this simple case.
@@ -67226,7 +59331,6 @@ void mbedtls_set_alarm( int seconds )
         return;
     }
 
->>>>>>> local
     mbedtls_timing_alarmed = 0;
     alarmMs = seconds * 1000;
     CloseHandle( CreateThread( NULL, 0, TimerProc, NULL, 0, &ThreadId ) );
@@ -67236,25 +59340,6 @@ void mbedtls_set_alarm( int seconds )
 
 unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int reset )
 {
-<<<<<<< HEAD
-    unsigned long delta;
-    struct timeval offset;
-    struct _hr_time *t = (struct _hr_time *) val;
-
-    gettimeofday( &offset, NULL );
-
-    if( reset )
-    {
-        t->start.tv_sec  = offset.tv_sec;
-        t->start.tv_usec = offset.tv_usec;
-        return( 0 );
-    }
-
-    delta = ( offset.tv_sec  - t->start.tv_sec  ) * 1000
-          + ( offset.tv_usec - t->start.tv_usec ) / 1000;
-
-    return( delta );
-=======
     struct _hr_time *t = (struct _hr_time *) val;
 
     if( reset )
@@ -67271,7 +59356,6 @@ unsigned long mbedtls_timing_get_timer( struct mbedtls_timing_hr_time *val, int 
               + ( now.tv_usec - t->start.tv_usec ) / 1000;
         return( delta );
     }
->>>>>>> local
 }
 
 static void sighandler( int signum )
@@ -67285,15 +59369,12 @@ void mbedtls_set_alarm( int seconds )
     mbedtls_timing_alarmed = 0;
     signal( SIGALRM, sighandler );
     alarm( seconds );
-<<<<<<< HEAD
-=======
     if( seconds == 0 )
     {
         /* alarm(0) cancelled any previous pending alarm, but the
            handler won't fire, so raise the flag straight away. */
         mbedtls_timing_alarmed = 1;
     }
->>>>>>> local
 }
 
 #endif /* _WIN32 && !EFIX64 && !EFI32 */
@@ -67357,15 +59438,6 @@ static void busy_msleep( unsigned long msec )
     (void) j;
 }
 
-<<<<<<< HEAD
-#define FAIL    do                      \
-{                                       \
-    if( verbose != 0 )                  \
-        mbedtls_printf( "failed\n" );   \
-                                        \
-    return( 1 );                        \
-} while( 0 )
-=======
 #define FAIL    do                                                      \
     {                                                                   \
         if( verbose != 0 )                                              \
@@ -67381,7 +59453,6 @@ static void busy_msleep( unsigned long msec )
         }                                                               \
         return( 1 );                                                    \
     } while( 0 )
->>>>>>> local
 
 /*
  * Checkup routine
@@ -67391,39 +59462,22 @@ static void busy_msleep( unsigned long msec )
  */
 int mbedtls_timing_self_test( int verbose )
 {
-<<<<<<< HEAD
-    unsigned long cycles, ratio;
-    unsigned long millisecs, secs;
-    int hardfail;
-    struct mbedtls_timing_hr_time hires;
-    uint32_t a, b;
-=======
     unsigned long cycles = 0, ratio = 0;
     unsigned long millisecs = 0, secs = 0;
     int hardfail = 0;
     struct mbedtls_timing_hr_time hires;
     uint32_t a = 0, b = 0;
->>>>>>> local
     mbedtls_timing_delay_context ctx;
 
     if( verbose != 0 )
         mbedtls_printf( "  TIMING tests note: will take some time!\n" );
 
-<<<<<<< HEAD
-
-    if( verbose != 0 )
-        mbedtls_printf( "  TIMING test #1 (set_alarm / get_timer): " );
-
-    for( secs = 1; secs <= 3; secs++ )
-    {
-=======
     if( verbose != 0 )
         mbedtls_printf( "  TIMING test #1 (set_alarm / get_timer): " );
 
     {
         secs = 1;
 
->>>>>>> local
         (void) mbedtls_timing_get_timer( &hires, 1 );
 
         mbedtls_set_alarm( (int) secs );
@@ -67435,16 +59489,7 @@ int mbedtls_timing_self_test( int verbose )
         /* For some reason on Windows it looks like alarm has an extra delay
          * (maybe related to creating a new thread). Allow some room here. */
         if( millisecs < 800 * secs || millisecs > 1200 * secs + 300 )
-<<<<<<< HEAD
-        {
-            if( verbose != 0 )
-                mbedtls_printf( "failed\n" );
-
-            return( 1 );
-        }
-=======
             FAIL;
->>>>>>> local
     }
 
     if( verbose != 0 )
@@ -67453,30 +59498,6 @@ int mbedtls_timing_self_test( int verbose )
     if( verbose != 0 )
         mbedtls_printf( "  TIMING test #2 (set/get_delay        ): " );
 
-<<<<<<< HEAD
-    for( a = 200; a <= 400; a += 200 )
-    {
-        for( b = 200; b <= 400; b += 200 )
-        {
-            mbedtls_timing_set_delay( &ctx, a, a + b );
-
-            busy_msleep( a - a / 8 );
-            if( mbedtls_timing_get_delay( &ctx ) != 0 )
-                FAIL;
-
-            busy_msleep( a / 4 );
-            if( mbedtls_timing_get_delay( &ctx ) != 1 )
-                FAIL;
-
-            busy_msleep( b - a / 8 - b / 8 );
-            if( mbedtls_timing_get_delay( &ctx ) != 1 )
-                FAIL;
-
-            busy_msleep( b / 4 );
-            if( mbedtls_timing_get_delay( &ctx ) != 2 )
-                FAIL;
-        }
-=======
     {
         a = 800;
         b = 400;
@@ -67493,7 +59514,6 @@ int mbedtls_timing_self_test( int verbose )
         busy_msleep( b );                          /* T = a + b + b/4 */
         if( mbedtls_timing_get_delay( &ctx ) != 2 )
             FAIL;
->>>>>>> local
     }
 
     mbedtls_timing_set_delay( &ctx, 0, 0 );
@@ -67512,10 +59532,6 @@ int mbedtls_timing_self_test( int verbose )
      * On a 4Ghz 32-bit machine the cycle counter wraps about once per second;
      * since the whole test is about 10ms, it shouldn't happen twice in a row.
      */
-<<<<<<< HEAD
-    hardfail = 0;
-=======
->>>>>>> local
 
 hard_test:
     if( hardfail > 1 )
@@ -67564,8 +59580,6 @@ hard_test_done:
 
 #endif /* MBEDTLS_TIMING_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -67598,15 +59612,10 @@ hard_test_done:
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/version.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  Version information
  *
@@ -67639,11 +59648,7 @@ hard_test_done:
 
 #include <string.h>
 
-<<<<<<< HEAD
-unsigned int mbedtls_version_get_number()
-=======
 unsigned int mbedtls_version_get_number( void )
->>>>>>> local
 {
     return( MBEDTLS_VERSION_NUMBER );
 }
@@ -67662,13 +59667,6 @@ void mbedtls_version_get_string_full( char *string )
 
 #endif /* MBEDTLS_VERSION_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/version_features.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -67705,7 +59703,6 @@ void mbedtls_version_get_string_full( char *string )
 
 /********* Start of file library/version_features.c ************/
 
->>>>>>> local
 /*
  *  Version feature information
  *
@@ -67744,12 +59741,9 @@ static const char *features[] = {
 #if defined(MBEDTLS_HAVE_ASM)
     "MBEDTLS_HAVE_ASM",
 #endif /* MBEDTLS_HAVE_ASM */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_NO_UDBL_DIVISION)
     "MBEDTLS_NO_UDBL_DIVISION",
 #endif /* MBEDTLS_NO_UDBL_DIVISION */
->>>>>>> local
 #if defined(MBEDTLS_HAVE_SSE2)
     "MBEDTLS_HAVE_SSE2",
 #endif /* MBEDTLS_HAVE_SSE2 */
@@ -67768,12 +59762,9 @@ static const char *features[] = {
 #if defined(MBEDTLS_PLATFORM_EXIT_ALT)
     "MBEDTLS_PLATFORM_EXIT_ALT",
 #endif /* MBEDTLS_PLATFORM_EXIT_ALT */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_PLATFORM_TIME_ALT)
     "MBEDTLS_PLATFORM_TIME_ALT",
 #endif /* MBEDTLS_PLATFORM_TIME_ALT */
->>>>>>> local
 #if defined(MBEDTLS_PLATFORM_FPRINTF_ALT)
     "MBEDTLS_PLATFORM_FPRINTF_ALT",
 #endif /* MBEDTLS_PLATFORM_FPRINTF_ALT */
@@ -67783,15 +59774,12 @@ static const char *features[] = {
 #if defined(MBEDTLS_PLATFORM_SNPRINTF_ALT)
     "MBEDTLS_PLATFORM_SNPRINTF_ALT",
 #endif /* MBEDTLS_PLATFORM_SNPRINTF_ALT */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_PLATFORM_NV_SEED_ALT)
     "MBEDTLS_PLATFORM_NV_SEED_ALT",
 #endif /* MBEDTLS_PLATFORM_NV_SEED_ALT */
 #if defined(MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT)
     "MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT",
 #endif /* MBEDTLS_PLATFORM_SETUP_TEARDOWN_ALT */
->>>>>>> local
 #if defined(MBEDTLS_DEPRECATED_WARNING)
     "MBEDTLS_DEPRECATED_WARNING",
 #endif /* MBEDTLS_DEPRECATED_WARNING */
@@ -67813,14 +59801,6 @@ static const char *features[] = {
 #if defined(MBEDTLS_CAMELLIA_ALT)
     "MBEDTLS_CAMELLIA_ALT",
 #endif /* MBEDTLS_CAMELLIA_ALT */
-<<<<<<< HEAD
-#if defined(MBEDTLS_DES_ALT)
-    "MBEDTLS_DES_ALT",
-#endif /* MBEDTLS_DES_ALT */
-#if defined(MBEDTLS_XTEA_ALT)
-    "MBEDTLS_XTEA_ALT",
-#endif /* MBEDTLS_XTEA_ALT */
-=======
 #if defined(MBEDTLS_CCM_ALT)
     "MBEDTLS_CCM_ALT",
 #endif /* MBEDTLS_CCM_ALT */
@@ -67839,7 +59819,6 @@ static const char *features[] = {
 #if defined(MBEDTLS_GCM_ALT)
     "MBEDTLS_GCM_ALT",
 #endif /* MBEDTLS_GCM_ALT */
->>>>>>> local
 #if defined(MBEDTLS_MD2_ALT)
     "MBEDTLS_MD2_ALT",
 #endif /* MBEDTLS_MD2_ALT */
@@ -67852,12 +59831,9 @@ static const char *features[] = {
 #if defined(MBEDTLS_RIPEMD160_ALT)
     "MBEDTLS_RIPEMD160_ALT",
 #endif /* MBEDTLS_RIPEMD160_ALT */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_RSA_ALT)
     "MBEDTLS_RSA_ALT",
 #endif /* MBEDTLS_RSA_ALT */
->>>>>>> local
 #if defined(MBEDTLS_SHA1_ALT)
     "MBEDTLS_SHA1_ALT",
 #endif /* MBEDTLS_SHA1_ALT */
@@ -67867,15 +59843,12 @@ static const char *features[] = {
 #if defined(MBEDTLS_SHA512_ALT)
     "MBEDTLS_SHA512_ALT",
 #endif /* MBEDTLS_SHA512_ALT */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_XTEA_ALT)
     "MBEDTLS_XTEA_ALT",
 #endif /* MBEDTLS_XTEA_ALT */
 #if defined(MBEDTLS_ECP_ALT)
     "MBEDTLS_ECP_ALT",
 #endif /* MBEDTLS_ECP_ALT */
->>>>>>> local
 #if defined(MBEDTLS_MD2_PROCESS_ALT)
     "MBEDTLS_MD2_PROCESS_ALT",
 #endif /* MBEDTLS_MD2_PROCESS_ALT */
@@ -67918,8 +59891,6 @@ static const char *features[] = {
 #if defined(MBEDTLS_AES_DECRYPT_ALT)
     "MBEDTLS_AES_DECRYPT_ALT",
 #endif /* MBEDTLS_AES_DECRYPT_ALT */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ECDH_GEN_PUBLIC_ALT)
     "MBEDTLS_ECDH_GEN_PUBLIC_ALT",
 #endif /* MBEDTLS_ECDH_GEN_PUBLIC_ALT */
@@ -67965,7 +59936,6 @@ static const char *features[] = {
 #if defined(MBEDTLS_TEST_NULL_ENTROPY)
     "MBEDTLS_TEST_NULL_ENTROPY",
 #endif /* MBEDTLS_TEST_NULL_ENTROPY */
->>>>>>> local
 #if defined(MBEDTLS_ENTROPY_HARDWARE_ALT)
     "MBEDTLS_ENTROPY_HARDWARE_ALT",
 #endif /* MBEDTLS_ENTROPY_HARDWARE_ALT */
@@ -68101,12 +60071,9 @@ static const char *features[] = {
 #if defined(MBEDTLS_ENTROPY_FORCE_SHA256)
     "MBEDTLS_ENTROPY_FORCE_SHA256",
 #endif /* MBEDTLS_ENTROPY_FORCE_SHA256 */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_ENTROPY_NV_SEED)
     "MBEDTLS_ENTROPY_NV_SEED",
 #endif /* MBEDTLS_ENTROPY_NV_SEED */
->>>>>>> local
 #if defined(MBEDTLS_MEMORY_DEBUG)
     "MBEDTLS_MEMORY_DEBUG",
 #endif /* MBEDTLS_MEMORY_DEBUG */
@@ -68131,12 +60098,6 @@ static const char *features[] = {
 #if defined(MBEDTLS_SHA256_SMALLER)
     "MBEDTLS_SHA256_SMALLER",
 #endif /* MBEDTLS_SHA256_SMALLER */
-<<<<<<< HEAD
-#if defined(MBEDTLS_SSL_AEAD_RANDOM_IV)
-    "MBEDTLS_SSL_AEAD_RANDOM_IV",
-#endif /* MBEDTLS_SSL_AEAD_RANDOM_IV */
-=======
->>>>>>> local
 #if defined(MBEDTLS_SSL_ALL_ALERT_MESSAGES)
     "MBEDTLS_SSL_ALL_ALERT_MESSAGES",
 #endif /* MBEDTLS_SSL_ALL_ALERT_MESSAGES */
@@ -68212,12 +60173,9 @@ static const char *features[] = {
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC)
     "MBEDTLS_SSL_TRUNCATED_HMAC",
 #endif /* MBEDTLS_SSL_TRUNCATED_HMAC */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_SSL_TRUNCATED_HMAC_COMPAT)
     "MBEDTLS_SSL_TRUNCATED_HMAC_COMPAT",
 #endif /* MBEDTLS_SSL_TRUNCATED_HMAC_COMPAT */
->>>>>>> local
 #if defined(MBEDTLS_THREADING_ALT)
     "MBEDTLS_THREADING_ALT",
 #endif /* MBEDTLS_THREADING_ALT */
@@ -68281,12 +60239,9 @@ static const char *features[] = {
 #if defined(MBEDTLS_CIPHER_C)
     "MBEDTLS_CIPHER_C",
 #endif /* MBEDTLS_CIPHER_C */
-<<<<<<< HEAD
-=======
 #if defined(MBEDTLS_CMAC_C)
     "MBEDTLS_CMAC_C",
 #endif /* MBEDTLS_CMAC_C */
->>>>>>> local
 #if defined(MBEDTLS_CTR_DRBG_C)
     "MBEDTLS_CTR_DRBG_C",
 #endif /* MBEDTLS_CTR_DRBG_C */
@@ -68468,8 +60423,6 @@ int mbedtls_version_check_feature( const char *feature )
 
 #endif /* MBEDTLS_VERSION_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -68502,15 +60455,10 @@ int mbedtls_version_check_feature( const char *feature )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/x509.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  X.509 common functions for parsing and verification
  *
@@ -68566,12 +60514,6 @@ int mbedtls_version_check_feature( const char *feature )
 #else
 #include <stdio.h>
 #include <stdlib.h>
-<<<<<<< HEAD
-#define mbedtls_free       free
-#define mbedtls_calloc    calloc
-#define mbedtls_printf     printf
-#define mbedtls_snprintf   snprintf
-=======
 #define mbedtls_free      free
 #define mbedtls_calloc    calloc
 #define mbedtls_printf    printf
@@ -68581,7 +60523,6 @@ int mbedtls_version_check_feature( const char *feature )
 
 #if defined(MBEDTLS_HAVE_TIME)
 
->>>>>>> local
 #endif
 
 #if defined(_WIN32) && !defined(EFIX64) && !defined(EFI32)
@@ -68600,10 +60541,7 @@ int mbedtls_version_check_feature( const char *feature )
 #endif
 
 #define CHECK(code) if( ( ret = code ) != 0 ){ return( ret ); }
-<<<<<<< HEAD
-=======
 #define CHECK_RANGE(min, max, val) if( val < min || val > max ){ return( ret ); }
->>>>>>> local
 
 /*
  *  CertificateSerialNumber  ::=  INTEGER
@@ -69003,16 +60941,6 @@ int mbedtls_x509_get_name( unsigned char **p, const unsigned char *end,
     }
 }
 
-<<<<<<< HEAD
-static int x509_parse_int(unsigned char **p, unsigned n, int *res){
-    *res = 0;
-    for( ; n > 0; --n ){
-        if( ( **p < '0') || ( **p > '9' ) ) return MBEDTLS_ERR_X509_INVALID_DATE;
-        *res *= 10;
-        *res += (*(*p)++ - '0');
-    }
-    return 0;
-=======
 static int x509_parse_int( unsigned char **p, size_t n, int *res )
 {
     *res = 0;
@@ -69124,7 +61052,6 @@ static int x509_parse_time( unsigned char **p, size_t len, size_t yearlen,
     CHECK( x509_date_is_valid( tm ) );
 
     return ( 0 );
->>>>>>> local
 }
 
 /*
@@ -69133,17 +61060,10 @@ static int x509_parse_time( unsigned char **p, size_t len, size_t yearlen,
  *       generalTime    GeneralizedTime }
  */
 int mbedtls_x509_get_time( unsigned char **p, const unsigned char *end,
-<<<<<<< HEAD
-                   mbedtls_x509_time *time )
-{
-    int ret;
-    size_t len;
-=======
                            mbedtls_x509_time *tm )
 {
     int ret;
     size_t len, year_len;
->>>>>>> local
     unsigned char tag;
 
     if( ( end - *p ) < 1 )
@@ -69153,53 +61073,6 @@ int mbedtls_x509_get_time( unsigned char **p, const unsigned char *end,
     tag = **p;
 
     if( tag == MBEDTLS_ASN1_UTC_TIME )
-<<<<<<< HEAD
-    {
-        (*p)++;
-        ret = mbedtls_asn1_get_len( p, end, &len );
-
-        if( ret != 0 )
-            return( MBEDTLS_ERR_X509_INVALID_DATE + ret );
-
-        CHECK( x509_parse_int( p, 2, &time->year ) );
-        CHECK( x509_parse_int( p, 2, &time->mon ) );
-        CHECK( x509_parse_int( p, 2, &time->day ) );
-        CHECK( x509_parse_int( p, 2, &time->hour ) );
-        CHECK( x509_parse_int( p, 2, &time->min ) );
-        if( len > 10 )
-            CHECK( x509_parse_int( p, 2, &time->sec ) );
-        if( len > 12 && *(*p)++ != 'Z' )
-            return( MBEDTLS_ERR_X509_INVALID_DATE );
-
-        time->year +=  100 * ( time->year < 50 );
-        time->year += 1900;
-
-        return( 0 );
-    }
-    else if( tag == MBEDTLS_ASN1_GENERALIZED_TIME )
-    {
-        (*p)++;
-        ret = mbedtls_asn1_get_len( p, end, &len );
-
-        if( ret != 0 )
-            return( MBEDTLS_ERR_X509_INVALID_DATE + ret );
-
-        CHECK( x509_parse_int( p, 4, &time->year ) );
-        CHECK( x509_parse_int( p, 2, &time->mon ) );
-        CHECK( x509_parse_int( p, 2, &time->day ) );
-        CHECK( x509_parse_int( p, 2, &time->hour ) );
-        CHECK( x509_parse_int( p, 2, &time->min ) );
-        if( len > 12 )
-            CHECK( x509_parse_int( p, 2, &time->sec ) );
-        if( len > 14 && *(*p)++ != 'Z' )
-            return( MBEDTLS_ERR_X509_INVALID_DATE );
-
-        return( 0 );
-    }
-    else
-        return( MBEDTLS_ERR_X509_INVALID_DATE +
-                MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-=======
         year_len = 2;
     else if( tag == MBEDTLS_ASN1_GENERALIZED_TIME )
         year_len = 4;
@@ -69214,35 +61087,24 @@ int mbedtls_x509_get_time( unsigned char **p, const unsigned char *end,
         return( MBEDTLS_ERR_X509_INVALID_DATE + ret );
 
     return x509_parse_time( p, len, year_len, tm );
->>>>>>> local
 }
 
 int mbedtls_x509_get_sig( unsigned char **p, const unsigned char *end, mbedtls_x509_buf *sig )
 {
     int ret;
     size_t len;
-<<<<<<< HEAD
-=======
     int tag_type;
->>>>>>> local
 
     if( ( end - *p ) < 1 )
         return( MBEDTLS_ERR_X509_INVALID_SIGNATURE +
                 MBEDTLS_ERR_ASN1_OUT_OF_DATA );
 
-<<<<<<< HEAD
-    sig->tag = **p;
-=======
     tag_type = **p;
->>>>>>> local
 
     if( ( ret = mbedtls_asn1_get_bitstring_null( p, end, &len ) ) != 0 )
         return( MBEDTLS_ERR_X509_INVALID_SIGNATURE + ret );
 
-<<<<<<< HEAD
-=======
     sig->tag = tag_type;
->>>>>>> local
     sig->len = len;
     sig->p = *p;
 
@@ -69301,11 +61163,7 @@ int mbedtls_x509_get_sig_alg( const mbedtls_x509_buf *sig_oid, const mbedtls_x50
 
 /*
  * X.509 Extensions (No parsing of extensions, pointer should
-<<<<<<< HEAD
- * be either manually updated or extensions should be parsed!
-=======
  * be either manually updated or extensions should be parsed!)
->>>>>>> local
  */
 int mbedtls_x509_get_ext( unsigned char **p, const unsigned char *end,
                   mbedtls_x509_buf *ext, int tag )
@@ -69526,11 +61384,7 @@ static int x509_get_current_time( mbedtls_x509_time *now )
 static int x509_get_current_time( mbedtls_x509_time *now )
 {
     struct tm *lt;
-<<<<<<< HEAD
-    time_t tt;
-=======
     mbedtls_time_t tt;
->>>>>>> local
     int ret = 0;
 
 #if defined(MBEDTLS_THREADING_C)
@@ -69538,11 +61392,7 @@ static int x509_get_current_time( mbedtls_x509_time *now )
         return( MBEDTLS_ERR_THREADING_MUTEX_ERROR );
 #endif
 
-<<<<<<< HEAD
-    tt = time( NULL );
-=======
     tt = mbedtls_time( NULL );
->>>>>>> local
     lt = gmtime( &tt );
 
     if( lt == NULL )
@@ -69652,11 +61502,7 @@ int mbedtls_x509_time_is_future( const mbedtls_x509_time *from )
  */
 int mbedtls_x509_self_test( int verbose )
 {
-<<<<<<< HEAD
-#if defined(MBEDTLS_CERTS_C) && defined(MBEDTLS_SHA1_C)
-=======
 #if defined(MBEDTLS_CERTS_C) && defined(MBEDTLS_SHA256_C)
->>>>>>> local
     int ret;
     uint32_t flags;
     mbedtls_x509_crt cacert;
@@ -69716,13 +61562,6 @@ int mbedtls_x509_self_test( int verbose )
 
 #endif /* MBEDTLS_SELF_TEST */
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef SAFE_SNPRINTF
-
-#endif /* MBEDTLS_X509_USE_C */
-
-=======
 #endif /* MBEDTLS_X509_USE_C */
 
 /*
@@ -69757,15 +61596,10 @@ int mbedtls_x509_self_test( int verbose )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/x509_create.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  X.509 base functions for creating certificates / CSRs
  *
@@ -70107,13 +61941,6 @@ int mbedtls_x509_write_extensions( unsigned char **p, unsigned char *start,
 
 #endif /* MBEDTLS_X509_CREATE_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/x509_crl.c ************/
-
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -70150,7 +61977,6 @@ int mbedtls_x509_write_extensions( unsigned char **p, unsigned char *start,
 
 /********* Start of file library/x509_crl.c ************/
 
->>>>>>> local
 /*
  *  X.509 Certidicate Revocation List (CRL) parsing
  *
@@ -70220,13 +62046,7 @@ int mbedtls_x509_write_extensions( unsigned char **p, unsigned char *start,
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void x509_crl_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  *  Version  ::=  INTEGER  {  v1(0), v2(1)  }
@@ -70252,34 +62072,23 @@ static int x509_crl_get_version( unsigned char **p,
 }
 
 /*
-<<<<<<< HEAD
- * X.509 CRL v2 extensions (no extensions parsed yet.)
-=======
  * X.509 CRL v2 extensions
  *
  * We currently don't parse any extension's content, but we do check that the
  * list of extensions is well-formed and abort on critical extensions (that
  * are unsupported as we don't support any extension so far)
->>>>>>> local
  */
 static int x509_get_crl_ext( unsigned char **p,
                              const unsigned char *end,
                              mbedtls_x509_buf *ext )
 {
     int ret;
-<<<<<<< HEAD
-    size_t len = 0;
-
-    /* Get explicit tag */
-    if( ( ret = mbedtls_x509_get_ext( p, end, ext, 0) ) != 0 )
-=======
 
     /*
      * crlExtensions           [0]  EXPLICIT Extensions OPTIONAL
      *                              -- if present, version MUST be v2
      */
     if( ( ret = mbedtls_x509_get_ext( p, end, ext, 0 ) ) != 0 )
->>>>>>> local
     {
         if( ret == MBEDTLS_ERR_ASN1_UNEXPECTED_TAG )
             return( 0 );
@@ -70289,8 +62098,6 @@ static int x509_get_crl_ext( unsigned char **p,
 
     while( *p < end )
     {
-<<<<<<< HEAD
-=======
         /*
          * Extension  ::=  SEQUENCE  {
          *      extnID      OBJECT IDENTIFIER,
@@ -70302,14 +62109,10 @@ static int x509_get_crl_ext( unsigned char **p,
         size_t len;
 
         /* Get enclosing sequence tag */
->>>>>>> local
         if( ( ret = mbedtls_asn1_get_tag( p, end, &len,
                 MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_SEQUENCE ) ) != 0 )
             return( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + ret );
 
-<<<<<<< HEAD
-        *p += len;
-=======
         end_ext_data = *p + len;
 
         /* Get OID (currently ignored) */
@@ -70343,7 +62146,6 @@ static int x509_get_crl_ext( unsigned char **p,
         if( is_critical )
             return( MBEDTLS_ERR_X509_INVALID_EXTENSIONS +
                     MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
->>>>>>> local
     }
 
     if( *p != end )
@@ -70481,11 +62283,7 @@ int mbedtls_x509_crl_parse_der( mbedtls_x509_crl *chain,
 {
     int ret;
     size_t len;
-<<<<<<< HEAD
-    unsigned char *p, *end;
-=======
     unsigned char *p = NULL, *end = NULL;
->>>>>>> local
     mbedtls_x509_buf sig_params1, sig_params2, sig_oid2;
     mbedtls_x509_crl *crl = chain;
 
@@ -70522,15 +62320,11 @@ int mbedtls_x509_crl_parse_der( mbedtls_x509_crl *chain,
     /*
      * Copy raw DER-encoded CRL
      */
-<<<<<<< HEAD
-    if( ( p = mbedtls_calloc( 1, buflen ) ) == NULL )
-=======
     if( buflen == 0 )
         return( MBEDTLS_ERR_X509_INVALID_FORMAT );
 
     p = mbedtls_calloc( 1, buflen );
     if( p == NULL )
->>>>>>> local
         return( MBEDTLS_ERR_X509_ALLOC_FAILED );
 
     memcpy( p, buf, buflen );
@@ -70588,23 +62382,14 @@ int mbedtls_x509_crl_parse_der( mbedtls_x509_crl *chain,
         return( ret );
     }
 
-<<<<<<< HEAD
-    crl->version++;
-
-    if( crl->version > 2 )
-=======
     if( crl->version < 0 || crl->version > 1 )
->>>>>>> local
     {
         mbedtls_x509_crl_free( crl );
         return( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
     }
 
-<<<<<<< HEAD
-=======
     crl->version++;
 
->>>>>>> local
     if( ( ret = mbedtls_x509_get_sig_alg( &crl->sig_oid, &sig_params1,
                                   &crl->sig_md, &crl->sig_pk,
                                   &crl->sig_opts ) ) != 0 )
@@ -70747,16 +62532,6 @@ int mbedtls_x509_crl_parse( mbedtls_x509_crl *chain, const unsigned char *buf, s
     {
         mbedtls_pem_init( &pem );
 
-<<<<<<< HEAD
-    /* Avoid calling mbedtls_pem_read_buffer() on non-null-terminated string */
-    if( buflen == 0 || buf[buflen - 1] != '\0' )
-        ret = MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT;
-    else
-        ret = mbedtls_pem_read_buffer( &pem,
-                               "-----BEGIN X509 CRL-----",
-                               "-----END X509 CRL-----",
-                               buf, NULL, 0, &use_len );
-=======
         // Avoid calling mbedtls_pem_read_buffer() on non-null-terminated
         // string
         if( buflen == 0 || buf[buflen - 1] != '\0' )
@@ -70766,7 +62541,6 @@ int mbedtls_x509_crl_parse( mbedtls_x509_crl *chain, const unsigned char *buf, s
                                            "-----BEGIN X509 CRL-----",
                                            "-----END X509 CRL-----",
                                             buf, NULL, 0, &use_len );
->>>>>>> local
 
         if( ret == 0 )
         {
@@ -70781,29 +62555,17 @@ int mbedtls_x509_crl_parse( mbedtls_x509_crl *chain, const unsigned char *buf, s
             if( ( ret = mbedtls_x509_crl_parse_der( chain,
                                             pem.buf, pem.buflen ) ) != 0 )
             {
-<<<<<<< HEAD
-                return( ret );
-            }
-
-            mbedtls_pem_free( &pem );
-        }
-        else if( ret != MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT )
-=======
                 mbedtls_pem_free( &pem );
                 return( ret );
             }
         }
         else if( is_pem )
->>>>>>> local
         {
             mbedtls_pem_free( &pem );
             return( ret );
         }
-<<<<<<< HEAD
-=======
 
         mbedtls_pem_free( &pem );
->>>>>>> local
     }
     /* In the PEM case, buflen is 1 at the end, for the terminated NULL byte.
      * And a valid CRL cannot be less than 1 byte anyway. */
@@ -70831,11 +62593,7 @@ int mbedtls_x509_crl_parse_file( mbedtls_x509_crl *chain, const char *path )
 
     ret = mbedtls_x509_crl_parse( chain, buf, n );
 
-<<<<<<< HEAD
-    x509_crl_zeroize( buf, n );
-=======
     mbedtls_zeroize( buf, n );
->>>>>>> local
     mbedtls_free( buf );
 
     return( ret );
@@ -70956,11 +62714,7 @@ void mbedtls_x509_crl_free( mbedtls_x509_crl *crl )
         {
             name_prv = name_cur;
             name_cur = name_cur->next;
-<<<<<<< HEAD
-            x509_crl_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
-=======
             mbedtls_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
->>>>>>> local
             mbedtls_free( name_prv );
         }
 
@@ -70969,21 +62723,13 @@ void mbedtls_x509_crl_free( mbedtls_x509_crl *crl )
         {
             entry_prv = entry_cur;
             entry_cur = entry_cur->next;
-<<<<<<< HEAD
-            x509_crl_zeroize( entry_prv, sizeof( mbedtls_x509_crl_entry ) );
-=======
             mbedtls_zeroize( entry_prv, sizeof( mbedtls_x509_crl_entry ) );
->>>>>>> local
             mbedtls_free( entry_prv );
         }
 
         if( crl_cur->raw.p != NULL )
         {
-<<<<<<< HEAD
-            x509_crl_zeroize( crl_cur->raw.p, crl_cur->raw.len );
-=======
             mbedtls_zeroize( crl_cur->raw.p, crl_cur->raw.len );
->>>>>>> local
             mbedtls_free( crl_cur->raw.p );
         }
 
@@ -70997,31 +62743,13 @@ void mbedtls_x509_crl_free( mbedtls_x509_crl *crl )
         crl_prv = crl_cur;
         crl_cur = crl_cur->next;
 
-<<<<<<< HEAD
-        x509_crl_zeroize( crl_prv, sizeof( mbedtls_x509_crl ) );
-=======
         mbedtls_zeroize( crl_prv, sizeof( mbedtls_x509_crl ) );
->>>>>>> local
         if( crl_prv != crl )
             mbedtls_free( crl_prv );
     }
     while( crl_cur != NULL );
 }
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef SAFE_SNPRINTF
-#undef BEFORE_COLON
-#undef BC
-
-#endif /* MBEDTLS_X509_CRL_PARSE_C */
-
-
-
-/********* Start of file library/x509_crt.c ************/
-
-
-=======
 #endif /* MBEDTLS_X509_CRL_PARSE_C */
 
 /*
@@ -71060,7 +62788,6 @@ void mbedtls_x509_crl_free( mbedtls_x509_crl *crl )
 
 /********* Start of file library/x509_crt.c ************/
 
->>>>>>> local
 /*
  *  X.509 certificate parsing and verification
  *
@@ -71139,30 +62866,18 @@ void mbedtls_x509_crl_free( mbedtls_x509_crl *crl )
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void x509_crt_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * Default profile
  */
 const mbedtls_x509_crt_profile mbedtls_x509_crt_profile_default =
 {
-<<<<<<< HEAD
-    /* Hashes from SHA-1 and above */
-    MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA1 ) |
-    MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_RIPEMD160 ) |
-=======
 #if defined(MBEDTLS_TLS_DEFAULT_ALLOW_SHA1_IN_CERTIFICATES)
     /* Allow SHA-1 (weak, but still safe in controlled environments) */
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA1 ) |
 #endif
     /* Only SHA-2 hashes */
->>>>>>> local
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA224 ) |
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 ) |
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 ) |
@@ -71206,12 +62921,8 @@ const mbedtls_x509_crt_profile mbedtls_x509_crt_profile_suiteb =
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA256 ) |
     MBEDTLS_X509_ID_FLAG( MBEDTLS_MD_SHA384 ),
     /* Only ECDSA */
-<<<<<<< HEAD
-    MBEDTLS_X509_ID_FLAG( MBEDTLS_PK_ECDSA ),
-=======
     MBEDTLS_X509_ID_FLAG( MBEDTLS_PK_ECDSA ) |
     MBEDTLS_X509_ID_FLAG( MBEDTLS_PK_ECKEY ),
->>>>>>> local
 #if defined(MBEDTLS_ECP_C)
     /* Only NIST P-256 and P-384 */
     MBEDTLS_X509_ID_FLAG( MBEDTLS_ECP_DP_SECP256R1 ) |
@@ -71550,18 +63261,12 @@ static int x509_get_subject_alt_name( unsigned char **p,
         if( ( ret = mbedtls_asn1_get_len( p, end, &tag_len ) ) != 0 )
             return( MBEDTLS_ERR_X509_INVALID_EXTENSIONS + ret );
 
-<<<<<<< HEAD
-        if( ( tag & MBEDTLS_ASN1_CONTEXT_SPECIFIC ) != MBEDTLS_ASN1_CONTEXT_SPECIFIC )
-            return( MBEDTLS_ERR_X509_INVALID_EXTENSIONS +
-                    MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
-=======
         if( ( tag & MBEDTLS_ASN1_TAG_CLASS_MASK ) !=
                 MBEDTLS_ASN1_CONTEXT_SPECIFIC )
         {
             return( MBEDTLS_ERR_X509_INVALID_EXTENSIONS +
                     MBEDTLS_ERR_ASN1_UNEXPECTED_TAG );
         }
->>>>>>> local
 
         /* Skip everything but DNS name */
         if( tag != ( MBEDTLS_ASN1_CONTEXT_SPECIFIC | 2 ) )
@@ -71605,12 +63310,6 @@ static int x509_get_subject_alt_name( unsigned char **p,
 /*
  * X.509 v3 extensions
  *
-<<<<<<< HEAD
- * TODO: Perform all of the basic constraints tests required by the RFC
- * TODO: Set values for undetected extensions to a sane default?
- *
-=======
->>>>>>> local
  */
 static int x509_get_crt_ext( unsigned char **p,
                              const unsigned char *end,
@@ -71772,20 +63471,9 @@ static int x509_crt_parse_der_core( mbedtls_x509_crt *crt, const unsigned char *
     if( crt == NULL || buf == NULL )
         return( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
 
-<<<<<<< HEAD
-    p = mbedtls_calloc( 1, len = buflen );
-    if( p == NULL )
-        return( MBEDTLS_ERR_X509_ALLOC_FAILED );
-
-    memcpy( p, buf, buflen );
-
-    crt->raw.p = p;
-    crt->raw.len = len;
-=======
     // Use the original buffer until we figure out actual length
     p = (unsigned char*) buf;
     len = buflen;
->>>>>>> local
     end = p + len;
 
     /*
@@ -71809,8 +63497,6 @@ static int x509_crt_parse_der_core( mbedtls_x509_crt *crt, const unsigned char *
     }
     crt_end = p + len;
 
-<<<<<<< HEAD
-=======
     // Create and populate a new buffer for the raw field
     crt->raw.len = crt_end - buf;
     crt->raw.p = p = mbedtls_calloc( 1, crt->raw.len );
@@ -71823,7 +63509,6 @@ static int x509_crt_parse_der_core( mbedtls_x509_crt *crt, const unsigned char *
     p += crt->raw.len - len;
     end = crt_end = p + len;
 
->>>>>>> local
     /*
      * TBSCertificate  ::=  SEQUENCE  {
      */
@@ -71855,23 +63540,14 @@ static int x509_crt_parse_der_core( mbedtls_x509_crt *crt, const unsigned char *
         return( ret );
     }
 
-<<<<<<< HEAD
-    crt->version++;
-
-    if( crt->version > 3 )
-=======
     if( crt->version < 0 || crt->version > 2 )
->>>>>>> local
     {
         mbedtls_x509_crt_free( crt );
         return( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
     }
 
-<<<<<<< HEAD
-=======
     crt->version++;
 
->>>>>>> local
     if( ( ret = mbedtls_x509_get_sig_alg( &crt->sig_oid, &sig_params1,
                                   &crt->sig_md, &crt->sig_pk,
                                   &crt->sig_opts ) ) != 0 )
@@ -72087,15 +63763,10 @@ int mbedtls_x509_crt_parse_der( mbedtls_x509_crt *chain, const unsigned char *bu
  */
 int mbedtls_x509_crt_parse( mbedtls_x509_crt *chain, const unsigned char *buf, size_t buflen )
 {
-<<<<<<< HEAD
-    int success = 0, first_error = 0, total_failed = 0;
-    int buf_format = MBEDTLS_X509_FORMAT_DER;
-=======
 #if defined(MBEDTLS_PEM_PARSE_C)
     int success = 0, first_error = 0, total_failed = 0;
     int buf_format = MBEDTLS_X509_FORMAT_DER;
 #endif
->>>>>>> local
 
     /*
      * Check for valid input
@@ -72113,19 +63784,12 @@ int mbedtls_x509_crt_parse( mbedtls_x509_crt *chain, const unsigned char *buf, s
     {
         buf_format = MBEDTLS_X509_FORMAT_PEM;
     }
-<<<<<<< HEAD
-#endif
-
-    if( buf_format == MBEDTLS_X509_FORMAT_DER )
-        return mbedtls_x509_crt_parse_der( chain, buf, buflen );
-=======
 
     if( buf_format == MBEDTLS_X509_FORMAT_DER )
         return mbedtls_x509_crt_parse_der( chain, buf, buflen );
 #else
     return mbedtls_x509_crt_parse_der( chain, buf, buflen );
 #endif
->>>>>>> local
 
 #if defined(MBEDTLS_PEM_PARSE_C)
     if( buf_format == MBEDTLS_X509_FORMAT_PEM )
@@ -72198,10 +63862,6 @@ int mbedtls_x509_crt_parse( mbedtls_x509_crt *chain, const unsigned char *buf, s
             success = 1;
         }
     }
-<<<<<<< HEAD
-#endif /* MBEDTLS_PEM_PARSE_C */
-=======
->>>>>>> local
 
     if( success )
         return( total_failed );
@@ -72209,10 +63869,7 @@ int mbedtls_x509_crt_parse( mbedtls_x509_crt *chain, const unsigned char *buf, s
         return( first_error );
     else
         return( MBEDTLS_ERR_X509_CERT_UNKNOWN_FORMAT );
-<<<<<<< HEAD
-=======
 #endif /* MBEDTLS_PEM_PARSE_C */
->>>>>>> local
 }
 
 #if defined(MBEDTLS_FS_IO)
@@ -72230,11 +63887,7 @@ int mbedtls_x509_crt_parse_file( mbedtls_x509_crt *chain, const char *path )
 
     ret = mbedtls_x509_crt_parse( chain, buf, n );
 
-<<<<<<< HEAD
-    x509_crt_zeroize( buf, n );
-=======
     mbedtls_zeroize( buf, n );
->>>>>>> local
     mbedtls_free( buf );
 
     return( ret );
@@ -72263,11 +63916,7 @@ int mbedtls_x509_crt_parse_path( mbedtls_x509_crt *chain, const char *path )
     p = filename + len;
     filename[len++] = '*';
 
-<<<<<<< HEAD
-    w_ret = MultiByteToWideChar( CP_ACP, 0, filename, len, szDir,
-=======
     w_ret = MultiByteToWideChar( CP_ACP, 0, filename, (int)len, szDir,
->>>>>>> local
                                  MAX_PATH - 3 );
     if( w_ret == 0 )
         return( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
@@ -72289,14 +63938,10 @@ int mbedtls_x509_crt_parse_path( mbedtls_x509_crt *chain, const char *path )
                                      p, (int) len - 1,
                                      NULL, NULL );
         if( w_ret == 0 )
-<<<<<<< HEAD
-            return( MBEDTLS_ERR_X509_FILE_IO_ERROR );
-=======
         {
             ret = MBEDTLS_ERR_X509_FILE_IO_ERROR;
             goto cleanup;
         }
->>>>>>> local
 
         w_ret = mbedtls_x509_crt_parse_file( chain, filename );
         if( w_ret < 0 )
@@ -72309,14 +63954,6 @@ int mbedtls_x509_crt_parse_path( mbedtls_x509_crt *chain, const char *path )
     if( GetLastError() != ERROR_NO_MORE_FILES )
         ret = MBEDTLS_ERR_X509_FILE_IO_ERROR;
 
-<<<<<<< HEAD
-    FindClose( hFind );
-#else /* _WIN32 */
-    int t_ret;
-    struct stat sb;
-    struct dirent *entry;
-    char entry_name[255];
-=======
 cleanup:
     FindClose( hFind );
 #else /* _WIN32 */
@@ -72325,33 +63962,17 @@ cleanup:
     struct stat sb;
     struct dirent *entry;
     char entry_name[MBEDTLS_X509_MAX_FILE_PATH_LEN];
->>>>>>> local
     DIR *dir = opendir( path );
 
     if( dir == NULL )
         return( MBEDTLS_ERR_X509_FILE_IO_ERROR );
 
-<<<<<<< HEAD
-#if defined(MBEDTLS_THREADING_PTHREAD)
-=======
 #if defined(MBEDTLS_THREADING_C)
->>>>>>> local
     if( ( ret = mbedtls_mutex_lock( &mbedtls_threading_readdir_mutex ) ) != 0 )
     {
         closedir( dir );
         return( ret );
     }
-<<<<<<< HEAD
-#endif
-
-    while( ( entry = readdir( dir ) ) != NULL )
-    {
-        mbedtls_snprintf( entry_name, sizeof entry_name, "%s/%s", path, entry->d_name );
-
-        if( stat( entry_name, &sb ) == -1 )
-        {
-            closedir( dir );
-=======
 #endif /* MBEDTLS_THREADING_C */
 
     while( ( entry = readdir( dir ) ) != NULL )
@@ -72366,7 +63987,6 @@ cleanup:
         }
         else if( stat( entry_name, &sb ) == -1 )
         {
->>>>>>> local
             ret = MBEDTLS_ERR_X509_FILE_IO_ERROR;
             goto cleanup;
         }
@@ -72382,15 +64002,6 @@ cleanup:
         else
             ret += t_ret;
     }
-<<<<<<< HEAD
-    closedir( dir );
-
-cleanup:
-#if defined(MBEDTLS_THREADING_PTHREAD)
-    if( mbedtls_mutex_unlock( &mbedtls_threading_readdir_mutex ) != 0 )
-        ret = MBEDTLS_ERR_THREADING_MUTEX_ERROR;
-#endif
-=======
 
 cleanup:
     closedir( dir );
@@ -72399,7 +64010,6 @@ cleanup:
     if( mbedtls_mutex_unlock( &mbedtls_threading_readdir_mutex ) != 0 )
         ret = MBEDTLS_ERR_THREADING_MUTEX_ERROR;
 #endif /* MBEDTLS_THREADING_C */
->>>>>>> local
 
 #endif /* _WIN32 */
 
@@ -72552,8 +64162,6 @@ int mbedtls_x509_crt_info( char *buf, size_t size, const char *prefix,
     p = buf;
     n = size;
 
-<<<<<<< HEAD
-=======
     if( NULL == crt )
     {
         ret = mbedtls_snprintf( p, n, "\nCertificate is uninitialised!\n" );
@@ -72562,7 +64170,6 @@ int mbedtls_x509_crt_info( char *buf, size_t size, const char *prefix,
         return( (int) ( size - n ) );
     }
 
->>>>>>> local
     ret = mbedtls_snprintf( p, n, "%scert. version     : %d\n",
                                prefix, crt->version );
     MBEDTLS_X509_SAFE_SNPRINTF;
@@ -72814,12 +64421,8 @@ int mbedtls_x509_crt_is_revoked( const mbedtls_x509_crt *crt, const mbedtls_x509
 }
 
 /*
-<<<<<<< HEAD
- * Check that the given certificate is valid according to the CRL.
-=======
  * Check that the given certificate is not revoked according to the CRL.
  * Skip validation is no CRL for the given CA is present.
->>>>>>> local
  */
 static int x509_crt_verifycrl( mbedtls_x509_crt *crt, mbedtls_x509_crt *ca,
                                mbedtls_x509_crl *crl_list,
@@ -72832,15 +64435,6 @@ static int x509_crt_verifycrl( mbedtls_x509_crt *crt, mbedtls_x509_crt *ca,
     if( ca == NULL )
         return( flags );
 
-<<<<<<< HEAD
-    /*
-     * TODO: What happens if no CRL is present?
-     * Suggestion: Revocation state should be unknown if no CRL is present.
-     * For backwards compatibility this is not yet implemented.
-     */
-
-=======
->>>>>>> local
     while( crl_list != NULL )
     {
         if( crl_list->version == 0 ||
@@ -73108,10 +64702,7 @@ static int x509_crt_verify_top(
     int check_path_cnt;
     unsigned char hash[MBEDTLS_MD_MAX_SIZE];
     const mbedtls_md_info_t *md_info;
-<<<<<<< HEAD
-=======
     mbedtls_x509_crt *future_past_ca = NULL;
->>>>>>> local
 
     if( mbedtls_x509_time_is_past( &child->valid_to ) )
         *flags |= MBEDTLS_X509_BADCERT_EXPIRED;
@@ -73173,8 +64764,6 @@ static int x509_crt_verify_top(
             continue;
         }
 
-<<<<<<< HEAD
-=======
         if( mbedtls_x509_time_is_past( &trust_ca->valid_to ) ||
             mbedtls_x509_time_is_future( &trust_ca->valid_from ) )
         {
@@ -73189,7 +64778,6 @@ static int x509_crt_verify_top(
 
     if( trust_ca != NULL || ( trust_ca = future_past_ca ) != NULL )
     {
->>>>>>> local
         /*
          * Top of chain is signed by a trusted CA
          */
@@ -73197,11 +64785,6 @@ static int x509_crt_verify_top(
 
         if( x509_profile_check_key( profile, child->sig_pk, &trust_ca->pk ) != 0 )
             *flags |= MBEDTLS_X509_BADCERT_BAD_KEY;
-<<<<<<< HEAD
-
-        break;
-=======
->>>>>>> local
     }
 
     /*
@@ -73270,13 +64853,8 @@ static int x509_crt_verify_child(
     /* path_cnt is 0 for the first intermediate CA */
     if( 1 + path_cnt > MBEDTLS_X509_MAX_INTERMEDIATE_CA )
     {
-<<<<<<< HEAD
-        *flags |= MBEDTLS_X509_BADCERT_NOT_TRUSTED;
-        return( MBEDTLS_ERR_X509_CERT_VERIFY_FAILED );
-=======
         /* return immediately as the goal is to avoid unbounded recursion */
         return( MBEDTLS_ERR_X509_FATAL_ERROR );
->>>>>>> local
     }
 
     if( mbedtls_x509_time_is_past( &child->valid_to ) )
@@ -73420,13 +64998,6 @@ int mbedtls_x509_crt_verify_with_profile( mbedtls_x509_crt *crt,
     mbedtls_x509_sequence *cur = NULL;
     mbedtls_pk_type_t pk_type;
 
-<<<<<<< HEAD
-    if( profile == NULL )
-        return( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
-
-    *flags = 0;
-
-=======
     *flags = 0;
 
     if( profile == NULL )
@@ -73435,7 +65006,6 @@ int mbedtls_x509_crt_verify_with_profile( mbedtls_x509_crt *crt,
         goto exit;
     }
 
->>>>>>> local
     if( cn != NULL )
     {
         name = &crt->subject;
@@ -73509,11 +65079,7 @@ int mbedtls_x509_crt_verify_with_profile( mbedtls_x509_crt *crt,
         ret = x509_crt_verify_top( crt, parent, ca_crl, profile,
                                    pathlen, selfsigned, flags, f_vrfy, p_vrfy );
         if( ret != 0 )
-<<<<<<< HEAD
-            return( ret );
-=======
             goto exit;
->>>>>>> local
     }
     else
     {
@@ -73528,23 +65094,13 @@ int mbedtls_x509_crt_verify_with_profile( mbedtls_x509_crt *crt,
             ret = x509_crt_verify_child( crt, parent, trust_ca, ca_crl, profile,
                                          pathlen, selfsigned, flags, f_vrfy, p_vrfy );
             if( ret != 0 )
-<<<<<<< HEAD
-                return( ret );
-=======
                 goto exit;
->>>>>>> local
         }
         else
         {
             ret = x509_crt_verify_top( crt, trust_ca, ca_crl, profile,
                                        pathlen, selfsigned, flags, f_vrfy, p_vrfy );
             if( ret != 0 )
-<<<<<<< HEAD
-                return( ret );
-        }
-    }
-
-=======
                 goto exit;
         }
     }
@@ -73562,7 +65118,6 @@ exit:
         return( ret );
     }
 
->>>>>>> local
     if( *flags != 0 )
         return( MBEDTLS_ERR_X509_CERT_VERIFY_FAILED );
 
@@ -73605,11 +65160,7 @@ void mbedtls_x509_crt_free( mbedtls_x509_crt *crt )
         {
             name_prv = name_cur;
             name_cur = name_cur->next;
-<<<<<<< HEAD
-            x509_crt_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
-=======
             mbedtls_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
->>>>>>> local
             mbedtls_free( name_prv );
         }
 
@@ -73618,11 +65169,7 @@ void mbedtls_x509_crt_free( mbedtls_x509_crt *crt )
         {
             name_prv = name_cur;
             name_cur = name_cur->next;
-<<<<<<< HEAD
-            x509_crt_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
-=======
             mbedtls_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
->>>>>>> local
             mbedtls_free( name_prv );
         }
 
@@ -73631,11 +65178,7 @@ void mbedtls_x509_crt_free( mbedtls_x509_crt *crt )
         {
             seq_prv = seq_cur;
             seq_cur = seq_cur->next;
-<<<<<<< HEAD
-            x509_crt_zeroize( seq_prv, sizeof( mbedtls_x509_sequence ) );
-=======
             mbedtls_zeroize( seq_prv, sizeof( mbedtls_x509_sequence ) );
->>>>>>> local
             mbedtls_free( seq_prv );
         }
 
@@ -73644,21 +65187,13 @@ void mbedtls_x509_crt_free( mbedtls_x509_crt *crt )
         {
             seq_prv = seq_cur;
             seq_cur = seq_cur->next;
-<<<<<<< HEAD
-            x509_crt_zeroize( seq_prv, sizeof( mbedtls_x509_sequence ) );
-=======
             mbedtls_zeroize( seq_prv, sizeof( mbedtls_x509_sequence ) );
->>>>>>> local
             mbedtls_free( seq_prv );
         }
 
         if( cert_cur->raw.p != NULL )
         {
-<<<<<<< HEAD
-            x509_crt_zeroize( cert_cur->raw.p, cert_cur->raw.len );
-=======
             mbedtls_zeroize( cert_cur->raw.p, cert_cur->raw.len );
->>>>>>> local
             mbedtls_free( cert_cur->raw.p );
         }
 
@@ -73672,26 +65207,13 @@ void mbedtls_x509_crt_free( mbedtls_x509_crt *crt )
         cert_prv = cert_cur;
         cert_cur = cert_cur->next;
 
-<<<<<<< HEAD
-        x509_crt_zeroize( cert_prv, sizeof( mbedtls_x509_crt ) );
-=======
         mbedtls_zeroize( cert_prv, sizeof( mbedtls_x509_crt ) );
->>>>>>> local
         if( cert_prv != crt )
             mbedtls_free( cert_prv );
     }
     while( cert_cur != NULL );
 }
 
-<<<<<<< HEAD
-/* Amalgamated Release Mappings */
-#undef SAFE_SNPRINTF
-#undef BEFORE_COLON
-#undef BC
-
-#endif /* MBEDTLS_X509_CRT_PARSE_C */
-
-=======
 #endif /* MBEDTLS_X509_CRT_PARSE_C */
 
 /*
@@ -73726,15 +65248,10 @@ void mbedtls_x509_crt_free( mbedtls_x509_crt *crt )
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/x509_csr.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  X.509 Certificate Signing Request (CSR) parsing
  *
@@ -73798,13 +65315,7 @@ void mbedtls_x509_crt_free( mbedtls_x509_crt *crt )
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void x509_csr_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  *  Version  ::=  INTEGER  {  v1(0)  }
@@ -73845,11 +65356,7 @@ int mbedtls_x509_csr_parse_der( mbedtls_x509_csr *csr,
     /*
      * Check for valid input
      */
-<<<<<<< HEAD
-    if( csr == NULL || buf == NULL )
-=======
     if( csr == NULL || buf == NULL || buflen == 0 )
->>>>>>> local
         return( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
 
     mbedtls_x509_csr_init( csr );
@@ -73913,23 +65420,14 @@ int mbedtls_x509_csr_parse_der( mbedtls_x509_csr *csr,
         return( ret );
     }
 
-<<<<<<< HEAD
-    csr->version++;
-
-    if( csr->version != 1 )
-=======
     if( csr->version != 0 )
->>>>>>> local
     {
         mbedtls_x509_csr_free( csr );
         return( MBEDTLS_ERR_X509_UNKNOWN_VERSION );
     }
 
-<<<<<<< HEAD
-=======
     csr->version++;
 
->>>>>>> local
     /*
      *  subject               Name
      */
@@ -73961,8 +65459,6 @@ int mbedtls_x509_csr_parse_der( mbedtls_x509_csr *csr,
 
     /*
      *  attributes    [0] Attributes
-<<<<<<< HEAD
-=======
      *
      *  The list of possible attributes is open-ended, though RFC 2985
      *  (PKCS#9) defines a few in section 5.4. We currently don't support any,
@@ -73970,7 +65466,6 @@ int mbedtls_x509_csr_parse_der( mbedtls_x509_csr *csr,
      *  that could happen is that we issue a certificate that does not match
      *  the requester's expectations - this cannot cause a violation of our
      *  signature policies.
->>>>>>> local
      */
     if( ( ret = mbedtls_asn1_get_tag( &p, end, &len,
             MBEDTLS_ASN1_CONSTRUCTED | MBEDTLS_ASN1_CONTEXT_SPECIFIC ) ) != 0 )
@@ -73978,10 +65473,6 @@ int mbedtls_x509_csr_parse_der( mbedtls_x509_csr *csr,
         mbedtls_x509_csr_free( csr );
         return( MBEDTLS_ERR_X509_INVALID_FORMAT + ret );
     }
-<<<<<<< HEAD
-    // TODO Parse Attributes / extension requests
-=======
->>>>>>> local
 
     p += len;
 
@@ -74026,13 +65517,8 @@ int mbedtls_x509_csr_parse_der( mbedtls_x509_csr *csr,
  */
 int mbedtls_x509_csr_parse( mbedtls_x509_csr *csr, const unsigned char *buf, size_t buflen )
 {
-<<<<<<< HEAD
-    int ret;
-#if defined(MBEDTLS_PEM_PARSE_C)
-=======
 #if defined(MBEDTLS_PEM_PARSE_C)
     int ret;
->>>>>>> local
     size_t use_len;
     mbedtls_pem_context pem;
 #endif
@@ -74040,22 +65526,14 @@ int mbedtls_x509_csr_parse( mbedtls_x509_csr *csr, const unsigned char *buf, siz
     /*
      * Check for valid input
      */
-<<<<<<< HEAD
-    if( csr == NULL || buf == NULL )
-=======
     if( csr == NULL || buf == NULL || buflen == 0 )
->>>>>>> local
         return( MBEDTLS_ERR_X509_BAD_INPUT_DATA );
 
 #if defined(MBEDTLS_PEM_PARSE_C)
     mbedtls_pem_init( &pem );
 
     /* Avoid calling mbedtls_pem_read_buffer() on non-null-terminated string */
-<<<<<<< HEAD
-    if( buflen == 0 || buf[buflen - 1] != '\0' )
-=======
     if( buf[buflen - 1] != '\0' )
->>>>>>> local
         ret = MBEDTLS_ERR_PEM_NO_HEADER_FOOTER_PRESENT;
     else
         ret = mbedtls_pem_read_buffer( &pem,
@@ -74099,11 +65577,7 @@ int mbedtls_x509_csr_parse_file( mbedtls_x509_csr *csr, const char *path )
 
     ret = mbedtls_x509_csr_parse( csr, buf, n );
 
-<<<<<<< HEAD
-    x509_csr_zeroize( buf, n );
-=======
     mbedtls_zeroize( buf, n );
->>>>>>> local
     mbedtls_free( buf );
 
     return( ret );
@@ -74185,37 +65659,12 @@ void mbedtls_x509_csr_free( mbedtls_x509_csr *csr )
     {
         name_prv = name_cur;
         name_cur = name_cur->next;
-<<<<<<< HEAD
-        x509_csr_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
-=======
         mbedtls_zeroize( name_prv, sizeof( mbedtls_x509_name ) );
->>>>>>> local
         mbedtls_free( name_prv );
     }
 
     if( csr->raw.p != NULL )
     {
-<<<<<<< HEAD
-        x509_csr_zeroize( csr->raw.p, csr->raw.len );
-        mbedtls_free( csr->raw.p );
-    }
-
-    x509_csr_zeroize( csr, sizeof( mbedtls_x509_csr ) );
-}
-
-/* Amalgamated Release Mappings */
-#undef SAFE_SNPRINTF
-#undef BEFORE_COLON
-#undef BC
-
-#endif /* MBEDTLS_X509_CSR_PARSE_C */
-
-
-
-/********* Start of file library/x509write_crt.c ************/
-
-
-=======
         mbedtls_zeroize( csr->raw.p, csr->raw.len );
         mbedtls_free( csr->raw.p );
     }
@@ -74261,7 +65710,6 @@ void mbedtls_x509_csr_free( mbedtls_x509_csr *csr )
 
 /********* Start of file library/x509write_crt.c ************/
 
->>>>>>> local
 /*
  *  X.509 certificate writing
  *
@@ -74309,21 +65757,11 @@ void mbedtls_x509_csr_free( mbedtls_x509_csr *csr )
 #endif /* MBEDTLS_PEM_WRITE_C */
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void x509_write_crt_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-
-void mbedtls_x509write_crt_init( mbedtls_x509write_cert *ctx )
-{
-    memset( ctx, 0, sizeof(mbedtls_x509write_cert) );
-=======
 /* zeroize was here */
 
 void mbedtls_x509write_crt_init( mbedtls_x509write_cert *ctx )
 {
     memset( ctx, 0, sizeof( mbedtls_x509write_cert ) );
->>>>>>> local
 
     mbedtls_mpi_init( &ctx->serial );
     ctx->version = MBEDTLS_X509_CRT_VERSION_3;
@@ -74337,11 +65775,7 @@ void mbedtls_x509write_crt_free( mbedtls_x509write_cert *ctx )
     mbedtls_asn1_free_named_data_list( &ctx->issuer );
     mbedtls_asn1_free_named_data_list( &ctx->extensions );
 
-<<<<<<< HEAD
-    x509_write_crt_zeroize( ctx, sizeof(mbedtls_x509write_cert) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_x509write_cert ) );
->>>>>>> local
 }
 
 void mbedtls_x509write_crt_set_version( mbedtls_x509write_cert *ctx, int version )
@@ -74453,16 +65887,11 @@ int mbedtls_x509write_crt_set_subject_key_identifier( mbedtls_x509write_cert *ct
     memset( buf, 0, sizeof(buf) );
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_pk_write_pubkey( &c, buf, ctx->subject_key ) );
 
-<<<<<<< HEAD
-    mbedtls_sha1( buf + sizeof(buf) - len, len, buf + sizeof(buf) - 20 );
-    c = buf + sizeof(buf) - 20;
-=======
     ret = mbedtls_sha1_ret( buf + sizeof( buf ) - len, len,
                             buf + sizeof( buf ) - 20 );
     if( ret != 0 )
         return( ret );
     c = buf + sizeof( buf ) - 20;
->>>>>>> local
     len = 20;
 
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, buf, len ) );
@@ -74477,26 +65906,17 @@ int mbedtls_x509write_crt_set_authority_key_identifier( mbedtls_x509write_cert *
 {
     int ret;
     unsigned char buf[MBEDTLS_MPI_MAX_SIZE * 2 + 20]; /* tag, length + 2xMPI */
-<<<<<<< HEAD
-    unsigned char *c = buf + sizeof(buf);
-=======
     unsigned char *c = buf + sizeof( buf );
->>>>>>> local
     size_t len = 0;
 
     memset( buf, 0, sizeof(buf) );
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_pk_write_pubkey( &c, buf, ctx->issuer_key ) );
 
-<<<<<<< HEAD
-    mbedtls_sha1( buf + sizeof(buf) - len, len, buf + sizeof(buf) - 20 );
-    c = buf + sizeof(buf) - 20;
-=======
     ret = mbedtls_sha1_ret( buf + sizeof( buf ) - len, len,
                             buf + sizeof( buf ) - 20 );
     if( ret != 0 )
         return( ret );
     c = buf + sizeof( buf ) - 20;
->>>>>>> local
     len = 20;
 
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, buf, len ) );
@@ -74508,11 +65928,7 @@ int mbedtls_x509write_crt_set_authority_key_identifier( mbedtls_x509write_cert *
 
     return mbedtls_x509write_crt_set_extension( ctx, MBEDTLS_OID_AUTHORITY_KEY_IDENTIFIER,
                                    MBEDTLS_OID_SIZE( MBEDTLS_OID_AUTHORITY_KEY_IDENTIFIER ),
-<<<<<<< HEAD
-                                   0, buf + sizeof(buf) - len, len );
-=======
                                    0, buf + sizeof( buf ) - len, len );
->>>>>>> local
 }
 #endif /* MBEDTLS_SHA1_C */
 
@@ -74564,11 +65980,7 @@ int mbedtls_x509write_crt_set_ns_cert_type( mbedtls_x509write_cert *ctx,
 }
 
 static int x509_write_time( unsigned char **p, unsigned char *start,
-<<<<<<< HEAD
-                            const char *time, size_t size )
-=======
                             const char *t, size_t size )
->>>>>>> local
 {
     int ret;
     size_t len = 0;
@@ -74576,17 +65988,10 @@ static int x509_write_time( unsigned char **p, unsigned char *start,
     /*
      * write MBEDTLS_ASN1_UTC_TIME if year < 2050 (2 bytes shorter)
      */
-<<<<<<< HEAD
-    if( time[0] == '2' && time[1] == '0' && time [2] < '5' )
-    {
-        MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_raw_buffer( p, start,
-                                             (const unsigned char *) time + 2,
-=======
     if( t[0] == '2' && t[1] == '0' && t[2] < '5' )
     {
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_raw_buffer( p, start,
                                              (const unsigned char *) t + 2,
->>>>>>> local
                                              size - 2 ) );
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_UTC_TIME ) );
@@ -74594,11 +65999,7 @@ static int x509_write_time( unsigned char **p, unsigned char *start,
     else
     {
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_raw_buffer( p, start,
-<<<<<<< HEAD
-                                                  (const unsigned char *) time,
-=======
                                                   (const unsigned char *) t,
->>>>>>> local
                                                   size ) );
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( p, start, len ) );
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( p, start, MBEDTLS_ASN1_GENERALIZED_TIME ) );
@@ -74628,14 +66029,6 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx, unsigned char *buf, 
     c = tmp_buf + sizeof( tmp_buf );
 
     /* Signature algorithm needed in TBS, and later for actual signature */
-<<<<<<< HEAD
-    pk_alg = mbedtls_pk_get_type( ctx->issuer_key );
-    if( pk_alg == MBEDTLS_PK_ECKEY )
-        pk_alg = MBEDTLS_PK_ECDSA;
-
-    if( ( ret = mbedtls_oid_get_oid_by_sig_alg( pk_alg, ctx->md_alg,
-                                        &sig_oid, &sig_oid_len ) ) != 0 )
-=======
 
     /* There's no direct way of extracting a signature algorithm
      * (represented as an element of mbedtls_pk_type_t) from a PK instance. */
@@ -74648,7 +66041,6 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx, unsigned char *buf, 
 
     if( ( ret = mbedtls_oid_get_oid_by_sig_alg( pk_alg, ctx->md_alg,
                                           &sig_oid, &sig_oid_len ) ) != 0 )
->>>>>>> local
     {
         return( ret );
     }
@@ -74656,15 +66048,6 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx, unsigned char *buf, 
     /*
      *  Extensions  ::=  SEQUENCE SIZE (1..MAX) OF Extension
      */
-<<<<<<< HEAD
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_x509_write_extensions( &c, tmp_buf, ctx->extensions ) );
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, tmp_buf, len ) );
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, tmp_buf, MBEDTLS_ASN1_CONSTRUCTED |
-                                                    MBEDTLS_ASN1_SEQUENCE ) );
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, tmp_buf, len ) );
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, tmp_buf, MBEDTLS_ASN1_CONTEXT_SPECIFIC |
-                                                    MBEDTLS_ASN1_CONSTRUCTED | 3 ) );
-=======
 
     /* Only for v3 */
     if( ctx->version == MBEDTLS_X509_CRT_VERSION_3 )
@@ -74677,7 +66060,6 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx, unsigned char *buf, 
         MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, tmp_buf, MBEDTLS_ASN1_CONTEXT_SPECIFIC |
                                                            MBEDTLS_ASN1_CONSTRUCTED | 3 ) );
     }
->>>>>>> local
 
     /*
      *  SubjectPublicKeyInfo
@@ -74729,18 +66111,6 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx, unsigned char *buf, 
     /*
      *  Version  ::=  INTEGER  {  v1(0), v2(1), v3(2)  }
      */
-<<<<<<< HEAD
-    sub_len = 0;
-    MBEDTLS_ASN1_CHK_ADD( sub_len, mbedtls_asn1_write_int( &c, tmp_buf, ctx->version ) );
-    len += sub_len;
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, tmp_buf, sub_len ) );
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, tmp_buf, MBEDTLS_ASN1_CONTEXT_SPECIFIC |
-                                                    MBEDTLS_ASN1_CONSTRUCTED | 0 ) );
-
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, tmp_buf, len ) );
-    MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, tmp_buf, MBEDTLS_ASN1_CONSTRUCTED |
-                                                    MBEDTLS_ASN1_SEQUENCE ) );
-=======
 
     /* Can be omitted for v1 */
     if( ctx->version != MBEDTLS_X509_CRT_VERSION_1 )
@@ -74756,20 +66126,15 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx, unsigned char *buf, 
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_len( &c, tmp_buf, len ) );
     MBEDTLS_ASN1_CHK_ADD( len, mbedtls_asn1_write_tag( &c, tmp_buf, MBEDTLS_ASN1_CONSTRUCTED |
                                                        MBEDTLS_ASN1_SEQUENCE ) );
->>>>>>> local
 
     /*
      * Make signature
      */
-<<<<<<< HEAD
-    mbedtls_md( mbedtls_md_info_from_type( ctx->md_alg ), c, len, hash );
-=======
     if( ( ret = mbedtls_md( mbedtls_md_info_from_type( ctx->md_alg ), c,
                             len, hash ) ) != 0 )
     {
         return( ret );
     }
->>>>>>> local
 
     if( ( ret = mbedtls_pk_sign( ctx->issuer_key, ctx->md_alg, hash, 0, sig, &sig_len,
                          f_rng, p_rng ) ) != 0 )
@@ -74784,12 +66149,9 @@ int mbedtls_x509write_crt_der( mbedtls_x509write_cert *ctx, unsigned char *buf, 
     MBEDTLS_ASN1_CHK_ADD( sig_and_oid_len, mbedtls_x509_write_sig( &c2, buf,
                                         sig_oid, sig_oid_len, sig, sig_len ) );
 
-<<<<<<< HEAD
-=======
     if( len > (size_t)( c2 - buf ) )
         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
 
->>>>>>> local
     c2 -= len;
     memcpy( c2, c, len );
 
@@ -74832,12 +66194,6 @@ int mbedtls_x509write_crt_pem( mbedtls_x509write_cert *crt, unsigned char *buf, 
 
 #endif /* MBEDTLS_X509_CRT_WRITE_C */
 
-<<<<<<< HEAD
-
-
-/********* Start of file library/x509write_csr.c ************/
-
-=======
 /*
     Amalgamated build undefines
  */
@@ -74873,7 +66229,6 @@ int mbedtls_x509write_crt_pem( mbedtls_x509write_cert *crt, unsigned char *buf, 
 
 
 /********* Start of file library/x509write_csr.c ************/
->>>>>>> local
 
 /*
  *  X.509 Certificate Signing Request writing
@@ -74921,21 +66276,11 @@ int mbedtls_x509write_crt_pem( mbedtls_x509write_cert *crt, unsigned char *buf, 
 #endif
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void x509_write_csr_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-
-void mbedtls_x509write_csr_init( mbedtls_x509write_csr *ctx )
-{
-    memset( ctx, 0, sizeof(mbedtls_x509write_csr) );
-=======
 /* zeroize was here */
 
 void mbedtls_x509write_csr_init( mbedtls_x509write_csr *ctx )
 {
     memset( ctx, 0, sizeof( mbedtls_x509write_csr ) );
->>>>>>> local
 }
 
 void mbedtls_x509write_csr_free( mbedtls_x509write_csr *ctx )
@@ -74943,11 +66288,7 @@ void mbedtls_x509write_csr_free( mbedtls_x509write_csr *ctx )
     mbedtls_asn1_free_named_data_list( &ctx->subject );
     mbedtls_asn1_free_named_data_list( &ctx->extensions );
 
-<<<<<<< HEAD
-    x509_write_csr_zeroize( ctx, sizeof(mbedtls_x509write_csr) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_x509write_csr ) );
->>>>>>> local
 }
 
 void mbedtls_x509write_csr_set_md_alg( mbedtls_x509write_csr *ctx, mbedtls_md_type_t md_alg )
@@ -75083,16 +66424,6 @@ int mbedtls_x509write_csr_der( mbedtls_x509write_csr *ctx, unsigned char *buf, s
      */
     mbedtls_md( mbedtls_md_info_from_type( ctx->md_alg ), c, len, hash );
 
-<<<<<<< HEAD
-    pk_alg = mbedtls_pk_get_type( ctx->key );
-    if( pk_alg == MBEDTLS_PK_ECKEY )
-        pk_alg = MBEDTLS_PK_ECDSA;
-
-    if( ( ret = mbedtls_pk_sign( ctx->key, ctx->md_alg, hash, 0, sig, &sig_len,
-                         f_rng, p_rng ) ) != 0 ||
-        ( ret = mbedtls_oid_get_oid_by_sig_alg( pk_alg, ctx->md_alg,
-                                        &sig_oid, &sig_oid_len ) ) != 0 )
-=======
     if( ( ret = mbedtls_pk_sign( ctx->key, ctx->md_alg, hash, 0, sig, &sig_len,
                                  f_rng, p_rng ) ) != 0 )
     {
@@ -75108,7 +66439,6 @@ int mbedtls_x509write_csr_der( mbedtls_x509write_csr *ctx, unsigned char *buf, s
 
     if( ( ret = mbedtls_oid_get_oid_by_sig_alg( pk_alg, ctx->md_alg,
                                                 &sig_oid, &sig_oid_len ) ) != 0 )
->>>>>>> local
     {
         return( ret );
     }
@@ -75120,12 +66450,9 @@ int mbedtls_x509write_csr_der( mbedtls_x509write_csr *ctx, unsigned char *buf, s
     MBEDTLS_ASN1_CHK_ADD( sig_and_oid_len, mbedtls_x509_write_sig( &c2, buf,
                                         sig_oid, sig_oid_len, sig, sig_len ) );
 
-<<<<<<< HEAD
-=======
     if( len > (size_t)( c2 - buf ) )
         return( MBEDTLS_ERR_ASN1_BUF_TOO_SMALL );
 
->>>>>>> local
     c2 -= len;
     memcpy( c2, c, len );
 
@@ -75168,8 +66495,6 @@ int mbedtls_x509write_csr_pem( mbedtls_x509write_csr *ctx, unsigned char *buf, s
 
 #endif /* MBEDTLS_X509_CSR_WRITE_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -75202,15 +66527,10 @@ int mbedtls_x509write_csr_pem( mbedtls_x509write_csr *ctx, unsigned char *buf, s
 #undef supported_init
 #undef write
 
->>>>>>> local
 
 
 /********* Start of file library/xtea.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
  *  An 32-bit implementation of the XTEA algorithm
  *
@@ -75256,13 +66576,7 @@ int mbedtls_x509write_csr_pem( mbedtls_x509write_csr *ctx, unsigned char *buf, s
 #if !defined(MBEDTLS_XTEA_ALT)
 
 /* Implementation that should never be optimized out by the compiler */
-<<<<<<< HEAD
-static void xtea_zeroize( void *v, size_t n ) {
-    volatile unsigned char *p = v; while( n-- ) *p++ = 0;
-}
-=======
 /* zeroize was here */
->>>>>>> local
 
 /*
  * 32-bit integer manipulation macros (big endian)
@@ -75297,11 +66611,7 @@ void mbedtls_xtea_free( mbedtls_xtea_context *ctx )
     if( ctx == NULL )
         return;
 
-<<<<<<< HEAD
-    xtea_zeroize( ctx, sizeof( mbedtls_xtea_context ) );
-=======
     mbedtls_zeroize( ctx, sizeof( mbedtls_xtea_context ) );
->>>>>>> local
 }
 
 /*
@@ -75501,8 +66811,6 @@ exit:
 
 #endif /* MBEDTLS_XTEA_C */
 
-<<<<<<< HEAD
-=======
 /*
     Amalgamated build undefines
  */
@@ -75536,5 +66844,4 @@ exit:
 #undef write
 
 
->>>>>>> local
 #endif /* ME_COM_MBEDTLS */

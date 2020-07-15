@@ -1,22 +1,13 @@
 /*
     cgiProgram.c - Test CGI program
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> local
     Copyright (c) All Rights Reserved. See details at the end of the file.
 
     Usage:
         cgiProgram [switches]
             -a                  Output the args (used for ISINDEX queries)
-<<<<<<< HEAD
-            -b bytes            Output content "bytes" long                 
-            -e                  Output the environment 
-=======
             -b bytes            Output content "bytes" long
             -e                  Output the environment
->>>>>>> local
             -h lines            Output header "lines" long
             -l location         Output "location" header
             -n                  Non-parsed-header ouput
@@ -24,11 +15,7 @@
             -q                  Ouput the query data
             -s status           Output "status" header
             default             Output args, env and query
-<<<<<<< HEAD
-  
-=======
 
->>>>>>> local
         Alternatively, pass the arguments as an environment variable HTTP_SWITCHES="-a -e -q"
  */
 
@@ -78,11 +65,7 @@
     #define chdir    _chdir
     #define strnset  _strnset
     #define chmod    _chmod
-<<<<<<< HEAD
-    
-=======
 
->>>>>>> local
     #define mkdir(a,b)  _mkdir(a)
     #define rmdir(a)    _rmdir(a)
     typedef int ssize_t;
@@ -121,11 +104,7 @@ static int      timeout;
 
 static void     error(char *fmt, ...);
 static void     descape(char *src);
-<<<<<<< HEAD
-static char     hex2Char(char *s); 
-=======
 static char     hex2Char(char *s);
->>>>>>> local
 static int      getVars(char ***cgiKeys, char *buf, size_t len);
 static int      getPostData(char **buf, size_t *len);
 static int      getQueryString(char **buf, size_t *len);
@@ -423,11 +402,7 @@ static void printEnv(char **envp)
     /*
         This is not supported on VxWorks as you cannot get "envp" in main()
      */
-<<<<<<< HEAD
-    printf("\r\n<H2>All Defined Environment Variables</H2>\r\n"); 
-=======
     printf("\r\n<H2>All Defined Environment Variables</H2>\r\n");
->>>>>>> local
     if (envp) {
         char    *p;
         int     i;
@@ -460,11 +435,7 @@ static void printQuery()
     printf("\r\n");
 }
 
-<<<<<<< HEAD
- 
-=======
 
->>>>>>> local
 static void printPost(char *buf, size_t len)
 {
     int     i;
@@ -594,11 +565,7 @@ static int getVars(char ***cgiKeys, char *buf, size_t buflen)
     }
 
     /*
-<<<<<<< HEAD
-        Crack the input into name/value pairs 
-=======
         Crack the input into name/value pairs
->>>>>>> local
      */
     keyList = malloc((keyCount * 2) * sizeof(char**));
 
@@ -621,11 +588,7 @@ static int getVars(char ***cgiKeys, char *buf, size_t buflen)
 }
 
 
-<<<<<<< HEAD
-static char hex2Char(char *s) 
-=======
 static char hex2Char(char *s)
->>>>>>> local
 {
     char    c;
 
@@ -645,11 +608,7 @@ static char hex2Char(char *s)
 }
 
 
-<<<<<<< HEAD
-static void descape(char *src) 
-=======
 static void descape(char *src)
->>>>>>> local
 {
     char    *dest;
 
@@ -707,27 +666,6 @@ int _exit() {
 #endif /* VXWORKS */
 
 /*
-<<<<<<< HEAD
-    @copy   default
-
-    Copyright (c) Embedthis Software. All Rights Reserved.
-
-    This software is distributed under commercial and open source licenses.
-    You may use the Embedthis Open Source license or you may acquire a 
-    commercial license from Embedthis Software. You agree to be fully bound
-    by the terms of either license. Consult the LICENSE.md distributed with
-    this software for full details and other copyrights.
-
-    Local variables:
-    tab-width: 4
-    c-basic-offset: 4
-    End:
-    vim: sw=4 ts=4 expandtab
-
-    @end
- */
-
-=======
     Copyright (c) Embedthis Software. All Rights Reserved.
     This software is distributed under commercial and open source licenses.
     You may use the Embedthis Open Source license or you may acquire a
@@ -735,4 +673,3 @@ int _exit() {
     by the terms of either license. Consult the LICENSE.md distributed with
     this software for full details and other copyrights.
  */
->>>>>>> local

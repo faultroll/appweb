@@ -3,19 +3,11 @@
  */
 
 #include "http.h"
-<<<<<<< HEAD
-
-=======
 #include "project.h"
->>>>>>> local
 
 
 /********* Start of file src/service.c ************/
 
-<<<<<<< HEAD
-
-=======
->>>>>>> local
 /*
     service.c -- Http service. Includes timer for expired requests.
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -1310,15 +1302,8 @@ PUBLIC int httpSetPlatformDir(cchar *path)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/actionHandler.c ************/
 
-
-=======
-/********* Start of file src/actionHandler.c ************/
-
->>>>>>> local
 /*
     actionHandler.c -- Action handler
 
@@ -1390,15 +1375,8 @@ PUBLIC int httpOpenActionHandler()
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/auth.c ************/
 
-
-=======
-/********* Start of file src/auth.c ************/
-
->>>>>>> local
 /*
 
     auth.c - Authorization and access management
@@ -1730,12 +1708,9 @@ PUBLIC bool httpLogin(HttpConn *conn, cchar *username, cchar *password)
         /* If using auto-login, replace the username */
         username = auth->username;
         password = 0;
-<<<<<<< HEAD
-=======
 
     } else if (!username || !password) {
         return 0;
->>>>>>> local
     }
     if (!(verifyUser)(conn, username, password)) {
         return 0;
@@ -1807,8 +1782,6 @@ static void loginServiceProc(HttpConn *conn)
 
     auth = conn->rx->route->auth;
     if (httpIsAuthenticated(conn)) {
-<<<<<<< HEAD
-=======
 		/*  post login info to pduc --iszeng
 		 */
 #if 1		 
@@ -1820,7 +1793,6 @@ static void loginServiceProc(HttpConn *conn)
 		mprLog("critical http auth", 3, "%s", decodedChars);
 		xif_sets(app_pduc, pduc_Oid_webPost, 0, decodedChars);	
 #endif		
->>>>>>> local
         httpRedirect(conn, HTTP_CODE_MOVED_TEMPORARILY, auth->loggedInPage ? auth->loggedInPage : "~");
     } else {
         httpRedirect(conn, HTTP_CODE_MOVED_TEMPORARILY, auth->loginPage);
@@ -2111,8 +2083,6 @@ PUBLIC int formParse(HttpConn *conn, cchar **username, cchar **password)
 {
     *username = httpGetParam(conn, "username", 0);
     *password = httpGetParam(conn, "password", 0);
-<<<<<<< HEAD
-=======
 
     if (username && *username == 0) {
         return MPR_ERR_BAD_FORMAT;
@@ -2120,7 +2090,6 @@ PUBLIC int formParse(HttpConn *conn, cchar **username, cchar **password)
     if (password && *password == 0) {
         return MPR_ERR_BAD_FORMAT;
     }
->>>>>>> local
     return 0;
 }
 
@@ -2137,15 +2106,8 @@ PUBLIC int formParse(HttpConn *conn, cchar **username, cchar **password)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/basic.c ************/
 
-
-=======
-/********* Start of file src/basic.c ************/
-
->>>>>>> local
 /*
     basic.c - Basic Authorization
 
@@ -2188,15 +2150,12 @@ PUBLIC int httpBasicParse(HttpConn *conn, cchar **username, cchar **password)
     if (password) {
         *password = sclone(cp);
     }
-<<<<<<< HEAD
-=======
     if (username && *username == 0) {
         return MPR_ERR_BAD_FORMAT;
     }
     if (password && *password == 0) {
         return MPR_ERR_BAD_FORMAT;
     }
->>>>>>> local
     return 0;
 }
 
@@ -2241,15 +2200,8 @@ PUBLIC bool httpBasicSetHeaders(HttpConn *conn, cchar *username, cchar *password
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/cache.c ************/
 
-
-=======
-/********* Start of file src/cache.c ************/
-
->>>>>>> local
 /*
     cache.c -- Http request route caching
 
@@ -2805,15 +2757,8 @@ static cchar *setHeadersFromCache(HttpConn *conn, cchar *content)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/chunkFilter.c ************/
 
-
-=======
-/********* Start of file src/chunkFilter.c ************/
-
->>>>>>> local
 /*
     chunkFilter.c - Transfer chunk endociding filter.
 
@@ -3067,15 +3012,8 @@ static void setChunkPrefix(HttpQueue *q, HttpPacket *packet)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/client.c ************/
 
-
-=======
-/********* Start of file src/client.c ************/
-
->>>>>>> local
 /*
     client.c -- Client side specific support.
 
@@ -3404,14 +3342,10 @@ PUBLIC char *httpReadString(HttpConn *conn)
     char        *content;
 
     rx = conn->rx;
-<<<<<<< HEAD
-    remaining = (ssize) min(MAXSSIZE, rx->length);
-=======
     if (rx->length < 0) {
         return 0;
     }
     remaining = (rx->length > MAXSSIZE) ? MAXSIZE: rx->length;
->>>>>>> local
 
     if (remaining > 0) {
         if ((content = mprAlloc(remaining + 1)) == 0) {
@@ -3654,15 +3588,8 @@ PUBLIC int httpWait(HttpConn *conn, int state, MprTicks timeout)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/config.c ************/
 
-
-=======
-/********* Start of file src/config.c ************/
-
->>>>>>> local
 /*
     config.c -- Http JSON Configuration File Parsing
 
@@ -3802,13 +3729,8 @@ PUBLIC void httpInitConfig(HttpRoute *route)
 
 PUBLIC int httpLoadConfig(HttpRoute *route, cchar *path)
 {
-<<<<<<< HEAD
-    MprJson     *config, *obj, *modeObj;
-    cchar       *data, *errorMsg, *mode;
-=======
     MprJson     *config, *obj, *profiles;
     cchar       *data, *errorMsg, *profile;
->>>>>>> local
 
     if (!path) {
         return 0;
@@ -3829,29 +3751,6 @@ PUBLIC int httpLoadConfig(HttpRoute *route, cchar *path)
     if ((obj = mprGetJsonObj(config, "include")) != 0) {
         parseInclude(route, config, obj);
     }
-<<<<<<< HEAD
-#if DEPRECATE
-{
-    MprJson *obj;
-    if ((obj = mprGetJsonObj(config, "app.http")) != 0) {
-        mprRemoveJson(config, "app.http");
-        mprSetJsonObj(config, "http", obj);
-    }
-    if ((obj = mprGetJsonObj(config, "app.esp")) != 0) {
-        mprRemoveJson(config, "app.esp");
-        mprSetJsonObj(config, "esp", obj);
-    }
-}
-#endif
-
-    if (!route->mode) {
-        mode = mprGetJson(route->config, "pak.mode");
-        if (!mode) {
-            mode = mprGetJson(config, "pak.mode");
-        }
-        route->mode = mode;
-        route->debug = smatch(route->mode, "debug");
-=======
     if (!route->mode) {
         if ((profile = mprGetJson(route->config, "profile")) == 0) {
             if ((profile = mprGetJson(route->config, "pak.mode")) == 0) {
@@ -3862,7 +3761,6 @@ PUBLIC int httpLoadConfig(HttpRoute *route, cchar *path)
         }
         route->mode = profile;
         route->debug = smatch(route->mode, "debug") || smatch(route->mode, "dev");
->>>>>>> local
     }
     if (route->config) {
         mprBlendJson(route->config, config, MPR_JSON_COMBINE);
@@ -3875,14 +3773,6 @@ PUBLIC int httpLoadConfig(HttpRoute *route, cchar *path)
         /*
             Http uses top level modes, Pak uses top level pak.modes.
          */
-<<<<<<< HEAD
-        if ((modeObj = mprGetJsonObj(config, sfmt("modes.%s", route->mode))) == 0) {
-            modeObj = mprGetJsonObj(config, sfmt("pak.modes.%s", route->mode));
-        }
-        if (modeObj) {
-            mprBlendJson(route->config, modeObj, MPR_JSON_OVERWRITE);
-            httpParseAll(route, 0, modeObj);
-=======
         if ((profiles = mprGetJsonObj(config, sfmt("profiles.%s", route->mode))) == 0) {
             if ((profiles = mprGetJsonObj(config, sfmt("modes.%s", route->mode))) == 0) {
                 profiles = mprGetJsonObj(config, sfmt("pak.modes.%s", route->mode));
@@ -3891,7 +3781,6 @@ PUBLIC int httpLoadConfig(HttpRoute *route, cchar *path)
         if (profiles) {
             mprBlendJson(route->config, profiles, MPR_JSON_OVERWRITE);
             httpParseAll(route, 0, profiles);
->>>>>>> local
         }
     }
     httpParseAll(route, 0, config);
@@ -3994,11 +3883,7 @@ static void parseAttach(HttpRoute *route, cchar *key, MprJson *prop)
 {
     HttpEndpoint    *endpoint;
     MprJson         *child;
-<<<<<<< HEAD
-    char            *ip;
-=======
     cchar           *ip;
->>>>>>> local
     int             ji, port;
 
     if (prop->type & MPR_JSON_VALUE) {
@@ -4030,10 +3915,6 @@ static void parseAttach(HttpRoute *route, cchar *key, MprJson *prop)
 static void parseAuth(HttpRoute *route, cchar *key, MprJson *prop)
 {
     if (prop->type & MPR_JSON_STRING) {
-<<<<<<< HEAD
-        /* Permits auth: "app" to set the store */
-        parseAuthStore(route, key, prop);
-=======
         /* Permits auth: "app" to set the store and "none" to set no auth */
         if (smatch(prop->value, "none")) {
             httpSetAuthType(route->auth, "none", 0);
@@ -4041,7 +3922,6 @@ static void parseAuth(HttpRoute *route, cchar *key, MprJson *prop)
         } else {
             parseAuthStore(route, key, prop);
         }
->>>>>>> local
     } else if (prop->type == MPR_JSON_OBJ) {
         httpParseAll(route, key, prop);
     }
@@ -4363,8 +4243,6 @@ static void parseFormatsResponse(HttpRoute *route, cchar *key, MprJson *prop)
 }
 
 
-<<<<<<< HEAD
-=======
 /*
     Alias for pipeline: { handler ... }
  */
@@ -4376,7 +4254,6 @@ static void parseHandler(HttpRoute *route, cchar *key, MprJson *prop)
 }
 
 
->>>>>>> local
 static void parseHeadersAdd(HttpRoute *route, cchar *key, MprJson *prop)
 {
     MprJson     *child;
@@ -4684,15 +4561,9 @@ static void parseMethods(HttpRoute *route, cchar *key, MprJson *prop)
 
 
 /*
-<<<<<<< HEAD
-    Note: this typically comes from package.json
- */
-static void parseMode(HttpRoute *route, cchar *key, MprJson *prop)
-=======
     Note: this typically comes from pak.json
  */
 static void parseProfile(HttpRoute *route, cchar *key, MprJson *prop)
->>>>>>> local
 {
     route->mode = prop->value;
 }
@@ -4763,14 +4634,11 @@ static void parsePipelineFilters(HttpRoute *route, cchar *key, MprJson *prop)
 }
 
 
-<<<<<<< HEAD
-=======
 /*
     pipeline: {
         handlers: 'espHandler',                     //  For all extensions
     },
  */
->>>>>>> local
 static void parsePipelineHandler(HttpRoute *route, cchar *key, MprJson *prop)
 {
     if (httpSetRouteHandler(route, prop->value) < 0) {
@@ -4781,10 +4649,6 @@ static void parsePipelineHandler(HttpRoute *route, cchar *key, MprJson *prop)
 
 /*
     pipeline: {
-<<<<<<< HEAD
-        handlers: 'espHandler',                     //  For all extensions
-=======
->>>>>>> local
         handlers: {
             espHandler: [ '*.esp, '*.xesp' ],
         },
@@ -4857,13 +4721,9 @@ static void parseRedirect(HttpRoute *route, cchar *key, MprJson *prop)
     cchar       *from, *status, *to;
     int         ji;
 
-<<<<<<< HEAD
-    if (prop->type & MPR_JSON_STRING) {
-=======
     if (prop->type & MPR_JSON_FALSE) {
         /* skip */
     } else if (prop->type & MPR_JSON_STRING) {
->>>>>>> local
         if (smatch(prop->value, "secure") ||smatch(prop->value, "https://")) {
             httpAddRouteCondition(route, "secure", "https://", HTTP_ROUTE_REDIRECT);
         } else {
@@ -5058,11 +4918,7 @@ static void parseServerListen(HttpRoute *route, cchar *key, MprJson *prop)
     HttpEndpoint    *endpoint, *dual;
     HttpHost        *host;
     MprJson         *child;
-<<<<<<< HEAD
-    char            *ip;
-=======
     cchar           *ip;
->>>>>>> local
     int             ji, port, secure;
 
     if (route->flags & (HTTP_ROUTE_HOSTED | HTTP_ROUTE_OWN_LISTEN)) {
@@ -5566,15 +5422,12 @@ static void parseTrace(HttpRoute *route, cchar *key, MprJson *prop)
 }
 
 
-<<<<<<< HEAD
-=======
 static void parseWebSocketsProtocol(HttpRoute *route, cchar *key, MprJson *prop)
 {
     route->webSocketsProtocol = sclone(prop->value);
 }
 
 
->>>>>>> local
 static void parseXsrf(HttpRoute *route, cchar *key, MprJson *prop)
 {
     httpSetRouteXsrf(route, (prop->type & MPR_JSON_TRUE) ? 1 : 0);
@@ -5685,10 +5538,7 @@ PUBLIC int httpInitParser()
     httpAddConfig("http.errors", parseErrors);
     httpAddConfig("http.formats", httpParseAll);
     httpAddConfig("http.formats.response", parseFormatsResponse);
-<<<<<<< HEAD
-=======
     httpAddConfig("http.handler", parseHandler);
->>>>>>> local
     httpAddConfig("http.headers", httpParseAll);
     httpAddConfig("http.headers.add", parseHeadersAdd);
     httpAddConfig("http.headers.remove", parseHeadersRemove);
@@ -5723,11 +5573,7 @@ PUBLIC int httpInitParser()
     httpAddConfig("http.limits.webSocketsFrame", parseLimitsWebSocketsFrame);
     httpAddConfig("http.limits.workers", parseLimitsWorkers);
     httpAddConfig("http.methods", parseMethods);
-<<<<<<< HEAD
-    httpAddConfig("http.mode", parseMode);
-=======
     httpAddConfig("http.mode", parseProfile);
->>>>>>> local
     httpAddConfig("http.name", parseName);
     httpAddConfig("http.params", parseParams);
     httpAddConfig("http.pattern", parsePattern);
@@ -5736,10 +5582,7 @@ PUBLIC int httpInitParser()
     httpAddConfig("http.pipeline.handler", parsePipelineHandler);
     httpAddConfig("http.pipeline.handlers", parsePipelineHandlers);
     httpAddConfig("http.prefix", parsePrefix);
-<<<<<<< HEAD
-=======
     httpAddConfig("http.profile", parseProfile);
->>>>>>> local
     httpAddConfig("http.redirect", parseRedirect);
     httpAddConfig("http.renameUploads", parseRenameUploads);
     httpAddConfig("http.routes", parseRoutes);
@@ -5780,19 +5623,12 @@ PUBLIC int httpInitParser()
     httpAddConfig("http.timeouts.request", parseTimeoutsRequest);
     httpAddConfig("http.timeouts.session", parseTimeoutsSession);
     httpAddConfig("http.trace", parseTrace);
-<<<<<<< HEAD
-=======
     httpAddConfig("http.websockets.protocol", parseWebSocketsProtocol);
->>>>>>> local
     httpAddConfig("http.xsrf", parseXsrf);
 
 #if DEPRECATE
     httpAddConfig("app", parseApp);
     httpAddConfig("http.domain", parseName);
-<<<<<<< HEAD
-    httpAddConfig("http.handler", parsePipelineHandler);
-=======
->>>>>>> local
     httpAddConfig("http.limits.requestBody", parseLimitsRxBody);
     httpAddConfig("http.limits.responseBody", parseLimitsTxBody);
     httpAddConfig("http.limits.requestForm", parseLimitsRxForm);
@@ -5823,15 +5659,8 @@ PUBLIC int httpInitParser()
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/conn.c ************/
 
-
-=======
-/********* Start of file src/conn.c ************/
-
->>>>>>> local
 /*
     conn.c -- Connection module to handle individual HTTP connections.
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -6824,15 +6653,8 @@ PUBLIC void httpSetConnReqData(HttpConn *conn, void *data)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/digest.c ************/
 
-
-=======
-/********* Start of file src/digest.c ************/
-
->>>>>>> local
 /*
     digest.c - Digest Authorization
 
@@ -7238,15 +7060,8 @@ static char *calcDigest(HttpConn *conn, HttpDigest *dp, cchar *username)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/dirHandler.c ************/
 
-
-=======
-/********* Start of file src/dirHandler.c ************/
-
->>>>>>> local
 /*
     dirHandler.c - Directory listing handler
 
@@ -7884,15 +7699,8 @@ PUBLIC int httpOpenDirHandler()
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/endpoint.c ************/
 
-
-=======
-/********* Start of file src/endpoint.c ************/
-
->>>>>>> local
 /*
     endpoint.c -- Create and manage listening endpoints.
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -8234,11 +8042,7 @@ PUBLIC int httpSecureEndpoint(HttpEndpoint *endpoint, struct MprSsl *ssl)
 PUBLIC int httpSecureEndpointByName(cchar *name, struct MprSsl *ssl)
 {
     HttpEndpoint    *endpoint;
-<<<<<<< HEAD
-    char            *ip;
-=======
     cchar           *ip;
->>>>>>> local
     int             port, next, count;
 
     if (mprParseSocketAddress(name, &ip, &port, NULL, -1) < 0) {
@@ -8319,15 +8123,8 @@ PUBLIC void httpSetInfoLevel(int level)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/error.c ************/
 
-
-=======
-/********* Start of file src/error.c ************/
-
->>>>>>> local
 /*
     error.c -- Http error handling
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -8541,15 +8338,8 @@ PUBLIC void httpMemoryError(HttpConn *conn)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/fileHandler.c ************/
 
-
-=======
-/********* Start of file src/fileHandler.c ************/
-
->>>>>>> local
 /*
     fileHandler.c -- Static file content handler
 
@@ -9080,15 +8870,8 @@ PUBLIC int httpOpenFileHandler()
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/host.c ************/
 
-
-=======
-/********* Start of file src/host.c ************/
-
->>>>>>> local
 /*
     host.c -- Host class for all HTTP hosts
 
@@ -9539,15 +9322,8 @@ PUBLIC void httpSetStreaming(HttpHost *host, cchar *mime, cchar *uri, bool enabl
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/monitor.c ************/
 
-
-=======
-/********* Start of file src/monitor.c ************/
-
->>>>>>> local
 /*
     monitor.c -- Monitor and defensive management.
 
@@ -9604,10 +9380,6 @@ static void invokeDefenses(HttpMonitor *monitor, MprHash *args)
     int             next;
 
     http = monitor->http;
-<<<<<<< HEAD
-    mprHold(args);
-=======
->>>>>>> local
 
     for (ITERATE_ITEMS(monitor->defenses, defense, next)) {
         if ((remedyProc = mprLookupKey(http->remedies, defense->remedy)) == 0) {
@@ -9652,10 +9424,6 @@ static void invokeDefenses(HttpMonitor *monitor, MprHash *args)
         }
 #endif
     }
-<<<<<<< HEAD
-    mprRelease(args);
-=======
->>>>>>> local
 }
 
 
@@ -9690,13 +9458,9 @@ static void checkCounter(HttpMonitor *monitor, HttpCounter *counter, cchar *ip)
         /*
             WARNING: may yield depending on remedy
          */
-<<<<<<< HEAD
-        invokeDefenses(monitor, args);
-=======
         mprAddRoot(args);
         invokeDefenses(monitor, args);
         mprRemoveRoot(args);
->>>>>>> local
     }
     counter->value = 0;
 }
@@ -10255,15 +10019,8 @@ PUBLIC int httpAddRemedies()
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/netConnector.c ************/
 
-
-=======
-/********* Start of file src/netConnector.c ************/
-
->>>>>>> local
 /*
     netConnector.c -- General network connector.
 
@@ -10583,15 +10340,8 @@ static void adjustNetVec(HttpQueue *q, ssize written)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/packet.c ************/
 
-
-=======
-/********* Start of file src/packet.c ************/
-
->>>>>>> local
 /*
     packet.c -- Queue support routines. Queues are the bi-directional data flow channels for the pipeline.
 
@@ -11103,15 +10853,8 @@ bool httpIsLastPacket(HttpPacket *packet)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/pam.c ************/
 
-
-=======
-/********* Start of file src/pam.c ************/
-
->>>>>>> local
 /*
     authPam.c - Authorization using PAM (Pluggable Authorization Module)
 
@@ -11258,15 +11001,8 @@ static int pamChat(int msgCount, const struct pam_message **msg, struct pam_resp
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/passHandler.c ************/
 
-
-=======
-/********* Start of file src/passHandler.c ************/
-
->>>>>>> local
 /*
     passHandler.c -- Pass through handler
 
@@ -11376,15 +11112,8 @@ PUBLIC int httpOpenPassHandler()
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/pipeline.c ************/
 
-
-=======
-/********* Start of file src/pipeline.c ************/
-
->>>>>>> local
 /*
     pipeline.c -- HTTP pipeline processing.
     Copyright (c) All Rights Reserved. See details at the end of the file.
@@ -11831,15 +11560,8 @@ static bool matchFilter(HttpConn *conn, HttpStage *filter, HttpRoute *route, int
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/queue.c ************/
 
-
-=======
-/********* Start of file src/queue.c ************/
-
->>>>>>> local
 /*
     queue.c -- Queue support routines. Queues are the bi-directional data flow channels for the pipeline.
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -12209,13 +11931,9 @@ PUBLIC void httpServiceQueue(HttpQueue *q)
         }
         if (!(q->flags & HTTP_QUEUE_SUSPENDED)) {
             q->servicing = 1;
-<<<<<<< HEAD
-            q->service(q);
-=======
             if (q->service) {
                 q->service(q);
             }
->>>>>>> local
             if (q->flags & HTTP_QUEUE_RESERVICE) {
                 q->flags &= ~HTTP_QUEUE_RESERVICE;
                 httpScheduleQueue(q);
@@ -12340,15 +12058,8 @@ PUBLIC bool httpVerifyQueue(HttpQueue *q)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/rangeFilter.c ************/
 
-
-=======
-/********* Start of file src/rangeFilter.c ************/
-
->>>>>>> local
 /*
     rangeFilter.c - Ranged request filter.
     Copyright (c) All Rights Reserved. See details at the end of the file.
@@ -12674,15 +12385,8 @@ static bool fixRangeLength(HttpConn *conn, HttpQueue *q)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/route.c ************/
 
-
-=======
-/********* Start of file src/route.c ************/
-
->>>>>>> local
 /*
     route.c -- Http request routing
 
@@ -12752,18 +12456,10 @@ PUBLIC HttpRoute *httpCreateRoute(HttpHost *host)
     route->defaultLanguage = sclone("en");
     route->home = route->documents = mprGetCurrentPath();
     route->flags = HTTP_ROUTE_STEALTH;
-<<<<<<< HEAD
-#if FUTURE
-    /* Enable in version 6 */
-    route->flags |= HTTP_ROUTE_ENV_ESCAPE;
-    route->envPrefix = sclone("CGI_");
-#endif
-=======
 
     route->flags |= HTTP_ROUTE_ENV_ESCAPE;
     route->envPrefix = sclone("CGI_");
 
->>>>>>> local
     route->host = host;
     route->http = HTTP;
     route->lifespan = ME_MAX_CACHE_DURATION;
@@ -14879,27 +14575,17 @@ static int authCondition(HttpConn *conn, HttpRoute *route, HttpRouteOp *op)
         return HTTP_ROUTE_OK;
     }
     if (!httpIsAuthenticated(conn)) {
-<<<<<<< HEAD
-        httpGetCredentials(conn, &username, &password);
-        if (!httpLogin(conn, username, password)) {
-=======
         if (!httpGetCredentials(conn, &username, &password) || !httpLogin(conn, username, password)) {
->>>>>>> local
             if (!conn->tx->finalized) {
                 if (auth && auth->type) {
                     (auth->type->askLogin)(conn);
                 } else {
                     httpError(conn, HTTP_CODE_UNAUTHORIZED, "Access Denied, login required");
                 }
-<<<<<<< HEAD
-                /* Request has been denied and a response generated. So OK to accept this route. */
-            }
-=======
             }
             /* 
                 Request has been denied and a response generated. So OK to accept this route. 
              */
->>>>>>> local
             return HTTP_ROUTE_OK;
         }
     }
@@ -14910,13 +14596,9 @@ static int authCondition(HttpConn *conn, HttpRoute *route, HttpRouteOp *op)
             /* Request has been denied and a response generated. So OK to accept this route. */
         }
     }
-<<<<<<< HEAD
-    /* OK to accept route. This does not mean the request was authenticated - an error may have been already generated */
-=======
     /* 
         OK to accept route. This does not mean the request was authenticated - an error may have been already generated 
      */
->>>>>>> local
     return HTTP_ROUTE_OK;
 }
 
@@ -14936,12 +14618,7 @@ static int unauthorizedCondition(HttpConn *conn, HttpRoute *route, HttpRouteOp *
     if (httpIsAuthenticated(conn)) {
         return HTTP_ROUTE_REJECT;
     }
-<<<<<<< HEAD
-    httpGetCredentials(conn, &username, &password);
-    if (httpLogin(conn, username, password)) {
-=======
     if (httpGetCredentials(conn, &username, &password) && httpLogin(conn, username, password)) {
->>>>>>> local
         return HTTP_ROUTE_REJECT;
     }
     return HTTP_ROUTE_OK;
@@ -16113,15 +15790,8 @@ PUBLIC HttpLimits *httpGraduateLimits(HttpRoute *route, HttpLimits *limits)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/rx.c ************/
 
-
-=======
-/********* Start of file src/rx.c ************/
-
->>>>>>> local
 /*
     rx.c -- Http receiver. Parses http requests and client responses.
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -16310,12 +15980,8 @@ static bool parseIncoming(HttpConn *conn)
     HttpAddress *address;
     HttpPacket  *packet;
     HttpLimits  *limits;
-<<<<<<< HEAD
-    char        *start, *end, *hostname;
-=======
     cchar       *hostname;
     char        *start, *end;
->>>>>>> local
     ssize       len;
     int64       value;
 
@@ -17662,11 +17328,7 @@ static void parseUri(HttpConn *conn)
         if (!hostname) {
             hostname = conn->sock->acceptIp;
         }
-<<<<<<< HEAD
-        if (mprParseSocketAddress(hostname, &up->host, NULL, NULL, 0) < 0 || up->host == 0 || *up->host == '\0') {
-=======
         if (mprParseSocketAddress(hostname, (cchar**) &up->host, NULL, NULL, 0) < 0 || up->host == 0 || *up->host == '\0') {
->>>>>>> local
             if (!conn->error) {
                 httpBadRequestError(conn, HTTP_CODE_BAD_REQUEST, "Bad host");
             }
@@ -18110,15 +17772,8 @@ static int sendContinue(HttpConn *conn)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/sendConnector.c ************/
 
-
-=======
-/********* Start of file src/sendConnector.c ************/
-
->>>>>>> local
 /*
     sendConnector.c -- Send file connector.
 
@@ -18460,15 +18115,8 @@ PUBLIC void httpSendOutgoingService(HttpQueue *q) {}
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/session.c ************/
 
-
-=======
-/********* Start of file src/session.c ************/
-
->>>>>>> local
 /**
     session.c - Session data storage
 
@@ -18885,15 +18533,8 @@ PUBLIC bool httpCheckSecurityToken(HttpConn *conn)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/stage.c ************/
 
-
-=======
-/********* Start of file src/stage.c ************/
-
->>>>>>> local
 /*
     stage.c -- Stages are the building blocks of the Http request pipeline.
 
@@ -19053,15 +18694,8 @@ PUBLIC HttpStage *httpCreateConnector(cchar *name, MprModule *module)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/trace.c ************/
 
-
-=======
-/********* Start of file src/trace.c ************/
-
->>>>>>> local
 /*
     trace.c -- Trace data
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -19764,15 +19398,8 @@ PUBLIC void httpCommonTraceFormatter(HttpTrace *trace, HttpConn *conn, cchar *ty
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/tx.c ************/
 
-
-=======
-/********* Start of file src/tx.c ************/
-
->>>>>>> local
 /*
     tx.c - Http transmitter for server responses and client requests.
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -20283,12 +19910,8 @@ PUBLIC void httpSetCookie(HttpConn *conn, cchar *name, cchar *value, cchar *path
     MprTicks lifespan, int flags)
 {
     HttpRx      *rx;
-<<<<<<< HEAD
-    char        *cp, *expiresAtt, *expires, *domainAtt, *domain, *secure, *httponly;
-=======
     cchar       *domain, *domainAtt;
     char        *cp, *expiresAtt, *expires, *secure, *httponly;
->>>>>>> local
 
     rx = conn->rx;
     if (path == 0) {
@@ -20810,15 +20433,8 @@ PUBLIC ssize httpWrite(HttpQueue *q, cchar *fmt, ...)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/uploadFilter.c ************/
 
-
-=======
-/********* Start of file src/uploadFilter.c ************/
-
->>>>>>> local
 /*
     uploadFilter.c - Upload file filter.
     The upload filter processes post data according to RFC-1867 ("multipart/form-data" post data).
@@ -21507,15 +21123,8 @@ static void cleanUploadedFiles(HttpConn *conn)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/uri.c ************/
 
-
-=======
-/********* Start of file src/uri.c ************/
-
->>>>>>> local
 /*
     uri.c - URI manipulation routines
     Copyright (c) All Rights Reserved. See details at the end of the file.
@@ -22467,12 +22076,6 @@ static void trimPathToDirname(HttpUri *uri)
  */
 static cchar *expandRouteName(HttpConn *conn, cchar *routeName)
 {
-<<<<<<< HEAD
-    HttpRoute   *route;
-
-    route = conn->rx->route;
-=======
->>>>>>> local
     if (routeName[0] == '~') {
         return sjoin(httpGetRouteTop(conn), &routeName[1], NULL);
     }
@@ -22481,11 +22084,8 @@ static cchar *expandRouteName(HttpConn *conn, cchar *routeName)
     }
 #if DEPRECATE
     if (routeName[0] == '|') {
-<<<<<<< HEAD
-=======
         HttpRoute   *route;
         route = conn->rx->route;
->>>>>>> local
         assert(routeName[0] != '|');
         return sjoin(route->prefix, &routeName[1], NULL);
     }
@@ -22523,15 +22123,8 @@ static char *actionRoute(HttpRoute *route, cchar *controller, cchar *action)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/user.c ************/
 
-
-=======
-/********* Start of file src/user.c ************/
-
->>>>>>> local
 /*
     user.c - User and Role management
 
@@ -22759,15 +22352,8 @@ PUBLIC void httpSetConnUser(HttpConn *conn, HttpUser *user)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/var.c ************/
 
-
-=======
-/********* Start of file src/var.c ************/
-
->>>>>>> local
 /*
     var.c -- Manage the request variables
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
@@ -23099,15 +22685,8 @@ PUBLIC bool httpMatchParam(HttpConn *conn, cchar *var, cchar *value)
  */
 
 
-<<<<<<< HEAD
-
 /********* Start of file src/webSockFilter.c ************/
 
-
-=======
-/********* Start of file src/webSockFilter.c ************/
-
->>>>>>> local
 /*
     webSockFilter.c - WebSockets filter support
 
@@ -23275,11 +22854,7 @@ static int matchWebSock(HttpConn *conn, HttpRoute *route, int dir)
             /* ws:// URI. Client web sockets */
             if ((ws = mprAllocObj(HttpWebSocket, manageWebSocket)) == 0) {
                 httpMemoryError(conn);
-<<<<<<< HEAD
-                return HTTP_ROUTE_OK;
-=======
                 return HTTP_ROUTE_OMIT_FILTER;
->>>>>>> local
             }
             rx->webSocket = ws;
             ws->state = WS_STATE_CONNECTING;
@@ -23303,30 +22878,18 @@ static int matchWebSock(HttpConn *conn, HttpRoute *route, int dir)
     if (version < WS_VERSION) {
         httpSetHeader(conn, "Sec-WebSocket-Version", "%d", WS_VERSION);
         httpError(conn, HTTP_CLOSE | HTTP_CODE_BAD_REQUEST, "Unsupported Sec-WebSocket-Version");
-<<<<<<< HEAD
-        return HTTP_ROUTE_OK;
-    }
-    if ((key = httpGetHeader(conn, "sec-websocket-key")) == 0) {
-        httpError(conn, HTTP_CLOSE | HTTP_CODE_BAD_REQUEST, "Bad Sec-WebSocket-Key");
-        return HTTP_ROUTE_OK;
-=======
         return HTTP_ROUTE_OMIT_FILTER;
     }
     if ((key = httpGetHeader(conn, "sec-websocket-key")) == 0) {
         httpError(conn, HTTP_CLOSE | HTTP_CODE_BAD_REQUEST, "Bad Sec-WebSocket-Key");
         return HTTP_ROUTE_OMIT_FILTER;
->>>>>>> local
     }
     protocols = httpGetHeader(conn, "sec-websocket-protocol");
 
     if (dir & HTTP_STAGE_RX) {
         if ((ws = mprAllocObj(HttpWebSocket, manageWebSocket)) == 0) {
             httpMemoryError(conn);
-<<<<<<< HEAD
-            return HTTP_ROUTE_OK;
-=======
             return HTTP_ROUTE_OMIT_FILTER;
->>>>>>> local
         }
         rx->webSocket = ws;
         ws->state = WS_STATE_OPEN;
@@ -23341,11 +22904,7 @@ static int matchWebSock(HttpConn *conn, HttpRoute *route, int dir)
             }
             if (!kind) {
                 httpError(conn, HTTP_CLOSE | HTTP_CODE_BAD_REQUEST, "Unsupported Sec-WebSocket-Protocol");
-<<<<<<< HEAD
-                return HTTP_ROUTE_OK;
-=======
                 return HTTP_ROUTE_OMIT_FILTER;
->>>>>>> local
             }
             ws->subProtocol = sclone(kind);
         } else {

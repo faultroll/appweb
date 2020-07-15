@@ -40,11 +40,7 @@ typedef struct App {
     MprList     *routes;                /* Routes to process */
     EspRoute    *eroute;                /* Selected ESP route to build */
     MprJson     *config;                /* Configuration from esp.json (only) */
-<<<<<<< HEAD
-    MprJson     *package;               /* Configuration from package.json (only) */
-=======
     MprJson     *package;               /* Configuration from pak.json (only) */
->>>>>>> local
     HttpRoute   *route;                 /* Selected route to build */
     HttpHost    *host;                  /* Default host */
     MprList     *files;                 /* List of files to process */
@@ -162,10 +158,7 @@ static void parseCommand(int argc, char **argv);
 static void process(int argc, char **argv);
 static MprJson *readConfig();
 static cchar *readTemplate(cchar *path, MprHash *tokens, ssize *len);
-<<<<<<< HEAD
-=======
 static void renderGenerated();
->>>>>>> local
 static bool requiredRoute(HttpRoute *route);
 static int reverseSortFiles(MprDirEntry **d1, MprDirEntry **d2);
 static void role(int argc, char **argv);
@@ -174,11 +167,7 @@ static void saveConfig(MprJson *config, cchar *path, int flags);
 static bool selectResource(cchar *path, cchar *kind);
 static bool selectView(HttpRoute *route, cchar *path);
 static void setConfigValue(MprJson *config, cchar *key, cchar *value);
-<<<<<<< HEAD
-static void setMode(cchar *mode);
-=======
 static void setProfile(cchar *mode);
->>>>>>> local
 static int sortFiles(MprDirEntry **d1, MprDirEntry **d2);
 static void qtrace(cchar *tag, cchar *fmt, ...);
 static void trace(cchar *tag, cchar *fmt, ...);
@@ -279,12 +268,6 @@ static void manageApp(App *app, int flags)
         mprMark(app->platform);
         mprMark(app->route);
         mprMark(app->routes);
-<<<<<<< HEAD
-#if DEPRECATED
-        mprMark(app->slink);
-#endif
-=======
->>>>>>> local
         mprMark(app->table);
         mprMark(app->targets);
         mprMark(app->title);
@@ -519,12 +502,8 @@ static void parseCommand(int argc, char **argv)
     } else if (smatch(cmd, "migrate")) {
         app->require = REQ_ROUTES;
 
-<<<<<<< HEAD
-    } else if (smatch(cmd, "mode")) {
-=======
     } else if (smatch(cmd, "profile") || smatch(cmd, "mode")) {
         //  LEGACY mode
->>>>>>> local
         /* Need config and routes because it does a clean */
         app->require = REQ_CONFIG | REQ_ROUTES;
 
@@ -646,18 +625,12 @@ static void initialize(int argc, char **argv)
         route->flags |= HTTP_ROUTE_OWN_LISTEN;
     }
     /*
-<<<<<<< HEAD
-        Read package.json first so esp.json can override
-     */
-    path = mprJoinPath(route->home, "package.json");
-=======
         Read pak.json first so esp.json can override
      */
     path = mprJoinPath(route->home, "pak.json");
     if (!mprPathExists(path, R_OK)) {
         path = mprJoinPath(route->home, "pak.json");
     }
->>>>>>> local
     if (mprPathExists(path, R_OK)) {
         if ((app->package = readConfig(path)) == 0) {
             return;
@@ -682,11 +655,7 @@ static void initialize(int argc, char **argv)
         }
     }
     /*
-<<<<<<< HEAD
-        Read name, title, description and version from esp.json - permits execution without package.json
-=======
         Read name, title, description and version from esp.json - permits execution without pak.json
->>>>>>> local
      */
     app->description = getJson(app->config, "description", app->description);
     app->name = getJson(app->config, "name", app->name);
@@ -735,11 +704,7 @@ static void initialize(int argc, char **argv)
     if (mprPathExists(path, R_OK) && !mprPathExists(mprJoinPath(route->home, "db"), R_OK)) {
         app->migDir = path;
         httpSetDir(route, "MIGRATIONS", path);
-<<<<<<< HEAD
-    } else 
-=======
     } else
->>>>>>> local
 #endif
     {
         app->migDir = httpGetDir(route, "MIGRATIONS");
@@ -784,20 +749,12 @@ static void process(int argc, char **argv)
     } else if (smatch(cmd, "migrate")) {
         migrate(argc - 1, &argv[1]);
 
-<<<<<<< HEAD
-    } else if (smatch(cmd, "mode")) {
-        if (argc < 2) {
-            printf("%s\n", getJson(app->package, "pak.mode", "undefined"));
-        } else {
-            setMode(argv[1]);
-=======
     } else if (smatch(cmd, "profile") || smatch(cmd, "mode")) {
         //  LEGACY mode
         if (argc < 2) {
             printf("%s\n", getJson(app->package, "profile", "undefined"));
         } else {
             setProfile(argv[1]);
->>>>>>> local
         }
 
     } else if (smatch(cmd, "role")) {
@@ -894,8 +851,6 @@ static void generate(int argc, char **argv)
     if (!app->error) {
         qtrace("Generate", "Complete");
     }
-<<<<<<< HEAD
-=======
     renderGenerated();
 }
 
@@ -920,7 +875,6 @@ static void renderGenerated() {
     } else {
         print("%s", err);
     }
->>>>>>> local
 }
 
 
@@ -1005,17 +959,10 @@ static void init(int argc, char **argv)
         }
     }
     /*
-<<<<<<< HEAD
-        package.json
-     */
-    if (!mprPathExists("package.json", R_OK)) {
-        trace("Create", "package.json");
-=======
         pak.json
      */
     if (!mprPathExists("pak.json", R_OK)) {
         trace("Create", "pak.json");
->>>>>>> local
         config = mprParseJson(sfmt("{" \
             "name: '%s'," \
             "title: '%s'," \
@@ -1027,11 +974,7 @@ static void init(int argc, char **argv)
             fail("Cannot parse config");
             return;
         }
-<<<<<<< HEAD
-        path = mprJoinPath(app->route ? app->route->home : ".", "package.json");
-=======
         path = mprJoinPath(app->route ? app->route->home : ".", "pak.json");
->>>>>>> local
         if ((data = mprJsonToString(config, MPR_JSON_PRETTY | MPR_JSON_QUOTES)) == 0) {
             fail("Cannot save %s", path);
         }
@@ -1284,21 +1227,12 @@ static void role(int argc, char **argv)
 }
 
 
-<<<<<<< HEAD
-static void setMode(cchar *mode)
-{
-    int     quiet;
-
-    setConfigValue(app->package, "pak.mode", mode);
-    saveConfig(app->package, "package.json", MPR_JSON_QUOTES);
-=======
 static void setProfile(cchar *mode)
 {
     int     quiet;
 
     setConfigValue(app->package, "profile", mode);
     saveConfig(app->package, "pak.json", MPR_JSON_QUOTES);
->>>>>>> local
     quiet = app->quiet;
     app->quiet = 1;
     clean(0, NULL);
@@ -1326,11 +1260,7 @@ static void serve(int argc, char **argv)
 {
     HttpEndpoint    *endpoint;
     cchar           *address;
-<<<<<<< HEAD
-    char            *ip;
-=======
     cchar           *ip;
->>>>>>> local
     int             i, port;
 
     if (app->error) {
@@ -1492,15 +1422,8 @@ static bool similarRoute(HttpRoute *r1, HttpRoute *r2)
     if (r1->vars != r2->vars) {
         return 0;
     }
-<<<<<<< HEAD
-    if (scontains(r1->sourceName, "${") == 0 && scontains(r2->sourceName, "${") == 0) {
-        if (r1->sourceName || r2->sourceName) {
-            return smatch(r1->sourceName, r2->sourceName);
-        }
-=======
     if (r1->sourceName || r2->sourceName) {
         return smatch(r1->sourceName, r2->sourceName);
->>>>>>> local
     }
     return 1;
 }
@@ -1513,11 +1436,7 @@ static MprList *getRoutes()
     MprList     *routes;
     MprKey      *kp;
     cchar       *filterRoutePattern, *filterRoutePrefix;
-<<<<<<< HEAD
-    int         prev, nextRoute;
-=======
     int         next, nextRoute;
->>>>>>> local
 
     if (app->error) {
         return 0;
@@ -1531,25 +1450,6 @@ static MprList *getRoutes()
     routes = mprCreateList(0, MPR_LIST_STABLE);
 
     /*
-<<<<<<< HEAD
-        Filter ESP routes. Go in reverse order to locate outermost routes first.
-     */
-    for (prev = -1; (route = mprGetPrevItem(app->host->routes, &prev)) != 0; ) {
-        if ((eroute = route->eroute) == 0) {
-            mprLog("", 6, "Skip route name %s - no esp configuration", route->pattern);
-            continue;
-        }
-#if UNUSED
-        app->require = REQ_SERVE;
-        if (!eroute->compileCmd) {
-            /* No ESP configuration for compiling */
-            mprLog("", 6, "Skip route name %s - no esp configuration", route->pattern);
-            continue;
-        }
-#endif
-        if (filterRoutePattern) {
-            mprLog("", 6, "Check route name %s, prefix %s with %s", route->pattern, route->startWith, filterRoutePattern);
-=======
         Filter ESP routes
      */
     for (next = 0; (route = mprGetNextItem(app->host->routes, &next)) != 0; ) {
@@ -1559,31 +1459,19 @@ static MprList *getRoutes()
         }
         if (filterRoutePattern) {
             mprLog("", 6, "Check route name \"%s\", prefix \"%s\" with \"%s\"", route->pattern, route->startWith, filterRoutePattern);
->>>>>>> local
             if (!smatch(filterRoutePattern, route->pattern)) {
                 continue;
             }
         } else if (filterRoutePrefix) {
-<<<<<<< HEAD
-            mprLog("", 6, "Check route name %s, prefix %s with %s", route->pattern, route->startWith, filterRoutePrefix);
-=======
             mprLog("", 6, "Check route name \"%s\", prefix \"%s\" with \"%s\"", route->pattern, route->startWith, filterRoutePrefix);
->>>>>>> local
             if (!smatch(filterRoutePrefix, route->prefix) && !smatch(filterRoutePrefix, route->startWith)) {
                 continue;
             }
         } else {
-<<<<<<< HEAD
-            mprLog("", 6, "Check route name %s, prefix %s", route->pattern, route->startWith);
-        }
-        if (!requiredRoute(route)) {
-            mprLog("", 6, "Skip route %s not required for selected targets", route->pattern);
-=======
             mprLog("", 6, "Check route name \"%s\", prefix \"%s\"", route->pattern, route->startWith);
         }
         if (!requiredRoute(route)) {
             mprLog("", 6, "Skip route \"%s\" not required for selected targets", route->pattern);
->>>>>>> local
             continue;
         }
         /*
@@ -1592,11 +1480,7 @@ static MprList *getRoutes()
         rp = 0;
         for (ITERATE_ITEMS(routes, rp, nextRoute)) {
             if (similarRoute(route, rp)) {
-<<<<<<< HEAD
-                mprLog("", 6, "Skip route %s because of prior similar route", route->pattern);
-=======
                 mprLog("", 6, "Skip route \"%s\" because of prior similar route", route->pattern);
->>>>>>> local
                 route = 0;
                 break;
             }
@@ -1614,26 +1498,13 @@ static MprList *getRoutes()
             continue;
         }
         if (route && mprLookupItem(routes, route) < 0) {
-<<<<<<< HEAD
-            mprLog("", 6, "Using route name: %s documents:%s prefix: %s", route->pattern, route->documents,
-=======
             mprLog("", 6, "Using route name: \"%s\" documents:\"%s\" prefix: \"%s\"", route->pattern, route->documents,
->>>>>>> local
                 route->startWith);
             mprAddItem(routes, route);
         }
     }
     if (mprGetListLength(routes) == 0) {
         if (filterRoutePattern) {
-<<<<<<< HEAD
-            fail("Cannot find usable ESP configuration for route %s", filterRoutePattern);
-        } else if (filterRoutePrefix) {
-            fail("Cannot find usable ESP configuration for route prefix %s", filterRoutePrefix);
-        } else {
-            kp = mprGetFirstKey(app->targets);
-            if (kp) {
-                fail("Cannot find usable ESP configuration for %s", kp->key);
-=======
             fail("Cannot find usable ESP configuration for route \"%s\"", filterRoutePattern);
         } else if (filterRoutePrefix) {
             fail("Cannot find usable ESP configuration for route prefix \"%s\"", filterRoutePrefix);
@@ -1641,7 +1512,6 @@ static MprList *getRoutes()
             kp = mprGetFirstKey(app->targets);
             if (kp) {
                 fail("Cannot find usable ESP configuration for \"%s\"", kp->key);
->>>>>>> local
             } else {
                 fail("Cannot find usable ESP configuration");
             }
@@ -1653,11 +1523,7 @@ static MprList *getRoutes()
      */
     for (ITERATE_KEYS(app->targets, kp)) {
         if (!kp->type) {
-<<<<<<< HEAD
-            fail("Cannot find a usable route for %s", kp->key);
-=======
             fail("Cannot find a usable route for \"%s\"", kp->key);
->>>>>>> local
             return 0;
         }
     }
@@ -1995,11 +1861,7 @@ static bool selectView(HttpRoute *route, cchar *path)
 
     if ((extensions = mprGetJsonObj(route->config, "http.pipeline.handlers.espHandler")) != 0) {
         for (ITERATE_JSON(extensions, ext, index)) {
-<<<<<<< HEAD
-            if (smatch(mprGetPathExt(path), ext->value)) {
-=======
             if (smatch(mprGetPathExt(path), ext->value) || ext->value[0] == '\0' || smatch(ext->value, "*")) {
->>>>>>> local
                 if (app->targets == 0 || mprGetHashLength(app->targets) == 0) {
                     return 1;
                 }
@@ -2037,10 +1899,7 @@ static void compileItems(HttpRoute *route)
     int         found, next;
 
     found = 0;
-<<<<<<< HEAD
-=======
     // trace("info", "Compile items for route %s", route->pattern);
->>>>>>> local
     if ((dir = httpGetDir(route, "CONTROLLERS")) != 0 && !smatch(dir, ".")) {
         app->files = mprGetPathFiles(dir, MPR_PATH_DESCEND);
         for (next = 0; (dp = mprGetNextItem(app->files, &next)) != 0 && !app->error; ) {
@@ -2072,20 +1931,6 @@ static void compileItems(HttpRoute *route)
             found++;
         }
     }
-<<<<<<< HEAD
-    app->files = mprGetPathFiles(route->documents, MPR_PATH_DESCEND);
-    for (next = 0; (dp = mprGetNextItem(app->files, &next)) != 0 && !app->error; ) {
-        path = dp->name;
-        if (selectView(route, path)) {
-            compileFile(route, path, ESP_PAGE);
-        }
-        found++;
-    }
-    /*
-        Stand-alone controllers
-     */
-    if (route->sourceName) {
-=======
     if (!route->sourceName) {
         app->files = mprGetPathFiles(route->documents, MPR_PATH_DESCEND);
         for (next = 0; (dp = mprGetNextItem(app->files, &next)) != 0 && !app->error; ) {
@@ -2099,24 +1944,17 @@ static void compileItems(HttpRoute *route)
         /*
             Stand-alone controllers
          */
->>>>>>> local
         path = mprJoinPath(route->home, route->sourceName);
         if (mprPathExists(path, R_OK)) {
             compileFile(route, path, ESP_CONTROlLER);
             found++;
         }
     }
-<<<<<<< HEAD
-    if (!found) {
-        trace("Info", "No files to compile for route \"%s\"", route->pattern);
-    }
-=======
 #if UNUSED
     if (!found) {
         trace("Info", "No files to compile for route \"%s\"", route->pattern);
     }
 #endif
->>>>>>> local
 }
 
 
@@ -2192,14 +2030,6 @@ static void compileCombined(HttpRoute *route)
             }
             compileFile(route, kp->key, kind);
         }
-<<<<<<< HEAD
-#if DEPRECATE
-        if (app->slink) {
-            mprAddItem(app->slink, route);
-        }
-#endif
-=======
->>>>>>> local
         mprWriteFileFmt(app->combineFile,
             "\nESP_EXPORT int esp_app_%s_combine(HttpRoute *route, MprModule *module) {\n", name);
         for (next = 0; (line = mprGetNextItem(app->combineItems, &next)) != 0; ) {
@@ -2567,11 +2397,7 @@ static cchar *getCachedPaks()
     files = mprGlobPathFiles(app->paksCacheDir, "*/*", 0);
     for (ITERATE_ITEMS(files, dir, next)) {
         version = getPakVersion(dir, NULL);
-<<<<<<< HEAD
-        path = mprJoinPaths(dir, version, "package.json", NULL);
-=======
         path = mprJoinPaths(dir, version, "pak.json", NULL);
->>>>>>> local
         if (mprPathExists(path, R_OK)) {
             if ((config = loadJson(path)) != 0) {
                 base = mprGetPathBase(path);

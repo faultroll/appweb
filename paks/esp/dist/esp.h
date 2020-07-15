@@ -8,11 +8,7 @@
 #include "osdep.h"
 
 #ifndef ESP_VERSION
-<<<<<<< HEAD
-    #define ESP_VERSION "6.2.3"
-=======
     #define ESP_VERSION "7.1.0"
->>>>>>> local
 #endif
 
 /*
@@ -1348,11 +1344,7 @@ PUBLIC int espInitParser();
     @see Esp
  */
 typedef struct EspRoute {
-<<<<<<< HEAD
-    cchar           *appName;               /**< App module name when compiled in combine mode */
-=======
     cchar           *appName;               /**< App module name */
->>>>>>> local
     struct EspRoute *top;                   /**< Top-level route for this application */
     HttpRoute       *route;                 /**< Back link to route */
     EspProc         commonController;       /**< Common code for all controllers */
@@ -1386,11 +1378,7 @@ typedef struct EspRoute {
 
 #if DEPRECATED || 1
 /**
-<<<<<<< HEAD
-    Add the specified pak to the package.json packs list.
-=======
     Add the specified pak to the pak.json packs list.
->>>>>>> local
     @param route HttpRoute defining the ESP application
     @param name Desired pak name. For example: "angular-mvc"
     @param version Pack version string.
@@ -1442,11 +1430,7 @@ PUBLIC int espInit(HttpRoute *route, cchar *prefix, cchar *path);
 
 /**
     Configure an ESP application
-<<<<<<< HEAD
-    @description Load the esp.json and package.json configuration files.
-=======
     @description Load the esp.json and pak.json configuration files.
->>>>>>> local
     @param route Parent route from which to inherit configuration.
     @returns Zero if successful, otherwise a negative MPR error code.
     @ingroup EspRoute
@@ -1654,11 +1638,7 @@ PUBLIC void espDefineView(HttpRoute *route, cchar *path, void *viewProc);
 PUBLIC char *espExpandCommand(HttpRoute *route, cchar *command, cchar *source, cchar *module);
 
 /**
-<<<<<<< HEAD
-    Get a configuration value from the ESP package.json
-=======
     Get a configuration value from the ESP pak.json
->>>>>>> local
     @param route HttpRoute defining the ESP application
     @param key Configuration property path. May contain dots.
     @param defaultValue Default value to use if the configuration is not defined. May be null
@@ -1690,30 +1670,9 @@ PUBLIC bool espHasPak(HttpRoute *route, cchar *name);
  */
 PUBLIC int espLoadCompilerRules(HttpRoute *route);
 
-<<<<<<< HEAD
-#if UNUSED
-/**
-    Load an ESP module
-    @param route Parent route from which to inherit configuration.
-    @param dispatcher Dispatcher to use when waiting for compilation commands
-    @param kind Type of module. Set to "view" or "controller" or "app".
-    @param source Path to source code for the module
-    @param errMsg Output string reference to receive any error messages.
-    @returns Zero if successful, otherwise a negative MPR error code.
-    @ingroup EspRoute
-    @stability Internal
- */
-PUBLIC int espLoadModule(HttpRoute *route, MprDispatcher *dispatcher, cchar *kind, cchar *source, cchar **errMsg);
-#endif
-
-#if DEPRECATED || 1
-/**
-    Save the in-memory ESP package.json configuration to the default location for the ESP application
-=======
 #if DEPRECATED || 1
 /**
     Save the in-memory ESP pak.json configuration to the default location for the ESP application
->>>>>>> local
     defined by the specified route.
     @param route HttpRoute defining the ESP application
     @returns Zero if successful, otherwise a negative MPR error code.
@@ -1724,13 +1683,8 @@ PUBLIC int espSaveConfig(HttpRoute *route);
 #endif
 
 /**
-<<<<<<< HEAD
-    Set a configuration value to the ESP package.json.
-    @description This updates the in-memory copy of the package.json only.
-=======
     Set a configuration value to the ESP pak.json.
     @description This updates the in-memory copy of the pak.json only.
->>>>>>> local
     @param route HttpRoute defining the ESP application
     @param key Configuration property path. May contain dots.
     @param value Value to set the property to.
@@ -1751,11 +1705,7 @@ PUBLIC int espSetConfig(HttpRoute *route, cchar *key, cchar *value);
 PUBLIC void espSetData(HttpConn *conn, void *data);
 
 /**
-<<<<<<< HEAD
-    Test if a configuration property from the ESP package.json has a desired value.
-=======
     Test if a configuration property from the ESP pak.json has a desired value.
->>>>>>> local
     @param route HttpRoute defining the ESP application
     @param key Configuration property path. May contain dots.
     @param desired Desired value to compare with.
@@ -3278,13 +3228,8 @@ PUBLIC cchar *getPath();
 PUBLIC EdiRec *getRec();
 
 /**
-<<<<<<< HEAD
-    Get a field from the application package.json configuration
-    @param field Property field name in package.json. May contain dots.
-=======
     Get a field from the application pak.json configuration
     @param field Property field name in pak.json. May contain dots.
->>>>>>> local
     @return The field value. Returns "" if the field is not found.
     @ingroup EspAbbrev
     @stability deprecated
@@ -3488,11 +3433,7 @@ PUBLIC cchar *nonce();
 
 /**
     Test the the application mode
-<<<<<<< HEAD
-    @description This is typically set to "debug" or "release". The mode is defined by the "mode" property in the package.json.
-=======
     @description This is typically set to "debug" or "release". The mode is defined by the "profile" property in the pak.json.
->>>>>>> local
     @param check Mode to compare with the current application mode.
     @return True if the current app mode matches the check mode
     @ingroup EspAbbrev
@@ -3672,11 +3613,7 @@ PUBLIC ssize render(cchar *fmt, ...);
 PUBLIC ssize renderCached();
 
 /**
-<<<<<<< HEAD
-    Render the package.json
-=======
     Render the pak.json
->>>>>>> local
     @return A count of the bytes actually written
     @ingroup EspAbbrev
     @stability Prototype
@@ -4191,12 +4128,6 @@ PUBLIC cchar *absuri(cchar *target, ...);
 
 PUBLIC void espSetFlash(HttpConn *conn, cchar *type, cchar *fmt, ...);
 PUBLIC void flash(cchar *type, cchar *fmt, ...);
-<<<<<<< HEAD
-
-#else
-#define
-=======
->>>>>>> local
 #endif /* DEPRECATED */
 
 #ifdef __cplusplus

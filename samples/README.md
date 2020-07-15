@@ -4,15 +4,9 @@ Embedthis Appweb Samples
 These samples are configured to use a locally built Appweb or Appweb installed to the default location
 (usually /usr/local/lib/apppweb). To build the samples, you will need to install Appweb and the MakeMe build tool from:
 
-<<<<<<< HEAD
-* Appweb - [https://embedthis.com/appweb/download.html](https://embedthis.com/appweb/download.html)
-* MakeMe - [https://embedthis.com/makeme/download.html](https://embedthis.com/makeme/download.html)
-* Pak - [https://embedthis.com/pak/download.html](https://embedthis.com/pak/download.html)
-=======
 * Appweb - [https://www.embedthis.com/appweb/download.html](https://www.embedthis.com/appweb/download.html)
 * MakeMe - [https://www.embedthis.com/makeme/download.html](https://www.embedthis.com/makeme/download.html)
 * Pak - [https://www.embedthis.com/pak/download.html](https://www.embedthis.com/pak/download.html)
->>>>>>> local
 
 The following samples are available:
 
@@ -27,10 +21,6 @@ The following samples are available:
 * [min-server](min-server/README.md)                Minimum configuration in appweb.conf.
 * [secure-server](secure-server/README.md)          Secure server using SSL, secure login, chroot and sandbox limits.
 * [simple-action](simple-action/README.md)          Action callback. Binding C function to URI.
-<<<<<<< HEAD
-* [simple-client](simple-client/README.md)          Http client.
-=======
->>>>>>> local
 * [simple-handler](simple-handler/README.md)        Simple Appweb URL handler.
 * [simple-module](simple-module/README.md)          Simple Appweb loadable module.
 * [simple-server](simple-server/README.md)          Simple Http server.
@@ -56,13 +46,9 @@ This will copy the generated certificates into the 'certs' directory.
 
 ### Building
 
-<<<<<<< HEAD
-To build the samples, see the per-sample README instructions. To build all, use:
-=======
 To build the samples, see the per-sample README instructions. Many can run without extra build steps.
 
 To build all, use:
->>>>>>> local
 
     me --file samples.me samples
 
@@ -70,22 +56,14 @@ To build all, use:
 
 The full product documentation is supplied in HTML format under the doc directory. This is also available online at:
 
-<<<<<<< HEAD
-* https://embedthis.com/appweb/doc/index.html
-=======
 * https://www.embedthis.com/appweb/doc/index.html
->>>>>>> local
 
 Licensing
 ---
 
 Please see: 
 
-<<<<<<< HEAD
-* https://embedthis.com/licensing/index.html
-=======
 * https://www.embedthis.com/licensing/index.html
->>>>>>> local
 
 
 Support

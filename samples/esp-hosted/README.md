@@ -21,15 +21,9 @@ Notes:
 
 Requirements
 ---
-<<<<<<< HEAD
-* [ESP](https://embedthis.com/esp/download.html)
-* [Pak](https://embedthis.com/pak/download.html)
-* [Expansive](https://embedthis.com/expansive/download.html)
-=======
 * [ESP](https://www.embedthis.com/esp/download.html)
 * [Pak](https://www.embedthis.com/pak/download.html)
 * [Expansive](https://www.embedthis.com/expansive/download.html)
->>>>>>> local
 
 To build:
 ---
@@ -63,18 +57,6 @@ Code:
 
 Documentation:
 ---
-<<<<<<< HEAD
-* [Apwpeb Documentation](https://embedthis.com/appweb/doc/index.html)
-* [ESP Documentation](https://embedthis.com/esp/doc/index.html)
-* [ESP Configuration in Appweb](https://embedthis.com/appweb/doc/users/dir/esp.html)
-* [ESP Configuration](https://embedthis.com/esp/doc/users/config.html)
-* [Sandbox Limits](https://embedthis.com/appweb/doc/users/dir/sandbox.html)
-* [Security Considerations](https://embedthis.com/appweb/doc/users/security.html)
-* [User Authentication](https://embedthis.com/appweb/doc/users/authentication.html)
-
-See Also:
----
-=======
 * [Apwpeb Documentation](https://www.embedthis.com/appweb/doc/index.html)
 * [ESP Documentation](https://www.embedthis.com/esp/doc/index.html)
 * [ESP Configuration in Appweb](https://www.embedthis.com/appweb/doc/users/dir/esp.html)
@@ -82,4 +64,3 @@ See Also:
 * [Sandbox Limits](https://www.embedthis.com/appweb/doc/users/dir/sandbox.html)
 * [Security Considerations](https://www.embedthis.com/appweb/doc/users/security.html)
 * [User Authentication](https://www.embedthis.com/appweb/doc/users/authentication.html)
->>>>>>> local

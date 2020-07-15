@@ -38,18 +38,11 @@ ws.onerror = function (event) {
 
 ws.wait(WebSocket.OPEN, TIMEOUT)
 ws.wait(WebSocket.CLOSED, TIMEOUT)
-<<<<<<< HEAD
-ttrue(ws.readyState == WebSocket.CLOSED)
-
-ttrue(received == 51000)
-ttrue(gotClose)
-=======
 
 ttrue(ws.readyState == WebSocket.CLOSED)
 
 ttrue(received == 51000)
 ttrue(gotClose == true)
->>>>>>> local
 ttrue(msgCount > 5)
 ttrue(lastEvent.last == true)
 ttrue(!gotError)

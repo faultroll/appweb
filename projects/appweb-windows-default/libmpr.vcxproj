@@ -3,13 +3,8 @@
 
       <ItemDefinitionGroup>
         <ClCompile>
-<<<<<<< HEAD
-          <PreprocessorDefinitions>ME_DEBUG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-          <AdditionalIncludeDirectories>$(IncDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
           <PreprocessorDefinitions>ME_DEBUG=1;_FILE_OFFSET_BITS=64;MBEDTLS_USER_CONFIG_FILE="embedtls.h";%(PreprocessorDefinitions)</PreprocessorDefinitions>
           <AdditionalIncludeDirectories>/Users/mob/dev/appweb-7/build/windows-x64-default/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
->>>>>>> local
     </ClCompile>
     <Link>
           <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -46,38 +41,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
 
       <Import Project="$(VCTargetsPath)Microsoft.Cpp.Default.props" />
@@ -137,11 +116,7 @@
         
 
       <Link>
-<<<<<<< HEAD
-        <AdditionalDependencies>;%(AdditionalDependencies)</AdditionalDependencies>
-=======
         <AdditionalDependencies>libmpr-mbedtls.lib;libmbedtls.lib;%(AdditionalDependencies)</AdditionalDependencies>
->>>>>>> local
         <AdditionalLibraryDirectories>$(OutDir);build\$(Cfg)\bin;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       </Link>
 

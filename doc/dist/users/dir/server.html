@@ -2,22 +2,6 @@
 <html lang="en">
 <head>
     <title>Server</title>
-<<<<<<< HEAD
-    <!-- Copyright Embedthis Software. All Rights Reserved. -->
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    <meta charset="utf-8" />
-    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <meta name="description" content="Server" />
-    <link href='https://fonts.googleapis.com/css?family=Source+Sans+Pro:400,700|Open+Sans:300italic,400,300,700'
-        rel='stylesheet' type='text/css'>
-    <link href='https://fonts.googleapis.com/css?family=Julius+Sans+One' rel='stylesheet' type='text/css'>
-    
-    <link href="../../images/favicon.ico" rel="shortcut icon" />
-    <link href="../../lib/semantic-ui/semantic.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../css/all.min.css" rel="stylesheet" type="text/css" />
-    <link href="../../css/api.min.css" rel="stylesheet" type="text/css" />
-=======
     
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
     <meta charset="utf-8">
@@ -31,7 +15,6 @@
     <link href="../../lib/semantic-ui/semantic.min.css" rel="stylesheet" type="text/css">
     <link href="../../css/all.min.css" rel="stylesheet" type="text/css">
     <link href="../../css/api.min.css" rel="stylesheet" type="text/css">
->>>>>>> local
     
 
 </head>
@@ -58,12 +41,9 @@
                     <a class="item" href="../../start/service.html">Running as a Service</a>
                     <a class="item" href="../../start/releaseNotes.html">Release Notes</a>
                     <a class="item" href="../../start/source.html">Building from Source</a>
-<<<<<<< HEAD
-=======
                     <a class="item" href="../../start/cgi.html">Building with CGI</a>
                     <a class="item" href="../../start/openssl.html">Building with OpenSSL</a>
                     <a class="item" href="../../start/php.html">Building with PHP</a>
->>>>>>> local
                 </div>
             </div>
             <div class="item">
@@ -312,21 +292,12 @@
                     <tr>
                         <td class="pivot">Notes</td>
                         <td>
-<<<<<<< HEAD
-                            <p>The CanonicalName directive specifies the preferred, public, fully qualified hostname 
-                            for the server. This address will be used when constructing URLs and redirections.
-                            The given hostname should be a fully qualified domain name with port number if using 
-                            a port other than the default port.</p>
-                            <p>If a CanonicalName is not defined, the value provided by the client in the request
-                            HTTP Host header will be used.</p> 
-=======
                             <p>The CanonicalName directive specifies the preferred, public, fully qualified hostname
                             for the server. This address will be used when constructing URLs and redirections.
                             The given hostname should be a fully qualified domain name with port number if using
                             a port other than the default port.</p>
                             <p>If a CanonicalName is not defined, the value provided by the client in the request
                             HTTP Host header will be used.</p>
->>>>>>> local
                         </td>
                     </tr>
                 </tbody>
@@ -339,17 +310,10 @@
                 <tbody>
                     <tr>
                         <td class="pivot">Description</td>
-<<<<<<< HEAD
-                        <td>Escape environment variables passed to CGI programs for special shell characters.
-                        If using shell scripts as CGI programs, this directive will escape all special 
-                            shell characters to make scripting easier and more secure. This will escape 
-                           (with \) the following characters: &amp;;`'\"|*?~&lt;&gt;^()[]{}$\\\n and also on windows \r%.</td>
-=======
                         <td><p>Escape environment variables passed to CGI programs for special shell characters.
                         If using shell scripts as CGI programs, this directive will escape all special
                             shell characters to make scripting easier and more secure. This will escape
                            (with \) the following characters: &amp;;`'\"|*?~&lt;&gt;^()[]{}$\\\n and also on windows \r%. The default value is "on". <p>Note: this will escape the QUERY_STRING and "&" characters will be converted to "\&".</td>
->>>>>>> local
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
@@ -365,13 +329,8 @@
                     </tr>
                     <tr>
                         <td class="pivot">Notes</td>
-<<<<<<< HEAD
-                        <td>Shell script variables should always be uses inside quotes. 
-                            For example: use "${filename}" not $filename. This permits filenames with spaces and special 
-=======
                         <td>Shell script variables should always be uses inside quotes.
                             For example: use "${filename}" not $filename. This permits filenames with spaces and special
->>>>>>> local
                             characters from being incorrectly interpreted by the shell.
                         </td>
                     </tr>
@@ -379,19 +338,11 @@
                         <td class="security">Security</td>
                         <td>Failing to escape CGI variables and then using $name to reference variables can cause
                             a security vulnerability by permitting user supplied data to inject shell special characters
-<<<<<<< HEAD
-                            into the variable value. This will then be interpreted by the shell when the variable is 
-                            referenced. </td>
-                    </tr>
-                </tbody>
-            </table> 
-=======
                             into the variable value. This will then be interpreted by the shell when the variable is
                             referenced. </td>
                     </tr>
                 </tbody>
             </table>
->>>>>>> local
             <a id="cgiPrefix"></a>
             <h2>CgiPrefix</h2>
             <table class="directive" title="directive">
@@ -419,13 +370,8 @@
                     </tr>
                     <tr>
                         <td class="security">Security</td>
-<<<<<<< HEAD
-                        <td>Failing to define 
-                            When coupled with lowering the privilege for the <a href="#userAccount">UserAccount</a> and 
-=======
                         <td>Failing to define
                             When coupled with lowering the privilege for the <a href="#userAccount">UserAccount</a> and
->>>>>>> local
                             <a href="#groupAccount">GroupAccount</a> potential security exposures can be minimized.</td>
                     </tr>
                 </tbody>
@@ -436,11 +382,7 @@
                 <tbody>
                     <tr>
                         <td class="pivot">Description</td>
-<<<<<<< HEAD
-                        <td>Directory containing a "chroot jail" in which for Appweb to execute. Once this 
-=======
                         <td>Directory containing a "chroot jail" in which for Appweb to execute. Once this
->>>>>>> local
                             directive is parsed, all files outside the jail will be inaccessible.</td>
                     </tr>
                     <tr>
@@ -465,11 +407,7 @@
                     <tr>
                         <td class="security">Security</td>
                         <td>A chroot jail enhances security by limiting system access should Appweb ever be compromised.
-<<<<<<< HEAD
-                            When coupled with lowering the privilege for the <a href="#userAccount">UserAccount</a> and 
-=======
                             When coupled with lowering the privilege for the <a href="#userAccount">UserAccount</a> and
->>>>>>> local
                             <a href="#groupAccount">GroupAccount</a> potential security exposures can be minimized.</td>
                     </tr>
                 </tbody>
@@ -492,11 +430,7 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
-<<<<<<< HEAD
-                        <td>GroupAccount nobody<br/>
-=======
                         <td>GroupAccount nobody<br>
->>>>>>> local
                         GroupAccount APPWEB</td>
                     </tr>
                     <tr>
@@ -511,11 +445,7 @@
                             safest if the compromised application has as few privileges as possible.</p>
                             <p>When Appweb starts it initially runs as root or administrator and then changes account if a
                             group account is defined in the Appweb configuration file by the GroupAccount directive.  </p>
-<<<<<<< HEAD
-                            <p>If logged in as root or administrator, the pseudo name of APPWEB will change group to 
-=======
                             <p>If logged in as root or administrator, the pseudo name of APPWEB will change group to
->>>>>>> local
                             _www on Mac, nogroup/nobody on Unix and Administrator on Windows.</p>
                         </td>
                     </tr>
@@ -525,11 +455,7 @@
                     </tr>
                 </tbody>
             </table>
-<<<<<<< HEAD
-            
-=======
 
->>>>>>> local
             <a id="home"></a>
             <h2>Home</h2>
             <table class="directive" title="directive">
@@ -579,13 +505,8 @@
                     </tr>
                     <tr>
                         <td class="pivot">Examples</td>
-<<<<<<< HEAD
-                        <td>Listen 80<br />
-                            Listen 205.162.77.64:7777<br/>
-=======
                         <td>Listen 80<br>
                             Listen 205.162.77.64:7777<br>
->>>>>>> local
                             Listen [::]
                         </td>
                     </tr>
@@ -594,11 +515,7 @@
                         <td>
                             <p>The Listen directive specifies the IP endpoints on which Appweb will listen for incoming
                             HTTP requests. If you specify only the port number and omit the IP address, Appweb will
-<<<<<<< HEAD
-                            listen on all network interfaces including the loop-back adaptor. It will listen on both 
-=======
                             listen on all network interfaces including the loop-back adaptor. It will listen on both
->>>>>>> local
                             IPv4 and IPv6 if only a portNumber is specified. </p>
                             <p>To listen on IPv6 endpoints, enclose the IP address in square brackets. For example:
                             Listen [2001:05c0:9168:0000:0000:0000:0000:0001]</p>
@@ -610,50 +527,9 @@
                     </tr>
                 </tbody>
             </table>
-<<<<<<< HEAD
-            
-            <!-- UNUSED
-            <a id="protocol"></a>
-            <h2>Protocol</h2>
-            <table class="directive" title="directive">
-                <tbody>
-                    <tr>
-                        <td class="pivot">Description</td>
-                        <td>HTTP protocol version to use</td>
-                    </tr>
-                    <tr>
-                        <td class="pivot">Synopsis</td>
-                        <td>Protocol [HTTP/1.0 | HTTP/1.1]</td>
-                    </tr>
-                    <tr>
-                        <td class="pivot">Context</td>
-                        <td>Default server</td>
-                    </tr>
-                    <tr>
-                        <td class="pivot">Example</td>
-                        <td>Protocol HTTP/1.0</td>
-                    </tr>
-                    <tr>
-                        <td class="pivot">Notes</td>
-                        <td>
-                            <p>The Protocol directive specifies the HTTP protocol version to respond with. If the
-                            Protocol directive specifies HTTP/1.0, a browser may issue requests using either HTTP/1.0
-                            or HTTP/1.1. However, the response will always be downgraded to use HTTP/1.0 without
-                            Keep-Alive support.</p>
-                            <p>If the Protocol directive specifies HTTP/1.1 and a browser makes a request using
-                            HTTP/1.0 it will not be processed and the client will receive an error.</p>
-                            <p>NOTE: this directive is proprietary to Appweb and is not an Apache directive.</p>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-            -->
-            
-=======
 
             
 
->>>>>>> local
             <a id="serverName"></a>
             <h2>ServerName</h2>
             <table class="directive" title="directive">
@@ -664,19 +540,11 @@
                     </tr>
                     <tr>
                         <td class="pivot">Synopsis</td>
-<<<<<<< HEAD
-                        <td>ServerName hostName<br/>
-                            ServerName *hostName<br/>
-                            ServerName *hostName<br/>
-                            ServerName hostName*<br/>
-                            ServerName /hostName|hostname/<br/>
-=======
                         <td>ServerName hostName<br>
                             ServerName *hostName<br>
                             ServerName *hostName<br>
                             ServerName hostName*<br>
                             ServerName /hostName|hostname/<br>
->>>>>>> local
                     </tr>
                     <tr>
                         <td class="pivot">Context</td>
@@ -684,17 +552,10 @@
                     </tr>
                     <tr>
                         <td class="pivot">Examples</td>
-<<<<<<< HEAD
-                        <td>ServerName www.acme.com:4100<br/>
-                            ServerName *.acme.com<br/>
-                            ServerName www.acme.*<br/>
-                            ServerName /acme.com|^www.roadrunner.org$/<br/>
-=======
                         <td>ServerName www.acme.com:4100<br>
                             ServerName *.acme.com<br>
                             ServerName www.acme.*<br>
                             ServerName /acme.com|^www.roadrunner.org$/<br>
->>>>>>> local
                     </tr>
                     <tr>
                         <td class="pivot">Notes</td>
@@ -703,19 +564,11 @@
                             host. The host name may be a fully qualified hostname with port number, a partial hostname
                             with a "*" wild card character or a regular expression.
 
-<<<<<<< HEAD
-                            <p>If the ServerName begins with "*", it will match requests with a client HTTP Host header 
-                                that "contains" the given name. For example: a ServerName directive of "*.example.com" 
-                                will match farm.example.com and www.example.com.</p>
-                            <p>Similarly, if the ServerName ends with "*", it will match client HTTP Host headers that
-                            begin with the pattern. For example: "example.*" will match "example.com" and 
-=======
                             <p>If the ServerName begins with "*", it will match requests with a client HTTP Host header
                                 that "contains" the given name. For example: a ServerName directive of "*.example.com"
                                 will match farm.example.com and www.example.com.</p>
                             <p>Similarly, if the ServerName ends with "*", it will match client HTTP Host headers that
                             begin with the pattern. For example: "example.*" will match "example.com" and
->>>>>>> local
                             "example.org".</p>
                             <p>If the ServerName begins and ends with "/", the pattern is interpreted as a regular expression.</p>
 
@@ -726,11 +579,7 @@
                     </tr>
                 </tbody>
             </table>
-<<<<<<< HEAD
-            
-=======
 
->>>>>>> local
             <a id="streamInput"></a>
             <h2>StreamInput</h2>
             <table class="directive" title="directive">
@@ -757,19 +606,11 @@
                             <p>The StreamInput directive specifies if the request body data should be buffered
                             before processing the request or whether the processing should be started immediately and the
                             body data streamed to the handler.</p>
-<<<<<<< HEAD
-                            <p>By default, POST forms that have a Content-Type of "application/x-www-form-urlencoded" or 
-                            "application/json" will have their request body data buffered before processing. 
-                            This enables form requests to use body data in the route processing. 
-                            By default, all other requests content types will be streamed. </p>
-                            <p>The mimeType specifies the required "Content-Type" HTTP header for the request. 
-=======
                             <p>By default, POST forms that have a Content-Type of "application/x-www-form-urlencoded" or
                             "application/json" will have their request body data buffered before processing.
                             This enables form requests to use body data in the route processing.
                             By default, all other requests content types will be streamed. </p>
                             <p>The mimeType specifies the required "Content-Type" HTTP header for the request.
->>>>>>> local
                             The URI is optional and if supplied, specifies a matching URI prefix for qualifying requests.</p>
                             <pre>StreamInput application/x-gzip /upload</pre>
                             <p>The StreamInput applies to the entire host and is not specific per-route.</p>
@@ -777,11 +618,7 @@
                     </tr>
                 </tbody>
             </table>
-<<<<<<< HEAD
-            
-=======
 
->>>>>>> local
             <a id="typesConfig"></a>
             <h2>TypesConfig</h2>
             <table class="directive" title="directive">
@@ -819,11 +656,7 @@
                     </tr>
                 </tbody>
             </table>
-<<<<<<< HEAD
-            
-=======
 
->>>>>>> local
             <a id="userAccount"></a>
             <h2>UserAccount</h2>
             <table class="directive" title="directive">
@@ -842,11 +675,7 @@
                     </tr>
                     <tr>
                         <td class="pivot">Example</td>
-<<<<<<< HEAD
-                        <td>UserAccount nobody<br/>
-=======
                         <td>UserAccount nobody<br>
->>>>>>> local
                         UserAccount APPWEB</td>
                     </tr>
                     <tr>
@@ -863,11 +692,7 @@
                             No supplemental groups.</p>
                             <p>If UserAccount is set and GroupAccount is not set, then Appweb will run with group membership set
                             to include all groups to which the user account is a member of.</p>
-<<<<<<< HEAD
-                            <P>The UserAccount directive can only be used if Appweb is started using a privileged
-=======
                             <p>The UserAccount directive can only be used if Appweb is started using a privileged
->>>>>>> local
                             account such as root. Normally Appweb is started using the account root or administrator
                             and thereafter it changes to run with less privilege using the specified accountName.</p>
                         </td>
@@ -892,11 +717,6 @@
 
     
 
-<<<<<<< HEAD
-</body>
-</html>
-=======
 
 
 
->>>>>>> local

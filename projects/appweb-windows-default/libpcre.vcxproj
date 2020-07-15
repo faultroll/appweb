@@ -4,11 +4,7 @@
       <ItemDefinitionGroup>
         <ClCompile>
           <PreprocessorDefinitions>ME_DEBUG=1;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-<<<<<<< HEAD
-          <AdditionalIncludeDirectories>$(IncDir);%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
-=======
           <AdditionalIncludeDirectories>/Users/mob/dev/appweb-7/build/windows-x64-default/inc;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
->>>>>>> local
     </ClCompile>
     <Link>
           <AdditionalDependencies>ws2_32.lib;%(AdditionalDependencies)</AdditionalDependencies>
@@ -45,38 +41,22 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
         <ConfigurationType>DynamicLibrary</ConfigurationType>
         <CharacterSet>NotSet</CharacterSet>
-<<<<<<< HEAD
-        <PlatformToolset>v120</PlatformToolset>
-=======
         <PlatformToolset>v141</PlatformToolset>
->>>>>>> local
       </PropertyGroup>
 
       <Import Project="$(VCTargetsPath)Microsoft.Cpp.Default.props" />

@@ -22,11 +22,7 @@
              */
             conn->rx->renameUploads = 0;
         }
-<<<<<<< HEAD
-        if (conn->rx->files->length > 0) {
-=======
         if (conn->rx->files && conn->rx->files->length > 0) {
->>>>>>> local
             render("Upload Complete");
         }
         showRequest();

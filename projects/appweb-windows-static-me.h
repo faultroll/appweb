@@ -1,9 +1,5 @@
 /*
-<<<<<<< HEAD
-    me.h -- MakeMe Configure Header for windows-x86-static
-=======
     me.h -- MakeMe Configure Header for windows-x64-static
->>>>>>> local
 
     This header is created by Me during configuration. To change settings, re-run
     configure or define variables in your Makefile to override these default values.
@@ -26,11 +22,7 @@
     #define ME_COMPANY "embedthis"
 #endif
 #ifndef ME_COMPATIBLE
-<<<<<<< HEAD
-    #define ME_COMPATIBLE "7.0"
-=======
     #define ME_COMPATIBLE "7.1"
->>>>>>> local
 #endif
 #ifndef ME_COMPILER_FORTIFY
     #define ME_COMPILER_FORTIFY 1
@@ -80,33 +72,6 @@
 #ifndef ME_DESCRIPTION
     #define ME_DESCRIPTION "Embedthis Appweb Embedded Web Server"
 #endif
-<<<<<<< HEAD
-#ifndef ME_EJSCRIPT_DB
-    #define ME_EJSCRIPT_DB 1
-#endif
-#ifndef ME_EJSCRIPT_MAIL
-    #define ME_EJSCRIPT_MAIL 1
-#endif
-#ifndef ME_EJSCRIPT_MAPPER
-    #define ME_EJSCRIPT_MAPPER 1
-#endif
-#ifndef ME_EJSCRIPT_SHELL
-    #define ME_EJSCRIPT_SHELL 1
-#endif
-#ifndef ME_EJSCRIPT_TAR
-    #define ME_EJSCRIPT_TAR 1
-#endif
-#ifndef ME_EJSCRIPT_TEMPLATE
-    #define ME_EJSCRIPT_TEMPLATE 1
-#endif
-#ifndef ME_EJSCRIPT_WEB
-    #define ME_EJSCRIPT_WEB 1
-#endif
-#ifndef ME_EJSCRIPT_ZLIB
-    #define ME_EJSCRIPT_ZLIB 1
-#endif
-=======
->>>>>>> local
 #ifndef ME_ESP_CMD
     #define ME_ESP_CMD 1
 #endif
@@ -147,11 +112,7 @@
     #define ME_MPR_SSL_CACHE 512
 #endif
 #ifndef ME_MPR_SSL_HANDSHAKES
-<<<<<<< HEAD
-    #define ME_MPR_SSL_HANDSHAKES 1
-=======
     #define ME_MPR_SSL_HANDSHAKES 3
->>>>>>> local
 #endif
 #ifndef ME_MPR_SSL_LOG_LEVEL
     #define ME_MPR_SSL_LOG_LEVEL 5
@@ -168,12 +129,9 @@
 #ifndef ME_NAME
     #define ME_NAME "appweb"
 #endif
-<<<<<<< HEAD
-=======
 #ifndef ME_OPENSSL_VERSION
     #define ME_OPENSSL_VERSION "1.0"
 #endif
->>>>>>> local
 #ifndef ME_PLATFORMS
     #define ME_PLATFORMS "local"
 #endif
@@ -190,21 +148,13 @@
     #define ME_STATIC 1
 #endif
 #ifndef ME_TITLE
-<<<<<<< HEAD
-    #define ME_TITLE "Embedthis Appweb"
-=======
     #define ME_TITLE "Embedthis Appweb Community Edition"
->>>>>>> local
 #endif
 #ifndef ME_TUNE
     #define ME_TUNE "size"
 #endif
 #ifndef ME_VERSION
-<<<<<<< HEAD
-    #define ME_VERSION "7.0.1"
-=======
     #define ME_VERSION "7.1.1"
->>>>>>> local
 #endif
 #ifndef ME_WATCHDOG_NAME
     #define ME_WATCHDOG_NAME "appman"
@@ -230,48 +180,6 @@
     #define ME_BASE_PREFIX "C:/Program Files"
 #endif
 #ifndef ME_APP_PREFIX
-<<<<<<< HEAD
-    #define ME_APP_PREFIX "C:/Program Files/Embedthis Appweb"
-#endif
-#ifndef ME_VAPP_PREFIX
-    #define ME_VAPP_PREFIX "C:/Program Files/Embedthis Appweb"
-#endif
-#ifndef ME_DATA_PREFIX
-    #define ME_DATA_PREFIX "C:/Program Files/Embedthis Appweb"
-#endif
-#ifndef ME_STATE_PREFIX
-    #define ME_STATE_PREFIX "C:/Program Files/Embedthis Appweb"
-#endif
-#ifndef ME_BIN_PREFIX
-    #define ME_BIN_PREFIX "C:/Program Files/Embedthis Appweb/bin"
-#endif
-#ifndef ME_INC_PREFIX
-    #define ME_INC_PREFIX "C:/Program Files/Embedthis Appweb/inc"
-#endif
-#ifndef ME_LIB_PREFIX
-    #define ME_LIB_PREFIX "C:/Program Files/Embedthis Appweb/lib"
-#endif
-#ifndef ME_MAN_PREFIX
-    #define ME_MAN_PREFIX "C:/Program Files/Embedthis Appweb/man"
-#endif
-#ifndef ME_ETC_PREFIX
-    #define ME_ETC_PREFIX "C:/Program Files/Embedthis Appweb"
-#endif
-#ifndef ME_WEB_PREFIX
-    #define ME_WEB_PREFIX "C:/Program Files/Embedthis Appweb/web"
-#endif
-#ifndef ME_LOG_PREFIX
-    #define ME_LOG_PREFIX "C:/Program Files/Embedthis Appweb/log"
-#endif
-#ifndef ME_SPOOL_PREFIX
-    #define ME_SPOOL_PREFIX "C:/Program Files/Embedthis Appweb/tmp"
-#endif
-#ifndef ME_CACHE_PREFIX
-    #define ME_CACHE_PREFIX "C:/Program Files/Embedthis Appweb/cache"
-#endif
-#ifndef ME_SRC_PREFIX
-    #define ME_SRC_PREFIX "C:/Program Files/Embedthis Appweb/src"
-=======
     #define ME_APP_PREFIX "C:/Program Files/Embedthis Appweb Community Edition"
 #endif
 #ifndef ME_VAPP_PREFIX
@@ -312,7 +220,6 @@
 #endif
 #ifndef ME_SRC_PREFIX
     #define ME_SRC_PREFIX "C:/Program Files/Embedthis Appweb Community Edition/src"
->>>>>>> local
 #endif
 
 /* Suffixes */
@@ -334,11 +241,7 @@
 
 /* Profile */
 #ifndef ME_CONFIG_CMD
-<<<<<<< HEAD
-    #define ME_CONFIG_CMD "me -d -q -platform windows-x86-static -static -configure . -without ssl -gen vs"
-=======
     #define ME_CONFIG_CMD "me -d -q -platform windows-x64-static -static -configure . -gen vs"
->>>>>>> local
 #endif
 #ifndef ME_APPWEB_PRODUCT
     #define ME_APPWEB_PRODUCT 1
@@ -355,21 +258,13 @@
     #define ME_MAJOR_VERSION 7
 #endif
 #ifndef ME_MINOR_VERSION
-<<<<<<< HEAD
-    #define ME_MINOR_VERSION 0
-=======
     #define ME_MINOR_VERSION 1
->>>>>>> local
 #endif
 #ifndef ME_PATCH_VERSION
     #define ME_PATCH_VERSION 1
 #endif
 #ifndef ME_VNUM
-<<<<<<< HEAD
-    #define ME_VNUM 700000001
-=======
     #define ME_VNUM 700010001
->>>>>>> local
 #endif
 
 /* Components */
@@ -397,16 +292,11 @@
 #ifndef ME_COM_LINK
     #define ME_COM_LINK 1
 #endif
-<<<<<<< HEAD
-#ifndef ME_COM_MBEDTLS
-    #define ME_COM_MBEDTLS 0
-=======
 #ifndef ME_COM_MATRIXSSL
     #define ME_COM_MATRIXSSL 0
 #endif
 #ifndef ME_COM_MBEDTLS
     #define ME_COM_MBEDTLS 1
->>>>>>> local
 #endif
 #ifndef ME_COM_MDB
     #define ME_COM_MDB 1
@@ -414,15 +304,12 @@
 #ifndef ME_COM_MPR
     #define ME_COM_MPR 1
 #endif
-<<<<<<< HEAD
-=======
 #ifndef ME_COM_NANOSSL
     #define ME_COM_NANOSSL 0
 #endif
 #ifndef ME_COM_OPENSSL
     #define ME_COM_OPENSSL 0
 #endif
->>>>>>> local
 #ifndef ME_COM_OSDEP
     #define ME_COM_OSDEP 1
 #endif
@@ -436,11 +323,7 @@
     #define ME_COM_RC 1
 #endif
 #ifndef ME_COM_SSL
-<<<<<<< HEAD
-    #define ME_COM_SSL 0
-=======
     #define ME_COM_SSL 1
->>>>>>> local
 #endif
 #ifndef ME_COM_VXWORKS
     #define ME_COM_VXWORKS 0

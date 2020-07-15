@@ -1,13 +1,9 @@
 /**
     appweb.c  -- AppWeb main program
 
-<<<<<<< HEAD
-    Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
-=======
     This is the default appweb main program. If you need a simpler and smaller web
     server, consider the samples/typical-server or samples/simple-server samples for
     simpler main programs.
->>>>>>> local
 
     usage: appweb [options]
     or:    appweb [options] [documents] [[ip][:port] ...]
@@ -22,11 +18,8 @@
             --version               # Output version information
             -v                      # Same as --log stdout:2
             -DIGIT                  # Same as --log stdout:DIGIT
-<<<<<<< HEAD
-=======
 
     Copyright (c) All Rights Reserved. See copyright notice at the bottom of the file.
->>>>>>> local
  */
 
 /********************************* Includes ***********************************/
@@ -261,14 +254,11 @@ MAIN(appweb, int argc, char **argv, char **envp)
         return MPR_ERR_CANT_INITIALIZE;
     }
     httpSetInfoLevel(0);
-<<<<<<< HEAD
-=======
 	
 	httpDefineAction("/action/action_get", action_get);
 	
 	httpDefineAction("/action/action_post", action_post);
 	
->>>>>>> local
     if (httpStartEndpoints() < 0) {
         mprLog("error appweb", 0, "Cannot listen on HTTP endpoints, exiting.");
         exit(9);
@@ -340,11 +330,7 @@ static int changeRoot(cchar *jail)
 
 static int createEndpoints(int argc, char **argv)
 {
-<<<<<<< HEAD
-    char    *ip;
-=======
     cchar   *ip;
->>>>>>> local
     int     argind, port, secure;
 
     ip = 0;
